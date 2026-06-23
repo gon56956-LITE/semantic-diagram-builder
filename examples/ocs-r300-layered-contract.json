@@ -1,0 +1,44 @@
+﻿{
+  "title": "OCS R300 Manufacturing Knowledge Topology",
+  "subtitle": "Example only: layered knowledge architecture, not a fixed template",
+  "layout": "layered",
+  "width": 1500,
+  "max_nodes_per_row": 4,
+  "groups": [
+    {"id": "navigation", "label": "Navigation layer", "type": "layer"},
+    {"id": "synthesis", "label": "Product-level synthesis", "type": "layer"},
+    {"id": "subkb", "label": "WI-derived knowledge layer", "type": "layer"},
+    {"id": "source", "label": "Controlled-source boundary", "type": "layer", "max_per_row": 1}
+  ],
+  "nodes": [
+    {"id": "moc", "label": "Manufacturing MOC", "subtitle": "entry point", "kind": "index", "group": "navigation"},
+    {"id": "query", "label": "Query Guide", "subtitle": "where to look", "kind": "query", "group": "navigation"},
+    {"id": "glossary", "label": "Glossary / Ontology", "subtitle": "shared language", "kind": "glossary", "group": "navigation"},
+    {"id": "process", "label": "End-to-End Process Overview", "subtitle": "product-level flow", "kind": "process", "group": "synthesis"},
+    {"id": "ctq", "label": "CTQ & Parameter Master Register", "subtitle": "quality + parameter families", "kind": "quality", "group": "synthesis"},
+    {"id": "risk", "label": "Defect & Risk Taxonomy", "subtitle": "cross-group risk concepts", "kind": "risk", "group": "synthesis"},
+    {"id": "mems", "label": "MEMS Package", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb"},
+    {"id": "mca", "label": "MCA Package", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb"},
+    {"id": "obm", "label": "OBM Assy", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb"},
+    {"id": "pob", "label": "POB", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb"},
+    {"id": "controlled_sources", "label": "Controlled WI / PLM Source Documents", "subtitle": "execution authority and revision control", "kind": "source", "group": "source"}
+  ],
+  "edges": [
+    {"from": "moc", "to": "query", "relation": "navigates_to", "style": "dashed"},
+    {"from": "query", "to": "glossary", "relation": "uses_language_from", "style": "dashed"},
+    {"from": "query", "to": "process", "relation": "points_to"},
+    {"from": "query", "to": "ctq", "relation": "points_to"},
+    {"from": "query", "to": "risk", "relation": "points_to"},
+    {"from": "ctq", "to": "mems", "relation": "synthesizes_from"},
+    {"from": "ctq", "to": "mca", "relation": "synthesizes_from"},
+    {"from": "ctq", "to": "obm", "relation": "synthesizes_from"},
+    {"from": "ctq", "to": "pob", "relation": "synthesizes_from"},
+    {"from": "mems", "to": "controlled_sources", "relation": "source_bound"},
+    {"from": "mca", "to": "controlled_sources", "relation": "source_bound"},
+    {"from": "obm", "to": "controlled_sources", "relation": "source_bound"},
+    {"from": "pob", "to": "controlled_sources", "relation": "source_bound"}
+  ],
+  "annotations": [
+    {"text": "Example note: derived knowledge maps support navigation; controlled source documents remain the execution authority.", "placement": "footer"}
+  ]
+}
