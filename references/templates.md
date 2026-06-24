@@ -6,10 +6,12 @@ Each standard diagram type has:
 
 - `templates/<diagram_type>/minimal-contract.json`: the smallest useful contract shape.
 - `templates/<diagram_type>/reference-contract.json`: a richer reference pattern.
+- `templates/<diagram_type>/stress-contract.json`: a dense QA pattern intended to expose routing, typography, spacing, and canvas issues.
 - `templates/<diagram_type>/minimal.svg`: renderer output for the minimal contract.
 - `templates/<diagram_type>/reference.svg`: renderer output for the reference contract.
+- `templates/<diagram_type>/stress.svg`: renderer output for the stress contract.
 
-`templates/template-gallery.html` renders all bundled templates for visual review. `templates/template-gallery-baseline.json` is the manifest used by `py scripts/test_template_library.py`.
+`templates/template-gallery.html` renders the reference and stress templates for visual review. Minimal templates remain available as starting points, but they are intentionally not used as the main visual QA gallery because they are too small to expose many layout problems. `templates/template-gallery-baseline.json` is the manifest used by `py scripts/test_template_library.py`.
 
 ## Usage
 
@@ -21,14 +23,14 @@ Each standard diagram type has:
 
 ## Template Index
 
-| Diagram type | Minimal template | Reference template |
-| --- | --- | --- |
-| `layered_knowledge_topology` | `templates/layered_knowledge_topology/minimal-contract.json` | `templates/layered_knowledge_topology/reference-contract.json` |
-| `source_boundary_map` | `templates/source_boundary_map/minimal-contract.json` | `templates/source_boundary_map/reference-contract.json` |
-| `boundary_ownership_map` | `templates/boundary_ownership_map/minimal-contract.json` | `templates/boundary_ownership_map/reference-contract.json` |
-| `registry_table` | `templates/registry_table/minimal-contract.json` | `templates/registry_table/reference-contract.json` |
-| `taxonomy_tree` | `templates/taxonomy_tree/minimal-contract.json` | `templates/taxonomy_tree/reference-contract.json` |
-| `hub_spoke` | `templates/hub_spoke/minimal-contract.json` | `templates/hub_spoke/reference-contract.json` |
+| Diagram type | Minimal template | Reference template | Stress template |
+| --- | --- | --- | --- |
+| `layered_knowledge_topology` | `templates/layered_knowledge_topology/minimal-contract.json` | `templates/layered_knowledge_topology/reference-contract.json` | `templates/layered_knowledge_topology/stress-contract.json` |
+| `source_boundary_map` | `templates/source_boundary_map/minimal-contract.json` | `templates/source_boundary_map/reference-contract.json` | `templates/source_boundary_map/stress-contract.json` |
+| `boundary_ownership_map` | `templates/boundary_ownership_map/minimal-contract.json` | `templates/boundary_ownership_map/reference-contract.json` | `templates/boundary_ownership_map/stress-contract.json` |
+| `registry_table` | `templates/registry_table/minimal-contract.json` | `templates/registry_table/reference-contract.json` | `templates/registry_table/stress-contract.json` |
+| `taxonomy_tree` | `templates/taxonomy_tree/minimal-contract.json` | `templates/taxonomy_tree/reference-contract.json` | `templates/taxonomy_tree/stress-contract.json` |
+| `hub_spoke` | `templates/hub_spoke/minimal-contract.json` | `templates/hub_spoke/reference-contract.json` | `templates/hub_spoke/stress-contract.json` |
 
 ## Type Notes
 

@@ -1,0 +1,49 @@
+{
+  "title": "Boundary Ownership Map Stress",
+  "subtitle": "Stress contract with domains, systems, assets, and owner assignments",
+  "diagram_type": "boundary_ownership_map",
+  "style": "accent-blueprint",
+  "width": 1900,
+  "max_nodes_per_row": 4,
+  "groups": [
+    {"id": "domains", "label": "Enterprise domains", "type": "layer"},
+    {"id": "systems", "label": "Systems and applications", "type": "layer"},
+    {"id": "assets", "label": "Data and knowledge assets", "type": "layer"},
+    {"id": "ownership", "label": "Ownership and stewardship", "type": "layer"}
+  ],
+  "nodes": [
+    {"id": "customer", "label": "Customer Domain", "subtitle": "market + service", "kind": "capability", "group": "domains"},
+    {"id": "product", "label": "Product Domain", "subtitle": "portfolio", "kind": "capability", "group": "domains"},
+    {"id": "operations", "label": "Operations Domain", "subtitle": "execution", "kind": "process", "group": "domains"},
+    {"id": "finance", "label": "Finance Domain", "subtitle": "controls", "kind": "quality", "group": "domains"},
+    {"id": "crm", "label": "CRM System", "subtitle": "customer records", "kind": "registry", "group": "systems"},
+    {"id": "plm", "label": "PLM System", "subtitle": "product records", "kind": "source", "group": "systems"},
+    {"id": "mes", "label": "MES System", "subtitle": "execution records", "kind": "source", "group": "systems"},
+    {"id": "erp", "label": "ERP System", "subtitle": "financial controls", "kind": "source", "group": "systems"},
+    {"id": "customer_data", "label": "Customer Data", "subtitle": "shared asset", "kind": "package", "group": "assets"},
+    {"id": "product_data", "label": "Product Data", "subtitle": "controlled asset", "kind": "package", "group": "assets"},
+    {"id": "operations_data", "label": "Operations Data", "subtitle": "regulated asset", "kind": "risk", "group": "assets"},
+    {"id": "finance_data", "label": "Financial Data", "subtitle": "governed asset", "kind": "quality", "group": "assets"},
+    {"id": "business_owner", "label": "Business Owner", "subtitle": "accountable", "kind": "quality", "group": "ownership"},
+    {"id": "system_owner", "label": "System Owner", "subtitle": "responsible", "kind": "quality", "group": "ownership"},
+    {"id": "data_steward", "label": "Data Steward", "subtitle": "quality guardrail", "kind": "risk", "group": "ownership"},
+    {"id": "security_owner", "label": "Security Owner", "subtitle": "access guardrail", "kind": "risk", "group": "ownership"}
+  ],
+  "edges": [
+    {"from": "customer", "to": "crm", "relation": "uses"},
+    {"from": "product", "to": "plm", "relation": "uses"},
+    {"from": "operations", "to": "mes", "relation": "uses"},
+    {"from": "finance", "to": "erp", "relation": "uses"},
+    {"from": "crm", "to": "customer_data", "relation": "owns_record"},
+    {"from": "plm", "to": "product_data", "relation": "owns_record"},
+    {"from": "mes", "to": "operations_data", "relation": "owns_record"},
+    {"from": "erp", "to": "finance_data", "relation": "owns_record"},
+    {"from": "customer_data", "to": "business_owner", "relation": "accountable"},
+    {"from": "product_data", "to": "system_owner", "relation": "responsible"},
+    {"from": "operations_data", "to": "data_steward", "relation": "stewarded_by"},
+    {"from": "finance_data", "to": "security_owner", "relation": "guarded_by"}
+  ],
+  "annotations": [
+    {"text": "Stress template: repeated boundary rows should keep spacing and ownership links readable.", "placement": "footer"}
+  ]
+}

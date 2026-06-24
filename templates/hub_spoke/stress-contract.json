@@ -1,0 +1,25 @@
+{
+  "title": "Hub Spoke Stress",
+  "subtitle": "Stress contract with many spokes and mixed semantics",
+  "diagram_type": "hub_spoke",
+  "style": "accent-blueprint",
+  "width": 1700,
+  "spoke_height": 104,
+  "hub_id": "hub",
+  "nodes": [
+    {"id": "hub", "label": "Knowledge Integration Hub", "subtitle": "routing + orchestration + monitoring", "kind": "hub"},
+    {"id": "portal", "label": "Knowledge Portal", "subtitle": "entry point", "kind": "index", "order": 0},
+    {"id": "domain", "label": "Domain Maps", "subtitle": "systems + ownership", "kind": "capability", "order": 1},
+    {"id": "registry", "label": "Semantic Registers", "subtitle": "terms + parameters", "kind": "registry", "order": 2},
+    {"id": "taxonomy", "label": "Risk Taxonomy", "subtitle": "constraints", "kind": "risk", "order": 3},
+    {"id": "analytics", "label": "Analytics Views", "subtitle": "decision support", "kind": "query", "order": 4},
+    {"id": "packages", "label": "Knowledge Packages", "subtitle": "approved modules", "kind": "package", "order": 5},
+    {"id": "sources", "label": "Controlled Sources", "subtitle": "authority", "kind": "source", "order": 6},
+    {"id": "governance", "label": "Governance Rules", "subtitle": "ownership + approvals", "kind": "quality", "order": 7},
+    {"id": "external", "label": "External Systems", "subtitle": "optional links", "kind": "ontology", "order": 8, "style": "dashed"},
+    {"id": "monitoring", "label": "Monitoring and Logging", "subtitle": "health signals", "kind": "process", "order": 9}
+  ],
+  "annotations": [
+    {"text": "Stress template: many spokes should remain legible and use a compact content-driven canvas.", "placement": "footer"}
+  ]
+}

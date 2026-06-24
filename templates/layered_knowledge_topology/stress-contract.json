@@ -1,0 +1,66 @@
+{
+  "title": "Layered Knowledge Topology Stress",
+  "subtitle": "Stress contract with dense multi-row fan-out and fan-in routing",
+  "diagram_type": "layered_knowledge_topology",
+  "style": "accent-blueprint",
+  "width": 1900,
+  "max_nodes_per_row": 4,
+  "groups": [
+    {"id": "entry", "label": "Entry and navigation layer", "type": "layer"},
+    {"id": "synthesis", "label": "Synthesis and governance layer", "type": "layer"},
+    {
+      "id": "packages",
+      "label": "WI-derived reusable knowledge packages",
+      "type": "layer",
+      "routing": {"mode": "row_bus_side_trunk", "fanout_side": "right", "fanin_side": "left"},
+      "side_gutter": 170
+    },
+    {"id": "authority", "label": "Controlled authority boundary", "type": "layer", "max_per_row": 2}
+  ],
+  "nodes": [
+    {"id": "moc", "label": "Manufacturing MOC", "subtitle": "entry point", "kind": "index", "group": "entry"},
+    {"id": "query", "label": "Query Guide", "subtitle": "where to look", "kind": "query", "group": "entry"},
+    {"id": "glossary", "label": "Glossary / Ontology", "subtitle": "shared language", "kind": "glossary", "group": "entry"},
+    {"id": "process", "label": "End-to-End Process Overview", "subtitle": "product-level flow", "kind": "process", "group": "synthesis"},
+    {"id": "parameter_master", "label": "CTQ and Parameter Master Register", "subtitle": "quality families", "kind": "registry", "group": "synthesis"},
+    {"id": "risk_model", "label": "Defect and Risk Taxonomy", "subtitle": "cross-group risks", "kind": "risk", "group": "synthesis"},
+    {"id": "governance", "label": "Governance Rules", "subtitle": "reuse constraints", "kind": "quality", "group": "synthesis"},
+    {"id": "package_a", "label": "MEMS Package", "subtitle": "source-bound sub-KB", "kind": "package", "group": "packages", "row": 0, "col": 0},
+    {"id": "package_b", "label": "MCA Package", "subtitle": "source-bound sub-KB", "kind": "package", "group": "packages", "row": 0, "col": 1},
+    {"id": "package_c", "label": "OBM Assembly", "subtitle": "source-bound sub-KB", "kind": "package", "group": "packages", "row": 0, "col": 2},
+    {"id": "package_d", "label": "POB Knowledge Package", "subtitle": "source-bound sub-KB", "kind": "package", "group": "packages", "row": 0, "col": 3},
+    {"id": "package_e", "label": "Faceplate Alignment Package", "subtitle": "fixture + inspection rules", "kind": "package", "group": "packages", "row": 1, "col": 0},
+    {"id": "package_f", "label": "MECH Assembly Package", "subtitle": "approved work module", "kind": "package", "group": "packages", "row": 1, "col": 1},
+    {"id": "package_g", "label": "Yield Excursion Playbook", "subtitle": "risk response", "kind": "risk", "group": "packages", "row": 1, "col": 2},
+    {"id": "package_h", "label": "Transformation Checklist", "subtitle": "handoff path", "kind": "process", "group": "packages", "row": 1, "col": 3},
+    {"id": "plm_docs", "label": "Controlled WI / PLM Source Documents", "subtitle": "revision authority", "kind": "source", "group": "authority"},
+    {"id": "quality_records", "label": "Quality Record System", "subtitle": "evidence authority", "kind": "evidence", "group": "authority"}
+  ],
+  "edges": [
+    {"from": "moc", "to": "query", "relation": "routes_to", "style": "dashed"},
+    {"from": "query", "to": "glossary", "relation": "uses_terms", "style": "dashed"},
+    {"from": "query", "to": "process", "relation": "opens"},
+    {"from": "query", "to": "parameter_master", "relation": "opens"},
+    {"from": "query", "to": "risk_model", "relation": "opens"},
+    {"from": "query", "to": "governance", "relation": "opens"},
+    {"from": "parameter_master", "to": "package_a", "relation": "defines"},
+    {"from": "parameter_master", "to": "package_b", "relation": "defines"},
+    {"from": "parameter_master", "to": "package_c", "relation": "defines"},
+    {"from": "parameter_master", "to": "package_d", "relation": "defines"},
+    {"from": "parameter_master", "to": "package_e", "relation": "defines"},
+    {"from": "parameter_master", "to": "package_f", "relation": "defines"},
+    {"from": "parameter_master", "to": "package_g", "relation": "defines"},
+    {"from": "parameter_master", "to": "package_h", "relation": "defines"},
+    {"from": "package_a", "to": "plm_docs", "relation": "source_bound"},
+    {"from": "package_b", "to": "plm_docs", "relation": "source_bound"},
+    {"from": "package_c", "to": "plm_docs", "relation": "source_bound"},
+    {"from": "package_d", "to": "plm_docs", "relation": "source_bound"},
+    {"from": "package_e", "to": "plm_docs", "relation": "source_bound"},
+    {"from": "package_f", "to": "plm_docs", "relation": "source_bound"},
+    {"from": "package_g", "to": "quality_records", "relation": "evidenced_by"},
+    {"from": "package_h", "to": "quality_records", "relation": "evidenced_by"}
+  ],
+  "annotations": [
+    {"text": "Stress template: dense fan-out and fan-in should remain inside the package layer.", "placement": "footer"}
+  ]
+}

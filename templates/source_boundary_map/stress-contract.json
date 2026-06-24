@@ -1,0 +1,56 @@
+{
+  "title": "Source Boundary Map Stress",
+  "subtitle": "Stress contract with multiple derived packages and authority targets",
+  "diagram_type": "source_boundary_map",
+  "style": "accent-blueprint",
+  "width": 1900,
+  "max_nodes_per_row": 4,
+  "groups": [
+    {"id": "access", "label": "Access and interpretation layer", "type": "layer"},
+    {"id": "models", "label": "Derived model layer", "type": "layer"},
+    {
+      "id": "assets",
+      "label": "Reusable derived assets",
+      "type": "layer",
+      "routing": {"mode": "row_bus_side_trunk", "fanout_side": "right", "fanin_side": "left"},
+      "side_gutter": 170
+    },
+    {"id": "sources", "label": "Controlled-source boundary", "type": "layer", "max_per_row": 2}
+  ],
+  "nodes": [
+    {"id": "portal", "label": "Knowledge Portal", "subtitle": "entry and routing", "kind": "index", "group": "access"},
+    {"id": "glossary", "label": "Glossary Register", "subtitle": "controlled terms", "kind": "glossary", "group": "access"},
+    {"id": "domain_model", "label": "Domain Model", "subtitle": "interfaces + boundaries", "kind": "capability", "group": "models"},
+    {"id": "risk_taxonomy", "label": "Risk Taxonomy", "subtitle": "constraint model", "kind": "risk", "group": "models"},
+    {"id": "ownership_rules", "label": "Ownership Rules", "subtitle": "shared governance", "kind": "quality", "group": "models"},
+    {"id": "asset_a", "label": "Assembly Knowledge Package", "subtitle": "approved module", "kind": "package", "group": "assets", "row": 0, "col": 0},
+    {"id": "asset_b", "label": "Inspection Parameter Package", "subtitle": "CTQ family", "kind": "registry", "group": "assets", "row": 0, "col": 1},
+    {"id": "asset_c", "label": "Exception Handling Playbook", "subtitle": "risk response", "kind": "risk", "group": "assets", "row": 0, "col": 2},
+    {"id": "asset_d", "label": "External Supplier Boundary", "subtitle": "optional link", "kind": "ontology", "group": "assets", "row": 0, "col": 3},
+    {"id": "asset_e", "label": "Reusable Training Module", "subtitle": "approved asset", "kind": "package", "group": "assets", "row": 1, "col": 1},
+    {"id": "asset_f", "label": "Change Impact Checklist", "subtitle": "transformation path", "kind": "process", "group": "assets", "row": 1, "col": 2},
+    {"id": "controlled_docs", "label": "Controlled Procedure Documents", "subtitle": "execution authority", "kind": "source", "group": "sources"},
+    {"id": "record_system", "label": "Quality Record System", "subtitle": "evidence authority", "kind": "evidence", "group": "sources"}
+  ],
+  "edges": [
+    {"from": "portal", "to": "glossary", "relation": "uses_language_from", "style": "dashed"},
+    {"from": "portal", "to": "domain_model", "relation": "opens"},
+    {"from": "portal", "to": "risk_taxonomy", "relation": "opens"},
+    {"from": "portal", "to": "ownership_rules", "relation": "opens"},
+    {"from": "domain_model", "to": "asset_a", "relation": "defines"},
+    {"from": "domain_model", "to": "asset_b", "relation": "defines"},
+    {"from": "domain_model", "to": "asset_c", "relation": "defines"},
+    {"from": "domain_model", "to": "asset_d", "relation": "defines"},
+    {"from": "domain_model", "to": "asset_e", "relation": "defines"},
+    {"from": "domain_model", "to": "asset_f", "relation": "defines"},
+    {"from": "asset_a", "to": "controlled_docs", "relation": "source_bound"},
+    {"from": "asset_b", "to": "controlled_docs", "relation": "source_bound"},
+    {"from": "asset_c", "to": "record_system", "relation": "evidenced_by"},
+    {"from": "asset_d", "to": "controlled_docs", "relation": "source_bound"},
+    {"from": "asset_e", "to": "record_system", "relation": "evidenced_by"},
+    {"from": "asset_f", "to": "record_system", "relation": "evidenced_by"}
+  ],
+  "annotations": [
+    {"text": "Stress template: derived assets may map to different authority targets without crossing card interiors.", "placement": "footer"}
+  ]
+}

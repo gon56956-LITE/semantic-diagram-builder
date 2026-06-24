@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="976" viewBox="0 0 1900 976" role="img" aria-label="Registry Table Stress" data-style="accent-blueprint" data-diagram-type="registry_table">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style="accent-blueprint"] .route-shared{marker-end:none}
+    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1900" height="976" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1900" height="976" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="950.0" y="54" text-anchor="middle" class="title">Registry Table Stress</text>
+<text x="950.0" y="80" text-anchor="middle" class="subtitle">Stress contract with many columns, long text, and semantic badges</text>
+<rect x="70" y="115" width="1760" height="751" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<rect x="70" y="115" width="1760" height="65" rx="6" fill="#FFFFFF" fill-opacity="0.06"/>
+<text x="86.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Term</text>
+<line x1="300.0" y1="115" x2="300.0" y2="866" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="316.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Definition</text>
+<line x1="740.0" y1="115" x2="740.0" y2="866" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="822.5" y="153.26" text-anchor="middle" class="table-header" style="font-size:17.3px">Type</text>
+<line x1="905.0" y1="115" x2="905.0" y2="866" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="921.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Owner</text>
+<line x1="1125.0" y1="115" x2="1125.0" y2="866" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="1141.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">State</text>
+<line x1="1305.0" y1="115" x2="1305.0" y2="866" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="1321.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Risk / Constraint</text>
+<line x1="1605.0" y1="115" x2="1605.0" y2="866" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="1621.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Related Items</text>
+<line x1="70" y1="180" x2="1830" y2="180" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="235.3" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Domain Map</text>
+<g class="table-badge semantic-badge" data-kind="capability"><rect x="86" y="214.0" width="30" height="30" rx="5" fill="#031E42" stroke="#16D9FF" stroke-width="1.2"/><rect x="91.0" y="222.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M91.0,227.0 H111.0 M101.0,222.0 V238.0" class="icon-line" stroke="#16D9FF"/></g>
+<text x="316.0" y="211.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Aligned view of systems, interfaces,</text>
+<text x="316.0" y="235.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">boundaries, and reusable knowledge</text>
+<text x="316.0" y="258.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">modules.</text>
+<text x="822.5" y="235.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Map</text>
+<text x="921.0" y="235.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Architecture</text>
+<text x="1141.0" y="235.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved</text>
+<text x="1321.0" y="223.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Scope must match declared</text>
+<text x="1321.0" y="247.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">domain boundary.</text>
+<text x="1621.0" y="223.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Interfaces,</text>
+<text x="1621.0" y="247.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Modules, Owners</text>
+<line x1="70" y1="278" x2="1830" y2="278" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="321.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Controlled</text>
+<text x="132.0" y="345.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Source</text>
+<g class="table-badge semantic-badge" data-kind="source"><rect x="86" y="312.0" width="30" height="30" rx="5" fill="#031E42" stroke="#F4F8FF" stroke-width="1.2"/><path d="M91.0,317.0 H105.0 L111.0,323.0 V337.0 H91.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M105.0,317.0 V323.0 H111.0" class="icon-line" stroke="#F4F8FF"/></g>
+<text x="316.0" y="321.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Authoritative document or system record</text>
+<text x="316.0" y="345.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">used to validate derived knowledge.</text>
+<text x="822.5" y="333.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Authority</text>
+<text x="921.0" y="333.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Document Control</text>
+<text x="1141.0" y="333.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Controlled</text>
+<text x="1321.0" y="309.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Revision mismatch</text>
+<text x="1321.0" y="333.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">invalidates derived</text>
+<text x="1321.0" y="356.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">content.</text>
+<text x="1621.0" y="333.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Revision, Approval</text>
+<line x1="70" y1="376" x2="1830" y2="376" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="419.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Risk</text>
+<text x="132.0" y="443.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Constraint</text>
+<g class="table-badge semantic-badge" data-kind="risk"><rect x="86" y="410.0" width="30" height="30" rx="5" fill="#031E42" stroke="#FFD84D" stroke-width="1.2"/><path d="M101.0,415.0 L110.0,420.0 V430.0 L101.0,435.0 L92.0,430.0 V420.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M97.0,425.0 L100.0,429.0 L106.0,421.0" class="icon-line" stroke="#FFD84D"/></g>
+<text x="316.0" y="407.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Condition that limits how an asset,</text>
+<text x="316.0" y="431.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">parameter, or process module can be</text>
+<text x="316.0" y="454.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">reused.</text>
+<text x="822.5" y="431.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Governance</text>
+<text x="921.0" y="431.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Quality</text>
+<text x="1141.0" y="431.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Active</text>
+<text x="1321.0" y="419.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Exceptions require</text>
+<text x="1321.0" y="443.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">explicit approval.</text>
+<text x="1621.0" y="431.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">CTQ, Exception</text>
+<line x1="70" y1="474" x2="1830" y2="474" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="517.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Reusable</text>
+<text x="132.0" y="541.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Module</text>
+<g class="table-badge semantic-badge" data-kind="package"><rect x="86" y="508.0" width="30" height="30" rx="5" fill="#031E42" stroke="#6EE66E" stroke-width="1.2"/><rect x="91.0" y="516.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M91.0,521.0 H111.0 M101.0,516.0 V532.0" class="icon-line" stroke="#6EE66E"/></g>
+<text x="316.0" y="505.67499999999995" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved knowledge package that can be</text>
+<text x="316.0" y="529.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">referenced by maps, taxonomies, or</text>
+<text x="316.0" y="552.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">workflows.</text>
+<text x="822.5" y="529.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Asset</text>
+<text x="921.0" y="529.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Knowledge Ops</text>
+<text x="1141.0" y="529.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Reusable</text>
+<text x="1321.0" y="517.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Must cite source boundary</text>
+<text x="1321.0" y="541.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">and owner.</text>
+<text x="1621.0" y="529.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Package, Instance</text>
+<line x1="70" y1="572" x2="1830" y2="572" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="615.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">System</text>
+<text x="132.0" y="639.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Interface</text>
+<g class="table-badge semantic-badge" data-kind="query"><rect x="86" y="606.0" width="30" height="30" rx="5" fill="#031E42" stroke="#16D9FF" stroke-width="1.2"/><circle cx="99.0" cy="619.0" r="7" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M105.0,625.0 L111.0,631.0" class="icon-line" stroke="#16D9FF"/></g>
+<text x="316.0" y="603.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Boundary where one system or team</text>
+<text x="316.0" y="627.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">exchanges data, decisions, or</text>
+<text x="316.0" y="650.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">responsibilities.</text>
+<text x="822.5" y="627.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Interface</text>
+<text x="921.0" y="627.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Systems</text>
+<text x="1141.0" y="627.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Reviewed</text>
+<text x="1321.0" y="615.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Ambiguous ownership</text>
+<text x="1321.0" y="639.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">causes handoff gaps.</text>
+<text x="1621.0" y="627.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Domain, Owner</text>
+<line x1="70" y1="670" x2="1830" y2="670" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="713.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Classification</text>
+<text x="132.0" y="737.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Node</text>
+<g class="table-badge semantic-badge" data-kind="glossary"><rect x="86" y="704.0" width="30" height="30" rx="5" fill="#031E42" stroke="#B56CFF" stroke-width="1.2"/><path d="M91.0,709.0 H107.0 Q111.0,709.0 111.0,713.0 V728.0 H91.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M96.0,715.0 H105.0 M96.0,721.0 H105.0" class="icon-line" stroke="#B56CFF"/></g>
+<text x="316.0" y="713.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Named category in a hierarchy used to</text>
+<text x="316.0" y="737.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">classify knowledge objects.</text>
+<text x="822.5" y="725.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Taxonomy</text>
+<text x="921.0" y="725.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Architecture</text>
+<text x="1141.0" y="725.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Draft</text>
+<text x="1321.0" y="713.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Do not skip parent levels</text>
+<text x="1321.0" y="737.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">without rule.</text>
+<text x="1621.0" y="725.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Parent, Child</text>
+<line x1="70" y1="768" x2="1830" y2="768" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="823.3" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Quality Metric</text>
+<g class="table-badge semantic-badge" data-kind="quality"><rect x="86" y="802.0" width="30" height="30" rx="5" fill="#031E42" stroke="#FFD84D" stroke-width="1.2"/><path d="M101.0,807.0 L111.0,825.0 H91.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M101.0,814.0 V820.0 M101.0,824.0 V824.0" class="icon-line" stroke="#FFD84D"/></g>
+<text x="316.0" y="811.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Measure used to evaluate quality,</text>
+<text x="316.0" y="835.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">completeness, or readiness of an asset.</text>
+<text x="822.5" y="823.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Metric</text>
+<text x="921.0" y="823.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Quality</text>
+<text x="1141.0" y="823.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved</text>
+<text x="1321.0" y="811.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Metric definition must be</text>
+<text x="1321.0" y="835.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">stable.</text>
+<text x="1621.0" y="823.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">CTQ, Threshold</text>
+<text x="950.0" y="948" text-anchor="middle" class="note">Stress template: long rows should wrap inside cells while badges remain semantic.</text>
+</svg>

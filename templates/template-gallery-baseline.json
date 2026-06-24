@@ -98,5 +98,105 @@
       "svg": "templates/hub_spoke/reference.svg",
       "max_height": 720
     }
+  ],
+  "gallery_templates": [
+    {
+      "diagram_type": "layered_knowledge_topology",
+      "variant": "reference",
+      "style": "modern-tech",
+      "title": "Layered Knowledge Topology Reference",
+      "contract": "templates/layered_knowledge_topology/reference-contract.json",
+      "svg": "templates/layered_knowledge_topology/reference.svg"
+    },
+    {
+      "diagram_type": "layered_knowledge_topology",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Layered Knowledge Topology Stress",
+      "contract": "templates/layered_knowledge_topology/stress-contract.json",
+      "svg": "templates/layered_knowledge_topology/stress.svg"
+    },
+    {
+      "diagram_type": "source_boundary_map",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Source Boundary Map Reference",
+      "contract": "templates/source_boundary_map/reference-contract.json",
+      "svg": "templates/source_boundary_map/reference.svg"
+    },
+    {
+      "diagram_type": "source_boundary_map",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Source Boundary Map Stress",
+      "contract": "templates/source_boundary_map/stress-contract.json",
+      "svg": "templates/source_boundary_map/stress.svg"
+    },
+    {
+      "diagram_type": "boundary_ownership_map",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Boundary Ownership Map Reference",
+      "contract": "templates/boundary_ownership_map/reference-contract.json",
+      "svg": "templates/boundary_ownership_map/reference.svg"
+    },
+    {
+      "diagram_type": "boundary_ownership_map",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Boundary Ownership Map Stress",
+      "contract": "templates/boundary_ownership_map/stress-contract.json",
+      "svg": "templates/boundary_ownership_map/stress.svg"
+    },
+    {
+      "diagram_type": "registry_table",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Registry Table Reference",
+      "contract": "templates/registry_table/reference-contract.json",
+      "svg": "templates/registry_table/reference.svg"
+    },
+    {
+      "diagram_type": "registry_table",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Registry Table Stress",
+      "contract": "templates/registry_table/stress-contract.json",
+      "svg": "templates/registry_table/stress.svg"
+    },
+    {
+      "diagram_type": "taxonomy_tree",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Taxonomy Tree Reference",
+      "contract": "templates/taxonomy_tree/reference-contract.json",
+      "svg": "templates/taxonomy_tree/reference.svg"
+    },
+    {
+      "diagram_type": "taxonomy_tree",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Taxonomy Tree Stress",
+      "contract": "templates/taxonomy_tree/stress-contract.json",
+      "svg": "templates/taxonomy_tree/stress.svg"
+    },
+    {
+      "diagram_type": "hub_spoke",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Hub Spoke Reference",
+      "contract": "templates/hub_spoke/reference-contract.json",
+      "svg": "templates/hub_spoke/reference.svg",
+      "max_height": 720
+    },
+    {
+      "diagram_type": "hub_spoke",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Hub Spoke Stress",
+      "contract": "templates/hub_spoke/stress-contract.json",
+      "svg": "templates/hub_spoke/stress.svg",
+      "max_height": 900
+    }
   ]
 }
