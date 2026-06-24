@@ -58,6 +58,9 @@ Use geometry validation for routing and style gallery review for visual quality:
 ```bash
 py scripts/validate_semantic_svg.py output.svg
 py scripts/build_style_gallery.py examples/style-gallery.html examples/accent-blueprint-boundary-contract.json
+py scripts/test_style_gallery_quality.py
 ```
 
 For screenshot review, compare the generated gallery/SVG against the style reference image listed in the style package `qa.reference_image`.
+
+`examples/style-gallery-baseline.json` is the shared QA manifest for the bundled examples. It keeps the checked contract list, expected diagram types/styles, and style-specific quality gates in one place so gallery regressions are caught before visual review.

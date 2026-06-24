@@ -150,6 +150,7 @@ Before final delivery, verify:
 - Layer containers are tall enough for all contained cards; no card protrudes outside its layer band.
 - Run `py scripts/validate_semantic_svg.py output.svg` when possible, then run `git diff --check` for generated SVGs when working in a git repo.
 - For style QA, build a gallery with `py scripts/build_style_gallery.py examples/style-gallery.html examples/your-contract.json` and compare against the style reference image or screenshot.
+- After renderer, style, or example changes, run `py scripts/test_style_gallery_quality.py` so the gallery stays fresh and catches shared visual regressions such as tiny text, mismatched arrowheads, missing group-label shields, or oversized canvases.
 
 ## Script usage
 
@@ -160,7 +161,8 @@ py scripts/render_semantic_diagram.py examples/accent-blueprint-boundary-contrac
 py scripts/render_semantic_diagram.py examples/registry-table-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/taxonomy-tree-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/hub-spoke-contract.json output.svg
-py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/accent-blueprint-boundary-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
+py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/ocs-r300-multirrow-contract.json examples/accent-blueprint-boundary-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
+py scripts/test_style_gallery_quality.py
 ```
 
 The script is a conservative standard-type renderer, not a full arbitrary graph engine. Unsupported diagram types, unsupported annotation placements, and edge labels produce errors or warnings and are left as contract guidance. If a diagram needs a special layout, use the script output as a starting point and make surgical SVG adjustments while preserving the QA rules above. After manual edits, rerun `scripts/validate_semantic_svg.py` because hand-edited icons, connectors, and layer heights are common failure points.

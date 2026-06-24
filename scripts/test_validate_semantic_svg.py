@@ -72,6 +72,55 @@ def main() -> int:
 """,
     )
     assert_pass(
+        "context stroke arrow marker",
+        """
+<svg width="100" height="100">
+<defs><marker id="arrow"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<path d="M 0 0 L 10 0" class="edge" marker-end="url(#arrow)"/>
+</svg>
+""",
+    )
+    assert_issue(
+        "fixed color arrow marker",
+        """
+<svg width="100" height="100">
+<defs><marker id="arrow-fanout"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker></defs>
+<path d="M 0 0 L 10 0" class="edge fanout" marker-end="url(#arrow-fanout)"/>
+</svg>
+""",
+        "context-stroke",
+    )
+    assert_issue(
+        "small generated label text",
+        """
+<svg width="600" height="260">
+<style>.group-label{font:700 10px Arial}.note{font:500 10px Arial}</style>
+<rect x="20" y="20" width="560" height="180" class="group-panel" fill="#EEF6FF"/>
+<g class="group-label-wrap"><rect x="32" y="32" width="90" height="24" fill="#FFFFFF"/><text x="40" y="48" class="group-label">Layer</text></g>
+</svg>
+""",
+        "group-label font size",
+    )
+    assert_issue(
+        "group label without shield",
+        """
+<svg width="600" height="260">
+<rect x="20" y="20" width="560" height="180" class="group-panel" fill="#EEF6FF"/>
+<text x="40" y="48" class="group-label">Layer</text>
+</svg>
+""",
+        "group labels should use background shields",
+    )
+    assert_issue(
+        "hub spoke excessive whitespace",
+        """
+<svg width="800" height="900" data-diagram-type="hub_spoke">
+<g id="node-hub" class="card"><rect x="300" y="180" width="200" height="200" fill="#FFFFFF" stroke="#334155"/></g>
+</svg>
+""",
+        "excessive bottom whitespace",
+    )
+    assert_pass(
         "bottom bus explains larger layer padding",
         """
 <svg width="600" height="520">

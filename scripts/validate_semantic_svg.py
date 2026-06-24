@@ -14,17 +14,23 @@ from pathlib import Path
 HEX_OR_NONE = re.compile(r'^(#[0-9A-Fa-f]{6}|none|context-stroke|url\(#[-A-Za-z0-9_]+\))$')
 ATTR = re.compile(r'(fill|stroke)="([^"]+)"')
 SVG_SIZE = re.compile(r'<svg[^>]*width="([0-9.]+)"[^>]*height="([0-9.]+)"')
+DATA_DIAGRAM_RE = re.compile(r'data-diagram-type="([^"]+)"')
 CARD_RE = re.compile(
     r'<g\b(?=[^>]*(?:\bclass="[^"]*\bcard\b[^"]*"|\bid="node-[^"]+"))[^>]*>(.*?)</g>',
     re.S,
 )
 RECT_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"')
 TEXT_RE = re.compile(r'<text[^>]*class="card-(title|sub)"[^>]*>(.*?)</text>')
+TEXT_TAG_RE = re.compile(r'<text\b([^>]*)>', re.S)
 LAYER_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"[^>]*>?</rect>|<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"[^>]*/>')
 GROUP_LABEL_RE = re.compile(r'<text[^>]*class="group-label"[^>]*>')
 PATH_RE = re.compile(r'<path\b([^>]*)/?>')
 CLASS_RE = re.compile(r'class="([^"]+)"')
 D_RE = re.compile(r'\bd="([^"]+)"')
+MARKER_RE = re.compile(r'<marker\b([^>]*)>(.*?)</marker>', re.S)
+FILL_RE = re.compile(r'\bfill="([^"]+)"')
+STYLE_FONT_RE = re.compile(r'\bfont\s*:[^;}]*?([0-9.]+)px', re.S)
+INLINE_FONT_RE = re.compile(r'\bfont-size\s*:\s*([0-9.]+)px')
 CONNECTOR_CLASSES = {
     'edge',
     'edge-dashed',
@@ -44,6 +50,19 @@ EPS = 1e-6
 BUS_CARD_CLEARANCE = 24.0
 BUS_LANE_GAP = 48.0
 LAYER_LABEL_HEIGHT = 42.0
+TEXT_MIN_SIZES = {
+    'group-label': 14.5,
+    'tree-level-label': 14.5,
+    'hub-label': 14.5,
+    'note': 13.5,
+    'table-header': 14.5,
+    'table-cell': 16.0,
+    'table-cell-secondary': 16.0,
+}
+INLINE_TEXT_MIN_SIZES = {
+    'card-title': 18.0,
+    'card-sub': 13.5,
+}
 
 
 def fail(msg: str, issues: list[str]) -> None:
@@ -247,6 +266,93 @@ def _card_rects(svg: str) -> list[tuple[float, float, float, float]]:
     return cards
 
 
+def _diagram_type(svg: str) -> str:
+    match = DATA_DIAGRAM_RE.search(svg)
+    return match.group(1) if match else ''
+
+
+def _css_font_sizes(svg: str, class_name: str) -> list[float]:
+    sizes: list[float] = []
+    rule_re = re.compile(rf'\.{re.escape(class_name)}\s*\{{([^}}]*)\}}', re.S)
+    for match in rule_re.finditer(svg):
+        font_match = STYLE_FONT_RE.search(match.group(1))
+        if font_match:
+            sizes.append(float(font_match.group(1)))
+    return sizes
+
+
+def _inline_font_sizes(svg: str, class_name: str) -> list[float]:
+    sizes: list[float] = []
+    for match in TEXT_TAG_RE.finditer(svg):
+        attrs = match.group(1)
+        class_match = CLASS_RE.search(attrs)
+        if not class_match or class_name not in class_match.group(1).split():
+            continue
+        font_match = INLINE_FONT_RE.search(attrs)
+        if font_match:
+            sizes.append(float(font_match.group(1)))
+    return sizes
+
+
+def _check_arrow_markers(svg: str, issues: list[str]) -> None:
+    for attrs, body in MARKER_RE.findall(svg):
+        id_match = re.search(r'\bid="([^"]+)"', attrs)
+        if not id_match or 'arrow' not in id_match.group(1):
+            continue
+        fills = FILL_RE.findall(body)
+        if 'context-stroke' not in fills:
+            fail(
+                f'arrow marker "{id_match.group(1)}" should use context-stroke so arrowheads match connector color',
+                issues,
+            )
+
+
+def _check_text_scale(svg: str, issues: list[str]) -> None:
+    for class_name, minimum in TEXT_MIN_SIZES.items():
+        for size in _css_font_sizes(svg, class_name):
+            if size + EPS < minimum:
+                fail(f'{class_name} font size {size:g}px is below readable minimum {minimum:g}px', issues)
+        for size in _inline_font_sizes(svg, class_name):
+            if size + EPS < minimum:
+                fail(f'{class_name} font size {size:g}px is below readable minimum {minimum:g}px', issues)
+
+    for class_name, minimum in INLINE_TEXT_MIN_SIZES.items():
+        for size in _inline_font_sizes(svg, class_name):
+            if size + EPS < minimum:
+                fail(f'{class_name} font size {size:g}px is below readable minimum {minimum:g}px', issues)
+
+
+def _check_group_label_shields(svg: str, issues: list[str]) -> None:
+    if 'class="group-panel"' not in svg:
+        return
+    label_count = len(GROUP_LABEL_RE.findall(svg))
+    if not label_count:
+        return
+    shield_count = svg.count('class="group-label-wrap"')
+    if shield_count < label_count:
+        fail('group labels should use background shields when group panels are rendered', issues)
+    first_edge = svg.find('class="edge')
+    first_shield = svg.find('class="group-label-wrap"')
+    if first_edge != -1 and first_shield != -1 and first_shield < first_edge:
+        fail('group label shields should be drawn above connector paths', issues)
+
+
+def _check_canvas_density(svg: str, issues: list[str]) -> None:
+    if _diagram_type(svg) != 'hub_spoke':
+        return
+    size = SVG_SIZE.search(svg)
+    if not size:
+        return
+    _width, height = map(float, size.groups())
+    cards = _card_rects(svg)
+    if not cards:
+        return
+    max_card_bottom = max(y + h for _x, y, _w, h in cards)
+    bottom_whitespace = height - max_card_bottom
+    if bottom_whitespace > 140:
+        fail(f'hub_spoke canvas has excessive bottom whitespace: {bottom_whitespace:.0f}px', issues)
+
+
 def _segment_inside_rect(seg: tuple[str, tuple[float, float], tuple[float, float]], rect: tuple[float, float, float, float]) -> bool:
     _orient, a, b = seg
     x, y, w, h = rect
@@ -432,6 +538,11 @@ def check_svg(svg: str) -> list[str]:
         elif value not in {'currentColor'}:
             # Named colors are avoided so semantic keys do not leak into SVG attrs.
             fail(f'non-portable {attr} value: {value}', issues)
+
+    _check_arrow_markers(svg, issues)
+    _check_text_scale(svg, issues)
+    _check_group_label_shields(svg, issues)
+    _check_canvas_density(svg, issues)
 
     dashed_count = svg.count('edge-dashed') + svg.count('stroke-dasharray')
     if dashed_count > 8:

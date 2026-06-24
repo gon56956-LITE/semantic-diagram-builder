@@ -1,0 +1,48 @@
+{
+  "gallery": "examples/style-gallery.html",
+  "contracts": [
+    {
+      "path": "examples/ocs-r300-layered-contract.json",
+      "title": "OCS R300 Manufacturing Knowledge Topology",
+      "style": "modern-tech",
+      "diagram_type": "layered_knowledge_topology"
+    },
+    {
+      "path": "examples/ocs-r300-multirrow-contract.json",
+      "title": "OCS R300 Manufacturing Knowledge Topology",
+      "style": "modern-tech",
+      "diagram_type": "layered_knowledge_topology"
+    },
+    {
+      "path": "examples/accent-blueprint-boundary-contract.json",
+      "title": "Knowledge Boundary Blueprint",
+      "style": "accent-blueprint",
+      "diagram_type": "source_boundary_map"
+    },
+    {
+      "path": "examples/registry-table-contract.json",
+      "title": "Semantic Register Reference",
+      "style": "accent-blueprint",
+      "diagram_type": "registry_table"
+    },
+    {
+      "path": "examples/taxonomy-tree-contract.json",
+      "title": "Knowledge Taxonomy Reference",
+      "style": "accent-blueprint",
+      "diagram_type": "taxonomy_tree"
+    },
+    {
+      "path": "examples/hub-spoke-contract.json",
+      "title": "Knowledge Hub Reference",
+      "style": "accent-blueprint",
+      "diagram_type": "hub_spoke",
+      "max_height": 720
+    }
+  ],
+  "quality_gates": {
+    "require_context_stroke_markers": true,
+    "require_group_label_shields": true,
+    "require_no_external_scripts": true,
+    "require_accent_blueprint_grid": true
+  }
+}
