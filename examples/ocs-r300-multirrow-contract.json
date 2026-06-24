@@ -1,0 +1,58 @@
+{
+  "title": "OCS R300 Manufacturing Knowledge Topology",
+  "subtitle": "Multi-row example: synthesis fan-out and source-bound fan-in stay inside the WI-derived layer",
+  "layout": "layered",
+  "width": 1800,
+  "max_nodes_per_row": 4,
+  "groups": [
+    {"id": "navigation", "label": "Navigation layer", "type": "layer"},
+    {"id": "synthesis", "label": "Product-level synthesis", "type": "layer"},
+    {
+      "id": "subkb",
+      "label": "WI-derived knowledge layer",
+      "type": "layer",
+      "routing": {"mode": "row_bus_side_trunk", "fanout_side": "right", "fanin_side": "left"},
+      "side_gutter": 150
+    },
+    {"id": "source", "label": "Controlled-source boundary", "type": "layer", "max_per_row": 1}
+  ],
+  "nodes": [
+    {"id": "moc", "label": "Manufacturing MOC", "subtitle": "entry point", "kind": "index", "group": "navigation"},
+    {"id": "query", "label": "Query Guide", "subtitle": "where to look", "kind": "query", "group": "navigation"},
+    {"id": "glossary", "label": "Glossary / Ontology", "subtitle": "shared language", "kind": "glossary", "group": "navigation"},
+    {"id": "process", "label": "End-to-End Process Overview", "subtitle": "product-level flow", "kind": "process", "group": "synthesis"},
+    {"id": "ctq", "label": "CTQ & Parameter Master Register", "subtitle": "quality + parameter families", "kind": "quality", "group": "synthesis"},
+    {"id": "risk", "label": "Defect & Risk Taxonomy", "subtitle": "cross-group risk concepts", "kind": "risk", "group": "synthesis"},
+    {"id": "mems", "label": "MEMS Package", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb", "row": 0, "col": 0},
+    {"id": "mca", "label": "MCA Package", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb", "row": 0, "col": 1},
+    {"id": "obm", "label": "OBM Assy", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb", "row": 0, "col": 2},
+    {"id": "pob", "label": "POB", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb", "row": 0, "col": 3},
+    {"id": "faceplate", "label": "Faceplate", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb", "row": 1, "col": 1},
+    {"id": "mech", "label": "MECH Assy", "subtitle": "source-bound sub-KB", "kind": "package", "group": "subkb", "row": 1, "col": 2},
+    {"id": "controlled_sources", "label": "Controlled WI / PLM Source Documents", "subtitle": "authoritative execution and revision control", "kind": "source", "group": "source"}
+  ],
+  "edges": [
+    {"from": "moc", "to": "query", "relation": "navigates_to", "style": "dashed"},
+    {"from": "query", "to": "glossary", "relation": "uses_language_from", "style": "dashed"},
+    {"from": "query", "to": "process", "relation": "points_to"},
+    {"from": "query", "to": "ctq", "relation": "points_to"},
+    {"from": "query", "to": "risk", "relation": "points_to"},
+    {"from": "ctq", "to": "mems", "relation": "synthesizes_from"},
+    {"from": "ctq", "to": "mca", "relation": "synthesizes_from"},
+    {"from": "ctq", "to": "obm", "relation": "synthesizes_from"},
+    {"from": "ctq", "to": "pob", "relation": "synthesizes_from"},
+    {"from": "ctq", "to": "faceplate", "relation": "synthesizes_from"},
+    {"from": "ctq", "to": "mech", "relation": "synthesizes_from"},
+    {"from": "mems", "to": "controlled_sources", "relation": "source_bound"},
+    {"from": "mca", "to": "controlled_sources", "relation": "source_bound"},
+    {"from": "obm", "to": "controlled_sources", "relation": "source_bound"},
+    {"from": "pob", "to": "controlled_sources", "relation": "source_bound"},
+    {"from": "faceplate", "to": "controlled_sources", "relation": "source_bound"},
+    {"from": "mech", "to": "controlled_sources", "relation": "source_bound"}
+  ],
+  "annotations": [
+    {"text": "blue = synthesis fan-out", "placement": "legend", "color": "#2563EB"},
+    {"text": "green = source-bound fan-in", "placement": "legend", "color": "#16A34A"},
+    {"text": "Example note: row-level buses and side trunks are generated from explicit row/col contract fields.", "placement": "footer"}
+  ]
+}

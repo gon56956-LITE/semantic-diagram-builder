@@ -24,9 +24,12 @@ These metrics keep semantic diagrams visually consistent. Use them as defaults u
 - Fan-out bus placement: put the horizontal bus inside the target layer, above the target sibling cards.
 - Fan-in bus placement: put the horizontal merge bus inside the source layer, below the source sibling cards.
 - Minimum bus-to-card clearance: keep at least `24 px` between a horizontal bus and the nearest card edge before an arrowhead enters or leaves a card. Prefer `32 px` when space allows.
+- Row-bus default clearance in generated diagrams: `32 px` from card top/bottom to the row bus.
+- Minimum gap between a fan-in lane from one row and a fan-out lane for the next row: `48 px`.
 - Cross-layer transition rule: after fan-in, use one trunk to cross the layer gap; before fan-out, enter the target layer first, then split.
 - Orthogonal connector turns should use rounded `Q` corners. Avoid hard 90-degree turns in hand-authored SVGs unless the diagram is intentionally grid-like.
 - Do not add parallel bus lanes as a default style. Use a single clear bus unless the user explicitly requests multiple lanes and the diagram remains readable.
+- Side-trunk gutter default for generated multi-row routing: reserve at least `130 px` inside the layer side gutter. The default fan-out side is right; the default fan-in side is left.
 
 ## Layer container metrics
 
@@ -81,3 +84,5 @@ Defaults:
 - Keep at least `48 px` between separate fan-out and fan-in bus channels when both appear between two card rows.
 - Add side-gutter width when a lower-row fan-out route must bypass upper-row cards; do not route through card columns.
 - Layer height must include all card rows, row gaps, bus channels, connector clearances, and bottom padding.
+- If both fan-out and fan-in lanes are present between two rows, calculate row gap as at least `bus_to_card_clearance + bus_lane_gap + bus_to_card_clearance`.
+- Use explicit `row` and `col` contract fields for multi-row examples that must remain stable across future edits.

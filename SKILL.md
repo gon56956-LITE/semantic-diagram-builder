@@ -20,6 +20,7 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - Which text is an annotation rather than a node?
    - Which node is the entry point or source of truth?
 2. Choose a layout pattern.
+   - The bundled renderer currently renders grouped/layered placement for `auto` and `layered`. Other layout names are contract/design guidance unless you manually author the SVG or extend the renderer.
    - `layered`: abstraction layers, knowledge architecture, source-boundary maps.
    - `hierarchy`: parent-child object trees.
    - `hub_spoke`: one center with surrounding domains/capabilities.
@@ -27,7 +28,7 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - `boundary_map`: source-of-truth vs derived/synthesis objects.
    - `auto`: choose the closest pattern from the contract.
 3. Apply stable layout metrics from `references/layout_metrics.md` before rendering or manual SVG edits.
-4. Render an SVG with `scripts/render_semantic_diagram.py` when possible.
+4. Render an SVG with `scripts/render_semantic_diagram.py` when possible. Treat script warnings as follow-up manual edit cues.
 5. Run automated QA with `scripts/validate_semantic_svg.py` and then visual QA before presenting the diagram.
 
 ## Contract fields
@@ -63,14 +64,24 @@ Useful node fields:
 - `subtitle`: small secondary label.
 - `kind`: semantic category used for icon/accent. Common values: `hub`, `index`, `query`, `glossary`, `process`, `quality`, `risk`, `package`, `source`, `ontology`, `registry`, `capability`, `evidence`, `decision`, `object`.
 - `group`: group/layer id.
+- `row`, `col`: optional 0-based placement controls inside the node's group. Use them for multi-row sibling sets that need stable routing.
 - `importance`: `primary`, `normal`, or `secondary`.
+
+Useful group fields:
+
+- `max_per_row`: maximum automatically placed nodes per row.
+- `row_gap`: optional row gap override; the renderer raises it when bus lanes need more clearance.
+- `side_gutter`: optional side-gutter width for side trunks.
+- `routing.mode`: `auto`, `row_bus_side_trunk`, or `simple`. `auto` selects row-level buses for multi-row fan-out/fan-in groups.
+- `routing.fanout_side`: `right` by default; side trunk used to reach lower-row fan-out buses.
+- `routing.fanin_side`: `left` by default; side trunk used to merge row-level fan-in buses.
 
 Useful edge fields:
 
 - `from`, `to`: node ids.
 - `relation`: semantic relation; keep it source-faithful.
 - `style`: `primary`, `secondary`, or `dashed`.
-- `label`: use sparingly; prefer legends/annotations when labels would collide with paths.
+- `label`: use sparingly; prefer legends/annotations when labels would collide with paths. The bundled renderer treats edge labels as contract guidance and warns instead of placing them automatically.
 
 Useful annotation placements:
 
@@ -78,6 +89,8 @@ Useful annotation placements:
 - `group:<group_id>`: inside a group band, away from connector corridors.
 - `side`: side callout.
 - `legend`: compact legend area.
+
+The bundled renderer currently renders `footer` and `legend` annotations. Other placements are contract guidance for manual SVG adjustment and will produce a script warning.
 
 ## Layout and design rules
 
@@ -89,6 +102,7 @@ Useful annotation placements:
 - For fan-out into parallel sibling cards, place the horizontal bus inside the target layer above the cards, with clear vertical space before arrowheads enter the card tops.
 - For fan-in from parallel sibling cards, place the horizontal merge bus inside the source layer below the cards, then use one trunk for the cross-layer transition.
 - For parallel sibling cards with split or merge edges, complete the split/merge within the sibling layer and use one trunk for the cross-layer transition. If the bus needs room, increase the layer band height instead of pushing the bus into the gap.
+- For multi-row sibling sets, prefer `routing.mode: "row_bus_side_trunk"` with explicit `row`/`col` fields. Fan-out uses row-level buses above each target row; fan-in uses row-level buses below each source row; side trunks carry lower-row routes through the layer gutter.
 - Use semantic icons and accent colors; do not use identical generic badges for every node unless the contract has no semantic kind. QA icon paths: a badge/icon must stay inside the card and must not look like a connector.
 - Wrap long labels rather than letting text overflow. Give cards enough width and height for the icon, two title lines, and subtitle; do not let icons collide with title text.
 - Prefer containment or legends over many unclear dashed edges. Dashed relations must have an obvious semantic meaning or be explained by a label/legend.
@@ -119,9 +133,10 @@ Before final delivery, verify:
 
 ```bash
 py scripts/render_semantic_diagram.py examples/ocs-r300-layered-contract.json output.svg
+py scripts/render_semantic_diagram.py examples/ocs-r300-multirrow-contract.json output.svg
 ```
 
-The script is a conservative generic renderer, not a full diagram engine. If a diagram needs a special layout, use the script output as a starting point and make surgical SVG adjustments while preserving the QA rules above. After manual edits, rerun `scripts/validate_semantic_svg.py` because hand-edited icons, connectors, and layer heights are common failure points.
+The script is a conservative grouped/layered renderer, not a full diagram engine. Unsupported layout names, unsupported annotation placements, and edge labels produce warnings and are left as contract guidance. If a diagram needs a special layout, use the script output as a starting point and make surgical SVG adjustments while preserving the QA rules above. After manual edits, rerun `scripts/validate_semantic_svg.py` because hand-edited icons, connectors, and layer heights are common failure points.
 
 ## Example policy
 

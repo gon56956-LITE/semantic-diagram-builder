@@ -65,3 +65,9 @@ Rules:
 - Shared buses and trunks normally have no arrow marker; only terminal branches entering cards, pills, or source nodes should carry arrowheads.
 - Branches into or out of a bus must be route-level rounded elbows. Do not draw a straight vertical branch that visually T-bones into a horizontal bus.
 - If fan-out and fan-in coexist in the same layer, use distinct styles or colors and keep the legend outside all bus corridors.
+
+Bundled renderer behavior:
+- Use `nodes[].row` and `nodes[].col` to lock multi-row sibling placement when the diagram must be reproducible.
+- Set `groups[].routing.mode` to `row_bus_side_trunk` to force row-level routing. In `auto`, this mode is selected when a group has more than one row and participates in fan-out or fan-in.
+- `routing.fanout_side` defaults to `right`; `routing.fanin_side` defaults to `left`.
+- Set `routing.mode` to `simple` only when you intentionally want the older per-edge elbow routing and will visually inspect the result.

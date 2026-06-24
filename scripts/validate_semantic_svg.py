@@ -14,20 +14,36 @@ from pathlib import Path
 HEX_OR_NONE = re.compile(r'^(#[0-9A-Fa-f]{6}|none|url\(#[-A-Za-z0-9_]+\))$')
 ATTR = re.compile(r'(fill|stroke)="([^"]+)"')
 SVG_SIZE = re.compile(r'<svg[^>]*width="([0-9.]+)"[^>]*height="([0-9.]+)"')
-CARD_RE = re.compile(r'<g[^>]*class="card"[^>]*>(.*?)</g>', re.S)
+CARD_RE = re.compile(
+    r'<g\b(?=[^>]*(?:\bclass="[^"]*\bcard\b[^"]*"|\bid="node-[^"]+"))[^>]*>(.*?)</g>',
+    re.S,
+)
 RECT_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"')
-ICON_PATH_RE = re.compile(r'<path[^>]*class="[^"]*icon[^"]*"[^>]*d="([^"]+)"')
-NUM_RE = re.compile(r'[-+]?[0-9]*\.?[0-9]+')
 TEXT_RE = re.compile(r'<text[^>]*class="card-(title|sub)"[^>]*>(.*?)</text>')
 LAYER_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"[^>]*>?</rect>|<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"[^>]*/>')
 GROUP_LABEL_RE = re.compile(r'<text[^>]*class="group-label"[^>]*>')
-CONNECTOR_PATH_RE = re.compile(r'<path\b([^>]*)\bd="([^"]+)"[^>]*/?>')
+PATH_RE = re.compile(r'<path\b([^>]*)/?>')
 CLASS_RE = re.compile(r'class="([^"]+)"')
+D_RE = re.compile(r'\bd="([^"]+)"')
 CONNECTOR_CLASSES = {
-    'edge', 'edge-dashed', 'line', 'bus', 'fanout', 'fanoutbus', 'fanin', 'faninbus'
+    'edge',
+    'edge-dashed',
+    'line',
+    'bus',
+    'branch',
+    'trunk',
+    'terminal',
+    'route-shared',
+    'fanout',
+    'fanoutbus',
+    'fanin',
+    'faninbus',
 }
 PATH_TOKEN_RE = re.compile(r'[MLQHVZmlqhvz]|[-+]?(?:\d*\.)?\d+(?:[eE][-+]?\d+)?')
 EPS = 1e-6
+BUS_CARD_CLEARANCE = 24.0
+BUS_LANE_GAP = 48.0
+LAYER_LABEL_HEIGHT = 42.0
 
 
 def fail(msg: str, issues: list[str]) -> None:
@@ -45,6 +61,21 @@ def _rect_values(match: re.Match) -> tuple[float, float, float, float]:
 
 def _path_tokens(d: str) -> list[str]:
     return PATH_TOKEN_RE.findall(d.replace(',', ' '))
+
+
+def _path_attrs_with_classes(svg: str, wanted: set[str]) -> list[tuple[str, str, set[str]]]:
+    matches = []
+    for m in PATH_RE.finditer(svg):
+        attrs = m.group(1)
+        cm = CLASS_RE.search(attrs)
+        dm = D_RE.search(attrs)
+        if not cm or not dm:
+            continue
+        classes = set(cm.group(1).split())
+        matched = classes & wanted
+        if matched:
+            matches.append((attrs, dm.group(1), classes))
+    return matches
 
 
 def _axis_segment(a: tuple[float, float], b: tuple[float, float]) -> tuple[str | None, tuple[float, float], tuple[float, float]]:
@@ -135,6 +166,7 @@ def _parse_path_geometry(d: str) -> dict:
                 orient_start, _a, _b = _axis_segment(cur, (x1, y1))
                 first_dir = orient_start
             cur = (x, y)
+            points.append((x1, y1))
             points.append(cur)
         else:
             break
@@ -144,6 +176,7 @@ def _parse_path_geometry(d: str) -> dict:
         'first_dir': first_dir,
         'last_dir': last_dir,
         'segments': straight_segments,
+        'points': points,
         'has_curve': 'Q' in d or 'q' in d or 'C' in d or 'c' in d or 'A' in d or 'a' in d,
         'd': d,
     }
@@ -163,21 +196,131 @@ def _perpendicular(a: str | None, b: str | None) -> bool:
     return bool(a and b and a != b and {a, b} == {'h', 'v'})
 
 
+def _path_class_set(path: dict) -> set[str]:
+    return set(str(path.get('classes', '')).split())
+
+
+def _is_intentional_bus_junction(a: dict, b: dict) -> bool:
+    """Allow row-bus connector joins that are intentionally rendered as T joints."""
+    ac = _path_class_set(a)
+    bc = _path_class_set(b)
+
+    if 'bus' in ac or 'bus' in bc:
+        other = bc if 'bus' in ac else ac
+        return bool(other & {'branch', 'trunk', 'terminal'})
+
+    if 'trunk' in ac or 'trunk' in bc:
+        other = bc if 'trunk' in ac else ac
+        return bool(other & {'terminal', 'route-shared'})
+
+    return False
+
+
 def _connector_paths(svg: str) -> list[dict]:
     paths = []
-    for idx, m in enumerate(CONNECTOR_PATH_RE.finditer(svg), start=1):
-        attrs, d = m.groups()
-        cm = CLASS_RE.search(attrs)
-        if not cm:
-            continue
-        classes = set(cm.group(1).split())
-        if not (classes & CONNECTOR_CLASSES):
-            continue
+    for idx, (_attrs, d, classes) in enumerate(_path_attrs_with_classes(svg, CONNECTOR_CLASSES), start=1):
         geom = _parse_path_geometry(d)
         geom['idx'] = idx
-        geom['classes'] = ' '.join(sorted(classes & CONNECTOR_CLASSES))
+        geom['classes'] = ' '.join(sorted(classes))
         paths.append(geom)
     return paths
+
+
+def _layer_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    layers: list[tuple[float, float, float, float]] = []
+    for m in LAYER_RE.finditer(svg):
+        x, y, w, h = _rect_values(m)
+        after = svg[m.end(): m.end() + 140].lstrip()
+        if GROUP_LABEL_RE.match(after) and w >= 500 and h >= 120:
+            layers.append((x, y, w, h))
+    layers.sort(key=lambda r: r[1])
+    return layers
+
+
+def _card_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    cards = []
+    for card in CARD_RE.findall(svg):
+        rect = RECT_RE.search(card)
+        if not rect:
+            continue
+        cards.append(tuple(map(float, rect.groups())))
+    return cards
+
+
+def _segment_inside_rect(seg: tuple[str, tuple[float, float], tuple[float, float]], rect: tuple[float, float, float, float]) -> bool:
+    _orient, a, b = seg
+    x, y, w, h = rect
+    return (
+        x - EPS <= a[0] <= x + w + EPS
+        and x - EPS <= b[0] <= x + w + EPS
+        and y - EPS <= a[1] <= y + h + EPS
+        and y - EPS <= b[1] <= y + h + EPS
+    )
+
+
+def _segment_crosses_card(seg: tuple[str, tuple[float, float], tuple[float, float]], card: tuple[float, float, float, float]) -> bool:
+    orient, a, b = seg
+    x, y, w, h = card
+    if orient == 'h':
+        seg_y = a[1]
+        if not (y + 2 < seg_y < y + h - 2):
+            return False
+        return max(min(a[0], b[0]), x + 2) < min(max(a[0], b[0]), x + w - 2)
+    if orient == 'v':
+        seg_x = a[0]
+        if not (x + 2 < seg_x < x + w - 2):
+            return False
+        return max(min(a[1], b[1]), y + 2) < min(max(a[1], b[1]), y + h - 2)
+    return False
+
+
+def _check_connector_clearance(svg: str, issues: list[str]) -> None:
+    layers = _layer_rects(svg)
+    cards = _card_rects(svg)
+    paths = _connector_paths(svg)
+
+    for p in paths:
+        classes = set(str(p.get('classes', '')).split())
+        for seg in p['segments']:
+            if any(_segment_crosses_card(seg, card) for card in cards):
+                fail(f'connector path {p["idx"]} runs through a card interior', issues)
+                break
+        if 'bus' not in classes:
+            continue
+        for seg in p['segments']:
+            if seg[0] != 'h':
+                continue
+            containing = [layer for layer in layers if _segment_inside_rect(seg, layer)]
+            if not containing:
+                fail(f'bus connector path {p["idx"]} is outside layer bounds', issues)
+                continue
+            lx, ly, lw, lh = containing[0]
+            bus_y = seg[1][1]
+            if bus_y < ly + LAYER_LABEL_HEIGHT:
+                fail(f'bus connector path {p["idx"]} is too close to the layer label area', issues)
+            layer_cards = [card for card in cards if ly <= card[1] <= ly + lh]
+            for cx, cy, cw, ch in layer_cards:
+                overlap = max(min(seg[1][0], seg[2][0]), cx) < min(max(seg[1][0], seg[2][0]), cx + cw)
+                if not overlap:
+                    continue
+                if bus_y <= cy and cy - bus_y < BUS_CARD_CLEARANCE:
+                    fail(f'bus connector path {p["idx"]} is too close above a card', issues)
+                if bus_y >= cy + ch and bus_y - (cy + ch) < BUS_CARD_CLEARANCE:
+                    fail(f'bus connector path {p["idx"]} is too close below a card', issues)
+
+    for layer in layers:
+        lx, ly, lw, lh = layer
+        bus_ys = []
+        for p in paths:
+            if 'bus' not in str(p.get('classes', '')).split():
+                continue
+            for seg in p['segments']:
+                if seg[0] == 'h' and _segment_inside_rect(seg, layer):
+                    bus_ys.append(round(seg[1][1], 1))
+        bus_ys = sorted(set(bus_ys))
+        for a, b in zip(bus_ys, bus_ys[1:]):
+            if b - a < BUS_LANE_GAP and any(cy + ch < b and cy > a for _cx, cy, _cw, ch in cards):
+                fail(f'bus lanes in layer at y={ly:.0f} are too close: {a}, {b}', issues)
 
 
 def _check_connector_rounding(svg: str, issues: list[str]) -> None:
@@ -187,12 +330,12 @@ def _check_connector_rounding(svg: str, issues: list[str]) -> None:
         d = p['d']
         if p['has_curve']:
             continue
-        pts = []
-        for m in re.finditer(r'([ML])\s*([-+]?(?:\d*\.)?\d+),([-+]?(?:\d*\.)?\d+)', d):
-            pts.append((float(m.group(2)), float(m.group(3))))
-        for a, b, c in zip(pts, pts[1:], pts[2:]):
-            o1, _a, _b = _axis_segment(a, b)
-            o2, _c, _d = _axis_segment(b, c)
+        segments = p['segments']
+        for first, second in zip(segments, segments[1:]):
+            o1, _a, b = first
+            o2, c, _d = second
+            if abs(b[0] - c[0]) >= EPS or abs(b[1] - c[1]) >= EPS:
+                continue
             if _perpendicular(o1, o2):
                 fail(f'connector path {p["idx"]} has hard orthogonal turn without Q elbow: {d}', issues)
                 break
@@ -212,6 +355,8 @@ def _check_connector_rounding(svg: str, issues: list[str]) -> None:
                         continue
                     if not _perpendicular(tangent, seg_orient):
                         continue
+                    if _is_intentional_bus_junction(p, q):
+                        continue
                     fail(
                         f'connector path {p["idx"]} {which} forms hard visual T-junction with path {q["idx"]}; encode the branch as a rounded Q route',
                         issues,
@@ -225,44 +370,47 @@ def _check_layer_metrics(svg: str, issues: list[str]) -> None:
     # Heuristic for generated semantic diagrams: a layer panel is a large rect
     # immediately followed by a group-label text. This keeps the check generic
     # and avoids relying on domain labels.
-    layers: list[tuple[float, float, float, float]] = []
-    for m in LAYER_RE.finditer(svg):
-        x, y, w, h = _rect_values(m)
-        after = svg[m.end(): m.end() + 220]
-        if GROUP_LABEL_RE.search(after) and w >= 500 and h >= 120:
-            layers.append((x, y, w, h))
+    layers = _layer_rects(svg)
     if len(layers) < 2:
         return
-    layers.sort(key=lambda r: r[1])
 
-    card_bounds: list[tuple[float, float]] = []
-    for card in CARD_RE.findall(svg):
-        rect = RECT_RE.search(card)
-        if not rect:
-            continue
-        _x, y, _w, h = map(float, rect.groups())
-        # If a card group has a translate(0,dy), account for it.
-        # The CARD_RE content excludes the opening <g>, so search a small prefix
-        # is not available; generated diagrams should avoid transforms, but old
-        # hand-edited diagrams are still checked approximately.
-        card_bounds.append((y, y + h))
+    card_bounds = [(y, y + h) for _x, y, _w, h in _card_rects(svg)]
 
-    bottom_pads: list[float] = []
+    connector_paths = _connector_paths(svg)
+    plain_bottom_pads: list[float] = []
+    bus_bottom_pads: list[float] = []
     for i, (_x, y, _w, h) in enumerate(layers):
         next_y = layers[i + 1][1] if i + 1 < len(layers) else y + h + 1
         contained = [b for a, b in card_bounds if y <= a < min(y + h + 30, next_y)]
         if contained:
-            bottom_pads.append(round(y + h - max(contained), 1))
-    if len(bottom_pads) >= 2 and max(bottom_pads) - min(bottom_pads) > 3:
-        fail(f'inconsistent repeated-layer bottom padding: {bottom_pads}', issues)
+            max_card_bottom = max(contained)
+            bottom_pad = round(y + h - max_card_bottom, 1)
+            has_bottom_bus = False
+            for path in connector_paths:
+                for orient, a, b in path['segments']:
+                    if orient != 'h':
+                        continue
+                    seg_y = a[1]
+                    if max_card_bottom + 8 <= seg_y <= y + h - 2:
+                        has_bottom_bus = True
+                        break
+                if has_bottom_bus:
+                    break
+            if has_bottom_bus:
+                bus_bottom_pads.append(bottom_pad)
+            else:
+                plain_bottom_pads.append(bottom_pad)
+    if len(plain_bottom_pads) >= 2 and max(plain_bottom_pads) - min(plain_bottom_pads) > 3:
+        fail(f'inconsistent repeated-layer bottom padding: {plain_bottom_pads}', issues)
+    if len(bus_bottom_pads) >= 2 and max(bus_bottom_pads) - min(bus_bottom_pads) > 3:
+        fail(f'inconsistent repeated-layer bottom padding for bus layers: {bus_bottom_pads}', issues)
 
     gaps = [round(layers[i + 1][1] - (layers[i][1] + layers[i][3]), 1) for i in range(len(layers) - 1)]
     if len(gaps) >= 2 and max(gaps) - min(gaps) > 3:
         fail(f'inconsistent repeated-layer gaps: {gaps}', issues)
 
 
-def check(path: Path) -> list[str]:
-    svg = path.read_text(encoding='utf-8-sig')
+def check_svg(svg: str) -> list[str]:
     issues: list[str] = []
     size = SVG_SIZE.search(svg)
     if not size:
@@ -270,6 +418,12 @@ def check(path: Path) -> list[str]:
         width = height = 0.0
     else:
         width, height = map(float, size.groups())
+
+    cards = CARD_RE.findall(svg)
+    if 'card-title' in svg and not cards:
+        fail('card text exists but no card groups were recognized', issues)
+    if 'class="edge' in svg and not _connector_paths(svg):
+        fail('connector paths exist but no connector geometry was recognized', issues)
 
     for attr, value in ATTR.findall(svg):
         if value.startswith('#') or value in {'none'} or value.startswith('url(#'):
@@ -283,24 +437,22 @@ def check(path: Path) -> list[str]:
     if dashed_count > 8:
         fail(f'too many dashed relations ({dashed_count}); consider legend/containment instead', issues)
 
-    for idx, card in enumerate(CARD_RE.findall(svg), start=1):
+    for idx, card in enumerate(cards, start=1):
         rect = RECT_RE.search(card)
         if not rect:
             continue
         x, y, w, h = map(float, rect.groups())
         # Catch the failure mode where an icon path uses x as a y coordinate and
         # draws a line far outside the badge/card.
-        for d in ICON_PATH_RE.findall(card):
-            vals = [float(v) for v in NUM_RE.findall(d)]
-            if not vals:
+        for _attrs, d, _classes in _path_attrs_with_classes(card, {'icon-line'}):
+            geom = _parse_path_geometry(d)
+            points = geom['points']
+            if not points:
                 continue
-            max_span = max(max(vals) - min(vals), 0)
-            if max_span > max(w, h) + 80:
-                fail(f'card {idx} icon path has suspicious coordinate span: {max_span:.1f}', issues)
             if width and height:
-                for v in vals:
-                    if v < -20 or v > max(width, height) + 20:
-                        fail(f'card {idx} icon path coordinate outside canvas: {v}', issues)
+                for px, py in points:
+                    if not (x - 20 <= px <= x + w + 20 and y - 20 <= py <= y + h + 20):
+                        fail(f'card {idx} icon path point outside card bounds: {px:.1f},{py:.1f}', issues)
                         break
         title_lines = len(re.findall(r'class="card-title"', card))
         has_sub = 'class="card-sub"' in card
@@ -314,11 +466,16 @@ def check(path: Path) -> list[str]:
                 fail(f'card {idx} title may be too long for width {w:.0f}: {text}', issues)
 
     _check_connector_rounding(svg, issues)
+    _check_connector_clearance(svg, issues)
     _check_layer_metrics(svg, issues)
 
     if 'Unsupported markdown' in svg:
         fail('contains Unsupported markdown placeholder', issues)
     return issues
+
+
+def check(path: Path) -> list[str]:
+    return check_svg(path.read_text(encoding='utf-8-sig'))
 
 
 def main(argv: list[str]) -> int:
