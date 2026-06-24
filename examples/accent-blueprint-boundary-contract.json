@@ -1,0 +1,55 @@
+{
+  "title": "Knowledge Boundary Blueprint",
+  "subtitle": "Reference example for the Accent Blueprint style",
+  "layout": "boundary_map",
+  "style": "accent-blueprint",
+  "width": 1536,
+  "max_nodes_per_row": 4,
+  "groups": [
+    {"id": "entry", "label": "Navigation / access layer", "type": "layer"},
+    {"id": "synthesis", "label": "Synthesis and governance layer", "type": "layer"},
+    {
+      "id": "assets",
+      "label": "Reusable knowledge assets",
+      "type": "layer",
+      "routing": {"mode": "row_bus_side_trunk", "fanout_side": "right", "fanin_side": "left"},
+      "side_gutter": 150
+    },
+    {"id": "source", "label": "Controlled-source boundary", "type": "layer", "max_per_row": 1}
+  ],
+  "nodes": [
+    {"id": "portal", "label": "Knowledge Portal", "subtitle": "blueprint entry", "kind": "index", "group": "entry"},
+    {"id": "glossary", "label": "Glossary Register", "subtitle": "controlled terms", "kind": "glossary", "group": "entry"},
+    {"id": "governance", "label": "Governance Rules", "subtitle": "ownership + constraints", "kind": "quality", "group": "synthesis"},
+    {"id": "domain_map", "label": "Domain Map", "subtitle": "system interfaces", "kind": "capability", "group": "synthesis"},
+    {"id": "risk_taxonomy", "label": "Risk Taxonomy", "subtitle": "constraint model", "kind": "risk", "group": "synthesis"},
+    {"id": "module_a", "label": "Module A", "subtitle": "approved asset", "kind": "package", "group": "assets", "row": 0, "col": 0},
+    {"id": "module_b", "label": "Module B", "subtitle": "approved asset", "kind": "package", "group": "assets", "row": 0, "col": 1},
+    {"id": "module_c", "label": "Module C", "subtitle": "external optional link", "kind": "ontology", "group": "assets", "row": 0, "col": 2},
+    {"id": "module_d", "label": "Module D", "subtitle": "reusable module", "kind": "package", "group": "assets", "row": 1, "col": 1},
+    {"id": "module_e", "label": "Module E", "subtitle": "transformation path", "kind": "process", "group": "assets", "row": 1, "col": 2},
+    {"id": "source_docs", "label": "Controlled Source Documents", "subtitle": "authoritative record", "kind": "source", "group": "source"}
+  ],
+  "edges": [
+    {"from": "portal", "to": "glossary", "relation": "uses_language_from", "style": "dashed"},
+    {"from": "portal", "to": "governance", "relation": "enters_governance"},
+    {"from": "portal", "to": "domain_map", "relation": "opens_domain_map"},
+    {"from": "portal", "to": "risk_taxonomy", "relation": "opens_risk_model"},
+    {"from": "domain_map", "to": "module_a", "relation": "defines_interface"},
+    {"from": "domain_map", "to": "module_b", "relation": "defines_interface"},
+    {"from": "domain_map", "to": "module_c", "relation": "defines_interface"},
+    {"from": "domain_map", "to": "module_d", "relation": "defines_interface"},
+    {"from": "domain_map", "to": "module_e", "relation": "defines_interface"},
+    {"from": "module_a", "to": "source_docs", "relation": "source_bound"},
+    {"from": "module_b", "to": "source_docs", "relation": "source_bound"},
+    {"from": "module_c", "to": "source_docs", "relation": "source_bound"},
+    {"from": "module_d", "to": "source_docs", "relation": "source_bound"},
+    {"from": "module_e", "to": "source_docs", "relation": "source_bound"}
+  ],
+  "annotations": [
+    {"text": "cyan = interfaces / active boundaries", "placement": "legend", "color": "accent_cyan"},
+    {"text": "green = reusable approved assets", "placement": "legend", "color": "accent_green"},
+    {"text": "orange = key flows / transformations", "placement": "legend", "color": "accent_orange"},
+    {"text": "Reference style: Accent Blueprint uses a blue-and-white technical base with sparse semantic accents.", "placement": "footer"}
+  ]
+}

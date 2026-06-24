@@ -14,38 +14,24 @@ import sys
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-ACCENTS = {
-    "hub": "#2F7DFF",
-    "index": "#2F7DFF",
-    "query": "#06B6D4",
-    "glossary": "#7C3AED",
-    "ontology": "#7C3AED",
-    "process": "#2F7DFF",
-    "quality": "#F97316",
-    "risk": "#7C3AED",
-    "package": "#22C55E",
-    "source": "#334155",
-    "registry": "#F97316",
-    "capability": "#0EA5E9",
-    "evidence": "#64748B",
-    "decision": "#F59E0B",
-    "object": "#64748B",
-}
+from semantic_diagram_styles import (
+    StyleError,
+    color as style_color,
+    kind_accent,
+    load_style_package,
+    metric as style_metric,
+    paint as style_paint,
+    paint_attrs,
+    pale_for,
+    style_id,
+    token as style_token,
+    validate_style_package,
+)
+from semantic_diagram_layouts import resolve_layout_strategy, supported_layouts
 
-PALE = {
-    "#2F7DFF": "#EFF6FF",
-    "#06B6D4": "#ECFEFF",
-    "#7C3AED": "#F5F3FF",
-    "#F97316": "#FFF7ED",
-    "#22C55E": "#ECFDF5",
-    "#334155": "#F8FAFC",
-    "#0EA5E9": "#F0F9FF",
-    "#64748B": "#F8FAFC",
-    "#F59E0B": "#FFFBEB",
-}
 
 VALID_HEX = re.compile(r"^#[0-9A-Fa-f]{6}$")
-SCRIPT_SUPPORTED_LAYOUTS = {"auto", "layered"}
+SCRIPT_SUPPORTED_LAYOUTS = supported_layouts()
 
 # Stable layout metrics. Keep these named so generated diagrams do not drift
 # into inconsistent card heights, row gaps, or layer padding.
@@ -95,64 +81,151 @@ def wrap_text(text: str, max_chars: int = 22, max_lines: int = 2) -> list[str]:
     return lines
 
 
-def style_block() -> str:
-    return """
-<defs>
-  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
-  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker>
-  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#16A34A"/></marker>
+def style_for_contract(contract: dict, contract_path: Path | None = None) -> dict:
+    return load_style_package(contract.get("style"), contract_path)
+
+
+def layout_metrics(style: dict | None = None) -> dict:
+    metrics = dict(LAYOUT)
+    if style:
+        for key, default in LAYOUT.items():
+            metrics[key] = style_metric(style, key, default)
+    return metrics
+
+
+def _paint_attr(style: dict, attr: str, value: object, default: str, opacity: object = None) -> str:
+    extra_opacity = opacity if isinstance(opacity, (int, float)) else None
+    return paint_attrs(style, attr, value, default, extra_opacity)
+
+
+def _style_component(style: dict, name: str) -> dict:
+    component = style_token(style, f"components.{name}", {})
+    return component if isinstance(component, dict) else {}
+
+
+def _font_css(style: dict, path: str, default: str) -> str:
+    value = style_token(style, path, default)
+    return str(value or default)
+
+
+def style_block(style: dict) -> str:
+    typography = style_token(style, "tokens.typography", {})
+    if not isinstance(typography, dict):
+        typography = {}
+    sans = typography.get("sans", "Inter,Segoe UI,Aptos,Arial,sans-serif")
+    mono = typography.get("mono", "IBM Plex Mono,JetBrains Mono,Consolas,monospace")
+    title_family = typography.get("title", sans)
+    title_case = typography.get("title_transform", "none")
+
+    connector = _style_component(style, "connector")
+    arrow = style_color(style, connector.get("primary", "line_primary"), "#334155")
+    fanout = style_color(style, connector.get("fanout", "accent_cyan"), "#2563EB")
+    fanin = style_color(style, connector.get("fanin", "accent_green"), "#16A34A")
+    edge_width = connector.get("stroke_width", 2)
+    edge_opacity = connector.get("opacity", 0.76)
+    fanout_opacity = connector.get("fanout_opacity", edge_opacity)
+    fanin_opacity = connector.get("fanin_opacity", edge_opacity)
+
+    card = _style_component(style, "card")
+    shadow = card.get("shadow", {})
+    shadow_enabled = bool(shadow.get("enabled", True)) if isinstance(shadow, dict) else bool(shadow)
+    shadow_def = ""
+    if shadow_enabled:
+        shadow_color = style_color(style, shadow.get("color", "#0F172A") if isinstance(shadow, dict) else "#0F172A", "#0F172A")
+        shadow_opacity = shadow.get("opacity", 0.10) if isinstance(shadow, dict) else 0.10
+        shadow_dy = shadow.get("dy", 8) if isinstance(shadow, dict) else 8
+        shadow_blur = shadow.get("blur", 8) if isinstance(shadow, dict) else 8
+        shadow_def = f'\n  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="{shadow_dy}" stdDeviation="{shadow_blur}" flood-color="{shadow_color}" flood-opacity="{shadow_opacity}"/></filter>'
+
+    grid = style_token(style, "tokens.grid", {})
+    grid_defs = ""
+    if isinstance(grid, dict) and grid.get("enabled"):
+        small = grid.get("size", 16)
+        large = grid.get("strong_every", 5) * small if isinstance(grid.get("strong_every", 5), (int, float)) else 80
+        line_color, line_opacity = style_paint(style, grid.get("line", "grid_line"), "#FFFFFF")
+        strong_color, strong_opacity = style_paint(style, grid.get("strong_line", "grid_line_strong"), "#FFFFFF")
+        grid_defs = f"""
+  <pattern id="blueprint-grid-small" width="{small}" height="{small}" patternUnits="userSpaceOnUse"><path d="M {small} 0 H 0 V {small}" fill="none" stroke="{line_color}" stroke-opacity="{line_opacity if line_opacity is not None else 0.08}" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="{large}" height="{large}" patternUnits="userSpaceOnUse"><rect width="{large}" height="{large}" fill="url(#blueprint-grid-small)"/><path d="M {large} 0 H 0 V {large}" fill="none" stroke="{strong_color}" stroke-opacity="{strong_opacity if strong_opacity is not None else 0.14}" stroke-width="1"/> </pattern>"""
+
+    extra_defs = "\n".join(part.strip() for part in (shadow_def, grid_defs) if part.strip())
+    extra_defs = f"\n  {extra_defs}" if extra_defs else ""
+
+    return f"""
+<defs>{extra_defs}
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="{arrow}"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="{fanout}"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="{fanin}"/></marker>
   <style>
-    .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
-    .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
-    .group-label{font:700 13px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#475569;letter-spacing:.06em;text-transform:uppercase}
-    .card-title{font:700 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
-    .card-sub{font:500 12.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
-    .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.76}
-    .fanout{stroke:#2563EB;opacity:.74}
-    .fanin{stroke:#16A34A;opacity:.74}
-    .route-shared{marker-end:none}
-    .edge-dashed{stroke-dasharray:8 8;opacity:.66}
-    .note{font:500 12px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
-    .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .title{{font:700 {_font_css(style, "tokens.typography.title_size", "30px")} {title_family};fill:{style_color(style, "text_primary", "#0F172A")};letter-spacing:{typography.get("title_letter_spacing", "0")};text-transform:{title_case}}}
+    .subtitle{{font:400 {_font_css(style, "tokens.typography.subtitle_size", "14px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
+    .group-label{{font:700 {_font_css(style, "tokens.typography.group_label_size", "13px")} {mono};fill:{style_color(style, "text_secondary", "#475569")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
+    .card-title{{font:700 {_font_css(style, "tokens.typography.card_title_size", "17px")} {sans};fill:{style_color(style, "text_primary", "#0F172A")}}}
+    .card-sub{{font:500 {_font_css(style, "tokens.typography.card_sub_size", "12.5px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
+    .edge{{fill:none;stroke:{arrow};stroke-width:{edge_width};stroke-linecap:round;stroke-linejoin:round;opacity:{edge_opacity}}}
+    .fanout{{stroke:{fanout};opacity:{fanout_opacity}}}
+    .fanin{{stroke:{fanin};opacity:{fanin_opacity}}}
+    .route-shared{{marker-end:none}}
+    .edge-dashed{{stroke-dasharray:{connector.get("dasharray", "8 8")};opacity:{connector.get("dashed_opacity", .66)}}}
+    .note{{font:500 {_font_css(style, "tokens.typography.note_size", "12px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
+    .mono{{font-family:{mono}}}
+    .icon-line{{fill:none;stroke-width:{_style_component(style, "icon").get("line_width", 1.8)};stroke-linecap:round;stroke-linejoin:round}}
   </style>
 </defs>""".strip()
 
 
-def icon_svg(kind: str, x: float, y: float, color: str) -> str:
-    pale = PALE.get(color, "#F8FAFC")
+def icon_svg(kind: str, x: float, y: float, color: str, style: dict) -> str:
+    icon = _style_component(style, "icon")
+    fill_mode = icon.get("fill_mode", "pale")
+    if fill_mode == "none":
+        pale = "none"
+    elif fill_mode == "component":
+        pale = style_color(style, icon.get("fill", "panel_fill"), "#F8FAFC")
+    else:
+        pale = pale_for(style, color)
+    stroke_width = icon.get("stroke_width", 1.7)
     k = kind or "object"
     if k in {"index", "moc", "document"}:
-        return f'<rect x="{x}" y="{y}" width="18" height="20" rx="3" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x+4},{y+6} H{x+14} M{x+4},{y+11} H{x+14} M{x+4},{y+16} H{x+11}" class="icon-line" stroke="{color}"/>'
+        return f'<rect x="{x}" y="{y}" width="18" height="20" rx="3" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+4},{y+6} H{x+14} M{x+4},{y+11} H{x+14} M{x+4},{y+16} H{x+11}" class="icon-line" stroke="{color}"/>'
     if k == "query":
-        return f'<circle cx="{x+8}" cy="{y+8}" r="7" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x+14},{y+14} L{x+20},{y+20}" class="icon-line" stroke="{color}"/>'
+        return f'<circle cx="{x+8}" cy="{y+8}" r="7" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+14},{y+14} L{x+20},{y+20}" class="icon-line" stroke="{color}"/>'
     if k in {"glossary", "ontology"}:
-        return f'<path d="M{x},{y} H{x+16} Q{x+20},{y} {x+20},{y+4} V{y+19} H{x} Z" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x+5},{y+6} H{x+14} M{x+5},{y+12} H{x+14}" class="icon-line" stroke="{color}"/>'
+        return f'<path d="M{x},{y} H{x+16} Q{x+20},{y} {x+20},{y+4} V{y+19} H{x} Z" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+5},{y+6} H{x+14} M{x+5},{y+12} H{x+14}" class="icon-line" stroke="{color}"/>'
     if k == "process":
         return f'<circle cx="{x+4}" cy="{y+11}" r="4" fill="{pale}" stroke="{color}" stroke-width="1.6"/><circle cx="{x+18}" cy="{y+4}" r="4" fill="{pale}" stroke="{color}" stroke-width="1.6"/><circle cx="{x+18}" cy="{y+18}" r="4" fill="{pale}" stroke="{color}" stroke-width="1.6"/><path d="M{x+8},{y+11} H{x+12} M{x+14},{y+7} L{x+12},{y+11} L{x+14},{y+15}" class="icon-line" stroke="{color}"/>'
     if k in {"quality", "registry"}:
-        return f'<path d="M{x+10},{y} L{x+20},{y+18} H{x} Z" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x+10},{y+7} V{y+13} M{x+10},{y+17} V{y+17}" class="icon-line" stroke="{color}"/>'
+        return f'<path d="M{x+10},{y} L{x+20},{y+18} H{x} Z" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+10},{y+7} V{y+13} M{x+10},{y+17} V{y+17}" class="icon-line" stroke="{color}"/>'
     if k == "risk":
-        return f'<path d="M{x+10},{y} L{x+19},{y+5} V{y+15} L{x+10},{y+20} L{x+1},{y+15} V{y+5} Z" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x+6},{y+10} L{x+9},{y+14} L{x+15},{y+6}" class="icon-line" stroke="{color}"/>'
+        return f'<path d="M{x+10},{y} L{x+19},{y+5} V{y+15} L{x+10},{y+20} L{x+1},{y+15} V{y+5} Z" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+6},{y+10} L{x+9},{y+14} L{x+15},{y+6}" class="icon-line" stroke="{color}"/>'
     if k in {"package", "capability"}:
-        return f'<rect x="{x}" y="{y+3}" width="20" height="16" rx="3" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x},{y+8} H{x+20} M{x+10},{y+3} V{y+19}" class="icon-line" stroke="{color}"/>'
+        return f'<rect x="{x}" y="{y+3}" width="20" height="16" rx="3" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x},{y+8} H{x+20} M{x+10},{y+3} V{y+19}" class="icon-line" stroke="{color}"/>'
     if k in {"source", "evidence"}:
-        return f'<path d="M{x},{y} H{x+14} L{x+20},{y+6} V{y+20} H{x} Z" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x+14},{y} V{y+6} H{x+20}" class="icon-line" stroke="{color}"/>'
+        return f'<path d="M{x},{y} H{x+14} L{x+20},{y+6} V{y+20} H{x} Z" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+14},{y} V{y+6} H{x+20}" class="icon-line" stroke="{color}"/>'
     if k == "decision":
-        return f'<path d="M{x+10},{y} L{x+20},{y+10} L{x+10},{y+20} L{x},{y+10} Z" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x+6},{y+10} H{x+14}" class="icon-line" stroke="{color}"/>'
-    return f'<circle cx="{x+10}" cy="{y+10}" r="8" fill="{pale}" stroke="{color}" stroke-width="1.7"/><path d="M{x+5},{y+10} H{x+15} M{x+10},{y+5} V{y+15}" class="icon-line" stroke="{color}"/>'
+        return f'<path d="M{x+10},{y} L{x+20},{y+10} L{x+10},{y+20} L{x},{y+10} Z" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+6},{y+10} H{x+14}" class="icon-line" stroke="{color}"/>'
+    return f'<circle cx="{x+10}" cy="{y+10}" r="8" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+5},{y+10} H{x+15} M{x+10},{y+5} V{y+15}" class="icon-line" stroke="{color}"/>'
 
 
-def make_card(node: dict, x: float, y: float, w: float, h: float) -> str:
+def make_card(node: dict, x: float, y: float, w: float, h: float, style: dict) -> str:
     kind = node.get("kind", "object")
-    color = node.get("accent") or ACCENTS.get(kind, ACCENTS["object"])
+    color = node.get("accent") or kind_accent(style, kind)
     if not VALID_HEX.match(color):
-        color = ACCENTS["object"]
+        color = kind_accent(style, "object")
+    card = _style_component(style, "card")
+    fill = card.get("fill", "card_fill")
+    fill_default = style_color(style, "card_fill", "#FFFFFF")
+    stroke = color if card.get("stroke_mode", "accent") == "accent" else style_color(style, card.get("stroke", "line_primary"), "#334155")
+    stroke_width = card.get("stroke_width", 2.2)
+    radius = card.get("radius", 20)
+    shadow = card.get("shadow", {})
+    shadow_enabled = bool(shadow.get("enabled", True)) if isinstance(shadow, dict) else bool(shadow)
+    filter_attr = ' filter="url(#shadow)"' if shadow_enabled else ""
     title_lines = wrap_text(node.get("label", node.get("id", "Object")), max_chars=max(14, int(w / 14)), max_lines=2)
     sub = node.get("subtitle", "")
     parts = [f'<g id="node-{e(node.get("id", ""))}" class="card node-card">']
-    parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="20" fill="#FFFFFF" stroke="{color}" stroke-width="2.2" filter="url(#shadow)"/>')
-    parts.append(icon_svg(kind, x + 24, y + 25, color))
+    fill_attrs = _paint_attr(style, "fill", fill, fill_default, card.get("fill_opacity"))
+    parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" {fill_attrs} stroke="{stroke}" stroke-width="{stroke_width}"{filter_attr}/>')
+    parts.append(icon_svg(kind, x + 24, y + 25, color, style))
     title_start = y + 31 if len(title_lines) == 1 else y + 26
     for i, line in enumerate(title_lines):
         parts.append(f'<text x="{x+w/2}" y="{title_start+i*20}" text-anchor="middle" class="card-title">{e(line)}</text>')
@@ -300,7 +373,10 @@ def _assign_rows(gnodes: list[dict], max_per_row: int) -> dict:
     return {"assignments": assignments, "rows": rows, "row_explicit": row_explicit}
 
 
-def build_layout_model(contract: dict) -> dict:
+def build_layout_model(contract: dict, style: dict | None = None, contract_path: Path | None = None) -> dict:
+    if style is None:
+        style = style_for_contract(contract, contract_path)
+    metrics = layout_metrics(style)
     nodes = list(contract.get("nodes", []))
     groups = [dict(g) for g in contract.get("groups", [])]
     if not groups:
@@ -322,9 +398,9 @@ def build_layout_model(contract: dict) -> dict:
     stats = _connector_stats(nodes, groups, contract.get("edges", []))
 
     width = int(contract.get("width", 1500))
-    margin_x = int(contract.get("canvas_margin_x", LAYOUT["canvas_margin_x"]))
-    y = int(contract.get("top_y", LAYOUT["top_y"]))
-    card_h = max(96, int(contract.get("card_height", LAYOUT["card_h"])))
+    margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
+    y = int(contract.get("top_y", metrics["top_y"]))
+    card_h = max(96, int(contract.get("card_height", metrics["card_h"])))
     positions = {}
     group_boxes = {}
     group_layouts = {}
@@ -348,33 +424,33 @@ def build_layout_model(contract: dict) -> dict:
         mode = "row_bus_side_trunk" if use_row_bus else "simple"
 
         row_gap = max(
-            int(g.get("row_gap", contract.get("card_row_gap", LAYOUT["card_row_gap"]))),
-            LAYOUT["card_row_gap"],
+            int(g.get("row_gap", contract.get("card_row_gap", metrics["card_row_gap"]))),
+            metrics["card_row_gap"],
         )
         if mode == "row_bus_side_trunk" and row_count > 1:
             if has_fanout and has_fanin:
-                row_gap = max(row_gap, 2 * LAYOUT["bus_to_card_clearance"] + LAYOUT["bus_lane_gap"])
+                row_gap = max(row_gap, 2 * metrics["bus_to_card_clearance"] + metrics["bus_lane_gap"])
             else:
-                row_gap = max(row_gap, LAYOUT["bus_to_card_clearance"] + LAYOUT["bus_bottom_clearance"])
+                row_gap = max(row_gap, metrics["bus_to_card_clearance"] + metrics["bus_bottom_clearance"])
 
-        top_pad = int(g.get("top_pad", contract.get("layer_top_pad", LAYOUT["layer_top_pad"])))
-        bottom_pad = int(g.get("bottom_pad", contract.get("layer_bottom_pad", LAYOUT["layer_bottom_pad"])))
+        top_pad = int(g.get("top_pad", contract.get("layer_top_pad", metrics["layer_top_pad"])))
+        bottom_pad = int(g.get("bottom_pad", contract.get("layer_bottom_pad", metrics["layer_bottom_pad"])))
         if mode == "row_bus_side_trunk" and has_fanout:
-            top_pad = max(top_pad, LAYOUT["layer_label_h"] + LAYOUT["bus_to_card_clearance"])
+            top_pad = max(top_pad, metrics["layer_label_h"] + metrics["bus_to_card_clearance"])
         if mode == "row_bus_side_trunk" and has_fanin:
-            bottom_pad = max(bottom_pad, LAYOUT["bus_to_card_clearance"] + LAYOUT["bus_bottom_clearance"])
+            bottom_pad = max(bottom_pad, metrics["bus_to_card_clearance"] + metrics["bus_bottom_clearance"])
 
         band_h = max(
             int(g.get("height", 0)),
-            LAYOUT["layer_min_h"],
+            metrics["layer_min_h"],
             top_pad + row_count * card_h + (row_count - 1) * row_gap + bottom_pad,
         )
         group_boxes[gid] = (margin_x, y, width - 2 * margin_x, band_h, g)
 
-        side_gutter = int(g.get("side_gutter", routing.get("side_gutter", LAYOUT["layer_side_gutter"])))
+        side_gutter = int(g.get("side_gutter", routing.get("side_gutter", metrics["layer_side_gutter"])))
         if mode == "row_bus_side_trunk":
-            side_gutter = max(side_gutter, LAYOUT["side_trunk_gutter"])
-        gap = int(g.get("col_gap", contract.get("card_col_gap", LAYOUT["card_col_gap"])))
+            side_gutter = max(side_gutter, metrics["side_trunk_gutter"])
+        gap = int(g.get("col_gap", contract.get("card_col_gap", metrics["card_col_gap"])))
         layer_w = width - 2 * margin_x
         usable = layer_w - (2 * side_gutter if mode == "row_bus_side_trunk" else side_gutter)
 
@@ -387,7 +463,7 @@ def build_layout_model(contract: dict) -> dict:
             else:
                 slots = len(row_nodes)
             slots = max(1, slots)
-            card_w = min(LAYOUT["card_max_w"], max(LAYOUT["card_min_w"], (usable - gap * (slots - 1)) / slots))
+            card_w = min(metrics["card_max_w"], max(metrics["card_min_w"], (usable - gap * (slots - 1)) / slots))
             row_w = slots * card_w + (slots - 1) * gap
             x0 = (width - row_w) / 2
             row_top = y + top_pad + row_ordinal * (card_h + row_gap)
@@ -399,8 +475,8 @@ def build_layout_model(contract: dict) -> dict:
             row_infos[row_id] = {
                 "top": row_top,
                 "bottom": row_top + card_h,
-                "fanout_bus_y": row_top - LAYOUT["bus_to_card_clearance"],
-                "fanin_bus_y": row_top + card_h + LAYOUT["bus_to_card_clearance"],
+                "fanout_bus_y": row_top - metrics["bus_to_card_clearance"],
+                "fanin_bus_y": row_top + card_h + metrics["bus_to_card_clearance"],
                 "nodes": [n.get("id") for n in row_nodes],
             }
         group_layouts[gid] = {
@@ -413,7 +489,7 @@ def build_layout_model(contract: dict) -> dict:
             "fanout_side": routing.get("fanout_side", "right"),
             "fanin_side": routing.get("fanin_side", "left"),
         }
-        y += band_h + int(g.get("gap_after", contract.get("layer_gap", LAYOUT["layer_gap"])))
+        y += band_h + int(g.get("gap_after", contract.get("layer_gap", metrics["layer_gap"])))
     height = int(max(y + 40, contract.get("height", 800)))
     return {
         "width": width,
@@ -645,7 +721,7 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
     for row in sorted(row_targets):
         targets = row_targets[row]
         bus_y = layout["rows"][row]["fanout_bus_y"]
-        terminal_anchors = []
+        terminal_paths = []
         upstream_x = sx if row == first_row else trunk_x
         if row == first_row:
             bus_points = list(source_bus_anchors)
@@ -655,13 +731,16 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
             bus_points = [trunk_anchor_x]
         for target_id in targets:
             tx, ty = center_top(positions[target_id])
+            if row == first_row and abs(tx - sx) < 1e-6:
+                terminal_paths.append(_vertical_branch(tx, bus_y, ty))
+                continue
             terminal_path, terminal_anchor = _curve_from_bus_from_side(tx, bus_y, ty, upstream_x)
-            terminal_anchors.append((terminal_path, terminal_anchor))
+            terminal_paths.append(terminal_path)
             bus_points.append(terminal_anchor)
         bus_gap = source_bus_gap if row == first_row else None
         for bus_d in _horizontal_bus_segments(bus_points, bus_y, bus_gap):
             paths.append(_path(bus_d, "edge fanout route-shared bus"))
-        for terminal_path, _terminal_anchor in terminal_anchors:
+        for terminal_path in terminal_paths:
             paths.append(_path(terminal_path, "edge fanout terminal", "arrow-fanout"))
     return paths, routed
 
@@ -783,16 +862,49 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
     return paths
 
 
-def render(contract: dict) -> str:
-    model = build_layout_model(contract)
+def _canvas_parts(style: dict, width: float, height: float) -> list[str]:
+    canvas = _style_component(style, "canvas")
+    radius = canvas.get("radius", 28)
+    bg = canvas.get("background", "background")
+    parts = [f'<rect x="0" y="0" width="{width}" height="{height}" rx="{radius}" {_paint_attr(style, "fill", bg, "#F8FBFF")}/>']
+    grid = style_token(style, "tokens.grid", {})
+    if isinstance(grid, dict) and grid.get("enabled"):
+        grid_opacity = grid.get("opacity", 1)
+        parts.append(f'<rect x="0" y="0" width="{width}" height="{height}" rx="{radius}" fill="url(#blueprint-grid)" opacity="{grid_opacity}"/>')
+    return parts
+
+
+def _group_panel_svg(style: dict, x: float, y: float, w: float, h: float, label: str) -> str:
+    group = _style_component(style, "group")
+    radius = group.get("radius", 26)
+    fill = group.get("fill", "group_fill")
+    fill_default = style_color(style, "group_fill", "#EEF6FF")
+    fill_attrs = _paint_attr(style, "fill", fill, fill_default, group.get("opacity"))
+    stroke = group.get("stroke", "none")
+    stroke_attrs = ""
+    if stroke != "none":
+        stroke_attrs = " " + _paint_attr(style, "stroke", stroke, "#F4F8FF", group.get("stroke_opacity"))
+        stroke_attrs += f' stroke-width="{group.get("stroke_width", 1)}"'
+        if group.get("dasharray") and group.get("dasharray") != "none":
+            stroke_attrs += f' stroke-dasharray="{group.get("dasharray")}"'
+    return (
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" {fill_attrs}{stroke_attrs}/>\n'
+        f'<text x="{x+28}" y="{y+23}" class="group-label">{e(label)}</text>'
+    )
+
+
+def render(contract: dict, contract_path: Path | None = None, style: dict | None = None) -> str:
+    if style is None:
+        style = style_for_contract(contract, contract_path)
+    model = build_layout_model(contract, style, contract_path)
     width = model["width"]
     height = model["height"]
     positions = model["positions"]
     group_boxes = model["group_boxes"]
     nodes = {n["id"]: n for n in contract.get("nodes", [])}
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{e(contract.get("title", "Semantic Diagram"))}">']
-    parts.append(style_block())
-    parts.append(f'<rect x="0" y="0" width="{width}" height="{height}" rx="28" fill="#F8FBFF"/>')
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{e(contract.get("title", "Semantic Diagram"))}" data-style="{e(style_id(style))}">']
+    parts.append(style_block(style))
+    parts.extend(_canvas_parts(style, width, height))
     title = contract.get("title", "Semantic Diagram")
     subtitle = contract.get("subtitle", "")
     parts.append(f'<text x="{width/2}" y="54" text-anchor="middle" class="title">{e(title)}</text>')
@@ -800,23 +912,20 @@ def render(contract: dict) -> str:
         parts.append(f'<text x="{width/2}" y="80" text-anchor="middle" class="subtitle">{e(subtitle)}</text>')
 
     for gid, (x, y, w, h, g) in group_boxes.items():
-        parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="26" fill="#EEF6FF" opacity="0.58"/>')
-        parts.append(f'<text x="{x+28}" y="{y+23}" class="group-label">{e(g.get("label", gid))}</text>')
+        parts.append(_group_panel_svg(style, x, y, w, h, g.get("label", gid)))
 
     # Draw edges behind cards but over group bands.
     parts.extend(routed_edge_paths(model, contract.get("edges", [])))
 
     for node_id, pos in positions.items():
-        parts.append(make_card(nodes[node_id], *pos))
+        parts.append(make_card(nodes[node_id], *pos, style))
 
     legend_notes = [a for a in contract.get("annotations", []) if a.get("placement") == "legend"]
     if legend_notes:
         legend_x = width - 330
         legend_y = height - 84 - (len(legend_notes) - 1) * 20
         for i, ann in enumerate(legend_notes[:4]):
-            color = ann.get("color", "#64748B")
-            if not VALID_HEX.match(color):
-                color = "#64748B"
+            color = style_color(style, ann.get("color", "text_secondary"), style_color(style, "text_secondary", "#64748B"))
             parts.append(f'<text x="{legend_x}" y="{legend_y + i*20}" class="note" fill="{color}">{e(ann.get("text", ""))}</text>')
 
     footer_y = height - 28
@@ -828,10 +937,12 @@ def render(contract: dict) -> str:
     return "\n".join(parts) + "\n"
 
 
-def contract_warnings(contract: dict) -> list[str]:
+def contract_warnings(contract: dict, contract_path: Path | None = None) -> list[str]:
     warnings: list[str] = []
+    # Validate style early so CLI failures are explicit and do not fall back.
+    style_for_contract(contract, contract_path)
     layout = contract.get("layout", "auto")
-    if layout not in SCRIPT_SUPPORTED_LAYOUTS:
+    if resolve_layout_strategy(layout) is None:
         warnings.append(
             f'layout "{layout}" is not rendered specially; falling back to grouped/layered placement'
         )
@@ -873,9 +984,13 @@ def main(argv: list[str]) -> int:
     contract_path = Path(argv[1])
     output_path = Path(argv[2])
     contract = json.loads(contract_path.read_text(encoding="utf-8-sig"))
-    for warning in contract_warnings(contract):
-        print(f"warning: {warning}", file=sys.stderr)
-    svg = render(contract)
+    try:
+        for warning in contract_warnings(contract, contract_path):
+            print(f"warning: {warning}", file=sys.stderr)
+        svg = render(contract, contract_path)
+    except StyleError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(svg, encoding="utf-8", newline="\n")
     print(f"wrote {output_path}")

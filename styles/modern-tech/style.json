@@ -1,0 +1,133 @@
+{
+  "id": "modern-tech",
+  "version": "1.0.0",
+  "description": "Current light technical semantic-diagram style migrated into a declarative package.",
+  "metrics": {
+    "canvas_margin_x": 70,
+    "top_y": 115,
+    "card_h": 100,
+    "card_min_w": 260,
+    "card_max_w": 360,
+    "card_col_gap": 56,
+    "card_row_gap": 34,
+    "layer_label_h": 42,
+    "layer_top_pad": 64,
+    "layer_bottom_pad": 32,
+    "layer_min_h": 170,
+    "layer_gap": 32,
+    "layer_side_gutter": 110,
+    "bus_to_card_clearance": 32,
+    "bus_bottom_clearance": 18,
+    "bus_lane_gap": 48,
+    "side_trunk_gutter": 130
+  },
+  "tokens": {
+    "colors": {
+      "background": "#F8FBFF",
+      "group_fill": "#EEF6FF",
+      "card_fill": "#FFFFFF",
+      "text_primary": "#0F172A",
+      "text_secondary": "#64748B",
+      "line_primary": "#334155",
+      "accent_cyan": "#06B6D4",
+      "accent_yellow": "#F59E0B",
+      "accent_green": "#22C55E",
+      "accent_purple": "#7C3AED",
+      "accent_orange": "#F97316",
+      "fanout": "#2563EB",
+      "fanin": "#16A34A",
+      "accents": {
+        "hub": "#2F7DFF",
+        "index": "#2F7DFF",
+        "query": "#06B6D4",
+        "glossary": "#7C3AED",
+        "ontology": "#7C3AED",
+        "process": "#2F7DFF",
+        "quality": "#F97316",
+        "risk": "#7C3AED",
+        "package": "#22C55E",
+        "source": "#334155",
+        "registry": "#F97316",
+        "capability": "#0EA5E9",
+        "evidence": "#64748B",
+        "decision": "#F59E0B",
+        "object": "#64748B"
+      },
+      "pale": {
+        "#2F7DFF": "#EFF6FF",
+        "#06B6D4": "#ECFEFF",
+        "#7C3AED": "#F5F3FF",
+        "#F97316": "#FFF7ED",
+        "#22C55E": "#ECFDF5",
+        "#334155": "#F8FAFC",
+        "#0EA5E9": "#F0F9FF",
+        "#64748B": "#F8FAFC",
+        "#F59E0B": "#FFFBEB"
+      }
+    },
+    "typography": {
+      "sans": "Inter,Segoe UI,Aptos,Arial,sans-serif",
+      "mono": "Inter,Segoe UI,Aptos,Arial,sans-serif",
+      "title": "Inter,Segoe UI,Aptos,Arial,sans-serif",
+      "title_size": "30px",
+      "subtitle_size": "14px",
+      "group_label_size": "13px",
+      "card_title_size": "17px",
+      "card_sub_size": "12.5px",
+      "note_size": "12px",
+      "title_letter_spacing": "0",
+      "label_letter_spacing": ".06em",
+      "title_transform": "none"
+    },
+    "grid": {
+      "enabled": false
+    }
+  },
+  "components": {
+    "canvas": {
+      "background": "background",
+      "radius": 28
+    },
+    "group": {
+      "fill": "group_fill",
+      "opacity": 0.58,
+      "stroke": "none",
+      "radius": 26
+    },
+    "card": {
+      "fill": "card_fill",
+      "stroke_mode": "accent",
+      "stroke_width": 2.2,
+      "radius": 20,
+      "shadow": {
+        "enabled": true,
+        "color": "#0F172A",
+        "opacity": 0.1,
+        "dy": 8,
+        "blur": 8
+      }
+    },
+    "icon": {
+      "fill_mode": "pale",
+      "stroke_width": 1.7,
+      "line_width": 1.8
+    },
+    "connector": {
+      "primary": "line_primary",
+      "fanout": "fanout",
+      "fanin": "fanin",
+      "stroke_width": 2,
+      "opacity": 0.76,
+      "fanout_opacity": 0.74,
+      "fanin_opacity": 0.74,
+      "dasharray": "8 8",
+      "dashed_opacity": 0.66
+    }
+  },
+  "qa": {
+    "reference_contracts": [
+      "examples/ocs-r300-layered-contract.json",
+      "examples/ocs-r300-multirrow-contract.json"
+    ]
+  }
+}

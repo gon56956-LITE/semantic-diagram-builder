@@ -1,0 +1,140 @@
+{
+  "id": "accent-blueprint",
+  "version": "1.0.0",
+  "description": "Deep navy enterprise architecture blueprint style with sparse semantic accents.",
+  "metrics": {
+    "canvas_margin_x": 70,
+    "top_y": 115,
+    "card_h": 100,
+    "card_min_w": 260,
+    "card_max_w": 360,
+    "card_col_gap": 56,
+    "card_row_gap": 34,
+    "layer_label_h": 42,
+    "layer_top_pad": 64,
+    "layer_bottom_pad": 32,
+    "layer_min_h": 170,
+    "layer_gap": 32,
+    "layer_side_gutter": 110,
+    "bus_to_card_clearance": 32,
+    "bus_bottom_clearance": 18,
+    "bus_lane_gap": 48,
+    "side_trunk_gutter": 130
+  },
+  "tokens": {
+    "colors": {
+      "background": "#062B5F",
+      "background_dark": "#031E42",
+      "grid_line": "rgba(255,255,255,0.08)",
+      "grid_line_strong": "rgba(255,255,255,0.14)",
+      "text_primary": "#F4F8FF",
+      "text_secondary": "#C9DAF5",
+      "line_primary": "#F4F8FF",
+      "panel_fill": "rgba(255,255,255,0.03)",
+      "panel_fill_strong": "rgba(255,255,255,0.06)",
+      "card_fill": "rgba(255,255,255,0.03)",
+      "accent_cyan": "#16D9FF",
+      "accent_yellow": "#FFD84D",
+      "accent_green": "#6EE66E",
+      "accent_purple": "#B56CFF",
+      "accent_orange": "#FF9F2E",
+      "fanout": "#FF9F2E",
+      "fanin": "#6EE66E",
+      "accents": {
+        "hub": "#16D9FF",
+        "index": "#16D9FF",
+        "query": "#16D9FF",
+        "glossary": "#B56CFF",
+        "ontology": "#B56CFF",
+        "process": "#FF9F2E",
+        "quality": "#FFD84D",
+        "risk": "#FFD84D",
+        "package": "#6EE66E",
+        "source": "#F4F8FF",
+        "registry": "#FFD84D",
+        "capability": "#16D9FF",
+        "evidence": "#C9DAF5",
+        "decision": "#FF9F2E",
+        "object": "#F4F8FF"
+      },
+      "pale": {
+        "#16D9FF": "#031E42",
+        "#FFD84D": "#031E42",
+        "#6EE66E": "#031E42",
+        "#B56CFF": "#031E42",
+        "#FF9F2E": "#031E42",
+        "#F4F8FF": "#031E42",
+        "#C9DAF5": "#031E42"
+      }
+    },
+    "typography": {
+      "sans": "IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif",
+      "mono": "IBM Plex Mono,JetBrains Mono,Consolas,monospace",
+      "title": "IBM Plex Mono,JetBrains Mono,Consolas,monospace",
+      "title_size": "27px",
+      "subtitle_size": "13px",
+      "group_label_size": "12px",
+      "card_title_size": "16px",
+      "card_sub_size": "12px",
+      "note_size": "12px",
+      "title_letter_spacing": ".04em",
+      "label_letter_spacing": ".08em",
+      "title_transform": "uppercase"
+    },
+    "grid": {
+      "enabled": true,
+      "line": "grid_line",
+      "strong_line": "grid_line_strong",
+      "size": 12,
+      "strong_every": 5,
+      "opacity": 1
+    }
+  },
+  "components": {
+    "canvas": {
+      "background": "background",
+      "radius": 0
+    },
+    "group": {
+      "fill": "panel_fill",
+      "opacity": 1,
+      "stroke": "line_primary",
+      "stroke_opacity": 0.7,
+      "stroke_width": 1,
+      "radius": 8,
+      "dasharray": "none"
+    },
+    "card": {
+      "fill": "card_fill",
+      "fill_opacity": 1,
+      "stroke_mode": "accent",
+      "stroke_width": 1.3,
+      "radius": 6,
+      "shadow": {
+        "enabled": false
+      }
+    },
+    "icon": {
+      "fill_mode": "none",
+      "stroke_width": 1.2,
+      "line_width": 1.3
+    },
+    "connector": {
+      "primary": "line_primary",
+      "fanout": "fanout",
+      "fanin": "fanin",
+      "stroke_width": 1.5,
+      "opacity": 0.88,
+      "fanout_opacity": 0.9,
+      "fanin_opacity": 0.9,
+      "dasharray": "6 5",
+      "dashed_opacity": 0.68
+    }
+  },
+  "qa": {
+    "reference_image": "C:/Users/gon56956/Downloads/Accent Blueprint style.png",
+    "reference_contracts": [
+      "examples/accent-blueprint-boundary-contract.json"
+    ]
+  }
+}

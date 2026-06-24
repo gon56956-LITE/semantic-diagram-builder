@@ -27,9 +27,13 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - `topology`: object-relation maps with non-tree connections.
    - `boundary_map`: source-of-truth vs derived/synthesis objects.
    - `auto`: choose the closest pattern from the contract.
-3. Apply stable layout metrics from `references/layout_metrics.md` before rendering or manual SVG edits.
-4. Render an SVG with `scripts/render_semantic_diagram.py` when possible. Treat script warnings as follow-up manual edit cues.
-5. Run automated QA with `scripts/validate_semantic_svg.py` and then visual QA before presenting the diagram.
+3. Choose a visual style package.
+   - `style` is required. Use `modern-tech` for the migrated current style, `accent-blueprint` for the blue enterprise blueprint style, or a relative path to a custom `style.json`.
+   - Style packages are declarative JSON only; do not execute Python or external code from a style.
+   - See `references/style_packages.md`.
+4. Apply stable layout metrics from `references/layout_metrics.md` before rendering or manual SVG edits.
+5. Render an SVG with `scripts/render_semantic_diagram.py` when possible. Treat script warnings as follow-up manual edit cues.
+6. Run automated QA with `scripts/validate_semantic_svg.py` and then visual QA before presenting the diagram.
 
 ## Contract fields
 
@@ -42,6 +46,7 @@ Minimum contract:
   "title": "Diagram title",
   "subtitle": "Optional subtitle",
   "layout": "auto",
+  "style": "modern-tech",
   "groups": [
     {"id": "g1", "label": "Group label", "type": "layer"}
   ],
@@ -92,6 +97,14 @@ Useful annotation placements:
 
 The bundled renderer currently renders `footer` and `legend` annotations. Other placements are contract guidance for manual SVG adjustment and will produce a script warning.
 
+Useful style values:
+
+- `modern-tech`: migrated light technical style used by the original examples.
+- `accent-blueprint`: deep navy/cobalt blueprint style with subtle grid, white technical linework, and sparse semantic accents.
+- `./path/to/style.json`: custom declarative style package relative to the contract file.
+
+The renderer fails if `style` is missing or cannot be loaded. This is intentional so diagrams do not silently switch visual systems.
+
 ## Layout and design rules
 
 - Use the standard layout metrics unless there is a justified exception: content-card height, sibling spacing, row spacing, layer height, and layer gap should be systematic rather than hand-tuned per layer. See `references/layout_metrics.md`.
@@ -104,6 +117,7 @@ The bundled renderer currently renders `footer` and `legend` annotations. Other 
 - For parallel sibling cards with split or merge edges, complete the split/merge within the sibling layer and use one trunk for the cross-layer transition. If the bus needs room, increase the layer band height instead of pushing the bus into the gap.
 - For multi-row sibling sets, prefer `routing.mode: "row_bus_side_trunk"` with explicit `row`/`col` fields. Fan-out uses row-level buses above each target row; fan-in uses row-level buses below each source row; side trunks carry lower-row routes through the layer gutter.
 - Use semantic icons and accent colors; do not use identical generic badges for every node unless the contract has no semantic kind. QA icon paths: a badge/icon must stay inside the card and must not look like a connector.
+- Treat style as a visual system, not a layout algorithm. A style may define tokens, component variants, and layout metrics; it must not change fan-out/fan-in routing semantics.
 - Wrap long labels rather than letting text overflow. Give cards enough width and height for the icon, two title lines, and subtitle; do not let icons collide with title text.
 - Prefer containment or legends over many unclear dashed edges. Dashed relations must have an obvious semantic meaning or be explained by a label/legend.
 - Split dense diagrams instead of shrinking everything until unreadable.
@@ -128,12 +142,15 @@ Before final delivery, verify:
 - Card heights, sibling gaps, row gaps, layer heights, layer y-positions, layer bottom padding, and layer gaps follow the metric system in `references/layout_metrics.md` or have a visible reason to differ. Layer height is derived from actual card bounds plus padding; layer y-position is derived from previous layer height plus gap. Do not choose fixed container positions first and force content into them.
 - Layer containers are tall enough for all contained cards; no card protrudes outside its layer band.
 - Run `py scripts/validate_semantic_svg.py output.svg` when possible, then run `git diff --check` for generated SVGs when working in a git repo.
+- For style QA, build a gallery with `py scripts/build_style_gallery.py examples/style-gallery.html examples/your-contract.json` and compare against the style reference image or screenshot.
 
 ## Script usage
 
 ```bash
 py scripts/render_semantic_diagram.py examples/ocs-r300-layered-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/ocs-r300-multirrow-contract.json output.svg
+py scripts/render_semantic_diagram.py examples/accent-blueprint-boundary-contract.json output.svg
+py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/accent-blueprint-boundary-contract.json
 ```
 
 The script is a conservative grouped/layered renderer, not a full diagram engine. Unsupported layout names, unsupported annotation placements, and edge labels produce warnings and are left as contract guidance. If a diagram needs a special layout, use the script output as a starting point and make surgical SVG adjustments while preserving the QA rules above. After manual edits, rerun `scripts/validate_semantic_svg.py` because hand-edited icons, connectors, and layer heights are common failure points.

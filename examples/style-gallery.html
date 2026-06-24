@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Semantic Diagram Style Gallery</title>
+  <style>
+    body{margin:0;background:#0b1220;color:#e5e7eb;font-family:Inter,Segoe UI,Arial,sans-serif}
+    main{padding:24px;display:grid;gap:24px}
+    .frame{border:1px solid #334155;background:#111827;padding:14px}
+    header{display:flex;gap:16px;align-items:baseline;margin:0 0 12px 0;color:#cbd5e1}
+    header strong{color:#f8fafc}
+    header code{margin-left:auto;color:#94a3b8}
+    .svg-wrap{overflow:auto;background:#020617}
+    svg{display:block;max-width:100%;height:auto}
+  </style>
+</head>
+<body>
+<main>
+<section class="frame">
+  <header>
+    <strong>OCS R300 Manufacturing Knowledge Topology</strong>
+    <span>modern-tech</span>
+    <code>examples\ocs-r300-layered-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1067" viewBox="0 0 1500 1067" role="img" aria-label="OCS R300 Manufacturing Knowledge Topology" data-style="modern-tech">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#16A34A"/></marker>
+  <style>
+    .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    .group-label{font:700 13px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    .card-title{font:700 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    .card-sub{font:500 12.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    .fanout{stroke:#2563EB;opacity:0.74}
+    .fanin{stroke:#16A34A;opacity:0.74}
+    .route-shared{marker-end:none}
+    .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    .note{font:500 12px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1500" height="1067" rx="28" fill="#F8FBFF"/>
+<text x="750.0" y="54" text-anchor="middle" class="title">OCS R300 Manufacturing Knowledge Topology</text>
+<text x="750.0" y="80" text-anchor="middle" class="subtitle">Example only: layered knowledge architecture, not a fixed template</text>
+<rect x="70" y="115" width="1360" height="196" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<text x="98" y="138" class="group-label">Navigation layer</text>
+<rect x="70" y="343" width="1360" height="196" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<text x="98" y="366" class="group-label">Product-level synthesis</text>
+<rect x="70" y="571" width="1360" height="196" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<text x="98" y="594" class="group-label">WI-derived knowledge layer</text>
+<rect x="70" y="799" width="1360" height="196" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<text x="98" y="822" class="group-label">Controlled-source boundary</text>
+<path d="M 514.0 229.0 L 570.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 930.0 229.0 L 986.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 750.0 279 L 750.0 329.0 Q 750.0 343.0 736.0 343.0 L 348.0 343.0 Q 334.0 343.0 334.0 357.0 L 334.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 750.0 279 L 750.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 750.0 279 L 750.0 329.0 Q 750.0 343.0 764.0 343.0 L 1152.0 343.0 Q 1166.0 343.0 1166.0 357.0 L 1166.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 750.0 507 L 750.0 557.0 Q 750.0 571.0 736.0 571.0 L 274.25 571.0 Q 260.25 571.0 260.25 585.0 L 260.25 635" class="edge" marker-end="url(#arrow)"/>
+<path d="M 750.0 507 L 750.0 557.0 Q 750.0 571.0 736.0 571.0 L 600.75 571.0 Q 586.75 571.0 586.75 585.0 L 586.75 635" class="edge" marker-end="url(#arrow)"/>
+<path d="M 750.0 507 L 750.0 557.0 Q 750.0 571.0 764.0 571.0 L 899.25 571.0 Q 913.25 571.0 913.25 585.0 L 913.25 635" class="edge" marker-end="url(#arrow)"/>
+<path d="M 750.0 507 L 750.0 557.0 Q 750.0 571.0 764.0 571.0 L 1225.75 571.0 Q 1239.75 571.0 1239.75 585.0 L 1239.75 635" class="edge" marker-end="url(#arrow)"/>
+<path d="M 260.25 735 L 260.25 785.0 Q 260.25 799.0 274.25 799.0 L 736.0 799.0 Q 750.0 799.0 750.0 813.0 L 750.0 863" class="edge" marker-end="url(#arrow)"/>
+<path d="M 586.75 735 L 586.75 785.0 Q 586.75 799.0 600.75 799.0 L 736.0 799.0 Q 750.0 799.0 750.0 813.0 L 750.0 863" class="edge" marker-end="url(#arrow)"/>
+<path d="M 913.25 735 L 913.25 785.0 Q 913.25 799.0 899.25 799.0 L 764.0 799.0 Q 750.0 799.0 750.0 813.0 L 750.0 863" class="edge" marker-end="url(#arrow)"/>
+<path d="M 1239.75 735 L 1239.75 785.0 Q 1239.75 799.0 1225.75 799.0 L 764.0 799.0 Q 750.0 799.0 750.0 813.0 L 750.0 863" class="edge" marker-end="url(#arrow)"/>
+<g id="node-moc" class="card node-card"><rect x="154.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><rect x="178.0" y="204" width="18" height="20" rx="3" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M182.0,210 H192.0 M182.0,215 H192.0 M182.0,220 H189.0" class="icon-line" stroke="#2F7DFF"/><text x="334.0" y="210" text-anchor="middle" class="card-title">Manufacturing MOC</text><text x="334.0" y="241" text-anchor="middle" class="card-sub">entry point</text></g>
+<g id="node-query" class="card node-card"><rect x="570.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#06B6D4" stroke-width="2.2" filter="url(#shadow)"/><circle cx="602.0" cy="212" r="7" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.7"/><path d="M608.0,218 L614.0,224" class="icon-line" stroke="#06B6D4"/><text x="750.0" y="210" text-anchor="middle" class="card-title">Query Guide</text><text x="750.0" y="241" text-anchor="middle" class="card-sub">where to look</text></g>
+<g id="node-glossary" class="card node-card"><rect x="986.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2.2" filter="url(#shadow)"/><path d="M1010.0,204 H1026.0 Q1030.0,204 1030.0,208 V223 H1010.0 Z" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.7"/><path d="M1015.0,210 H1024.0 M1015.0,216 H1024.0" class="icon-line" stroke="#7C3AED"/><text x="1166.0" y="210" text-anchor="middle" class="card-title">Glossary / Ontology</text><text x="1166.0" y="241" text-anchor="middle" class="card-sub">shared language</text></g>
+<g id="node-process" class="card node-card"><rect x="154.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><circle cx="182.0" cy="443" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><circle cx="196.0" cy="436" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><circle cx="196.0" cy="450" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><path d="M186.0,443 H190.0 M192.0,439 L190.0,443 L192.0,447" class="icon-line" stroke="#2F7DFF"/><text x="334.0" y="433" text-anchor="middle" class="card-title">End-to-End Process</text><text x="334.0" y="453" text-anchor="middle" class="card-title">Overview</text><text x="334.0" y="484" text-anchor="middle" class="card-sub">product-level flow</text></g>
+<g id="node-ctq" class="card node-card"><rect x="570.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#F97316" stroke-width="2.2" filter="url(#shadow)"/><path d="M604.0,432 L614.0,450 H594.0 Z" fill="#FFF7ED" stroke="#F97316" stroke-width="1.7"/><path d="M604.0,439 V445 M604.0,449 V449" class="icon-line" stroke="#F97316"/><text x="750.0" y="433" text-anchor="middle" class="card-title">CTQ &amp; Parameter Master</text><text x="750.0" y="453" text-anchor="middle" class="card-title">Register</text><text x="750.0" y="484" text-anchor="middle" class="card-sub">quality + parameter families</text></g>
+<g id="node-risk" class="card node-card"><rect x="986.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2.2" filter="url(#shadow)"/><path d="M1020.0,432 L1029.0,437 V447 L1020.0,452 L1011.0,447 V437 Z" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.7"/><path d="M1016.0,442 L1019.0,446 L1025.0,438" class="icon-line" stroke="#7C3AED"/><text x="1166.0" y="438" text-anchor="middle" class="card-title">Defect &amp; Risk Taxonomy</text><text x="1166.0" y="469" text-anchor="middle" class="card-sub">cross-group risk concepts</text></g>
+<g id="node-mems" class="card node-card"><rect x="125.0" y="635" width="270.5" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="149.0" y="663" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M149.0,668 H169.0 M159.0,663 V679" class="icon-line" stroke="#22C55E"/><text x="260.25" y="666" text-anchor="middle" class="card-title">MEMS Package</text><text x="260.25" y="697" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-mca" class="card node-card"><rect x="451.5" y="635" width="270.5" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="475.5" y="663" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M475.5,668 H495.5 M485.5,663 V679" class="icon-line" stroke="#22C55E"/><text x="586.75" y="666" text-anchor="middle" class="card-title">MCA Package</text><text x="586.75" y="697" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-obm" class="card node-card"><rect x="778.0" y="635" width="270.5" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="802.0" y="663" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M802.0,668 H822.0 M812.0,663 V679" class="icon-line" stroke="#22C55E"/><text x="913.25" y="666" text-anchor="middle" class="card-title">OBM Assy</text><text x="913.25" y="697" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-pob" class="card node-card"><rect x="1104.5" y="635" width="270.5" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="1128.5" y="663" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M1128.5,668 H1148.5 M1138.5,663 V679" class="icon-line" stroke="#22C55E"/><text x="1239.75" y="666" text-anchor="middle" class="card-title">POB</text><text x="1239.75" y="697" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-controlled_sources" class="card node-card"><rect x="570.0" y="863" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#334155" stroke-width="2.2" filter="url(#shadow)"/><path d="M594.0,888 H608.0 L614.0,894 V908 H594.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M608.0,888 V894 H614.0" class="icon-line" stroke="#334155"/><text x="750.0" y="889" text-anchor="middle" class="card-title">Controlled WI / PLM</text><text x="750.0" y="909" text-anchor="middle" class="card-title">Source Documents</text><text x="750.0" y="940" text-anchor="middle" class="card-sub">execution authority and revision control</text></g>
+<text x="750.0" y="1039" text-anchor="middle" class="note">Example note: derived knowledge maps support navigation; controlled source documents remain the execution authority.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>OCS R300 Manufacturing Knowledge Topology</strong>
+    <span>modern-tech</span>
+    <code>examples\ocs-r300-multirrow-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1307" viewBox="0 0 1800 1307" role="img" aria-label="OCS R300 Manufacturing Knowledge Topology" data-style="modern-tech">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#16A34A"/></marker>
+  <style>
+    .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    .group-label{font:700 13px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    .card-title{font:700 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    .card-sub{font:500 12.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    .fanout{stroke:#2563EB;opacity:0.74}
+    .fanin{stroke:#16A34A;opacity:0.74}
+    .route-shared{marker-end:none}
+    .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    .note{font:500 12px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1800" height="1307" rx="28" fill="#F8FBFF"/>
+<text x="900.0" y="54" text-anchor="middle" class="title">OCS R300 Manufacturing Knowledge Topology</text>
+<text x="900.0" y="80" text-anchor="middle" class="subtitle">Multi-row example: synthesis fan-out and source-bound fan-in stay inside the WI-derived layer</text>
+<rect x="70" y="115" width="1660" height="196" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<text x="98" y="138" class="group-label">Navigation layer</text>
+<rect x="70" y="343" width="1660" height="196" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<text x="98" y="366" class="group-label">Product-level synthesis</text>
+<rect x="70" y="571" width="1660" height="436" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<text x="98" y="594" class="group-label">WI-derived knowledge layer</text>
+<rect x="70" y="1039" width="1660" height="196" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<text x="98" y="1062" class="group-label">Controlled-source boundary</text>
+<path d="M 900.0 507.0 L 900.0 606.0 Q 900.0 613.0 893.0 613.0 L 886.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 900.0 507.0 L 900.0 606.0 Q 900.0 613.0 907.0 613.0 L 914.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 1641.0 613.0 L 1648.0 613.0 Q 1655.0 613.0 1655.0 620.0 L 1655.0 818.0 Q 1655.0 825.0 1648.0 825.0 L 1641.0 825.0" class="edge fanout route-shared trunk"/>
+<path d="M 383.0 613.0 L 886.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 914.0 613.0 L 1641.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 383.0 613.0 L 376.0 613.0 Q 369.0 613.0 369.0 620.0 L 369.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 737.0 613.0 L 730.0 613.0 Q 723.0 613.0 723.0 620.0 L 723.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1063.0 613.0 L 1070.0 613.0 Q 1077.0 613.0 1077.0 620.0 L 1077.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1417.0 613.0 L 1424.0 613.0 Q 1431.0 613.0 1431.0 620.0 L 1431.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 914.0 825.0 L 1641.0 825.0" class="edge fanout route-shared bus"/>
+<path d="M 914.0 825.0 L 907.0 825.0 Q 900.0 825.0 900.0 832.0 L 900.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1330.0 825.0 L 1323.0 825.0 Q 1316.0 825.0 1316.0 832.0 L 1316.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 159.0 777.0 L 152.0 777.0 Q 145.0 777.0 145.0 784.0 L 145.0 982.0 Q 145.0 989.0 152.0 989.0 L 159.0 989.0" class="edge fanin route-shared trunk"/>
+<path d="M 369.0 745.0 L 369.0 770.0 Q 369.0 777.0 362.0 777.0 L 355.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 723.0 745.0 L 723.0 770.0 Q 723.0 777.0 716.0 777.0 L 709.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 1077.0 745.0 L 1077.0 770.0 Q 1077.0 777.0 1070.0 777.0 L 1063.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 1431.0 745.0 L 1431.0 770.0 Q 1431.0 777.0 1424.0 777.0 L 1417.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 777.0 L 1417.0 777.0" class="edge fanin route-shared bus"/>
+<path d="M 1316.0 957.0 L 1316.0 982.0 Q 1316.0 989.0 1309.0 989.0 L 1302.0 989.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 989.0 L 886.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 914.0 989.0 L 1302.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 886.0 989.0 L 893.0 989.0 Q 900.0 989.0 900.0 996.0 L 900.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 914.0 989.0 L 907.0 989.0 Q 900.0 989.0 900.0 996.0 L 900.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 900.0 957.0 L 900.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)"/>
+<path d="M 664.0 229.0 L 720.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 1080.0 229.0 L 1136.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 900.0 279 L 900.0 329.0 Q 900.0 343.0 886.0 343.0 L 498.0 343.0 Q 484.0 343.0 484.0 357.0 L 484.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 900.0 279 L 900.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 900.0 279 L 900.0 329.0 Q 900.0 343.0 914.0 343.0 L 1302.0 343.0 Q 1316.0 343.0 1316.0 357.0 L 1316.0 407" class="edge" marker-end="url(#arrow)"/>
+<g id="node-moc" class="card node-card"><rect x="304.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><rect x="328.0" y="204" width="18" height="20" rx="3" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M332.0,210 H342.0 M332.0,215 H342.0 M332.0,220 H339.0" class="icon-line" stroke="#2F7DFF"/><text x="484.0" y="210" text-anchor="middle" class="card-title">Manufacturing MOC</text><text x="484.0" y="241" text-anchor="middle" class="card-sub">entry point</text></g>
+<g id="node-query" class="card node-card"><rect x="720.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#06B6D4" stroke-width="2.2" filter="url(#shadow)"/><circle cx="752.0" cy="212" r="7" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.7"/><path d="M758.0,218 L764.0,224" class="icon-line" stroke="#06B6D4"/><text x="900.0" y="210" text-anchor="middle" class="card-title">Query Guide</text><text x="900.0" y="241" text-anchor="middle" class="card-sub">where to look</text></g>
+<g id="node-glossary" class="card node-card"><rect x="1136.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2.2" filter="url(#shadow)"/><path d="M1160.0,204 H1176.0 Q1180.0,204 1180.0,208 V223 H1160.0 Z" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.7"/><path d="M1165.0,210 H1174.0 M1165.0,216 H1174.0" class="icon-line" stroke="#7C3AED"/><text x="1316.0" y="210" text-anchor="middle" class="card-title">Glossary / Ontology</text><text x="1316.0" y="241" text-anchor="middle" class="card-sub">shared language</text></g>
+<g id="node-process" class="card node-card"><rect x="304.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><circle cx="332.0" cy="443" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><circle cx="346.0" cy="436" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><circle cx="346.0" cy="450" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><path d="M336.0,443 H340.0 M342.0,439 L340.0,443 L342.0,447" class="icon-line" stroke="#2F7DFF"/><text x="484.0" y="433" text-anchor="middle" class="card-title">End-to-End Process</text><text x="484.0" y="453" text-anchor="middle" class="card-title">Overview</text><text x="484.0" y="484" text-anchor="middle" class="card-sub">product-level flow</text></g>
+<g id="node-ctq" class="card node-card"><rect x="720.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#F97316" stroke-width="2.2" filter="url(#shadow)"/><path d="M754.0,432 L764.0,450 H744.0 Z" fill="#FFF7ED" stroke="#F97316" stroke-width="1.7"/><path d="M754.0,439 V445 M754.0,449 V449" class="icon-line" stroke="#F97316"/><text x="900.0" y="433" text-anchor="middle" class="card-title">CTQ &amp; Parameter Master</text><text x="900.0" y="453" text-anchor="middle" class="card-title">Register</text><text x="900.0" y="484" text-anchor="middle" class="card-sub">quality + parameter families</text></g>
+<g id="node-risk" class="card node-card"><rect x="1136.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2.2" filter="url(#shadow)"/><path d="M1170.0,432 L1179.0,437 V447 L1170.0,452 L1161.0,447 V437 Z" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.7"/><path d="M1166.0,442 L1169.0,446 L1175.0,438" class="icon-line" stroke="#7C3AED"/><text x="1316.0" y="438" text-anchor="middle" class="card-title">Defect &amp; Risk Taxonomy</text><text x="1316.0" y="469" text-anchor="middle" class="card-sub">cross-group risk concepts</text></g>
+<g id="node-mems" class="card node-card"><rect x="220.0" y="645" width="298.0" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="244.0" y="673" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M244.0,678 H264.0 M254.0,673 V689" class="icon-line" stroke="#22C55E"/><text x="369.0" y="676" text-anchor="middle" class="card-title">MEMS Package</text><text x="369.0" y="707" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-mca" class="card node-card"><rect x="574.0" y="645" width="298.0" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="598.0" y="673" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M598.0,678 H618.0 M608.0,673 V689" class="icon-line" stroke="#22C55E"/><text x="723.0" y="676" text-anchor="middle" class="card-title">MCA Package</text><text x="723.0" y="707" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-obm" class="card node-card"><rect x="928.0" y="645" width="298.0" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="952.0" y="673" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M952.0,678 H972.0 M962.0,673 V689" class="icon-line" stroke="#22C55E"/><text x="1077.0" y="676" text-anchor="middle" class="card-title">OBM Assy</text><text x="1077.0" y="707" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-pob" class="card node-card"><rect x="1282.0" y="645" width="298.0" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="1306.0" y="673" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M1306.0,678 H1326.0 M1316.0,673 V689" class="icon-line" stroke="#22C55E"/><text x="1431.0" y="676" text-anchor="middle" class="card-title">POB</text><text x="1431.0" y="707" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-faceplate" class="card node-card"><rect x="720.0" y="857" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="744.0" y="885" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M744.0,890 H764.0 M754.0,885 V901" class="icon-line" stroke="#22C55E"/><text x="900.0" y="888" text-anchor="middle" class="card-title">Faceplate</text><text x="900.0" y="919" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-mech" class="card node-card"><rect x="1136.0" y="857" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="1160.0" y="885" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M1160.0,890 H1180.0 M1170.0,885 V901" class="icon-line" stroke="#22C55E"/><text x="1316.0" y="888" text-anchor="middle" class="card-title">MECH Assy</text><text x="1316.0" y="919" text-anchor="middle" class="card-sub">source-bound sub-KB</text></g>
+<g id="node-controlled_sources" class="card node-card"><rect x="720.0" y="1103" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#334155" stroke-width="2.2" filter="url(#shadow)"/><path d="M744.0,1128 H758.0 L764.0,1134 V1148 H744.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M758.0,1128 V1134 H764.0" class="icon-line" stroke="#334155"/><text x="900.0" y="1129" text-anchor="middle" class="card-title">Controlled WI / PLM</text><text x="900.0" y="1149" text-anchor="middle" class="card-title">Source Documents</text><text x="900.0" y="1180" text-anchor="middle" class="card-sub">authoritative execution and revision control</text></g>
+<text x="1470" y="1203" class="note" fill="#2563EB">blue = synthesis fan-out</text>
+<text x="1470" y="1223" class="note" fill="#16A34A">green = source-bound fan-in</text>
+<text x="900.0" y="1279" text-anchor="middle" class="note">Example note: row-level buses and side trunks are generated from explicit row/col contract fields.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Knowledge Boundary Blueprint</strong>
+    <span>accent-blueprint</span>
+    <code>examples\accent-blueprint-boundary-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1307" viewBox="0 0 1536 1307" role="img" aria-label="Knowledge Boundary Blueprint" data-style="accent-blueprint">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#F4F8FF"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#FF9F2E"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#6EE66E"/></marker>
+  <style>
+    .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    .group-label{font:700 12px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    .card-title{font:700 16px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    .card-sub{font:500 12px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    .fanout{stroke:#FF9F2E;opacity:0.9}
+    .fanin{stroke:#6EE66E;opacity:0.9}
+    .route-shared{marker-end:none}
+    .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    .note{font:500 12px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1536" height="1307" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1536" height="1307" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="768.0" y="54" text-anchor="middle" class="title">Knowledge Boundary Blueprint</text>
+<text x="768.0" y="80" text-anchor="middle" class="subtitle">Reference example for the Accent Blueprint style</text>
+<rect x="70" y="115" width="1396" height="196" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<text x="98" y="138" class="group-label">Navigation / access layer</text>
+<rect x="70" y="343" width="1396" height="196" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<text x="98" y="366" class="group-label">Synthesis and governance layer</text>
+<rect x="70" y="571" width="1396" height="436" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<text x="98" y="594" class="group-label">Reusable knowledge assets</text>
+<rect x="70" y="1039" width="1396" height="196" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<text x="98" y="1062" class="group-label">Controlled-source boundary</text>
+<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 761.0 613.0 L 754.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 775.0 613.0 L 782.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 1377.0 613.0 L 1384.0 613.0 Q 1391.0 613.0 1391.0 620.0 L 1391.0 818.0 Q 1391.0 825.0 1384.0 825.0 L 1377.0 825.0" class="edge fanout route-shared trunk"/>
+<path d="M 398.0 613.0 L 754.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 782.0 613.0 L 1377.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 398.0 613.0 L 391.0 613.0 Q 384.0 613.0 384.0 620.0 L 384.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 768.0 613.0 L 768.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1138.0 613.0 L 1145.0 613.0 Q 1152.0 613.0 1152.0 620.0 L 1152.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 782.0 825.0 L 1377.0 825.0" class="edge fanout route-shared bus"/>
+<path d="M 782.0 825.0 L 775.0 825.0 Q 768.0 825.0 768.0 832.0 L 768.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1166.0 825.0 L 1159.0 825.0 Q 1152.0 825.0 1152.0 832.0 L 1152.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 159.0 777.0 L 152.0 777.0 Q 145.0 777.0 145.0 784.0 L 145.0 982.0 Q 145.0 989.0 152.0 989.0 L 159.0 989.0" class="edge fanin route-shared trunk"/>
+<path d="M 384.0 745.0 L 384.0 770.0 Q 384.0 777.0 377.0 777.0 L 370.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 768.0 745.0 L 768.0 770.0 Q 768.0 777.0 761.0 777.0 L 754.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 1152.0 745.0 L 1152.0 770.0 Q 1152.0 777.0 1145.0 777.0 L 1138.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 777.0 L 1138.0 777.0" class="edge fanin route-shared bus"/>
+<path d="M 1152.0 957.0 L 1152.0 982.0 Q 1152.0 989.0 1145.0 989.0 L 1138.0 989.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 989.0 L 754.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 782.0 989.0 L 1138.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 754.0 989.0 L 761.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 782.0 989.0 L 775.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 768.0 957.0 L 768.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)"/>
+<path d="M 740.0 229.0 L 796.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 754.0 343.0 Q 768.0 343.0 768.0 357.0 L 768.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 1170.0 343.0 Q 1184.0 343.0 1184.0 357.0 L 1184.0 407" class="edge" marker-end="url(#arrow)"/>
+<g id="node-portal" class="card node-card"><rect x="380.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="404.0" y="204" width="18" height="20" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M408.0,210 H418.0 M408.0,215 H418.0 M408.0,220 H415.0" class="icon-line" stroke="#16D9FF"/><text x="560.0" y="210" text-anchor="middle" class="card-title">Knowledge Portal</text><text x="560.0" y="241" text-anchor="middle" class="card-sub">blueprint entry</text></g>
+<g id="node-glossary" class="card node-card"><rect x="796.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.3"/><path d="M820.0,204 H836.0 Q840.0,204 840.0,208 V223 H820.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M825.0,210 H834.0 M825.0,216 H834.0" class="icon-line" stroke="#B56CFF"/><text x="976.0" y="210" text-anchor="middle" class="card-title">Glossary Register</text><text x="976.0" y="241" text-anchor="middle" class="card-sub">controlled terms</text></g>
+<g id="node-governance" class="card node-card"><rect x="172.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M206.0,432 L216.0,450 H196.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M206.0,439 V445 M206.0,449 V449" class="icon-line" stroke="#FFD84D"/><text x="352.0" y="438" text-anchor="middle" class="card-title">Governance Rules</text><text x="352.0" y="469" text-anchor="middle" class="card-sub">ownership + constraints</text></g>
+<g id="node-domain_map" class="card node-card"><rect x="588.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="612.0" y="435" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M612.0,440 H632.0 M622.0,435 V451" class="icon-line" stroke="#16D9FF"/><text x="768.0" y="438" text-anchor="middle" class="card-title">Domain Map</text><text x="768.0" y="469" text-anchor="middle" class="card-sub">system interfaces</text></g>
+<g id="node-risk_taxonomy" class="card node-card"><rect x="1004.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M1038.0,432 L1047.0,437 V447 L1038.0,452 L1029.0,447 V437 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M1034.0,442 L1037.0,446 L1043.0,438" class="icon-line" stroke="#FFD84D"/><text x="1184.0" y="438" text-anchor="middle" class="card-title">Risk Taxonomy</text><text x="1184.0" y="469" text-anchor="middle" class="card-sub">constraint model</text></g>
+<g id="node-module_a" class="card node-card"><rect x="220.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="244.0" y="673" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M244.0,678 H264.0 M254.0,673 V689" class="icon-line" stroke="#6EE66E"/><text x="384.0" y="676" text-anchor="middle" class="card-title">Module A</text><text x="384.0" y="707" text-anchor="middle" class="card-sub">approved asset</text></g>
+<g id="node-module_b" class="card node-card"><rect x="604.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="628.0" y="673" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M628.0,678 H648.0 M638.0,673 V689" class="icon-line" stroke="#6EE66E"/><text x="768.0" y="676" text-anchor="middle" class="card-title">Module B</text><text x="768.0" y="707" text-anchor="middle" class="card-sub">approved asset</text></g>
+<g id="node-module_c" class="card node-card"><rect x="988.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.3"/><path d="M1012.0,670 H1028.0 Q1032.0,670 1032.0,674 V689 H1012.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M1017.0,676 H1026.0 M1017.0,682 H1026.0" class="icon-line" stroke="#B56CFF"/><text x="1152.0" y="676" text-anchor="middle" class="card-title">Module C</text><text x="1152.0" y="707" text-anchor="middle" class="card-sub">external optional link</text></g>
+<g id="node-module_d" class="card node-card"><rect x="604.0" y="857" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="628.0" y="885" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M628.0,890 H648.0 M638.0,885 V901" class="icon-line" stroke="#6EE66E"/><text x="768.0" y="888" text-anchor="middle" class="card-title">Module D</text><text x="768.0" y="919" text-anchor="middle" class="card-sub">reusable module</text></g>
+<g id="node-module_e" class="card node-card"><rect x="988.0" y="857" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-width="1.3"/><circle cx="1016.0" cy="893" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1030.0" cy="886" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1030.0" cy="900" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M1020.0,893 H1024.0 M1026.0,889 L1024.0,893 L1026.0,897" class="icon-line" stroke="#FF9F2E"/><text x="1152.0" y="888" text-anchor="middle" class="card-title">Module E</text><text x="1152.0" y="919" text-anchor="middle" class="card-sub">transformation path</text></g>
+<g id="node-source_docs" class="card node-card"><rect x="588.0" y="1103" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-width="1.3"/><path d="M612.0,1128 H626.0 L632.0,1134 V1148 H612.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M626.0,1128 V1134 H632.0" class="icon-line" stroke="#F4F8FF"/><text x="768.0" y="1129" text-anchor="middle" class="card-title">Controlled Source</text><text x="768.0" y="1149" text-anchor="middle" class="card-title">Documents</text><text x="768.0" y="1180" text-anchor="middle" class="card-sub">authoritative record</text></g>
+<text x="1206" y="1183" class="note" fill="#16D9FF">cyan = interfaces / active boundaries</text>
+<text x="1206" y="1203" class="note" fill="#6EE66E">green = reusable approved assets</text>
+<text x="1206" y="1223" class="note" fill="#FF9F2E">orange = key flows / transformations</text>
+<text x="768.0" y="1279" text-anchor="middle" class="note">Reference style: Accent Blueprint uses a blue-and-white technical base with sparse semantic accents.</text>
+</svg>
+</div>
+</section>
+</main>
+</body>
+</html>

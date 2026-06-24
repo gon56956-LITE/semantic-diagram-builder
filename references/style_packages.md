@@ -1,0 +1,60 @@
+# Style Packages
+
+Semantic diagram styles are declarative JSON packages. They control visual language without executing code and without changing routing semantics.
+
+## Loading
+
+- Built-in style id: `style: "modern-tech"` or `style: "accent-blueprint"`.
+- Local style path: `style: "./my-style/style.json"` relative to the contract file.
+- Missing or invalid styles are hard errors.
+
+## Package Shape
+
+Required fields:
+
+- `id`: stable style id.
+- `version`: style package version.
+- `metrics`: numeric layout metric overrides. Keep these equal across styles when geometry must remain identical.
+- `tokens.colors`: color tokens as `#RRGGBB`, `rgba(r,g,b,a)`, or `none`.
+- `components`: declarative renderer component settings for canvas, group, card, icon, and connector.
+- `qa`: optional reference image and reference contracts.
+
+Style packages may define:
+
+- canvas background and grid.
+- typography stacks and type sizes.
+- group panel fill/stroke.
+- card fill, radius, border mode, and shadow behavior.
+- icon fill mode and stroke widths.
+- connector primary/fanout/fanin colors, stroke width, dash style, and marker colors.
+- semantic accent mapping by node `kind`.
+
+Style packages may not:
+
+- execute Python or JavaScript.
+- fetch remote assets.
+- replace fan-out/fan-in routing logic.
+- hide invalid SVG colors behind raw snippets.
+
+## Accent Blueprint
+
+`accent-blueprint` is the first user-defined style package. It follows the supplied reference image and uses:
+
+- deep navy/cobalt background.
+- subtle CAD-like grid.
+- white or near-white typography and linework.
+- sparse semantic accents: cyan, yellow, green, purple, orange.
+- thin rectangular panels, compact technical typography, and clean arrowheads.
+
+Accent colors are semantic emphasis, not the whole theme. The diagram should remain blue-and-white first.
+
+## QA
+
+Use geometry validation for routing and style gallery review for visual quality:
+
+```bash
+py scripts/validate_semantic_svg.py output.svg
+py scripts/build_style_gallery.py examples/style-gallery.html examples/accent-blueprint-boundary-contract.json
+```
+
+For screenshot review, compare the generated gallery/SVG against the style reference image listed in the style package `qa.reference_image`.

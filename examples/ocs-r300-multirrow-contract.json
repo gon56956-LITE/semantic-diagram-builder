@@ -2,6 +2,7 @@
   "title": "OCS R300 Manufacturing Knowledge Topology",
   "subtitle": "Multi-row example: synthesis fan-out and source-bound fan-in stay inside the WI-derived layer",
   "layout": "layered",
+  "style": "modern-tech",
   "width": 1800,
   "max_nodes_per_row": 4,
   "groups": [
