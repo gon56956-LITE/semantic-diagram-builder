@@ -1,0 +1,21 @@
+{
+  "title": "Source Boundary Map Minimal",
+  "subtitle": "Minimal standard contract for source-bound knowledge",
+  "diagram_type": "source_boundary_map",
+  "style": "modern-tech",
+  "width": 1100,
+  "groups": [
+    {"id": "derived", "label": "Derived knowledge", "type": "layer"},
+    {"id": "controlled", "label": "Controlled source boundary", "type": "layer", "max_per_row": 1}
+  ],
+  "nodes": [
+    {"id": "package", "label": "Knowledge Package", "subtitle": "derived asset", "kind": "package", "group": "derived"},
+    {"id": "source", "label": "Controlled Source", "subtitle": "authority", "kind": "source", "group": "controlled"}
+  ],
+  "edges": [
+    {"from": "package", "to": "source", "relation": "source_bound"}
+  ],
+  "annotations": [
+    {"text": "Use source-boundary maps to separate derived knowledge from authoritative records.", "placement": "footer"}
+  ]
+}

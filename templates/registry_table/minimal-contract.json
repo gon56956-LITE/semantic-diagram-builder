@@ -1,0 +1,19 @@
+{
+  "title": "Registry Table Minimal",
+  "subtitle": "Minimal standard contract for a semantic registry",
+  "diagram_type": "registry_table",
+  "style": "modern-tech",
+  "width": 1100,
+  "columns": [
+    {"id": "term", "label": "Term", "width": 220},
+    {"id": "definition", "label": "Definition"},
+    {"id": "owner", "label": "Owner", "width": 180}
+  ],
+  "rows": [
+    {"id": "domain", "kind": "capability", "term": "Domain Map", "definition": "Aligned view of a bounded area.", "owner": "Architecture"},
+    {"id": "source", "kind": "source", "term": "Controlled Source", "definition": "Authoritative record for validation.", "owner": "Document Control"}
+  ],
+  "annotations": [
+    {"text": "Use registry_table for glossary, CTQ, parameter, risk, or index tables.", "placement": "footer"}
+  ]
+}

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1307" viewBox="0 0 1536 1307" role="img" aria-label="Source Boundary Map Reference" data-style="accent-blueprint" data-diagram-type="source_boundary_map">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style="accent-blueprint"] .route-shared{marker-end:none}
+    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1536" height="1307" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1536" height="1307" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="768.0" y="54" text-anchor="middle" class="title">Source Boundary Map Reference</text>
+<text x="768.0" y="80" text-anchor="middle" class="subtitle">Reference contract for derived assets and controlled sources</text>
+<rect x="70" y="115" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="343" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="571" width="1396" height="436" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="1039" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 761.0 613.0 L 754.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 775.0 613.0 L 782.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 1377.0 613.0 L 1384.0 613.0 Q 1391.0 613.0 1391.0 620.0 L 1391.0 818.0 Q 1391.0 825.0 1384.0 825.0 L 1377.0 825.0" class="edge fanout route-shared trunk"/>
+<path d="M 398.0 613.0 L 754.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 782.0 613.0 L 1377.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 398.0 613.0 L 391.0 613.0 Q 384.0 613.0 384.0 620.0 L 384.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 768.0 613.0 L 768.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1138.0 613.0 L 1145.0 613.0 Q 1152.0 613.0 1152.0 620.0 L 1152.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 782.0 825.0 L 1377.0 825.0" class="edge fanout route-shared bus"/>
+<path d="M 782.0 825.0 L 775.0 825.0 Q 768.0 825.0 768.0 832.0 L 768.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1166.0 825.0 L 1159.0 825.0 Q 1152.0 825.0 1152.0 832.0 L 1152.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 159.0 777.0 L 152.0 777.0 Q 145.0 777.0 145.0 784.0 L 145.0 982.0 Q 145.0 989.0 152.0 989.0 L 159.0 989.0" class="edge fanin route-shared trunk"/>
+<path d="M 384.0 745.0 L 384.0 770.0 Q 384.0 777.0 377.0 777.0 L 370.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 768.0 745.0 L 768.0 770.0 Q 768.0 777.0 761.0 777.0 L 754.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 1152.0 745.0 L 1152.0 770.0 Q 1152.0 777.0 1145.0 777.0 L 1138.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 777.0 L 1138.0 777.0" class="edge fanin route-shared bus"/>
+<path d="M 1152.0 957.0 L 1152.0 982.0 Q 1152.0 989.0 1145.0 989.0 L 1138.0 989.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 989.0 L 754.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 782.0 989.0 L 1138.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 754.0 989.0 L 761.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 782.0 989.0 L 775.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 768.0 957.0 L 768.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)"/>
+<path d="M 740.0 229.0 L 796.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 754.0 343.0 Q 768.0 343.0 768.0 357.0 L 768.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 1170.0 343.0 Q 1184.0 343.0 1184.0 357.0 L 1184.0 407" class="edge" marker-end="url(#arrow)"/>
+<g class="group-label-wrap"><rect x="88" y="121" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Navigation / access layer</text></g>
+<g class="group-label-wrap"><rect x="88" y="349" width="276.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Synthesis and governance layer</text></g>
+<g class="group-label-wrap"><rect x="88" y="577" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable knowledge assets</text></g>
+<g class="group-label-wrap"><rect x="88" y="1045" width="242.4" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="1065" class="group-label">Controlled-source boundary</text></g>
+<g id="node-portal" class="card node-card"><rect x="380.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="398.0" y="219.0" width="18" height="20" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M402.0,225.0 H412.0 M402.0,230.0 H412.0 M402.0,235.0 H409.0" class="icon-line" stroke="#16D9FF"/><text x="434.0" y="228.13472" text-anchor="start" class="card-title" style="font-size:22px">Knowledge Portal</text><text x="434.0" y="250.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">blueprint entry</text></g>
+<g id="node-glossary" class="card node-card"><rect x="796.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.3"/><path d="M814.0,219.0 H830.0 Q834.0,219.0 834.0,223.0 V238.0 H814.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M819.0,225.0 H828.0 M819.0,231.0 H828.0" class="icon-line" stroke="#B56CFF"/><text x="850.0" y="228.13472" text-anchor="start" class="card-title" style="font-size:22px">Glossary Register</text><text x="850.0" y="250.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">controlled terms</text></g>
+<g id="node-rules" class="card node-card"><rect x="172.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M200.0,447.0 L210.0,465.0 H190.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M200.0,454.0 V460.0 M200.0,464.0 V464.0" class="icon-line" stroke="#FFD84D"/><text x="226.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">Governance Rules</text><text x="226.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">ownership + constraints</text></g>
+<g id="node-domain_map" class="card node-card"><rect x="588.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="606.0" y="450.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M606.0,455.0 H626.0 M616.0,450.0 V466.0" class="icon-line" stroke="#16D9FF"/><text x="642.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">Domain Map</text><text x="642.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">system interfaces</text></g>
+<g id="node-risk" class="card node-card"><rect x="1004.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M1032.0,447.0 L1041.0,452.0 V462.0 L1032.0,467.0 L1023.0,462.0 V452.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M1028.0,457.0 L1031.0,461.0 L1037.0,453.0" class="icon-line" stroke="#FFD84D"/><text x="1058.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">Risk Taxonomy</text><text x="1058.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">constraint model</text></g>
+<g id="node-asset_a" class="card node-card"><rect x="220.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="238.0" y="688.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M238.0,693.0 H258.0 M248.0,688.0 V704.0" class="icon-line" stroke="#6EE66E"/><text x="274.0" y="694.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset A</text><text x="274.0" y="716.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">approved package</text></g>
+<g id="node-asset_b" class="card node-card"><rect x="604.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="622.0" y="688.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M622.0,693.0 H642.0 M632.0,688.0 V704.0" class="icon-line" stroke="#6EE66E"/><text x="658.0" y="694.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset B</text><text x="658.0" y="716.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">approved package</text></g>
+<g id="node-asset_c" class="card node-card"><rect x="988.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.3"/><path d="M1006.0,685.0 H1022.0 Q1026.0,685.0 1026.0,689.0 V704.0 H1006.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M1011.0,691.0 H1020.0 M1011.0,697.0 H1020.0" class="icon-line" stroke="#B56CFF"/><text x="1042.0" y="694.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset C</text><text x="1042.0" y="716.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">external optional link</text></g>
+<g id="node-asset_d" class="card node-card"><rect x="604.0" y="857" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="622.0" y="900.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M622.0,905.0 H642.0 M632.0,900.0 V916.0" class="icon-line" stroke="#6EE66E"/><text x="658.0" y="906.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset D</text><text x="658.0" y="928.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">reusable module</text></g>
+<g id="node-asset_e" class="card node-card"><rect x="988.0" y="857" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-width="1.3"/><circle cx="1010.0" cy="908.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1024.0" cy="901.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1024.0" cy="915.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M1014.0,908.0 H1018.0 M1020.0,904.0 L1018.0,908.0 L1020.0,912.0" class="icon-line" stroke="#FF9F2E"/><text x="1042.0" y="906.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset E</text><text x="1042.0" y="928.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">transformation path</text></g>
+<g id="node-controlled_source" class="card node-card"><rect x="588.0" y="1103" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-width="1.3"/><path d="M606.0,1143.0 H620.0 L626.0,1149.0 V1163.0 H606.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M620.0,1143.0 V1149.0 H626.0" class="icon-line" stroke="#F4F8FF"/><text x="642.0" y="1152.13472" text-anchor="start" class="card-title" style="font-size:22px">Controlled Source</text><text x="642.0" y="1174.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">authoritative record</text></g>
+<text x="1206" y="1171" class="note legend-note" fill="#16D9FF">cyan = interfaces / active boundaries</text>
+<text x="1206" y="1195" class="note legend-note" fill="#6EE66E">green = reusable approved assets</text>
+<text x="1206" y="1219" class="note legend-note" fill="#FF9F2E">orange = key flows / transformations</text>
+<text x="768.0" y="1279" text-anchor="middle" class="note">Reference template: keep derived assets and controlled sources visually separated.</text>
+</svg>

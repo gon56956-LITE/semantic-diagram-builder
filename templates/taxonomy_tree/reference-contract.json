@@ -1,0 +1,22 @@
+{
+  "title": "Taxonomy Tree Reference",
+  "subtitle": "Reference contract for a multi-level taxonomy",
+  "diagram_type": "taxonomy_tree",
+  "style": "accent-blueprint",
+  "width": 1500,
+  "nodes": [
+    {"id": "root", "label": "Knowledge Assets", "subtitle": "root class", "kind": "hub"},
+    {"id": "maps", "label": "Maps", "subtitle": "navigation views", "kind": "capability", "parent": "root", "order": 0},
+    {"id": "registers", "label": "Registers", "subtitle": "controlled tables", "kind": "registry", "parent": "root", "order": 1},
+    {"id": "modules", "label": "Modules", "subtitle": "reusable assets", "kind": "package", "parent": "root", "order": 2},
+    {"id": "domain", "label": "Domain Map", "subtitle": "systems + interfaces", "kind": "capability", "parent": "maps", "order": 0},
+    {"id": "boundary", "label": "Boundary Map", "subtitle": "authority + ownership", "kind": "decision", "parent": "maps", "order": 1},
+    {"id": "glossary", "label": "Glossary", "subtitle": "terms", "kind": "glossary", "parent": "registers", "order": 0},
+    {"id": "risk", "label": "Risk Register", "subtitle": "constraints", "kind": "risk", "parent": "registers", "order": 1},
+    {"id": "package", "label": "Knowledge Package", "subtitle": "approved module", "kind": "package", "parent": "modules", "order": 0},
+    {"id": "evidence", "label": "Evidence Set", "subtitle": "source-backed", "kind": "evidence", "parent": "modules", "order": 1}
+  ],
+  "annotations": [
+    {"text": "Reference template: use order to stabilize sibling placement.", "placement": "footer"}
+  ]
+}

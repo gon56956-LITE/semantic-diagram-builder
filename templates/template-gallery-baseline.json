@@ -1,0 +1,102 @@
+{
+  "gallery": "templates/template-gallery.html",
+  "templates": [
+    {
+      "diagram_type": "layered_knowledge_topology",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Layered Knowledge Topology Minimal",
+      "contract": "templates/layered_knowledge_topology/minimal-contract.json",
+      "svg": "templates/layered_knowledge_topology/minimal.svg"
+    },
+    {
+      "diagram_type": "layered_knowledge_topology",
+      "variant": "reference",
+      "style": "modern-tech",
+      "title": "Layered Knowledge Topology Reference",
+      "contract": "templates/layered_knowledge_topology/reference-contract.json",
+      "svg": "templates/layered_knowledge_topology/reference.svg"
+    },
+    {
+      "diagram_type": "source_boundary_map",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Source Boundary Map Minimal",
+      "contract": "templates/source_boundary_map/minimal-contract.json",
+      "svg": "templates/source_boundary_map/minimal.svg"
+    },
+    {
+      "diagram_type": "source_boundary_map",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Source Boundary Map Reference",
+      "contract": "templates/source_boundary_map/reference-contract.json",
+      "svg": "templates/source_boundary_map/reference.svg"
+    },
+    {
+      "diagram_type": "boundary_ownership_map",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Boundary Ownership Map Minimal",
+      "contract": "templates/boundary_ownership_map/minimal-contract.json",
+      "svg": "templates/boundary_ownership_map/minimal.svg"
+    },
+    {
+      "diagram_type": "boundary_ownership_map",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Boundary Ownership Map Reference",
+      "contract": "templates/boundary_ownership_map/reference-contract.json",
+      "svg": "templates/boundary_ownership_map/reference.svg"
+    },
+    {
+      "diagram_type": "registry_table",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Registry Table Minimal",
+      "contract": "templates/registry_table/minimal-contract.json",
+      "svg": "templates/registry_table/minimal.svg"
+    },
+    {
+      "diagram_type": "registry_table",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Registry Table Reference",
+      "contract": "templates/registry_table/reference-contract.json",
+      "svg": "templates/registry_table/reference.svg"
+    },
+    {
+      "diagram_type": "taxonomy_tree",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Taxonomy Tree Minimal",
+      "contract": "templates/taxonomy_tree/minimal-contract.json",
+      "svg": "templates/taxonomy_tree/minimal.svg"
+    },
+    {
+      "diagram_type": "taxonomy_tree",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Taxonomy Tree Reference",
+      "contract": "templates/taxonomy_tree/reference-contract.json",
+      "svg": "templates/taxonomy_tree/reference.svg"
+    },
+    {
+      "diagram_type": "hub_spoke",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Hub Spoke Minimal",
+      "contract": "templates/hub_spoke/minimal-contract.json",
+      "svg": "templates/hub_spoke/minimal.svg"
+    },
+    {
+      "diagram_type": "hub_spoke",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Hub Spoke Reference",
+      "contract": "templates/hub_spoke/reference-contract.json",
+      "svg": "templates/hub_spoke/reference.svg",
+      "max_height": 720
+    }
+  ]
+}

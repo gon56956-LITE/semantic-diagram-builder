@@ -1,0 +1,50 @@
+{
+  "title": "Layered Knowledge Topology Reference",
+  "subtitle": "Reference contract with multi-row fan-out and fan-in",
+  "diagram_type": "layered_knowledge_topology",
+  "style": "modern-tech",
+  "width": 1600,
+  "max_nodes_per_row": 4,
+  "groups": [
+    {"id": "navigation", "label": "Navigation layer", "type": "layer"},
+    {"id": "synthesis", "label": "Synthesis layer", "type": "layer"},
+    {
+      "id": "modules",
+      "label": "Reusable knowledge modules",
+      "type": "layer",
+      "routing": {"mode": "row_bus_side_trunk", "fanout_side": "right", "fanin_side": "left"},
+      "side_gutter": 150
+    },
+    {"id": "authority", "label": "Authority layer", "type": "layer", "max_per_row": 1}
+  ],
+  "nodes": [
+    {"id": "portal", "label": "Knowledge Portal", "subtitle": "entry point", "kind": "index", "group": "navigation"},
+    {"id": "registry", "label": "Registry", "subtitle": "controlled terms", "kind": "registry", "group": "navigation"},
+    {"id": "domain_map", "label": "Domain Map", "subtitle": "system view", "kind": "capability", "group": "synthesis"},
+    {"id": "rules", "label": "Governance Rules", "subtitle": "constraints", "kind": "quality", "group": "synthesis"},
+    {"id": "module_a", "label": "Module A", "subtitle": "approved asset", "kind": "package", "group": "modules", "row": 0, "col": 0},
+    {"id": "module_b", "label": "Module B", "subtitle": "approved asset", "kind": "package", "group": "modules", "row": 0, "col": 1},
+    {"id": "module_c", "label": "Module C", "subtitle": "optional link", "kind": "ontology", "group": "modules", "row": 0, "col": 2},
+    {"id": "module_d", "label": "Module D", "subtitle": "reusable asset", "kind": "package", "group": "modules", "row": 1, "col": 1},
+    {"id": "module_e", "label": "Module E", "subtitle": "transformation path", "kind": "process", "group": "modules", "row": 1, "col": 2},
+    {"id": "source_doc", "label": "Controlled Source", "subtitle": "authoritative record", "kind": "source", "group": "authority"}
+  ],
+  "edges": [
+    {"from": "portal", "to": "registry", "relation": "uses_language", "style": "dashed"},
+    {"from": "portal", "to": "domain_map", "relation": "opens"},
+    {"from": "portal", "to": "rules", "relation": "opens"},
+    {"from": "domain_map", "to": "module_a", "relation": "defines"},
+    {"from": "domain_map", "to": "module_b", "relation": "defines"},
+    {"from": "domain_map", "to": "module_c", "relation": "defines"},
+    {"from": "domain_map", "to": "module_d", "relation": "defines"},
+    {"from": "domain_map", "to": "module_e", "relation": "defines"},
+    {"from": "module_a", "to": "source_doc", "relation": "source_bound"},
+    {"from": "module_b", "to": "source_doc", "relation": "source_bound"},
+    {"from": "module_c", "to": "source_doc", "relation": "source_bound"},
+    {"from": "module_d", "to": "source_doc", "relation": "source_bound"},
+    {"from": "module_e", "to": "source_doc", "relation": "source_bound"}
+  ],
+  "annotations": [
+    {"text": "Reference template: use row and col to stabilize multi-row sibling placement.", "placement": "footer"}
+  ]
+}

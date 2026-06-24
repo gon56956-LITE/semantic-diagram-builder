@@ -1,0 +1,20 @@
+{
+  "title": "Hub Spoke Reference",
+  "subtitle": "Reference contract for a designed hub-spoke map",
+  "diagram_type": "hub_spoke",
+  "style": "accent-blueprint",
+  "width": 1500,
+  "hub_id": "hub",
+  "nodes": [
+    {"id": "hub", "label": "Knowledge Hub", "subtitle": "navigation + orchestration", "kind": "hub"},
+    {"id": "portal", "label": "Portal", "subtitle": "entry point", "kind": "index", "order": 0},
+    {"id": "domain", "label": "Domain Maps", "subtitle": "systems + ownership", "kind": "capability", "order": 1},
+    {"id": "registers", "label": "Registers", "subtitle": "terms + parameters", "kind": "registry", "order": 2},
+    {"id": "modules", "label": "Modules", "subtitle": "approved assets", "kind": "package", "order": 3},
+    {"id": "sources", "label": "Sources", "subtitle": "controlled authority", "kind": "source", "order": 4},
+    {"id": "governance", "label": "Governance", "subtitle": "rules + risks", "kind": "risk", "order": 5, "style": "dashed"}
+  ],
+  "annotations": [
+    {"text": "Reference template: dashed spokes should represent optional or indirect relationships.", "placement": "footer"}
+  ]
+}

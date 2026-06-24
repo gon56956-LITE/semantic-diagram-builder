@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="800" viewBox="0 0 1100 800" role="img" aria-label="Source Boundary Map Minimal" data-style="modern-tech" data-diagram-type="source_boundary_map">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1100" height="800" rx="28" fill="#F8FBFF"/>
+<text x="550.0" y="54" text-anchor="middle" class="title">Source Boundary Map Minimal</text>
+<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for source-bound knowledge</text>
+<rect x="70" y="115" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<rect x="70" y="343" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<path d="M 550.0 279 L 550.0 407" class="edge" marker-end="url(#arrow)"/>
+<g class="group-label-wrap"><rect x="88" y="121" width="166.8" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Derived knowledge</text></g>
+<g class="group-label-wrap"><rect x="88" y="349" width="242.4" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Controlled source boundary</text></g>
+<g id="node-package" class="card node-card"><rect x="370.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="388.0" y="222.0" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M388.0,227.0 H408.0 M398.0,222.0 V238.0" class="icon-line" stroke="#22C55E"/><text x="424.0" y="228.06" text-anchor="start" class="card-title" style="font-size:20.5px">Knowledge Package</text><text x="424.0" y="248.89" text-anchor="start" class="card-sub" style="font-size:15.5px">derived asset</text></g>
+<g id="node-source" class="card node-card"><rect x="370.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#334155" stroke-width="2.2" filter="url(#shadow)"/><path d="M388.0,447.0 H402.0 L408.0,453.0 V467.0 H388.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M402.0,447.0 V453.0 H408.0" class="icon-line" stroke="#334155"/><text x="424.0" y="456.06" text-anchor="start" class="card-title" style="font-size:20.5px">Controlled Source</text><text x="424.0" y="476.89" text-anchor="start" class="card-sub" style="font-size:15.5px">authority</text></g>
+<text x="550.0" y="772" text-anchor="middle" class="note">Use source-boundary maps to separate derived knowledge from authoritative records.</text>
+</svg>

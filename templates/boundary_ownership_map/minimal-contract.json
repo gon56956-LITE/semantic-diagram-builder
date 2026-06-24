@@ -1,0 +1,21 @@
+{
+  "title": "Boundary Ownership Map Minimal",
+  "subtitle": "Minimal standard contract for ownership boundaries",
+  "diagram_type": "boundary_ownership_map",
+  "style": "modern-tech",
+  "width": 1100,
+  "groups": [
+    {"id": "domain", "label": "Domain boundary", "type": "layer"},
+    {"id": "owner", "label": "Ownership boundary", "type": "layer"}
+  ],
+  "nodes": [
+    {"id": "domain_a", "label": "Domain A", "subtitle": "business boundary", "kind": "capability", "group": "domain"},
+    {"id": "owner_a", "label": "Owner A", "subtitle": "accountable role", "kind": "quality", "group": "owner"}
+  ],
+  "edges": [
+    {"from": "domain_a", "to": "owner_a", "relation": "owned_by"}
+  ],
+  "annotations": [
+    {"text": "Use boundary ownership maps for domains, owner roles, systems, and assets.", "placement": "footer"}
+  ]
+}

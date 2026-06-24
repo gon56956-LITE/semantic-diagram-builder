@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="467" viewBox="0 0 1100 467" role="img" aria-label="Registry Table Minimal" data-style="modern-tech" data-diagram-type="registry_table">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1100" height="467" rx="28" fill="#F8FBFF"/>
+<text x="550.0" y="54" text-anchor="middle" class="title">Registry Table Minimal</text>
+<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for a semantic registry</text>
+<rect x="70" y="115" width="960" height="242" rx="16" fill="#FFFFFF" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<rect x="70" y="115" width="960" height="58" rx="16" fill="#EEF6FF"/>
+<text x="86.0" y="149.16666666666666" text-anchor="start" class="table-header" style="font-size:15.5px">Term</text>
+<line x1="290.0" y1="115" x2="290.0" y2="357" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="306.0" y="149.16666666666666" text-anchor="start" class="table-header" style="font-size:15.5px">Definition</text>
+<line x1="850.0" y1="115" x2="850.0" y2="357" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="866.0" y="149.16666666666666" text-anchor="start" class="table-header" style="font-size:15.5px">Owner</text>
+<line x1="70" y1="173" x2="1030" y2="173" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="132.0" y="224.66666666666666" text-anchor="start" class="table-cell" style="font-size:17px;font-weight:700">Domain Map</text>
+<g class="table-badge semantic-badge" data-kind="capability"><rect x="86" y="204.0" width="30" height="30" rx="5" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.2"/><rect x="91.0" y="212.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M91.0,217.0 H111.0 M101.0,212.0 V228.0" class="icon-line" stroke="#0EA5E9"/></g>
+<text x="306.0" y="224.66666666666666" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Aligned view of a bounded area.</text>
+<text x="866.0" y="224.66666666666666" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Architecture</text>
+<line x1="70" y1="265" x2="1030" y2="265" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="132.0" y="306.0416666666667" text-anchor="start" class="table-cell" style="font-size:17px;font-weight:700">Controlled</text>
+<text x="132.0" y="327.2916666666667" text-anchor="start" class="table-cell" style="font-size:17px;font-weight:700">Source</text>
+<g class="table-badge semantic-badge" data-kind="source"><rect x="86" y="296.0" width="30" height="30" rx="5" fill="#F8FAFC" stroke="#334155" stroke-width="1.2"/><path d="M91.0,301.0 H105.0 L111.0,307.0 V321.0 H91.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M105.0,301.0 V307.0 H111.0" class="icon-line" stroke="#334155"/></g>
+<text x="306.0" y="316.6666666666667" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Authoritative record for validation.</text>
+<text x="866.0" y="306.0416666666667" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Document</text>
+<text x="866.0" y="327.2916666666667" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Control</text>
+<text x="550.0" y="439" text-anchor="middle" class="note">Use registry_table for glossary, CTQ, parameter, risk, or index tables.</text>
+</svg>

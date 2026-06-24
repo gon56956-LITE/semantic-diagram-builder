@@ -1,0 +1,55 @@
+{
+  "title": "Source Boundary Map Reference",
+  "subtitle": "Reference contract for derived assets and controlled sources",
+  "diagram_type": "source_boundary_map",
+  "style": "accent-blueprint",
+  "width": 1536,
+  "max_nodes_per_row": 4,
+  "groups": [
+    {"id": "entry", "label": "Navigation / access layer", "type": "layer"},
+    {"id": "governance", "label": "Synthesis and governance layer", "type": "layer"},
+    {
+      "id": "assets",
+      "label": "Reusable knowledge assets",
+      "type": "layer",
+      "routing": {"mode": "row_bus_side_trunk", "fanout_side": "right", "fanin_side": "left"},
+      "side_gutter": 150
+    },
+    {"id": "source", "label": "Controlled-source boundary", "type": "layer", "max_per_row": 1}
+  ],
+  "nodes": [
+    {"id": "portal", "label": "Knowledge Portal", "subtitle": "blueprint entry", "kind": "index", "group": "entry"},
+    {"id": "glossary", "label": "Glossary Register", "subtitle": "controlled terms", "kind": "glossary", "group": "entry"},
+    {"id": "rules", "label": "Governance Rules", "subtitle": "ownership + constraints", "kind": "quality", "group": "governance"},
+    {"id": "domain_map", "label": "Domain Map", "subtitle": "system interfaces", "kind": "capability", "group": "governance"},
+    {"id": "risk", "label": "Risk Taxonomy", "subtitle": "constraint model", "kind": "risk", "group": "governance"},
+    {"id": "asset_a", "label": "Asset A", "subtitle": "approved package", "kind": "package", "group": "assets", "row": 0, "col": 0},
+    {"id": "asset_b", "label": "Asset B", "subtitle": "approved package", "kind": "package", "group": "assets", "row": 0, "col": 1},
+    {"id": "asset_c", "label": "Asset C", "subtitle": "external optional link", "kind": "ontology", "group": "assets", "row": 0, "col": 2},
+    {"id": "asset_d", "label": "Asset D", "subtitle": "reusable module", "kind": "package", "group": "assets", "row": 1, "col": 1},
+    {"id": "asset_e", "label": "Asset E", "subtitle": "transformation path", "kind": "process", "group": "assets", "row": 1, "col": 2},
+    {"id": "controlled_source", "label": "Controlled Source", "subtitle": "authoritative record", "kind": "source", "group": "source"}
+  ],
+  "edges": [
+    {"from": "portal", "to": "glossary", "relation": "uses_language_from", "style": "dashed"},
+    {"from": "portal", "to": "rules", "relation": "opens_governance"},
+    {"from": "portal", "to": "domain_map", "relation": "opens_domain_map"},
+    {"from": "portal", "to": "risk", "relation": "opens_risk_model"},
+    {"from": "domain_map", "to": "asset_a", "relation": "defines_interface"},
+    {"from": "domain_map", "to": "asset_b", "relation": "defines_interface"},
+    {"from": "domain_map", "to": "asset_c", "relation": "defines_interface"},
+    {"from": "domain_map", "to": "asset_d", "relation": "defines_interface"},
+    {"from": "domain_map", "to": "asset_e", "relation": "defines_interface"},
+    {"from": "asset_a", "to": "controlled_source", "relation": "source_bound"},
+    {"from": "asset_b", "to": "controlled_source", "relation": "source_bound"},
+    {"from": "asset_c", "to": "controlled_source", "relation": "source_bound"},
+    {"from": "asset_d", "to": "controlled_source", "relation": "source_bound"},
+    {"from": "asset_e", "to": "controlled_source", "relation": "source_bound"}
+  ],
+  "annotations": [
+    {"text": "cyan = interfaces / active boundaries", "placement": "legend", "color": "accent_cyan"},
+    {"text": "green = reusable approved assets", "placement": "legend", "color": "accent_green"},
+    {"text": "orange = key flows / transformations", "placement": "legend", "color": "accent_orange"},
+    {"text": "Reference template: keep derived assets and controlled sources visually separated.", "placement": "footer"}
+  ]
+}

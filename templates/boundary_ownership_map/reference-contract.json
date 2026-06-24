@@ -1,0 +1,43 @@
+{
+  "title": "Boundary Ownership Map Reference",
+  "subtitle": "Reference contract for domains, systems, owners, and assets",
+  "diagram_type": "boundary_ownership_map",
+  "style": "accent-blueprint",
+  "width": 1536,
+  "groups": [
+    {"id": "domains", "label": "Enterprise domains", "type": "layer"},
+    {"id": "systems", "label": "Systems / applications", "type": "layer"},
+    {"id": "assets", "label": "Data / knowledge assets", "type": "layer"},
+    {"id": "owners", "label": "Ownership and stewardship", "type": "layer"}
+  ],
+  "nodes": [
+    {"id": "customer_domain", "label": "Customer Domain", "subtitle": "market + service", "kind": "capability", "group": "domains"},
+    {"id": "product_domain", "label": "Product Domain", "subtitle": "portfolio", "kind": "capability", "group": "domains"},
+    {"id": "ops_domain", "label": "Operations Domain", "subtitle": "execution", "kind": "process", "group": "domains"},
+    {"id": "crm", "label": "CRM System", "subtitle": "customer records", "kind": "registry", "group": "systems"},
+    {"id": "plm", "label": "PLM System", "subtitle": "product records", "kind": "source", "group": "systems"},
+    {"id": "erp", "label": "ERP System", "subtitle": "execution data", "kind": "source", "group": "systems"},
+    {"id": "customer_asset", "label": "Customer Data", "subtitle": "shared asset", "kind": "package", "group": "assets"},
+    {"id": "product_asset", "label": "Product Data", "subtitle": "controlled asset", "kind": "package", "group": "assets"},
+    {"id": "ops_asset", "label": "Operations Data", "subtitle": "regulated asset", "kind": "risk", "group": "assets"},
+    {"id": "data_owner", "label": "Data Owner", "subtitle": "accountable", "kind": "quality", "group": "owners"},
+    {"id": "system_owner", "label": "System Owner", "subtitle": "responsible", "kind": "quality", "group": "owners"},
+    {"id": "steward", "label": "Data Steward", "subtitle": "quality guardrail", "kind": "risk", "group": "owners"}
+  ],
+  "edges": [
+    {"from": "customer_domain", "to": "crm", "relation": "uses"},
+    {"from": "product_domain", "to": "plm", "relation": "uses"},
+    {"from": "ops_domain", "to": "erp", "relation": "uses"},
+    {"from": "crm", "to": "customer_asset", "relation": "owns_record"},
+    {"from": "plm", "to": "product_asset", "relation": "owns_record"},
+    {"from": "erp", "to": "ops_asset", "relation": "owns_record"},
+    {"from": "customer_asset", "to": "data_owner", "relation": "accountable"},
+    {"from": "product_asset", "to": "system_owner", "relation": "responsible"},
+    {"from": "ops_asset", "to": "steward", "relation": "stewarded_by"}
+  ],
+  "annotations": [
+    {"text": "yellow = ownership / governance", "placement": "legend", "color": "accent_yellow"},
+    {"text": "green = reusable assets", "placement": "legend", "color": "accent_green"},
+    {"text": "Reference template: use containment first, then add only essential ownership links.", "placement": "footer"}
+  ]
+}

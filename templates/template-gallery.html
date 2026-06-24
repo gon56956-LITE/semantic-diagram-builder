@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Semantic Diagram Style Gallery</title>
+  <style>
+    body{margin:0;background:#0b1220;color:#e5e7eb;font-family:Inter,Segoe UI,Arial,sans-serif}
+    main{padding:24px;display:grid;gap:24px}
+    .frame{border:1px solid #334155;background:#111827;padding:14px}
+    header{display:flex;gap:16px;align-items:baseline;margin:0 0 12px 0;color:#cbd5e1}
+    header strong{color:#f8fafc}
+    header code{margin-left:auto;color:#94a3b8}
+    .svg-wrap{overflow:auto;background:#020617}
+    svg{display:block;max-width:100%;height:auto}
+  </style>
+</head>
+<body>
+<main>
+<section class="frame">
+  <header>
+    <strong>Layered Knowledge Topology Minimal</strong>
+    <span>modern-tech</span>
+    <span>layered_knowledge_topology</span>
+    <code>templates\layered_knowledge_topology\minimal-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="839" viewBox="0 0 1100 839" role="img" aria-label="Layered Knowledge Topology Minimal" data-style="modern-tech" data-diagram-type="layered_knowledge_topology">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1100" height="839" rx="28" fill="#F8FBFF"/>
+<text x="550.0" y="54" text-anchor="middle" class="title">Layered Knowledge Topology Minimal</text>
+<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for layered knowledge topology</text>
+<rect x="70" y="115" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<rect x="70" y="343" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<rect x="70" y="571" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<path d="M 550.0 279 L 550.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 550.0 507 L 550.0 635" class="edge" marker-end="url(#arrow)"/>
+<g class="group-label-wrap"><rect x="88" y="121" width="136.0" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Access layer</text></g>
+<g class="group-label-wrap"><rect x="88" y="349" width="150.0" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Knowledge layer</text></g>
+<g class="group-label-wrap"><rect x="88" y="577" width="136.0" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Source layer</text></g>
+<g id="node-portal" class="card node-card"><rect x="370.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><rect x="388.0" y="219.0" width="18" height="20" rx="3" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M392.0,225.0 H402.0 M392.0,230.0 H402.0 M392.0,235.0 H399.0" class="icon-line" stroke="#2F7DFF"/><text x="424.0" y="228.06" text-anchor="start" class="card-title" style="font-size:20.5px">Knowledge Portal</text><text x="424.0" y="248.89" text-anchor="start" class="card-sub" style="font-size:15.5px">entry point</text></g>
+<g id="node-map" class="card node-card"><rect x="370.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2.2" filter="url(#shadow)"/><rect x="388.0" y="450.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M388.0,455.0 H408.0 M398.0,450.0 V466.0" class="icon-line" stroke="#0EA5E9"/><text x="424.0" y="456.06" text-anchor="start" class="card-title" style="font-size:20.5px">Domain Map</text><text x="424.0" y="476.89" text-anchor="start" class="card-sub" style="font-size:15.5px">organized view</text></g>
+<g id="node-source_doc" class="card node-card"><rect x="370.0" y="635" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#334155" stroke-width="2.2" filter="url(#shadow)"/><path d="M388.0,675.0 H402.0 L408.0,681.0 V695.0 H388.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M402.0,675.0 V681.0 H408.0" class="icon-line" stroke="#334155"/><text x="424.0" y="684.06" text-anchor="start" class="card-title" style="font-size:20.5px">Source Document</text><text x="424.0" y="704.89" text-anchor="start" class="card-sub" style="font-size:15.5px">authoritative record</text></g>
+<text x="550.0" y="811" text-anchor="middle" class="note">Use this minimal template when a diagram has a clear layered structure.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Layered Knowledge Topology Reference</strong>
+    <span>modern-tech</span>
+    <span>layered_knowledge_topology</span>
+    <code>templates\layered_knowledge_topology\reference-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1307" viewBox="0 0 1600 1307" role="img" aria-label="Layered Knowledge Topology Reference" data-style="modern-tech" data-diagram-type="layered_knowledge_topology">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1600" height="1307" rx="28" fill="#F8FBFF"/>
+<text x="800.0" y="54" text-anchor="middle" class="title">Layered Knowledge Topology Reference</text>
+<text x="800.0" y="80" text-anchor="middle" class="subtitle">Reference contract with multi-row fan-out and fan-in</text>
+<rect x="70" y="115" width="1460" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<rect x="70" y="343" width="1460" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<rect x="70" y="571" width="1460" height="436" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<rect x="70" y="1039" width="1460" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<path d="M 592.0 507.0 L 592.0 606.0 Q 592.0 613.0 585.0 613.0 L 578.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 592.0 507.0 L 592.0 606.0 Q 592.0 613.0 599.0 613.0 L 606.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 1441.0 613.0 L 1448.0 613.0 Q 1455.0 613.0 1455.0 620.0 L 1455.0 818.0 Q 1455.0 825.0 1448.0 825.0 L 1441.0 825.0" class="edge fanout route-shared trunk"/>
+<path d="M 408.67 613.0 L 578.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 606.0 613.0 L 1441.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 408.67 613.0 L 401.67 613.0 Q 394.67 613.0 394.67 620.0 L 394.67 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 786.0 613.0 L 793.0 613.0 Q 800.0 613.0 800.0 620.0 L 800.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1191.33 613.0 L 1198.33 613.0 Q 1205.33 613.0 1205.33 620.0 L 1205.33 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 814.0 825.0 L 1441.0 825.0" class="edge fanout route-shared bus"/>
+<path d="M 814.0 825.0 L 807.0 825.0 Q 800.0 825.0 800.0 832.0 L 800.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1219.33 825.0 L 1212.33 825.0 Q 1205.33 825.0 1205.33 832.0 L 1205.33 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 159.0 777.0 L 152.0 777.0 Q 145.0 777.0 145.0 784.0 L 145.0 982.0 Q 145.0 989.0 152.0 989.0 L 159.0 989.0" class="edge fanin route-shared trunk"/>
+<path d="M 394.67 745.0 L 394.67 770.0 Q 394.67 777.0 387.67 777.0 L 380.67 777.0" class="edge fanin route-shared branch"/>
+<path d="M 800.0 745.0 L 800.0 770.0 Q 800.0 777.0 793.0 777.0 L 786.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 1205.33 745.0 L 1205.33 770.0 Q 1205.33 777.0 1198.33 777.0 L 1191.33 777.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 777.0 L 1191.33 777.0" class="edge fanin route-shared bus"/>
+<path d="M 1205.33 957.0 L 1205.33 982.0 Q 1205.33 989.0 1198.33 989.0 L 1191.33 989.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 989.0 L 786.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 814.0 989.0 L 1191.33 989.0" class="edge fanin route-shared bus"/>
+<path d="M 786.0 989.0 L 793.0 989.0 Q 800.0 989.0 800.0 996.0 L 800.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 814.0 989.0 L 807.0 989.0 Q 800.0 989.0 800.0 996.0 L 800.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 800.0 957.0 L 800.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)"/>
+<path d="M 772.0 229.0 L 828.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 592.0 279 L 592.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 592.0 279 L 592.0 329.0 Q 592.0 343.0 606.0 343.0 L 994.0 343.0 Q 1008.0 343.0 1008.0 357.0 L 1008.0 407" class="edge" marker-end="url(#arrow)"/>
+<g class="group-label-wrap"><rect x="88" y="121" width="158.4" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Navigation layer</text></g>
+<g class="group-label-wrap"><rect x="88" y="349" width="150.0" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Synthesis layer</text></g>
+<g class="group-label-wrap"><rect x="88" y="577" width="242.4" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable knowledge modules</text></g>
+<g class="group-label-wrap"><rect x="88" y="1045" width="150.0" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="1065" class="group-label">Authority layer</text></g>
+<g id="node-portal" class="card node-card"><rect x="412.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><rect x="430.0" y="219.0" width="18" height="20" rx="3" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M434.0,225.0 H444.0 M434.0,230.0 H444.0 M434.0,235.0 H441.0" class="icon-line" stroke="#2F7DFF"/><text x="466.0" y="228.09866666666667" text-anchor="start" class="card-title" style="font-size:22.9px">Knowledge Portal</text><text x="466.0" y="251.128" text-anchor="start" class="card-sub" style="font-size:17.1px">entry point</text></g>
+<g id="node-registry" class="card node-card"><rect x="828.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#F97316" stroke-width="2.2" filter="url(#shadow)"/><path d="M856.0,219.0 L866.0,237.0 H846.0 Z" fill="#FFF7ED" stroke="#F97316" stroke-width="1.7"/><path d="M856.0,226.0 V232.0 M856.0,236.0 V236.0" class="icon-line" stroke="#F97316"/><text x="882.0" y="228.09866666666667" text-anchor="start" class="card-title" style="font-size:22.9px">Registry</text><text x="882.0" y="251.128" text-anchor="start" class="card-sub" style="font-size:17.1px">controlled terms</text></g>
+<g id="node-domain_map" class="card node-card"><rect x="412.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2.2" filter="url(#shadow)"/><rect x="430.0" y="450.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M430.0,455.0 H450.0 M440.0,450.0 V466.0" class="icon-line" stroke="#0EA5E9"/><text x="466.0" y="456.09866666666665" text-anchor="start" class="card-title" style="font-size:22.9px">Domain Map</text><text x="466.0" y="479.12799999999993" text-anchor="start" class="card-sub" style="font-size:17.1px">system view</text></g>
+<g id="node-rules" class="card node-card"><rect x="828.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#F97316" stroke-width="2.2" filter="url(#shadow)"/><path d="M856.0,447.0 L866.0,465.0 H846.0 Z" fill="#FFF7ED" stroke="#F97316" stroke-width="1.7"/><path d="M856.0,454.0 V460.0 M856.0,464.0 V464.0" class="icon-line" stroke="#F97316"/><text x="882.0" y="456.09866666666665" text-anchor="start" class="card-title" style="font-size:22.9px">Governance Rules</text><text x="882.0" y="479.12799999999993" text-anchor="start" class="card-sub" style="font-size:17.1px">constraints</text></g>
+<g id="node-module_a" class="card node-card"><rect x="220.0" y="645" width="349.3333333333333" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="238.0" y="688.0" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M238.0,693.0 H258.0 M248.0,688.0 V704.0" class="icon-line" stroke="#22C55E"/><text x="274.0" y="694.0986666666666" text-anchor="start" class="card-title" style="font-size:22.9px">Module A</text><text x="274.0" y="717.1280000000002" text-anchor="start" class="card-sub" style="font-size:17.1px">approved asset</text></g>
+<g id="node-module_b" class="card node-card"><rect x="625.3333333333333" y="645" width="349.3333333333333" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="643.3333333333333" y="688.0" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M643.3333333333333,693.0 H663.3333333333333 M653.3333333333333,688.0 V704.0" class="icon-line" stroke="#22C55E"/><text x="679.3333333333333" y="694.0986666666666" text-anchor="start" class="card-title" style="font-size:22.9px">Module B</text><text x="679.3333333333333" y="717.1280000000002" text-anchor="start" class="card-sub" style="font-size:17.1px">approved asset</text></g>
+<g id="node-module_c" class="card node-card"><rect x="1030.6666666666665" y="645" width="349.3333333333333" height="100" rx="20" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2.2" filter="url(#shadow)"/><path d="M1048.6666666666665,685.0 H1064.6666666666665 Q1068.6666666666665,685.0 1068.6666666666665,689.0 V704.0 H1048.6666666666665 Z" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.7"/><path d="M1053.6666666666665,691.0 H1062.6666666666665 M1053.6666666666665,697.0 H1062.6666666666665" class="icon-line" stroke="#7C3AED"/><text x="1084.6666666666665" y="694.0986666666666" text-anchor="start" class="card-title" style="font-size:22.9px">Module C</text><text x="1084.6666666666665" y="717.1280000000002" text-anchor="start" class="card-sub" style="font-size:17.1px">optional link</text></g>
+<g id="node-module_d" class="card node-card"><rect x="625.3333333333333" y="857" width="349.3333333333333" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="643.3333333333333" y="900.0" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M643.3333333333333,905.0 H663.3333333333333 M653.3333333333333,900.0 V916.0" class="icon-line" stroke="#22C55E"/><text x="679.3333333333333" y="906.0986666666666" text-anchor="start" class="card-title" style="font-size:22.9px">Module D</text><text x="679.3333333333333" y="929.1280000000002" text-anchor="start" class="card-sub" style="font-size:17.1px">reusable asset</text></g>
+<g id="node-module_e" class="card node-card"><rect x="1030.6666666666665" y="857" width="349.3333333333333" height="100" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><circle cx="1052.6666666666665" cy="908.0" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><circle cx="1066.6666666666665" cy="901.0" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><circle cx="1066.6666666666665" cy="915.0" r="4" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.6"/><path d="M1056.6666666666665,908.0 H1060.6666666666665 M1062.6666666666665,904.0 L1060.6666666666665,908.0 L1062.6666666666665,912.0" class="icon-line" stroke="#2F7DFF"/><text x="1084.6666666666665" y="906.0986666666666" text-anchor="start" class="card-title" style="font-size:22.9px">Module E</text><text x="1084.6666666666665" y="929.1280000000002" text-anchor="start" class="card-sub" style="font-size:17.1px">transformation path</text></g>
+<g id="node-source_doc" class="card node-card"><rect x="620.0" y="1103" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#334155" stroke-width="2.2" filter="url(#shadow)"/><path d="M638.0,1143.0 H652.0 L658.0,1149.0 V1163.0 H638.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M652.0,1143.0 V1149.0 H658.0" class="icon-line" stroke="#334155"/><text x="674.0" y="1152.0986666666668" text-anchor="start" class="card-title" style="font-size:22.9px">Controlled Source</text><text x="674.0" y="1175.128" text-anchor="start" class="card-sub" style="font-size:17.1px">authoritative record</text></g>
+<text x="800.0" y="1279" text-anchor="middle" class="note">Reference template: use row and col to stabilize multi-row sibling placement.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Source Boundary Map Minimal</strong>
+    <span>modern-tech</span>
+    <span>source_boundary_map</span>
+    <code>templates\source_boundary_map\minimal-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="800" viewBox="0 0 1100 800" role="img" aria-label="Source Boundary Map Minimal" data-style="modern-tech" data-diagram-type="source_boundary_map">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1100" height="800" rx="28" fill="#F8FBFF"/>
+<text x="550.0" y="54" text-anchor="middle" class="title">Source Boundary Map Minimal</text>
+<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for source-bound knowledge</text>
+<rect x="70" y="115" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<rect x="70" y="343" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<path d="M 550.0 279 L 550.0 407" class="edge" marker-end="url(#arrow)"/>
+<g class="group-label-wrap"><rect x="88" y="121" width="166.8" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Derived knowledge</text></g>
+<g class="group-label-wrap"><rect x="88" y="349" width="242.4" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Controlled source boundary</text></g>
+<g id="node-package" class="card node-card"><rect x="370.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2" filter="url(#shadow)"/><rect x="388.0" y="222.0" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M388.0,227.0 H408.0 M398.0,222.0 V238.0" class="icon-line" stroke="#22C55E"/><text x="424.0" y="228.06" text-anchor="start" class="card-title" style="font-size:20.5px">Knowledge Package</text><text x="424.0" y="248.89" text-anchor="start" class="card-sub" style="font-size:15.5px">derived asset</text></g>
+<g id="node-source" class="card node-card"><rect x="370.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#334155" stroke-width="2.2" filter="url(#shadow)"/><path d="M388.0,447.0 H402.0 L408.0,453.0 V467.0 H388.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M402.0,447.0 V453.0 H408.0" class="icon-line" stroke="#334155"/><text x="424.0" y="456.06" text-anchor="start" class="card-title" style="font-size:20.5px">Controlled Source</text><text x="424.0" y="476.89" text-anchor="start" class="card-sub" style="font-size:15.5px">authority</text></g>
+<text x="550.0" y="772" text-anchor="middle" class="note">Use source-boundary maps to separate derived knowledge from authoritative records.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Source Boundary Map Reference</strong>
+    <span>accent-blueprint</span>
+    <span>source_boundary_map</span>
+    <code>templates\source_boundary_map\reference-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1307" viewBox="0 0 1536 1307" role="img" aria-label="Source Boundary Map Reference" data-style="accent-blueprint" data-diagram-type="source_boundary_map">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style="accent-blueprint"] .route-shared{marker-end:none}
+    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1536" height="1307" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1536" height="1307" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="768.0" y="54" text-anchor="middle" class="title">Source Boundary Map Reference</text>
+<text x="768.0" y="80" text-anchor="middle" class="subtitle">Reference contract for derived assets and controlled sources</text>
+<rect x="70" y="115" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="343" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="571" width="1396" height="436" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="1039" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 761.0 613.0 L 754.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 775.0 613.0 L 782.0 613.0" class="edge fanout route-shared branch"/>
+<path d="M 1377.0 613.0 L 1384.0 613.0 Q 1391.0 613.0 1391.0 620.0 L 1391.0 818.0 Q 1391.0 825.0 1384.0 825.0 L 1377.0 825.0" class="edge fanout route-shared trunk"/>
+<path d="M 398.0 613.0 L 754.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 782.0 613.0 L 1377.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 398.0 613.0 L 391.0 613.0 Q 384.0 613.0 384.0 620.0 L 384.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 768.0 613.0 L 768.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1138.0 613.0 L 1145.0 613.0 Q 1152.0 613.0 1152.0 620.0 L 1152.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 782.0 825.0 L 1377.0 825.0" class="edge fanout route-shared bus"/>
+<path d="M 782.0 825.0 L 775.0 825.0 Q 768.0 825.0 768.0 832.0 L 768.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 1166.0 825.0 L 1159.0 825.0 Q 1152.0 825.0 1152.0 832.0 L 1152.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 159.0 777.0 L 152.0 777.0 Q 145.0 777.0 145.0 784.0 L 145.0 982.0 Q 145.0 989.0 152.0 989.0 L 159.0 989.0" class="edge fanin route-shared trunk"/>
+<path d="M 384.0 745.0 L 384.0 770.0 Q 384.0 777.0 377.0 777.0 L 370.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 768.0 745.0 L 768.0 770.0 Q 768.0 777.0 761.0 777.0 L 754.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 1152.0 745.0 L 1152.0 770.0 Q 1152.0 777.0 1145.0 777.0 L 1138.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 777.0 L 1138.0 777.0" class="edge fanin route-shared bus"/>
+<path d="M 1152.0 957.0 L 1152.0 982.0 Q 1152.0 989.0 1145.0 989.0 L 1138.0 989.0" class="edge fanin route-shared branch"/>
+<path d="M 159.0 989.0 L 754.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 782.0 989.0 L 1138.0 989.0" class="edge fanin route-shared bus"/>
+<path d="M 754.0 989.0 L 761.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 782.0 989.0 L 775.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 768.0 957.0 L 768.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)"/>
+<path d="M 740.0 229.0 L 796.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 754.0 343.0 Q 768.0 343.0 768.0 357.0 L 768.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 1170.0 343.0 Q 1184.0 343.0 1184.0 357.0 L 1184.0 407" class="edge" marker-end="url(#arrow)"/>
+<g class="group-label-wrap"><rect x="88" y="121" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Navigation / access layer</text></g>
+<g class="group-label-wrap"><rect x="88" y="349" width="276.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Synthesis and governance layer</text></g>
+<g class="group-label-wrap"><rect x="88" y="577" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable knowledge assets</text></g>
+<g class="group-label-wrap"><rect x="88" y="1045" width="242.4" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="1065" class="group-label">Controlled-source boundary</text></g>
+<g id="node-portal" class="card node-card"><rect x="380.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="398.0" y="219.0" width="18" height="20" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M402.0,225.0 H412.0 M402.0,230.0 H412.0 M402.0,235.0 H409.0" class="icon-line" stroke="#16D9FF"/><text x="434.0" y="228.13472" text-anchor="start" class="card-title" style="font-size:22px">Knowledge Portal</text><text x="434.0" y="250.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">blueprint entry</text></g>
+<g id="node-glossary" class="card node-card"><rect x="796.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.3"/><path d="M814.0,219.0 H830.0 Q834.0,219.0 834.0,223.0 V238.0 H814.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M819.0,225.0 H828.0 M819.0,231.0 H828.0" class="icon-line" stroke="#B56CFF"/><text x="850.0" y="228.13472" text-anchor="start" class="card-title" style="font-size:22px">Glossary Register</text><text x="850.0" y="250.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">controlled terms</text></g>
+<g id="node-rules" class="card node-card"><rect x="172.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M200.0,447.0 L210.0,465.0 H190.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M200.0,454.0 V460.0 M200.0,464.0 V464.0" class="icon-line" stroke="#FFD84D"/><text x="226.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">Governance Rules</text><text x="226.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">ownership + constraints</text></g>
+<g id="node-domain_map" class="card node-card"><rect x="588.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="606.0" y="450.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M606.0,455.0 H626.0 M616.0,450.0 V466.0" class="icon-line" stroke="#16D9FF"/><text x="642.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">Domain Map</text><text x="642.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">system interfaces</text></g>
+<g id="node-risk" class="card node-card"><rect x="1004.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M1032.0,447.0 L1041.0,452.0 V462.0 L1032.0,467.0 L1023.0,462.0 V452.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M1028.0,457.0 L1031.0,461.0 L1037.0,453.0" class="icon-line" stroke="#FFD84D"/><text x="1058.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">Risk Taxonomy</text><text x="1058.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">constraint model</text></g>
+<g id="node-asset_a" class="card node-card"><rect x="220.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="238.0" y="688.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M238.0,693.0 H258.0 M248.0,688.0 V704.0" class="icon-line" stroke="#6EE66E"/><text x="274.0" y="694.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset A</text><text x="274.0" y="716.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">approved package</text></g>
+<g id="node-asset_b" class="card node-card"><rect x="604.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="622.0" y="688.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M622.0,693.0 H642.0 M632.0,688.0 V704.0" class="icon-line" stroke="#6EE66E"/><text x="658.0" y="694.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset B</text><text x="658.0" y="716.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">approved package</text></g>
+<g id="node-asset_c" class="card node-card"><rect x="988.0" y="645" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.3"/><path d="M1006.0,685.0 H1022.0 Q1026.0,685.0 1026.0,689.0 V704.0 H1006.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M1011.0,691.0 H1020.0 M1011.0,697.0 H1020.0" class="icon-line" stroke="#B56CFF"/><text x="1042.0" y="694.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset C</text><text x="1042.0" y="716.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">external optional link</text></g>
+<g id="node-asset_d" class="card node-card"><rect x="604.0" y="857" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="622.0" y="900.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M622.0,905.0 H642.0 M632.0,900.0 V916.0" class="icon-line" stroke="#6EE66E"/><text x="658.0" y="906.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset D</text><text x="658.0" y="928.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">reusable module</text></g>
+<g id="node-asset_e" class="card node-card"><rect x="988.0" y="857" width="328.0" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-width="1.3"/><circle cx="1010.0" cy="908.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1024.0" cy="901.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1024.0" cy="915.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M1014.0,908.0 H1018.0 M1020.0,904.0 L1018.0,908.0 L1020.0,912.0" class="icon-line" stroke="#FF9F2E"/><text x="1042.0" y="906.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Asset E</text><text x="1042.0" y="928.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">transformation path</text></g>
+<g id="node-controlled_source" class="card node-card"><rect x="588.0" y="1103" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-width="1.3"/><path d="M606.0,1143.0 H620.0 L626.0,1149.0 V1163.0 H606.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M620.0,1143.0 V1149.0 H626.0" class="icon-line" stroke="#F4F8FF"/><text x="642.0" y="1152.13472" text-anchor="start" class="card-title" style="font-size:22px">Controlled Source</text><text x="642.0" y="1174.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">authoritative record</text></g>
+<text x="1206" y="1171" class="note legend-note" fill="#16D9FF">cyan = interfaces / active boundaries</text>
+<text x="1206" y="1195" class="note legend-note" fill="#6EE66E">green = reusable approved assets</text>
+<text x="1206" y="1219" class="note legend-note" fill="#FF9F2E">orange = key flows / transformations</text>
+<text x="768.0" y="1279" text-anchor="middle" class="note">Reference template: keep derived assets and controlled sources visually separated.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Boundary Ownership Map Minimal</strong>
+    <span>modern-tech</span>
+    <span>boundary_ownership_map</span>
+    <code>templates\boundary_ownership_map\minimal-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="800" viewBox="0 0 1100 800" role="img" aria-label="Boundary Ownership Map Minimal" data-style="modern-tech" data-diagram-type="boundary_ownership_map">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1100" height="800" rx="28" fill="#F8FBFF"/>
+<text x="550.0" y="54" text-anchor="middle" class="title">Boundary Ownership Map Minimal</text>
+<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for ownership boundaries</text>
+<rect x="70" y="115" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<rect x="70" y="343" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
+<path d="M 550.0 279 L 550.0 407" class="edge" marker-end="url(#arrow)"/>
+<g class="group-label-wrap"><rect x="88" y="121" width="150.0" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Domain boundary</text></g>
+<g class="group-label-wrap"><rect x="88" y="349" width="175.20000000000002" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Ownership boundary</text></g>
+<g id="node-domain_a" class="card node-card"><rect x="370.0" y="179" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2.2" filter="url(#shadow)"/><rect x="388.0" y="222.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M388.0,227.0 H408.0 M398.0,222.0 V238.0" class="icon-line" stroke="#0EA5E9"/><text x="424.0" y="228.06" text-anchor="start" class="card-title" style="font-size:20.5px">Domain A</text><text x="424.0" y="248.89" text-anchor="start" class="card-sub" style="font-size:15.5px">business boundary</text></g>
+<g id="node-owner_a" class="card node-card"><rect x="370.0" y="407" width="360" height="100" rx="20" fill="#FFFFFF" stroke="#F97316" stroke-width="2.2" filter="url(#shadow)"/><path d="M398.0,447.0 L408.0,465.0 H388.0 Z" fill="#FFF7ED" stroke="#F97316" stroke-width="1.7"/><path d="M398.0,454.0 V460.0 M398.0,464.0 V464.0" class="icon-line" stroke="#F97316"/><text x="424.0" y="456.06" text-anchor="start" class="card-title" style="font-size:20.5px">Owner A</text><text x="424.0" y="476.89" text-anchor="start" class="card-sub" style="font-size:15.5px">accountable role</text></g>
+<text x="550.0" y="772" text-anchor="middle" class="note">Use boundary ownership maps for domains, owner roles, systems, and assets.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Boundary Ownership Map Reference</strong>
+    <span>accent-blueprint</span>
+    <span>boundary_ownership_map</span>
+    <code>templates\boundary_ownership_map\reference-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1067" viewBox="0 0 1536 1067" role="img" aria-label="Boundary Ownership Map Reference" data-style="accent-blueprint" data-diagram-type="boundary_ownership_map">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style="accent-blueprint"] .route-shared{marker-end:none}
+    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1536" height="1067" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1536" height="1067" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="768.0" y="54" text-anchor="middle" class="title">Boundary Ownership Map Reference</text>
+<text x="768.0" y="80" text-anchor="middle" class="subtitle">Reference contract for domains, systems, owners, and assets</text>
+<rect x="70" y="115" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="343" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="571" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<rect x="70" y="799" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
+<path d="M 352.0 279 L 352.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 768.0 279 L 768.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 1184.0 279 L 1184.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 352.0 507 L 352.0 635" class="edge" marker-end="url(#arrow)"/>
+<path d="M 768.0 507 L 768.0 635" class="edge" marker-end="url(#arrow)"/>
+<path d="M 1184.0 507 L 1184.0 635" class="edge" marker-end="url(#arrow)"/>
+<path d="M 352.0 735 L 352.0 863" class="edge" marker-end="url(#arrow)"/>
+<path d="M 768.0 735 L 768.0 863" class="edge" marker-end="url(#arrow)"/>
+<path d="M 1184.0 735 L 1184.0 863" class="edge" marker-end="url(#arrow)"/>
+<g class="group-label-wrap"><rect x="88" y="121" width="175.20000000000002" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Enterprise domains</text></g>
+<g class="group-label-wrap"><rect x="88" y="349" width="208.8" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Systems / applications</text></g>
+<g class="group-label-wrap"><rect x="88" y="577" width="217.20000000000002" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Data / knowledge assets</text></g>
+<g class="group-label-wrap"><rect x="88" y="805" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="825" class="group-label">Ownership and stewardship</text></g>
+<g id="node-customer_domain" class="card node-card"><rect x="172.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="190.0" y="222.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M190.0,227.0 H210.0 M200.0,222.0 V238.0" class="icon-line" stroke="#16D9FF"/><text x="226.0" y="228.13472" text-anchor="start" class="card-title" style="font-size:22px">Customer Domain</text><text x="226.0" y="250.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">market + service</text></g>
+<g id="node-product_domain" class="card node-card"><rect x="588.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="606.0" y="222.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M606.0,227.0 H626.0 M616.0,222.0 V238.0" class="icon-line" stroke="#16D9FF"/><text x="642.0" y="228.13472" text-anchor="start" class="card-title" style="font-size:22px">Product Domain</text><text x="642.0" y="250.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">portfolio</text></g>
+<g id="node-ops_domain" class="card node-card"><rect x="1004.0" y="179" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-width="1.3"/><circle cx="1026.0" cy="230.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1040.0" cy="223.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1040.0" cy="237.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M1030.0,230.0 H1034.0 M1036.0,226.0 L1034.0,230.0 L1036.0,234.0" class="icon-line" stroke="#FF9F2E"/><text x="1058.0" y="228.13472" text-anchor="start" class="card-title" style="font-size:22px">Operations Domain</text><text x="1058.0" y="250.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">execution</text></g>
+<g id="node-crm" class="card node-card"><rect x="172.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M200.0,447.0 L210.0,465.0 H190.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M200.0,454.0 V460.0 M200.0,464.0 V464.0" class="icon-line" stroke="#FFD84D"/><text x="226.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">CRM System</text><text x="226.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">customer records</text></g>
+<g id="node-plm" class="card node-card"><rect x="588.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-width="1.3"/><path d="M606.0,447.0 H620.0 L626.0,453.0 V467.0 H606.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M620.0,447.0 V453.0 H626.0" class="icon-line" stroke="#F4F8FF"/><text x="642.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">PLM System</text><text x="642.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">product records</text></g>
+<g id="node-erp" class="card node-card"><rect x="1004.0" y="407" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-width="1.3"/><path d="M1022.0,447.0 H1036.0 L1042.0,453.0 V467.0 H1022.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M1036.0,447.0 V453.0 H1042.0" class="icon-line" stroke="#F4F8FF"/><text x="1058.0" y="456.13472" text-anchor="start" class="card-title" style="font-size:22px">ERP System</text><text x="1058.0" y="478.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">execution data</text></g>
+<g id="node-customer_asset" class="card node-card"><rect x="172.0" y="635" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="190.0" y="678.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M190.0,683.0 H210.0 M200.0,678.0 V694.0" class="icon-line" stroke="#6EE66E"/><text x="226.0" y="684.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Customer Data</text><text x="226.0" y="706.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">shared asset</text></g>
+<g id="node-product_asset" class="card node-card"><rect x="588.0" y="635" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="606.0" y="678.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M606.0,683.0 H626.0 M616.0,678.0 V694.0" class="icon-line" stroke="#6EE66E"/><text x="642.0" y="684.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Product Data</text><text x="642.0" y="706.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">controlled asset</text></g>
+<g id="node-ops_asset" class="card node-card"><rect x="1004.0" y="635" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M1032.0,675.0 L1041.0,680.0 V690.0 L1032.0,695.0 L1023.0,690.0 V680.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M1028.0,685.0 L1031.0,689.0 L1037.0,681.0" class="icon-line" stroke="#FFD84D"/><text x="1058.0" y="684.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Operations Data</text><text x="1058.0" y="706.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">regulated asset</text></g>
+<g id="node-data_owner" class="card node-card"><rect x="172.0" y="863" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M200.0,903.0 L210.0,921.0 H190.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M200.0,910.0 V916.0 M200.0,920.0 V920.0" class="icon-line" stroke="#FFD84D"/><text x="226.0" y="912.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Data Owner</text><text x="226.0" y="934.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">accountable</text></g>
+<g id="node-system_owner" class="card node-card"><rect x="588.0" y="863" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M616.0,903.0 L626.0,921.0 H606.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M616.0,910.0 V916.0 M616.0,920.0 V920.0" class="icon-line" stroke="#FFD84D"/><text x="642.0" y="912.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">System Owner</text><text x="642.0" y="934.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">responsible</text></g>
+<g id="node-steward" class="card node-card"><rect x="1004.0" y="863" width="360" height="100" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M1032.0,903.0 L1041.0,908.0 V918.0 L1032.0,923.0 L1023.0,918.0 V908.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M1028.0,913.0 L1031.0,917.0 L1037.0,909.0" class="icon-line" stroke="#FFD84D"/><text x="1058.0" y="912.1347199999999" text-anchor="start" class="card-title" style="font-size:22px">Data Steward</text><text x="1058.0" y="934.24288" text-anchor="start" class="card-sub" style="font-size:16.4px">quality guardrail</text></g>
+<text x="1206" y="955" class="note legend-note" fill="#FFD84D">yellow = ownership / governance</text>
+<text x="1206" y="979" class="note legend-note" fill="#6EE66E">green = reusable assets</text>
+<text x="768.0" y="1039" text-anchor="middle" class="note">Reference template: use containment first, then add only essential ownership links.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Registry Table Minimal</strong>
+    <span>modern-tech</span>
+    <span>registry_table</span>
+    <code>templates\registry_table\minimal-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="467" viewBox="0 0 1100 467" role="img" aria-label="Registry Table Minimal" data-style="modern-tech" data-diagram-type="registry_table">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1100" height="467" rx="28" fill="#F8FBFF"/>
+<text x="550.0" y="54" text-anchor="middle" class="title">Registry Table Minimal</text>
+<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for a semantic registry</text>
+<rect x="70" y="115" width="960" height="242" rx="16" fill="#FFFFFF" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<rect x="70" y="115" width="960" height="58" rx="16" fill="#EEF6FF"/>
+<text x="86.0" y="149.16666666666666" text-anchor="start" class="table-header" style="font-size:15.5px">Term</text>
+<line x1="290.0" y1="115" x2="290.0" y2="357" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="306.0" y="149.16666666666666" text-anchor="start" class="table-header" style="font-size:15.5px">Definition</text>
+<line x1="850.0" y1="115" x2="850.0" y2="357" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="866.0" y="149.16666666666666" text-anchor="start" class="table-header" style="font-size:15.5px">Owner</text>
+<line x1="70" y1="173" x2="1030" y2="173" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="132.0" y="224.66666666666666" text-anchor="start" class="table-cell" style="font-size:17px;font-weight:700">Domain Map</text>
+<g class="table-badge semantic-badge" data-kind="capability"><rect x="86" y="204.0" width="30" height="30" rx="5" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.2"/><rect x="91.0" y="212.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M91.0,217.0 H111.0 M101.0,212.0 V228.0" class="icon-line" stroke="#0EA5E9"/></g>
+<text x="306.0" y="224.66666666666666" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Aligned view of a bounded area.</text>
+<text x="866.0" y="224.66666666666666" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Architecture</text>
+<line x1="70" y1="265" x2="1030" y2="265" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="132.0" y="306.0416666666667" text-anchor="start" class="table-cell" style="font-size:17px;font-weight:700">Controlled</text>
+<text x="132.0" y="327.2916666666667" text-anchor="start" class="table-cell" style="font-size:17px;font-weight:700">Source</text>
+<g class="table-badge semantic-badge" data-kind="source"><rect x="86" y="296.0" width="30" height="30" rx="5" fill="#F8FAFC" stroke="#334155" stroke-width="1.2"/><path d="M91.0,301.0 H105.0 L111.0,307.0 V321.0 H91.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M105.0,301.0 V307.0 H111.0" class="icon-line" stroke="#334155"/></g>
+<text x="306.0" y="316.6666666666667" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Authoritative record for validation.</text>
+<text x="866.0" y="306.0416666666667" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Document</text>
+<text x="866.0" y="327.2916666666667" text-anchor="start" class="table-cell-secondary" style="font-size:17px">Control</text>
+<text x="550.0" y="439" text-anchor="middle" class="note">Use registry_table for glossary, CTQ, parameter, risk, or index tables.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Registry Table Reference</strong>
+    <span>accent-blueprint</span>
+    <span>registry_table</span>
+    <code>templates\registry_table\reference-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1500" height="657" viewBox="0 0 1500 657" role="img" aria-label="Registry Table Reference" data-style="accent-blueprint" data-diagram-type="registry_table">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style="accent-blueprint"] .route-shared{marker-end:none}
+    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1500" height="657" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1500" height="657" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="750.0" y="54" text-anchor="middle" class="title">Registry Table Reference</text>
+<text x="750.0" y="80" text-anchor="middle" class="subtitle">Reference contract for a compact semantic register</text>
+<rect x="70" y="115" width="1360" height="432" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<rect x="70" y="115" width="1360" height="60" rx="6" fill="#FFFFFF" fill-opacity="0.06"/>
+<text x="86.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Term</text>
+<line x1="290.0" y1="115" x2="290.0" y2="547" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="306.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Definition</text>
+<line x1="750.0" y1="115" x2="750.0" y2="547" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="835.0" y="150.33333333333334" text-anchor="middle" class="table-header" style="font-size:16px">Type</text>
+<line x1="920.0" y1="115" x2="920.0" y2="547" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="936.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Owner</text>
+<line x1="1130.0" y1="115" x2="1130.0" y2="547" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="1146.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Related Items</text>
+<line x1="70" y1="175" x2="1430" y2="175" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="227.33333333333334" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Domain Map</text>
+<g class="table-badge semantic-badge" data-kind="capability"><rect x="86" y="206.5" width="30" height="30" rx="5" fill="#031E42" stroke="#16D9FF" stroke-width="1.2"/><rect x="91.0" y="214.5" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M91.0,219.5 H111.0 M101.0,214.5 V230.5" class="icon-line" stroke="#16D9FF"/></g>
+<text x="306.0" y="216.39583333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Aligned view of systems, interfaces,</text>
+<text x="306.0" y="238.27083333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">boundaries, and reusable knowledge modules.</text>
+<text x="835.0" y="227.33333333333334" text-anchor="middle" class="table-cell-secondary" style="font-size:17.5px">Map</text>
+<text x="936.0" y="227.33333333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Architecture</text>
+<text x="1146.0" y="216.39583333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Interfaces, Modules,</text>
+<text x="1146.0" y="238.27083333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Boundaries</text>
+<line x1="70" y1="268" x2="1430" y2="268" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="309.3958333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Controlled</text>
+<text x="132.0" y="331.2708333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Source</text>
+<g class="table-badge semantic-badge" data-kind="source"><rect x="86" y="299.5" width="30" height="30" rx="5" fill="#031E42" stroke="#F4F8FF" stroke-width="1.2"/><path d="M91.0,304.5 H105.0 L111.0,310.5 V324.5 H91.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M105.0,304.5 V310.5 H111.0" class="icon-line" stroke="#F4F8FF"/></g>
+<text x="306.0" y="309.3958333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Authoritative document or system record used</text>
+<text x="306.0" y="331.2708333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">to validate derived knowledge.</text>
+<text x="835.0" y="320.3333333333333" text-anchor="middle" class="table-cell-secondary" style="font-size:17.5px">Authority</text>
+<text x="936.0" y="320.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Document Control</text>
+<text x="1146.0" y="320.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Revision, Approval</text>
+<line x1="70" y1="361" x2="1430" y2="361" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="402.3958333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Risk</text>
+<text x="132.0" y="424.2708333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Constraint</text>
+<g class="table-badge semantic-badge" data-kind="risk"><rect x="86" y="392.5" width="30" height="30" rx="5" fill="#031E42" stroke="#FFD84D" stroke-width="1.2"/><path d="M101.0,397.5 L110.0,402.5 V412.5 L101.0,417.5 L92.0,412.5 V402.5 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M97.0,407.5 L100.0,411.5 L106.0,403.5" class="icon-line" stroke="#FFD84D"/></g>
+<text x="306.0" y="402.3958333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Condition that limits how an asset,</text>
+<text x="306.0" y="424.2708333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">parameter, or process module can be reused.</text>
+<text x="835.0" y="413.3333333333333" text-anchor="middle" class="table-cell-secondary" style="font-size:17.5px">Governance</text>
+<text x="936.0" y="413.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Quality</text>
+<text x="1146.0" y="413.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">CTQ, Exception</text>
+<line x1="70" y1="454" x2="1430" y2="454" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="132.0" y="495.3958333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Reusable</text>
+<text x="132.0" y="517.2708333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Module</text>
+<g class="table-badge semantic-badge" data-kind="package"><rect x="86" y="485.5" width="30" height="30" rx="5" fill="#031E42" stroke="#6EE66E" stroke-width="1.2"/><rect x="91.0" y="493.5" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M91.0,498.5 H111.0 M101.0,493.5 V509.5" class="icon-line" stroke="#6EE66E"/></g>
+<text x="306.0" y="484.4583333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Approved knowledge package that can be</text>
+<text x="306.0" y="506.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">referenced by maps, taxonomies, or</text>
+<text x="306.0" y="528.2083333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">workflows.</text>
+<text x="835.0" y="506.3333333333333" text-anchor="middle" class="table-cell-secondary" style="font-size:17.5px">Asset</text>
+<text x="936.0" y="506.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Knowledge Ops</text>
+<text x="1146.0" y="506.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Package, Instance</text>
+<text x="750.0" y="629" text-anchor="middle" class="note">Reference template: rows use semantic badges derived from row kind.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Taxonomy Tree Minimal</strong>
+    <span>modern-tech</span>
+    <span>taxonomy_tree</span>
+    <code>templates\taxonomy_tree\minimal-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1100" height="509" viewBox="0 0 1100 509" role="img" aria-label="Taxonomy Tree Minimal" data-style="modern-tech" data-diagram-type="taxonomy_tree">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1100" height="509" rx="28" fill="#F8FBFF"/>
+<text x="550.0" y="54" text-anchor="middle" class="title">Taxonomy Tree Minimal</text>
+<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for a taxonomy tree</text>
+<path d="M 185.0 215.0 L 185.0 299.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<g id="node-root" class="card node-card"><rect x="70.0" y="115.0" width="230.0" height="100.0" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><circle cx="98.0" cy="165.0" r="8" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M93.0,165.0 H103.0 M98.0,160.0 V170.0" class="icon-line" stroke="#2F7DFF"/><text x="124.0" y="152.99" text-anchor="start" class="card-title" style="font-size:20.5px">Knowledge</text><text x="124.0" y="175.13" text-anchor="start" class="card-title" style="font-size:20.5px">Assets</text><text x="124.0" y="195.96" text-anchor="start" class="card-sub" style="font-size:15.5px">root class</text></g>
+<g id="node-maps" class="card node-card"><rect x="70.0" y="299.0" width="230.0" height="100.0" rx="20" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2.2" filter="url(#shadow)"/><rect x="88.0" y="342.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M88.0,347.0 H108.0 M98.0,342.0 V358.0" class="icon-line" stroke="#0EA5E9"/><text x="124.0" y="348.06" text-anchor="start" class="card-title" style="font-size:20.5px">Maps</text><text x="124.0" y="368.89" text-anchor="start" class="card-sub" style="font-size:15.5px">child class</text></g>
+<text x="70" y="101.0" class="tree-level-label">Level 0</text>
+<text x="70" y="285.0" class="tree-level-label">Level 1</text>
+<text x="550.0" y="481" text-anchor="middle" class="note">Use nodes[].parent for deterministic hierarchy placement.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Taxonomy Tree Reference</strong>
+    <span>accent-blueprint</span>
+    <span>taxonomy_tree</span>
+    <code>templates\taxonomy_tree\reference-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1740" height="693" viewBox="0 0 1740 693" role="img" aria-label="Taxonomy Tree Reference" data-style="accent-blueprint" data-diagram-type="taxonomy_tree">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style="accent-blueprint"] .route-shared{marker-end:none}
+    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1740" height="693" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1740" height="693" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="870.0" y="54" text-anchor="middle" class="title">Taxonomy Tree Reference</text>
+<text x="870.0" y="80" text-anchor="middle" class="subtitle">Reference contract for a multi-level taxonomy</text>
+<path d="M 870.0 215.0 L 870.0 243.0 Q 870.0 257.0 856.0 257.0 L 336.0 257.0 Q 322.0 257.0 322.0 271.0 L 322.0 299.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<path d="M 870.0 215.0 L 870.0 299.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<path d="M 870.0 215.0 L 870.0 243.0 Q 870.0 257.0 884.0 257.0 L 1404.0 257.0 Q 1418.0 257.0 1418.0 271.0 L 1418.0 299.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<path d="M 322.0 399.0 L 322.0 427.0 Q 322.0 441.0 308.0 441.0 L 199.0 441.0 Q 185.0 441.0 185.0 455.0 L 185.0 483.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<path d="M 322.0 399.0 L 322.0 427.0 Q 322.0 441.0 336.0 441.0 L 445.0 441.0 Q 459.0 441.0 459.0 455.0 L 459.0 483.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<path d="M 870.0 399.0 L 870.0 427.0 Q 870.0 441.0 856.0 441.0 L 747.0 441.0 Q 733.0 441.0 733.0 455.0 L 733.0 483.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<path d="M 870.0 399.0 L 870.0 427.0 Q 870.0 441.0 884.0 441.0 L 993.0 441.0 Q 1007.0 441.0 1007.0 455.0 L 1007.0 483.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<path d="M 1418.0 399.0 L 1418.0 427.0 Q 1418.0 441.0 1404.0 441.0 L 1295.0 441.0 Q 1281.0 441.0 1281.0 455.0 L 1281.0 483.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<path d="M 1418.0 399.0 L 1418.0 427.0 Q 1418.0 441.0 1432.0 441.0 L 1541.0 441.0 Q 1555.0 441.0 1555.0 455.0 L 1555.0 483.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
+<g id="node-root" class="card node-card"><rect x="755.0" y="115.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><circle cx="783.0" cy="165.0" r="8" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M778.0,165.0 H788.0 M783.0,160.0 V170.0" class="icon-line" stroke="#16D9FF"/><text x="809.0" y="151.5486" text-anchor="start" class="card-title" style="font-size:23.2px">Knowledge</text><text x="809.0" y="176.62619999999998" text-anchor="start" class="card-title" style="font-size:23.2px">Assets</text><text x="809.0" y="199.9434" text-anchor="start" class="card-sub" style="font-size:17.3px">root class</text></g>
+<g id="node-maps" class="card node-card"><rect x="207.0" y="299.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="225.0" y="342.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M225.0,347.0 H245.0 M235.0,342.0 V358.0" class="icon-line" stroke="#16D9FF"/><text x="261.0" y="348.0874" text-anchor="start" class="card-title" style="font-size:23.2px">Maps</text><text x="261.0" y="371.40459999999996" text-anchor="start" class="card-sub" style="font-size:17.3px">navigation views</text></g>
+<g id="node-registers" class="card node-card"><rect x="755.0" y="299.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M783.0,339.0 L793.0,357.0 H773.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M783.0,346.0 V352.0 M783.0,356.0 V356.0" class="icon-line" stroke="#FFD84D"/><text x="809.0" y="348.0874" text-anchor="start" class="card-title" style="font-size:23.2px">Registers</text><text x="809.0" y="371.40459999999996" text-anchor="start" class="card-sub" style="font-size:17.3px">controlled tables</text></g>
+<g id="node-modules" class="card node-card"><rect x="1303.0" y="299.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="1321.0" y="342.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M1321.0,347.0 H1341.0 M1331.0,342.0 V358.0" class="icon-line" stroke="#6EE66E"/><text x="1357.0" y="348.0874" text-anchor="start" class="card-title" style="font-size:23.2px">Modules</text><text x="1357.0" y="371.40459999999996" text-anchor="start" class="card-sub" style="font-size:17.3px">reusable assets</text></g>
+<g id="node-domain" class="card node-card"><rect x="70.0" y="483.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.3"/><rect x="88.0" y="526.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M88.0,531.0 H108.0 M98.0,526.0 V542.0" class="icon-line" stroke="#16D9FF"/><text x="124.0" y="522.5834" text-anchor="start" class="card-title" style="font-size:23.2px">Domain Map</text><text x="124.0" y="545.9006" text-anchor="start" class="card-sub" style="font-size:17.3px">systems +</text><text x="124.0" y="564.9086000000001" text-anchor="start" class="card-sub" style="font-size:17.3px">interfaces</text></g>
+<g id="node-boundary" class="card node-card"><rect x="344.0" y="483.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-width="1.3"/><path d="M372.0,523.0 L382.0,533.0 L372.0,543.0 L362.0,533.0 Z" fill="none" stroke="#FF9F2E" stroke-width="1.2"/><path d="M368.0,533.0 H376.0" class="icon-line" stroke="#FF9F2E"/><text x="398.0" y="522.5834" text-anchor="start" class="card-title" style="font-size:23.2px">Boundary Map</text><text x="398.0" y="545.9006" text-anchor="start" class="card-sub" style="font-size:17.3px">authority +</text><text x="398.0" y="564.9086000000001" text-anchor="start" class="card-sub" style="font-size:17.3px">ownership</text></g>
+<g id="node-glossary" class="card node-card"><rect x="618.0" y="483.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.3"/><path d="M636.0,523.0 H652.0 Q656.0,523.0 656.0,527.0 V542.0 H636.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M641.0,529.0 H650.0 M641.0,535.0 H650.0" class="icon-line" stroke="#B56CFF"/><text x="672.0" y="532.0874" text-anchor="start" class="card-title" style="font-size:23.2px">Glossary</text><text x="672.0" y="555.4046" text-anchor="start" class="card-sub" style="font-size:17.3px">terms</text></g>
+<g id="node-risk" class="card node-card"><rect x="892.0" y="483.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.3"/><path d="M920.0,523.0 L929.0,528.0 V538.0 L920.0,543.0 L911.0,538.0 V528.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M916.0,533.0 L919.0,537.0 L925.0,529.0" class="icon-line" stroke="#FFD84D"/><text x="946.0" y="532.0874" text-anchor="start" class="card-title" style="font-size:23.2px">Risk Register</text><text x="946.0" y="555.4046" text-anchor="start" class="card-sub" style="font-size:17.3px">constraints</text></g>
+<g id="node-package" class="card node-card"><rect x="1166.0" y="483.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.3"/><rect x="1184.0" y="526.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M1184.0,531.0 H1204.0 M1194.0,526.0 V542.0" class="icon-line" stroke="#6EE66E"/><text x="1220.0" y="519.5486" text-anchor="start" class="card-title" style="font-size:23.2px">Knowledge</text><text x="1220.0" y="544.6261999999999" text-anchor="start" class="card-title" style="font-size:23.2px">Package</text><text x="1220.0" y="567.9434" text-anchor="start" class="card-sub" style="font-size:17.3px">approved module</text></g>
+<g id="node-evidence" class="card node-card"><rect x="1440.0" y="483.0" width="230.0" height="100.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#C9DAF5" stroke-width="1.3"/><path d="M1458.0,523.0 H1472.0 L1478.0,529.0 V543.0 H1458.0 Z" fill="none" stroke="#C9DAF5" stroke-width="1.2"/><path d="M1472.0,523.0 V529.0 H1478.0" class="icon-line" stroke="#C9DAF5"/><text x="1494.0" y="532.0874" text-anchor="start" class="card-title" style="font-size:23.2px">Evidence Set</text><text x="1494.0" y="555.4046" text-anchor="start" class="card-sub" style="font-size:17.3px">source-backed</text></g>
+<text x="70" y="101.0" class="tree-level-label">Level 0</text>
+<text x="70" y="285.0" class="tree-level-label">Level 1</text>
+<text x="70" y="469.0" class="tree-level-label">Level 2</text>
+<text x="870.0" y="665" text-anchor="middle" class="note">Reference template: use order to stabilize sibling placement.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Hub Spoke Minimal</strong>
+    <span>modern-tech</span>
+    <span>hub_spoke</span>
+    <code>templates\hub_spoke\minimal-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1300" height="620" viewBox="0 0 1300 620" role="img" aria-label="Hub Spoke Minimal" data-style="modern-tech" data-diagram-type="hub_spoke">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1300" height="620" rx="28" fill="#F8FBFF"/>
+<text x="650.0" y="54" text-anchor="middle" class="title">Hub Spoke Minimal</text>
+<text x="650.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for a hub-spoke map</text>
+<circle cx="650.0" cy="390" r="138.0" fill="none" stroke="#2F7DFF" stroke-opacity="0.16" stroke-width="1.4"/>
+<path d="M 532.0 390.0 L 445.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 768.0 390.0 L 855.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<g id="node-hub" class="hub-core card"><rect x="532.0" y="272.0" width="236.0" height="236.0" fill="none" stroke="none"/><circle cx="650.0" cy="390" r="118.0" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="3.2"/><circle cx="650.0" cy="390" r="106.0" fill="none" stroke="#2F7DFF" stroke-opacity="0.32" stroke-width="1.3"/><text x="650.0" y="388.5" text-anchor="middle" class="card-title" style="font-size:21px">Knowledge Hub</text><text x="650.0" y="412.5" text-anchor="middle" class="card-sub" style="font-size:14px">center</text></g>
+<g id="node-portal" class="hub-spoke-node spoke-block card"><rect x="165" y="347.0" width="280.0" height="86.0" rx="10" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2"/><rect x="189" y="380.0" width="18" height="20" rx="3" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M193,386.0 H203 M193,391.0 H203 M193,396.0 H200" class="icon-line" stroke="#2F7DFF"/><text x="231" y="388.75" text-anchor="start" class="card-title" style="font-size:18px">Portal</text><text x="231" y="409.25" text-anchor="start" class="card-sub" style="font-size:13.5px">entry point</text></g>
+<g id="node-modules" class="hub-spoke-node spoke-block card"><rect x="855.0" y="347.0" width="280.0" height="86.0" rx="10" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2"/><rect x="879.0" y="383.0" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M879.0,388.0 H899.0 M889.0,383.0 V399.0" class="icon-line" stroke="#22C55E"/><text x="921.0" y="388.75" text-anchor="start" class="card-title" style="font-size:18px">Modules</text><text x="921.0" y="409.25" text-anchor="start" class="card-sub" style="font-size:13.5px">assets</text></g>
+<text x="650.0" y="592" text-anchor="middle" class="note">Use hub_id for the center node and order for deterministic spoke placement.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Hub Spoke Reference</strong>
+    <span>accent-blueprint</span>
+    <span>hub_spoke</span>
+    <code>templates\hub_spoke\reference-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1500" height="645" viewBox="0 0 1500 645" role="img" aria-label="Hub Spoke Reference" data-style="accent-blueprint" data-diagram-type="hub_spoke">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style="accent-blueprint"] .route-shared{marker-end:none}
+    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1500" height="645" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1500" height="645" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="750.0" y="54" text-anchor="middle" class="title">Hub Spoke Reference</text>
+<text x="750.0" y="80" text-anchor="middle" class="subtitle">Reference contract for a designed hub-spoke map</text>
+<circle cx="750.0" cy="390" r="138.0" fill="none" stroke="#16D9FF" stroke-opacity="0.16" stroke-width="1.4"/>
+<path d="M 640.19 346.8 L 445.0 270.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 632.0 390.0 L 445.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 640.19 433.2 L 445.0 510.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 859.81 346.8 L 1055.0 270.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 868.0 390.0 L 1055.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 859.81 433.2 L 1055.0 510.0" class="edge edge-dashed hub-spoke-link" marker-end="url(#arrow)"/>
+<g id="node-hub" class="hub-core card"><rect x="632.0" y="272.0" width="236.0" height="236.0" fill="none" stroke="none"/><circle cx="750.0" cy="390" r="118.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="3.2"/><circle cx="750.0" cy="390" r="106.0" fill="none" stroke="#16D9FF" stroke-opacity="0.32" stroke-width="1.3"/><text x="750.0" y="380.0" text-anchor="middle" class="card-title" style="font-size:22px">Knowledge Hub</text><text x="750.0" y="405.0" text-anchor="middle" class="card-sub" style="font-size:15px">navigation +</text><text x="750.0" y="422.0" text-anchor="middle" class="card-sub" style="font-size:15px">orchestration</text></g>
+<g id="node-portal" class="hub-spoke-node spoke-block card"><rect x="165" y="227.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.4"/><rect x="189" y="260.0" width="18" height="20" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M193,266.0 H203 M193,271.0 H203 M193,276.0 H200" class="icon-line" stroke="#16D9FF"/><text x="231" y="268.75" text-anchor="start" class="card-title" style="font-size:19px">Portal</text><text x="231" y="290.25" text-anchor="start" class="card-sub" style="font-size:14.5px">entry point</text></g>
+<g id="node-domain" class="hub-spoke-node spoke-block card"><rect x="165" y="347.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.4"/><rect x="189" y="383.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M189,388.0 H209 M199,383.0 V399.0" class="icon-line" stroke="#16D9FF"/><text x="231" y="388.75" text-anchor="start" class="card-title" style="font-size:19px">Domain Maps</text><text x="231" y="410.25" text-anchor="start" class="card-sub" style="font-size:14.5px">systems + ownership</text></g>
+<g id="node-registers" class="hub-spoke-node spoke-block card"><rect x="165" y="467.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.4"/><path d="M199,500.0 L209,518.0 H189 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M199,507.0 V513.0 M199,517.0 V517.0" class="icon-line" stroke="#FFD84D"/><text x="231" y="508.75" text-anchor="start" class="card-title" style="font-size:19px">Registers</text><text x="231" y="530.25" text-anchor="start" class="card-sub" style="font-size:14.5px">terms + parameters</text></g>
+<g id="node-modules" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="227.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.4"/><rect x="1079.0" y="263.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M1079.0,268.0 H1099.0 M1089.0,263.0 V279.0" class="icon-line" stroke="#6EE66E"/><text x="1121.0" y="268.75" text-anchor="start" class="card-title" style="font-size:19px">Modules</text><text x="1121.0" y="290.25" text-anchor="start" class="card-sub" style="font-size:14.5px">approved assets</text></g>
+<g id="node-sources" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="347.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-width="1.4"/><path d="M1079.0,380.0 H1093.0 L1099.0,386.0 V400.0 H1079.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M1093.0,380.0 V386.0 H1099.0" class="icon-line" stroke="#F4F8FF"/><text x="1121.0" y="388.75" text-anchor="start" class="card-title" style="font-size:19px">Sources</text><text x="1121.0" y="410.25" text-anchor="start" class="card-sub" style="font-size:14.5px">controlled authority</text></g>
+<g id="node-governance" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="467.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.4"/><path d="M1089.0,500.0 L1098.0,505.0 V515.0 L1089.0,520.0 L1080.0,515.0 V505.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M1085.0,510.0 L1088.0,514.0 L1094.0,506.0" class="icon-line" stroke="#FFD84D"/><text x="1121.0" y="508.75" text-anchor="start" class="card-title" style="font-size:19px">Governance</text><text x="1121.0" y="530.25" text-anchor="start" class="card-sub" style="font-size:14.5px">rules + risks</text></g>
+<text x="750.0" y="617" text-anchor="middle" class="note">Reference template: dashed spokes should represent optional or indirect relationships.</text>
+</svg>
+</div>
+</section>
+</main>
+</body>
+</html>

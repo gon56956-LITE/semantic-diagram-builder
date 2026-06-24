@@ -1,0 +1,24 @@
+{
+  "title": "Layered Knowledge Topology Minimal",
+  "subtitle": "Minimal standard contract for layered knowledge topology",
+  "diagram_type": "layered_knowledge_topology",
+  "style": "modern-tech",
+  "width": 1100,
+  "groups": [
+    {"id": "access", "label": "Access layer", "type": "layer"},
+    {"id": "knowledge", "label": "Knowledge layer", "type": "layer"},
+    {"id": "source", "label": "Source layer", "type": "layer"}
+  ],
+  "nodes": [
+    {"id": "portal", "label": "Knowledge Portal", "subtitle": "entry point", "kind": "index", "group": "access"},
+    {"id": "map", "label": "Domain Map", "subtitle": "organized view", "kind": "capability", "group": "knowledge"},
+    {"id": "source_doc", "label": "Source Document", "subtitle": "authoritative record", "kind": "source", "group": "source"}
+  ],
+  "edges": [
+    {"from": "portal", "to": "map", "relation": "opens"},
+    {"from": "map", "to": "source_doc", "relation": "source_bound"}
+  ],
+  "annotations": [
+    {"text": "Use this minimal template when a diagram has a clear layered structure.", "placement": "footer"}
+  ]
+}

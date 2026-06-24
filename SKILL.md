@@ -23,6 +23,7 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - New contracts should declare `diagram_type`. Legacy `layout` is accepted only for compatibility and will produce a warning.
    - Supported standard types: `layered_knowledge_topology`, `source_boundary_map`, `boundary_ownership_map`, `registry_table`, `taxonomy_tree`, and `hub_spoke`.
    - See `references/diagram_types.md` for required fields and boundaries.
+   - Start from `templates/<diagram_type>/minimal-contract.json` for a small diagram or `templates/<diagram_type>/reference-contract.json` for a richer pattern.
 3. Choose a visual style package.
    - `style` is required. Use `modern-tech` for the migrated current style, `accent-blueprint` for the blue enterprise blueprint style, or a relative path to a custom `style.json`.
    - Style packages are declarative JSON only; do not execute Python or external code from a style.
@@ -165,6 +166,8 @@ py scripts/validate_semantic_contract.py examples/ocs-r300-layered-contract.json
 py scripts/test_contract_schema.py
 py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/ocs-r300-multirrow-contract.json examples/accent-blueprint-boundary-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
 py scripts/test_style_gallery_quality.py
+py scripts/build_style_gallery.py templates/template-gallery.html templates/layered_knowledge_topology/minimal-contract.json templates/layered_knowledge_topology/reference-contract.json templates/source_boundary_map/minimal-contract.json templates/source_boundary_map/reference-contract.json templates/boundary_ownership_map/minimal-contract.json templates/boundary_ownership_map/reference-contract.json templates/registry_table/minimal-contract.json templates/registry_table/reference-contract.json templates/taxonomy_tree/minimal-contract.json templates/taxonomy_tree/reference-contract.json templates/hub_spoke/minimal-contract.json templates/hub_spoke/reference-contract.json
+py scripts/test_template_library.py
 ```
 
 The script is a conservative standard-type renderer, not a full arbitrary graph engine. Unsupported diagram types, unsupported annotation placements, and edge labels produce errors or warnings and are left as contract guidance. If a diagram needs a special layout, use the script output as a starting point and make surgical SVG adjustments while preserving the QA rules above. After manual edits, rerun `scripts/validate_semantic_svg.py` because hand-edited icons, connectors, and layer heights are common failure points.

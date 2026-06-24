@@ -1,0 +1,16 @@
+{
+  "title": "Hub Spoke Minimal",
+  "subtitle": "Minimal standard contract for a hub-spoke map",
+  "diagram_type": "hub_spoke",
+  "style": "modern-tech",
+  "width": 1300,
+  "hub_id": "hub",
+  "nodes": [
+    {"id": "hub", "label": "Knowledge Hub", "subtitle": "center", "kind": "hub"},
+    {"id": "portal", "label": "Portal", "subtitle": "entry point", "kind": "index", "order": 0},
+    {"id": "modules", "label": "Modules", "subtitle": "assets", "kind": "package", "order": 1}
+  ],
+  "annotations": [
+    {"text": "Use hub_id for the center node and order for deterministic spoke placement.", "placement": "footer"}
+  ]
+}

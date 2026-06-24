@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="645" viewBox="0 0 1500 645" role="img" aria-label="Hub Spoke Reference" data-style="accent-blueprint" data-diagram-type="hub_spoke">
+<defs>
+  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style="accent-blueprint"] .route-shared{marker-end:none}
+    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1500" height="645" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="1500" height="645" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="750.0" y="54" text-anchor="middle" class="title">Hub Spoke Reference</text>
+<text x="750.0" y="80" text-anchor="middle" class="subtitle">Reference contract for a designed hub-spoke map</text>
+<circle cx="750.0" cy="390" r="138.0" fill="none" stroke="#16D9FF" stroke-opacity="0.16" stroke-width="1.4"/>
+<path d="M 640.19 346.8 L 445.0 270.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 632.0 390.0 L 445.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 640.19 433.2 L 445.0 510.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 859.81 346.8 L 1055.0 270.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 868.0 390.0 L 1055.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 859.81 433.2 L 1055.0 510.0" class="edge edge-dashed hub-spoke-link" marker-end="url(#arrow)"/>
+<g id="node-hub" class="hub-core card"><rect x="632.0" y="272.0" width="236.0" height="236.0" fill="none" stroke="none"/><circle cx="750.0" cy="390" r="118.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="3.2"/><circle cx="750.0" cy="390" r="106.0" fill="none" stroke="#16D9FF" stroke-opacity="0.32" stroke-width="1.3"/><text x="750.0" y="380.0" text-anchor="middle" class="card-title" style="font-size:22px">Knowledge Hub</text><text x="750.0" y="405.0" text-anchor="middle" class="card-sub" style="font-size:15px">navigation +</text><text x="750.0" y="422.0" text-anchor="middle" class="card-sub" style="font-size:15px">orchestration</text></g>
+<g id="node-portal" class="hub-spoke-node spoke-block card"><rect x="165" y="227.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.4"/><rect x="189" y="260.0" width="18" height="20" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M193,266.0 H203 M193,271.0 H203 M193,276.0 H200" class="icon-line" stroke="#16D9FF"/><text x="231" y="268.75" text-anchor="start" class="card-title" style="font-size:19px">Portal</text><text x="231" y="290.25" text-anchor="start" class="card-sub" style="font-size:14.5px">entry point</text></g>
+<g id="node-domain" class="hub-spoke-node spoke-block card"><rect x="165" y="347.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.4"/><rect x="189" y="383.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M189,388.0 H209 M199,383.0 V399.0" class="icon-line" stroke="#16D9FF"/><text x="231" y="388.75" text-anchor="start" class="card-title" style="font-size:19px">Domain Maps</text><text x="231" y="410.25" text-anchor="start" class="card-sub" style="font-size:14.5px">systems + ownership</text></g>
+<g id="node-registers" class="hub-spoke-node spoke-block card"><rect x="165" y="467.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.4"/><path d="M199,500.0 L209,518.0 H189 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M199,507.0 V513.0 M199,517.0 V517.0" class="icon-line" stroke="#FFD84D"/><text x="231" y="508.75" text-anchor="start" class="card-title" style="font-size:19px">Registers</text><text x="231" y="530.25" text-anchor="start" class="card-sub" style="font-size:14.5px">terms + parameters</text></g>
+<g id="node-modules" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="227.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-width="1.4"/><rect x="1079.0" y="263.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M1079.0,268.0 H1099.0 M1089.0,263.0 V279.0" class="icon-line" stroke="#6EE66E"/><text x="1121.0" y="268.75" text-anchor="start" class="card-title" style="font-size:19px">Modules</text><text x="1121.0" y="290.25" text-anchor="start" class="card-sub" style="font-size:14.5px">approved assets</text></g>
+<g id="node-sources" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="347.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-width="1.4"/><path d="M1079.0,380.0 H1093.0 L1099.0,386.0 V400.0 H1079.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M1093.0,380.0 V386.0 H1099.0" class="icon-line" stroke="#F4F8FF"/><text x="1121.0" y="388.75" text-anchor="start" class="card-title" style="font-size:19px">Sources</text><text x="1121.0" y="410.25" text-anchor="start" class="card-sub" style="font-size:14.5px">controlled authority</text></g>
+<g id="node-governance" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="467.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.4"/><path d="M1089.0,500.0 L1098.0,505.0 V515.0 L1089.0,520.0 L1080.0,515.0 V505.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M1085.0,510.0 L1088.0,514.0 L1094.0,506.0" class="icon-line" stroke="#FFD84D"/><text x="1121.0" y="508.75" text-anchor="start" class="card-title" style="font-size:19px">Governance</text><text x="1121.0" y="530.25" text-anchor="start" class="card-sub" style="font-size:14.5px">rules + risks</text></g>
+<text x="750.0" y="617" text-anchor="middle" class="note">Reference template: dashed spokes should represent optional or indirect relationships.</text>
+</svg>
