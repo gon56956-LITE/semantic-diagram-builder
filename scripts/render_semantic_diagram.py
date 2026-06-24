@@ -27,7 +27,7 @@ from semantic_diagram_styles import (
     token as style_token,
     validate_style_package,
 )
-from semantic_diagram_types import DiagramTypeError, normalize_diagram_type
+from semantic_diagram_types import DiagramTypeError, normalize_diagram_type, validate_contract_schema
 
 
 VALID_HEX = re.compile(r"^#[0-9A-Fa-f]{6}$")
@@ -1427,6 +1427,7 @@ def render(contract: dict, contract_path: Path | None = None, style: dict | None
     if style is None:
         style = style_for_contract(contract, contract_path)
     diagram_type, strategy, _warnings = diagram_for_contract(contract)
+    validate_contract_schema(contract, diagram_type)
     if strategy == "table":
         return _render_table(contract, style, diagram_type)
     if strategy == "tree":
@@ -1447,26 +1448,12 @@ def contract_warnings(contract: dict, contract_path: Path | None = None) -> list
     style_for_contract(contract, contract_path)
     diagram_type, strategy, type_warnings = diagram_for_contract(contract)
     warnings.extend(type_warnings)
+    warnings.extend(validate_contract_schema(contract, diagram_type))
 
     node_ids = [n.get("id") for n in contract.get("nodes", []) if n.get("id")]
     node_id_set = set(node_ids)
-    if len(node_ids) != len(node_id_set):
-        warnings.append("duplicate node ids may collapse cards or edges")
-
-    if diagram_type == "registry_table":
-        columns = contract.get("columns", [])
-        rows = contract.get("rows", [])
-        if not isinstance(columns, list) or not columns:
-            raise DiagramTypeError("registry_table requires columns")
-        if not isinstance(rows, list):
-            raise DiagramTypeError("registry_table rows must be a list")
-        column_ids = [c.get("id") for c in columns if isinstance(c, dict) and c.get("id")]
-        if len(column_ids) != len(set(column_ids)):
-            warnings.append("duplicate registry_table column ids may collapse cells")
-    elif diagram_type == "taxonomy_tree":
+    if diagram_type == "taxonomy_tree":
         _tree_maps(contract)
-    elif diagram_type == "hub_spoke" and contract.get("hub_id") not in node_id_set:
-        raise DiagramTypeError("hub_spoke requires hub_id to match a node id")
 
     skipped_edges = []
     for edge in contract.get("edges", []):

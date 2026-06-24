@@ -28,8 +28,8 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - Style packages are declarative JSON only; do not execute Python or external code from a style.
    - See `references/style_packages.md`.
 4. Apply stable layout metrics from `references/layout_metrics.md` before rendering or manual SVG edits.
-5. Render an SVG with `scripts/render_semantic_diagram.py` when possible. Treat script warnings as follow-up manual edit cues.
-6. Run automated QA with `scripts/validate_semantic_svg.py` and then visual QA before presenting the diagram.
+5. Validate the contract with `scripts/validate_semantic_contract.py`, then render an SVG with `scripts/render_semantic_diagram.py` when possible. Treat script warnings as follow-up manual edit cues.
+6. Run automated SVG QA with `scripts/validate_semantic_svg.py` and then visual QA before presenting the diagram.
 
 ## Contract fields
 
@@ -161,6 +161,8 @@ py scripts/render_semantic_diagram.py examples/accent-blueprint-boundary-contrac
 py scripts/render_semantic_diagram.py examples/registry-table-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/taxonomy-tree-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/hub-spoke-contract.json output.svg
+py scripts/validate_semantic_contract.py examples/ocs-r300-layered-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
+py scripts/test_contract_schema.py
 py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/ocs-r300-multirrow-contract.json examples/accent-blueprint-boundary-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
 py scripts/test_style_gallery_quality.py
 ```
