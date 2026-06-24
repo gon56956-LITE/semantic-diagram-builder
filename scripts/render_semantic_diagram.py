@@ -27,11 +27,10 @@ from semantic_diagram_styles import (
     token as style_token,
     validate_style_package,
 )
-from semantic_diagram_layouts import resolve_layout_strategy, supported_layouts
+from semantic_diagram_types import DiagramTypeError, normalize_diagram_type
 
 
 VALID_HEX = re.compile(r"^#[0-9A-Fa-f]{6}$")
-SCRIPT_SUPPORTED_LAYOUTS = supported_layouts()
 
 # Stable layout metrics. Keep these named so generated diagrams do not drift
 # into inconsistent card heights, row gaps, or layer padding.
@@ -85,6 +84,10 @@ def style_for_contract(contract: dict, contract_path: Path | None = None) -> dic
     return load_style_package(contract.get("style"), contract_path)
 
 
+def diagram_for_contract(contract: dict) -> tuple[str, str, list[str]]:
+    return normalize_diagram_type(contract)
+
+
 def layout_metrics(style: dict | None = None) -> dict:
     metrics = dict(LAYOUT)
     if style:
@@ -108,6 +111,67 @@ def _font_css(style: dict, path: str, default: str) -> str:
     return str(value or default)
 
 
+def _px(value: object, default: float) -> float:
+    match = re.match(r"^\s*([0-9.]+)", str(value or ""))
+    if not match:
+        return default
+    try:
+        return float(match.group(1))
+    except ValueError:
+        return default
+
+
+def _clamp(value: float, low: float, high: float) -> float:
+    return max(low, min(high, value))
+
+
+def _fmt_px(value: float) -> str:
+    return f"{round(value, 1):g}px"
+
+
+def _card_text_metrics(style: dict, canvas_w: float) -> dict[str, float]:
+    title_token = _px(style_token(style, "tokens.typography.card_title_size", "18px"), 18)
+    sub_token = _px(style_token(style, "tokens.typography.card_sub_size", "13.5px"), 13.5)
+    canvas_scale = _clamp(canvas_w / 1500.0, 0.92, 1.08)
+    title_size = _clamp(21.5 * canvas_scale, max(20.5, title_token), 23.5)
+    sub_size = _clamp(16.0 * canvas_scale, max(15.5, sub_token), 17.5)
+    return {
+        "title_size": title_size,
+        "sub_size": sub_size,
+        "title_line_h": max(title_size + 1.5, title_size * 1.08),
+        "sub_line_h": max(sub_size + 1.5, sub_size * 1.1),
+        "sub_gap": _clamp(title_size * 0.18, 3.0, 5.0),
+    }
+
+
+def _number(value: object, default: float) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _table_text_metrics(style: dict, canvas_w: float) -> dict[str, float]:
+    table = _style_component(style, "table")
+    header_token = _px(table.get("header_size", style_token(style, "tokens.typography.group_label_size", "13px")), 13)
+    cell_token = _px(table.get("cell_size", style_token(style, "tokens.typography.card_sub_size", "13px")), 13)
+    canvas_scale = _clamp(canvas_w / 1500.0, 0.92, 1.08)
+    header_size = _clamp(16.0 * canvas_scale, max(14.5, header_token), 17.5)
+    cell_size = _clamp(17.5 * canvas_scale, max(16.0, cell_token), 19.0)
+    line_h = max(cell_size * 1.25, cell_size + 4)
+    return {
+        "header_size": header_size,
+        "cell_size": cell_size,
+        "line_h": line_h,
+        "header_h": max(58.0, header_size * 3.8),
+        "row_h": max(92.0, line_h * 3 + 28),
+    }
+
+
+def _css_attr(value: object) -> str:
+    return str(value).replace("\\", "\\\\").replace('"', '\\"')
+
+
 def style_block(style: dict) -> str:
     typography = style_token(style, "tokens.typography", {})
     if not isinstance(typography, dict):
@@ -125,6 +189,10 @@ def style_block(style: dict) -> str:
     edge_opacity = connector.get("opacity", 0.76)
     fanout_opacity = connector.get("fanout_opacity", edge_opacity)
     fanin_opacity = connector.get("fanin_opacity", edge_opacity)
+    table = _style_component(style, "table")
+    table_header_size = table.get("header_size", style_token(style, "tokens.typography.group_label_size", "13px"))
+    table_cell_size = table.get("cell_size", style_token(style, "tokens.typography.card_sub_size", "12.5px"))
+    scope = f'[data-style="{_css_attr(style_id(style))}"]'
 
     card = _style_component(style, "card")
     shadow = card.get("shadow", {})
@@ -153,23 +221,28 @@ def style_block(style: dict) -> str:
 
     return f"""
 <defs>{extra_defs}
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="{arrow}"/></marker>
-  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="{fanout}"/></marker>
-  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="{fanin}"/></marker>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
   <style>
-    .title{{font:700 {_font_css(style, "tokens.typography.title_size", "30px")} {title_family};fill:{style_color(style, "text_primary", "#0F172A")};letter-spacing:{typography.get("title_letter_spacing", "0")};text-transform:{title_case}}}
-    .subtitle{{font:400 {_font_css(style, "tokens.typography.subtitle_size", "14px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
-    .group-label{{font:700 {_font_css(style, "tokens.typography.group_label_size", "13px")} {mono};fill:{style_color(style, "text_secondary", "#475569")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
-    .card-title{{font:700 {_font_css(style, "tokens.typography.card_title_size", "17px")} {sans};fill:{style_color(style, "text_primary", "#0F172A")}}}
-    .card-sub{{font:500 {_font_css(style, "tokens.typography.card_sub_size", "12.5px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
-    .edge{{fill:none;stroke:{arrow};stroke-width:{edge_width};stroke-linecap:round;stroke-linejoin:round;opacity:{edge_opacity}}}
-    .fanout{{stroke:{fanout};opacity:{fanout_opacity}}}
-    .fanin{{stroke:{fanin};opacity:{fanin_opacity}}}
-    .route-shared{{marker-end:none}}
-    .edge-dashed{{stroke-dasharray:{connector.get("dasharray", "8 8")};opacity:{connector.get("dashed_opacity", .66)}}}
-    .note{{font:500 {_font_css(style, "tokens.typography.note_size", "12px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
-    .mono{{font-family:{mono}}}
-    .icon-line{{fill:none;stroke-width:{_style_component(style, "icon").get("line_width", 1.8)};stroke-linecap:round;stroke-linejoin:round}}
+    {scope} .title{{font:700 {_font_css(style, "tokens.typography.title_size", "30px")} {title_family};fill:{style_color(style, "text_primary", "#0F172A")};letter-spacing:{typography.get("title_letter_spacing", "0")};text-transform:{title_case}}}
+    {scope} .subtitle{{font:400 {_font_css(style, "tokens.typography.subtitle_size", "14px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
+    {scope} .group-label{{font:700 {_font_css(style, "tokens.typography.group_label_size", "13px")} {mono};fill:{style_color(style, "text_secondary", "#475569")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
+    {scope} .card-title{{font:700 {_font_css(style, "tokens.typography.card_title_size", "17px")} {sans};fill:{style_color(style, "text_primary", "#0F172A")}}}
+    {scope} .card-sub{{font:500 {_font_css(style, "tokens.typography.card_sub_size", "12.5px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
+    {scope} .edge{{fill:none;stroke:{arrow};stroke-width:{edge_width};stroke-linecap:round;stroke-linejoin:round;opacity:{edge_opacity}}}
+    {scope} .fanout{{stroke:{fanout};opacity:{fanout_opacity}}}
+    {scope} .fanin{{stroke:{fanin};opacity:{fanin_opacity}}}
+    {scope} .route-shared{{marker-end:none}}
+    {scope} .edge-dashed{{stroke-dasharray:{connector.get("dasharray", "8 8")};opacity:{connector.get("dashed_opacity", .66)}}}
+    {scope} .note{{font:500 {_font_css(style, "tokens.typography.note_size", "12px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
+    {scope} .mono{{font-family:{mono}}}
+    {scope} .table-header{{font:700 {table_header_size} {mono};fill:{style_color(style, "text_primary", "#0F172A")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
+    {scope} .table-cell{{font:500 {table_cell_size} {sans};fill:{style_color(style, "text_primary", "#0F172A")}}}
+    {scope} .table-cell-secondary{{font:500 {table_cell_size} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
+    {scope} .tree-level-label{{font:700 {_font_css(style, "tokens.typography.group_label_size", "15px")} {mono};fill:{style_color(style, "text_secondary", "#64748B")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
+    {scope} .hub-label{{font:700 {_font_css(style, "tokens.typography.group_label_size", "13px")} {mono};fill:{style_color(style, "text_secondary", "#64748B")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
+    {scope} .icon-line{{fill:none;stroke-width:{_style_component(style, "icon").get("line_width", 1.8)};stroke-linecap:round;stroke-linejoin:round}}
   </style>
 </defs>""".strip()
 
@@ -206,7 +279,7 @@ def icon_svg(kind: str, x: float, y: float, color: str, style: dict) -> str:
     return f'<circle cx="{x+10}" cy="{y+10}" r="8" fill="{pale}" stroke="{color}" stroke-width="{stroke_width}"/><path d="M{x+5},{y+10} H{x+15} M{x+10},{y+5} V{y+15}" class="icon-line" stroke="{color}"/>'
 
 
-def make_card(node: dict, x: float, y: float, w: float, h: float, style: dict) -> str:
+def make_card(node: dict, x: float, y: float, w: float, h: float, style: dict, canvas_width: float | None = None) -> str:
     kind = node.get("kind", "object")
     color = node.get("accent") or kind_accent(style, kind)
     if not VALID_HEX.match(color):
@@ -220,20 +293,40 @@ def make_card(node: dict, x: float, y: float, w: float, h: float, style: dict) -
     shadow = card.get("shadow", {})
     shadow_enabled = bool(shadow.get("enabled", True)) if isinstance(shadow, dict) else bool(shadow)
     filter_attr = ' filter="url(#shadow)"' if shadow_enabled else ""
-    title_lines = wrap_text(node.get("label", node.get("id", "Object")), max_chars=max(14, int(w / 14)), max_lines=2)
+    pad_x = float(card.get("padding_x", 18))
+    icon_gap = float(card.get("icon_gap", 16))
+    text_x = x + pad_x + 22 + icon_gap
+    text_w = max(80, w - (text_x - x) - pad_x)
+    text_metrics = _card_text_metrics(style, canvas_width or w)
+    title_size = text_metrics["title_size"]
+    sub_size = text_metrics["sub_size"]
+    title_line_h = text_metrics["title_line_h"]
+    sub_line_h = text_metrics["sub_line_h"]
+    sub_gap = text_metrics["sub_gap"]
+    title_chars = max(8, int(text_w / max(8.0, title_size * 0.52)))
+    title_lines = wrap_text(node.get("label", node.get("id", "Object")), max_chars=title_chars, max_lines=2)
     sub = node.get("subtitle", "")
+    sub_lines: list[str] = []
+    if sub:
+        sub_chars = max(10, int(text_w / max(7.0, sub_size * 0.5)))
+        sub_lines = wrap_text(sub, max_chars=sub_chars, max_lines=1 if len(title_lines) > 1 else 2)
     parts = [f'<g id="node-{e(node.get("id", ""))}" class="card node-card">']
     fill_attrs = _paint_attr(style, "fill", fill, fill_default, card.get("fill_opacity"))
     parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" {fill_attrs} stroke="{stroke}" stroke-width="{stroke_width}"{filter_attr}/>')
-    parts.append(icon_svg(kind, x + 24, y + 25, color, style))
-    title_start = y + 31 if len(title_lines) == 1 else y + 26
+    parts.append(icon_svg(kind, x + pad_x, y + h / 2 - 10, color, style))
+    block_h = len(title_lines) * title_line_h
+    if sub_lines:
+        block_h += sub_gap + len(sub_lines) * sub_line_h
+    block_top = y + max(7.0, (h - block_h) / 2)
+    title_start = block_top + title_size
+    title_style = f' style="font-size:{_fmt_px(title_size)}"'
+    sub_style = f' style="font-size:{_fmt_px(sub_size)}"'
     for i, line in enumerate(title_lines):
-        parts.append(f'<text x="{x+w/2}" y="{title_start+i*20}" text-anchor="middle" class="card-title">{e(line)}</text>')
-    if sub:
-        sub_y = title_start + len(title_lines) * 20 + 11
-        if sub_y > y + h - 16:
-            sub_y = y + h - 16
-        parts.append(f'<text x="{x+w/2}" y="{sub_y}" text-anchor="middle" class="card-sub">{e(sub)}</text>')
+        parts.append(f'<text x="{text_x}" y="{title_start+i*title_line_h}" text-anchor="start" class="card-title"{title_style}>{e(line)}</text>')
+    if sub_lines:
+        sub_start = block_top + len(title_lines) * title_line_h + sub_gap + sub_size
+        for i, line in enumerate(sub_lines):
+            parts.append(f'<text x="{text_x}" y="{sub_start+i*sub_line_h}" text-anchor="start" class="card-sub"{sub_style}>{e(line)}</text>')
     parts.append('</g>')
     return "".join(parts)
 
@@ -874,7 +967,7 @@ def _canvas_parts(style: dict, width: float, height: float) -> list[str]:
     return parts
 
 
-def _group_panel_svg(style: dict, x: float, y: float, w: float, h: float, label: str) -> str:
+def _group_panel_svg(style: dict, x: float, y: float, w: float, h: float) -> str:
     group = _style_component(style, "group")
     radius = group.get("radius", 26)
     fill = group.get("fill", "group_fill")
@@ -887,22 +980,24 @@ def _group_panel_svg(style: dict, x: float, y: float, w: float, h: float, label:
         stroke_attrs += f' stroke-width="{group.get("stroke_width", 1)}"'
         if group.get("dasharray") and group.get("dasharray") != "none":
             stroke_attrs += f' stroke-dasharray="{group.get("dasharray")}"'
+    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" class="group-panel" rx="{radius}" {fill_attrs}{stroke_attrs}/>'
+
+
+def _group_label_svg(style: dict, x: float, y: float, w: float, label: str) -> str:
+    label_w = min(w - 40, max(136.0, len(str(label)) * 8.4 + 24))
+    bg = style_color(style, "background", "#F8FBFF")
     return (
-        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" {fill_attrs}{stroke_attrs}/>\n'
-        f'<text x="{x+28}" y="{y+23}" class="group-label">{e(label)}</text>'
+        f'<g class="group-label-wrap">'
+        f'<rect x="{x+18}" y="{y+6}" width="{label_w}" height="30" rx="7" fill="{bg}" fill-opacity="0.78"/>'
+        f'<text x="{x+28}" y="{y+26}" class="group-label">{e(label)}</text>'
+        f'</g>'
     )
 
 
-def render(contract: dict, contract_path: Path | None = None, style: dict | None = None) -> str:
-    if style is None:
-        style = style_for_contract(contract, contract_path)
-    model = build_layout_model(contract, style, contract_path)
-    width = model["width"]
-    height = model["height"]
-    positions = model["positions"]
-    group_boxes = model["group_boxes"]
-    nodes = {n["id"]: n for n in contract.get("nodes", [])}
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{e(contract.get("title", "Semantic Diagram"))}" data-style="{e(style_id(style))}">']
+def _svg_shell_start(contract: dict, style: dict, width: float, height: float, diagram_type: str) -> list[str]:
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{e(contract.get("title", "Semantic Diagram"))}" data-style="{e(style_id(style))}" data-diagram-type="{e(diagram_type)}">'
+    ]
     parts.append(style_block(style))
     parts.extend(_canvas_parts(style, width, height))
     title = contract.get("title", "Semantic Diagram")
@@ -910,28 +1005,437 @@ def render(contract: dict, contract_path: Path | None = None, style: dict | None
     parts.append(f'<text x="{width/2}" y="54" text-anchor="middle" class="title">{e(title)}</text>')
     if subtitle:
         parts.append(f'<text x="{width/2}" y="80" text-anchor="middle" class="subtitle">{e(subtitle)}</text>')
+    return parts
 
-    for gid, (x, y, w, h, g) in group_boxes.items():
-        parts.append(_group_panel_svg(style, x, y, w, h, g.get("label", gid)))
 
-    # Draw edges behind cards but over group bands.
-    parts.extend(routed_edge_paths(model, contract.get("edges", [])))
-
-    for node_id, pos in positions.items():
-        parts.append(make_card(nodes[node_id], *pos, style))
-
+def _append_annotations(parts: list[str], contract: dict, style: dict, width: float, height: float) -> None:
     legend_notes = [a for a in contract.get("annotations", []) if a.get("placement") == "legend"]
     if legend_notes:
         legend_x = width - 330
-        legend_y = height - 84 - (len(legend_notes) - 1) * 20
+        legend_y = height - 88 - (len(legend_notes) - 1) * 24
         for i, ann in enumerate(legend_notes[:4]):
             color = style_color(style, ann.get("color", "text_secondary"), style_color(style, "text_secondary", "#64748B"))
-            parts.append(f'<text x="{legend_x}" y="{legend_y + i*20}" class="note" fill="{color}">{e(ann.get("text", ""))}</text>')
+            parts.append(f'<text x="{legend_x}" y="{legend_y + i*24}" class="note legend-note" fill="{color}">{e(ann.get("text", ""))}</text>')
 
     footer_y = height - 28
     footer_notes = [a for a in contract.get("annotations", []) if a.get("placement", "footer") == "footer"]
     for i, ann in enumerate(footer_notes[:3]):
         parts.append(f'<text x="{width/2}" y="{footer_y - (len(footer_notes[:3])-1-i)*17}" text-anchor="middle" class="note">{e(ann.get("text", ""))}</text>')
+
+
+def _render_grouped_layered(contract: dict, style: dict, contract_path: Path | None, diagram_type: str) -> str:
+    model = build_layout_model(contract, style, contract_path)
+    width = model["width"]
+    height = model["height"]
+    positions = model["positions"]
+    group_boxes = model["group_boxes"]
+    nodes = {n["id"]: n for n in contract.get("nodes", [])}
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+
+    for gid, (x, y, w, h, _g) in group_boxes.items():
+        parts.append(_group_panel_svg(style, x, y, w, h))
+
+    # Draw edges behind cards but over group bands.
+    parts.extend(routed_edge_paths(model, contract.get("edges", [])))
+
+    for gid, (x, y, w, _h, g) in group_boxes.items():
+        parts.append(_group_label_svg(style, x, y, w, g.get("label", gid)))
+
+    for node_id, pos in positions.items():
+        parts.append(make_card(nodes[node_id], *pos, style, width))
+
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
+def _column_widths(columns: list[dict], available_w: float) -> list[float]:
+    widths: list[float | None] = []
+    fixed = 0.0
+    auto_count = 0
+    for col in columns:
+        value = col.get("width")
+        if isinstance(value, (int, float)) and value > 0:
+            widths.append(float(value))
+            fixed += float(value)
+        else:
+            widths.append(None)
+            auto_count += 1
+    auto_w = max(120.0, (available_w - fixed) / max(1, auto_count))
+    out = [auto_w if w is None else w for w in widths]
+    total = sum(out)
+    if total > available_w:
+        scale = available_w / total
+        out = [w * scale for w in out]
+    return out
+
+
+def _text_anchor_for(align: object) -> tuple[str, float]:
+    if align == "right":
+        return "end", 1.0
+    if align == "center":
+        return "middle", 0.5
+    return "start", 0.0
+
+
+def _render_wrapped_text(
+    parts: list[str],
+    lines: list[str],
+    x: float,
+    y: float,
+    klass: str,
+    anchor: str = "start",
+    line_h: float = 16,
+    inline_style: str = "",
+) -> None:
+    start_y = y - (len(lines) - 1) * line_h / 2
+    for i, line in enumerate(lines):
+        style_attr = f' style="{inline_style}"' if inline_style else ""
+        parts.append(f'<text x="{x}" y="{start_y + i*line_h}" text-anchor="{anchor}" class="{klass}"{style_attr}>{e(line)}</text>')
+
+
+def _table_badge_svg(style: dict, kind: object, x: float, y: float, size: float, color: str) -> str:
+    fill = pale_for(style, color)
+    icon_offset = (size - 20) / 2
+    return (
+        f'<g class="table-badge semantic-badge" data-kind="{e(kind or "object")}">'
+        f'<rect x="{x}" y="{y}" width="{size}" height="{size}" rx="5" fill="{fill}" stroke="{color}" stroke-width="1.2"/>'
+        f'{icon_svg(str(kind or "object"), x + icon_offset, y + icon_offset, color, style)}'
+        f'</g>'
+    )
+
+
+def _render_table(contract: dict, style: dict, diagram_type: str) -> str:
+    metrics = layout_metrics(style)
+    columns = [c for c in contract.get("columns", []) if isinstance(c, dict) and c.get("id")]
+    rows = [r for r in contract.get("rows", []) if isinstance(r, dict)]
+    if not columns:
+        raise DiagramTypeError("registry_table requires non-empty columns")
+    margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
+    width = int(contract.get("width", 1500))
+    table_x = margin_x
+    table_y = int(contract.get("top_y", metrics["top_y"]))
+    table_w = width - 2 * margin_x
+    text_metrics = _table_text_metrics(style, width)
+    header_h = int(max(_number(contract.get("header_height"), text_metrics["header_h"]), text_metrics["header_h"]))
+    row_h = int(max(_number(contract.get("row_height"), text_metrics["row_h"]), text_metrics["row_h"]))
+    header_style = f'font-size:{_fmt_px(text_metrics["header_size"])}'
+    cell_style = f'font-size:{_fmt_px(text_metrics["cell_size"])}'
+    term_style = f'{cell_style};font-weight:700'
+    line_h = text_metrics["line_h"]
+    height = int(max(contract.get("height", 0), table_y + header_h + max(1, len(rows)) * row_h + 110))
+    col_widths = _column_widths(columns, table_w)
+    table = _style_component(style, "table")
+    radius = table.get("radius", _style_component(style, "card").get("radius", 8))
+    fill = table.get("fill", "panel_fill")
+    header_fill = table.get("header_fill", "panel_fill_strong")
+    stroke = table.get("stroke", "line_primary")
+    stroke_color, stroke_opacity = style_paint(style, stroke, "#334155")
+    stroke_opacity = table.get("grid_opacity", stroke_opacity if stroke_opacity is not None else 0.55)
+
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+    parts.append(
+        f'<rect x="{table_x}" y="{table_y}" width="{table_w}" height="{header_h + max(1, len(rows)) * row_h}" rx="{radius}" {_paint_attr(style, "fill", fill, "#FFFFFF", table.get("fill_opacity"))} stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="{table.get("stroke_width", 1)}"/>'
+    )
+    parts.append(
+        f'<rect x="{table_x}" y="{table_y}" width="{table_w}" height="{header_h}" rx="{radius}" {_paint_attr(style, "fill", header_fill, "#EEF6FF", table.get("header_opacity"))}/>'
+    )
+    cur_x = table_x
+    for idx, col in enumerate(columns):
+        col_w = col_widths[idx]
+        if idx > 0:
+            parts.append(f'<line x1="{cur_x}" y1="{table_y}" x2="{cur_x}" y2="{table_y + header_h + max(1, len(rows)) * row_h}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
+        anchor, offset = _text_anchor_for(col.get("align"))
+        text_x = cur_x + 16 + (col_w - 32) * offset
+        parts.append(f'<text x="{text_x}" y="{table_y + header_h / 2 + text_metrics["header_size"] / 3}" text-anchor="{anchor}" class="table-header" style="{header_style}">{e(col.get("label", col.get("id")))}</text>')
+        cur_x += col_w
+    parts.append(f'<line x1="{table_x}" y1="{table_y + header_h}" x2="{table_x + table_w}" y2="{table_y + header_h}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
+
+    if not rows:
+        parts.append(f'<text x="{table_x + table_w/2}" y="{table_y + header_h + row_h/2 + 4}" text-anchor="middle" class="table-cell-secondary">No rows</text>')
+    for row_idx, row in enumerate(rows):
+        y = table_y + header_h + row_idx * row_h
+        if row_idx > 0:
+            parts.append(f'<line x1="{table_x}" y1="{y}" x2="{table_x + table_w}" y2="{y}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
+        cur_x = table_x
+        row_kind = row.get("kind", "object")
+        row_accent = row.get("accent") or kind_accent(style, row_kind)
+        row_accent = style_color(style, row_accent, kind_accent(style, "object"))
+        for col_idx, col in enumerate(columns):
+            col_w = col_widths[col_idx]
+            value = row.get(col["id"], "")
+            anchor, offset = _text_anchor_for(col.get("align"))
+            badge_size = 30
+            pad_left = 62 if col_idx == 0 else 16
+            text_x = cur_x + pad_left + (col_w - pad_left - 16) * offset
+            max_chars = max(8, int((col_w - pad_left - 16) / max(8.0, text_metrics["cell_size"] * 0.55)))
+            lines = wrap_text(str(value), max_chars=max_chars, max_lines=3)
+            klass = "table-cell" if col_idx == 0 else "table-cell-secondary"
+            _render_wrapped_text(
+                parts,
+                lines,
+                text_x,
+                y + row_h / 2 + text_metrics["cell_size"] / 3,
+                klass,
+                anchor,
+                line_h,
+                term_style if col_idx == 0 else cell_style,
+            )
+            if col_idx == 0:
+                parts.append(_table_badge_svg(style, row_kind, cur_x + 16, y + row_h / 2 - badge_size / 2, badge_size, row_accent))
+            cur_x += col_w
+
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
+TREE_PARENT_RELATIONS = {"parent", "parent_of", "contains", "has_child", "classifies"}
+
+
+def _tree_maps(contract: dict) -> tuple[dict[str, dict], dict[str, str], dict[str, list[str]], list[str]]:
+    nodes = [n for n in contract.get("nodes", []) if isinstance(n, dict) and n.get("id")]
+    node_by_id = {str(n["id"]): n for n in nodes}
+    parent_map: dict[str, str] = {}
+    for node in nodes:
+        if node.get("parent"):
+            parent = str(node["parent"])
+            child = str(node["id"])
+            if parent not in node_by_id:
+                raise DiagramTypeError(f'taxonomy_tree parent "{parent}" for "{child}" is not a node id')
+            parent_map[child] = parent
+
+    edge_parent_map: dict[str, str] = {}
+    for edge in contract.get("edges", []):
+        fr, to = edge.get("from"), edge.get("to")
+        if fr not in node_by_id or to not in node_by_id:
+            continue
+        relation = edge.get("relation")
+        if parent_map and relation not in TREE_PARENT_RELATIONS:
+            continue
+        if to in edge_parent_map and edge_parent_map[to] != fr:
+            raise DiagramTypeError(f'taxonomy_tree node "{to}" has multiple edge parents')
+        edge_parent_map[str(to)] = str(fr)
+
+    if parent_map:
+        for child, edge_parent in edge_parent_map.items():
+            if child in parent_map and parent_map[child] != edge_parent:
+                raise DiagramTypeError(f'taxonomy_tree parent conflict for "{child}"')
+    else:
+        parent_map = edge_parent_map
+
+    children = {node_id: [] for node_id in node_by_id}
+    for child, parent in parent_map.items():
+        children[parent].append(child)
+    order = {str(n["id"]): i for i, n in enumerate(nodes)}
+    for child_list in children.values():
+        child_list.sort(key=lambda node_id: (node_by_id[node_id].get("order", order[node_id]), order[node_id]))
+    roots = [node_id for node_id in node_by_id if node_id not in parent_map]
+    if not roots and node_by_id:
+        raise DiagramTypeError("taxonomy_tree must have at least one root")
+
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(node_id: str) -> None:
+        if node_id in visiting:
+            raise DiagramTypeError("taxonomy_tree cannot contain cycles")
+        if node_id in visited:
+            return
+        visiting.add(node_id)
+        for child in children[node_id]:
+            visit(child)
+        visiting.remove(node_id)
+        visited.add(node_id)
+
+    for root in roots:
+        visit(root)
+    return node_by_id, parent_map, children, roots
+
+
+def _render_tree(contract: dict, style: dict, diagram_type: str) -> str:
+    node_by_id, parent_map, children, roots = _tree_maps(contract)
+    if not node_by_id:
+        raise DiagramTypeError("taxonomy_tree requires nodes")
+    metrics = layout_metrics(style)
+    margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
+    card_w = float(contract.get("card_width", 230))
+    card_h = float(contract.get("card_height", metrics["card_h"]))
+    level_gap = float(contract.get("level_gap", 84))
+    leaf_slots: dict[str, int] = {}
+    centers: dict[str, float] = {}
+    depths: dict[str, int] = {}
+    leaf_index = 0
+
+    def assign(node_id: str, depth: int) -> float:
+        nonlocal leaf_index
+        depths[node_id] = depth
+        if not children[node_id]:
+            leaf_slots[node_id] = leaf_index
+            leaf_index += 1
+            centers[node_id] = float(leaf_slots[node_id])
+            return centers[node_id]
+        child_centers = [assign(child, depth + 1) for child in children[node_id]]
+        centers[node_id] = sum(child_centers) / len(child_centers)
+        return centers[node_id]
+
+    for root in roots:
+        assign(root, 0)
+    leaf_count = max(1, leaf_index)
+    min_width = int(2 * margin_x + leaf_count * card_w + max(0, leaf_count - 1) * 44)
+    width = int(max(contract.get("width", 1500), min_width))
+    top_y = int(contract.get("top_y", metrics["top_y"]))
+    max_depth = max(depths.values())
+    height = int(max(contract.get("height", 0), top_y + (max_depth + 1) * card_h + max_depth * level_gap + 110))
+    span = max(1.0, width - 2 * margin_x - card_w)
+    step = span / max(1, leaf_count - 1)
+    positions: dict[str, tuple[float, float, float, float]] = {}
+    for node_id, slot_center in centers.items():
+        cx = margin_x + card_w / 2 + slot_center * step
+        y = top_y + depths[node_id] * (card_h + level_gap)
+        positions[node_id] = (cx - card_w / 2, y, card_w, card_h)
+
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+    for child, parent in parent_map.items():
+        parts.append(_path(edge_path(positions[parent], positions[child]), "edge taxonomy-link", "arrow"))
+    for node_id in sorted(positions, key=lambda nid: (depths[nid], positions[nid][0])):
+        parts.append(make_card(node_by_id[node_id], *positions[node_id], style, width))
+    for depth in range(max_depth + 1):
+        parts.append(f'<text x="{margin_x}" y="{top_y + depth * (card_h + level_gap) - 14}" class="tree-level-label">Level {depth}</text>')
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
+def _circle_anchor(cx: float, cy: float, radius: float, tx: float, ty: float) -> tuple[float, float]:
+    dx = tx - cx
+    dy = ty - cy
+    dist = math.hypot(dx, dy) or 1.0
+    return cx + dx / dist * radius, cy + dy / dist * radius
+
+
+def _hub_text_lines(text: object, max_chars: int, max_lines: int) -> list[str]:
+    return wrap_text(str(text or ""), max_chars=max_chars, max_lines=max_lines)
+
+
+def _render_spoke_block(node: dict, x: float, y: float, w: float, h: float, style: dict, canvas_w: float) -> str:
+    kind = node.get("kind", "object")
+    color = node.get("accent") or kind_accent(style, kind)
+    if not VALID_HEX.match(color):
+        color = kind_accent(style, "object")
+    card = _style_component(style, "card")
+    fill = card.get("fill", "card_fill")
+    radius = min(float(card.get("radius", 10)), 10)
+    title_size = _clamp(19.0 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 18.0, 20.5)
+    sub_size = _clamp(14.5 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 13.5, 15.5)
+    text_x = x + 66
+    text_w = max(80, w - 82)
+    title_lines = _hub_text_lines(node.get("label", node.get("id", "Spoke")), max(8, int(text_w / (title_size * 0.55))), 2)
+    sub_lines = _hub_text_lines(node.get("subtitle", ""), max(10, int(text_w / (sub_size * 0.52))), 1)
+    block_h = len(title_lines) * (title_size + 2) + (sub_size + 5 if sub_lines else 0)
+    top = y + (h - block_h) / 2
+    parts = [f'<g id="node-{e(node.get("id", ""))}" class="hub-spoke-node spoke-block card">']
+    parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" {_paint_attr(style, "fill", fill, "#FFFFFF", card.get("fill_opacity"))} stroke="{color}" stroke-width="{max(1.4, float(card.get("stroke_width", 1.4)))}"/>')
+    parts.append(icon_svg(kind, x + 24, y + h / 2 - 10, color, style))
+    for i, line in enumerate(title_lines):
+        parts.append(f'<text x="{text_x}" y="{top + title_size + i * (title_size + 2)}" text-anchor="start" class="card-title" style="font-size:{_fmt_px(title_size)}">{e(line)}</text>')
+    if sub_lines:
+        sub_y = top + len(title_lines) * (title_size + 2) + sub_size + 5
+        parts.append(f'<text x="{text_x}" y="{sub_y}" text-anchor="start" class="card-sub" style="font-size:{_fmt_px(sub_size)}">{e(sub_lines[0])}</text>')
+    parts.append('</g>')
+    return "".join(parts)
+
+
+def _render_hub_core(node: dict, cx: float, cy: float, radius: float, style: dict, canvas_w: float) -> str:
+    kind = node.get("kind", "hub")
+    color = node.get("accent") or kind_accent(style, kind)
+    if not VALID_HEX.match(color):
+        color = kind_accent(style, "hub")
+    card = _style_component(style, "card")
+    fill = card.get("fill", "card_fill")
+    title_size = _clamp(22.0 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 21.0, 24.0)
+    sub_size = _clamp(15.0 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 14.0, 16.0)
+    title_lines = _hub_text_lines(node.get("label", "Hub"), 15, 2)
+    sub_lines = _hub_text_lines(node.get("subtitle", ""), 20, 2)
+    block_h = len(title_lines) * (title_size + 2) + (len(sub_lines) * (sub_size + 2) + 6 if sub_lines else 0)
+    top = cy - block_h / 2
+    parts = [f'<g id="node-{e(node.get("id", ""))}" class="hub-core card">']
+    parts.append(f'<rect x="{cx-radius}" y="{cy-radius}" width="{radius*2}" height="{radius*2}" fill="none" stroke="none"/>')
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="{radius}" {_paint_attr(style, "fill", fill, "#FFFFFF", card.get("fill_opacity"))} stroke="{color}" stroke-width="3.2"/>')
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="{radius-12}" fill="none" stroke="{color}" stroke-opacity="0.32" stroke-width="1.3"/>')
+    for i, line in enumerate(title_lines):
+        parts.append(f'<text x="{cx}" y="{top + title_size + i * (title_size + 2)}" text-anchor="middle" class="card-title" style="font-size:{_fmt_px(title_size)}">{e(line)}</text>')
+    for i, line in enumerate(sub_lines):
+        parts.append(f'<text x="{cx}" y="{top + len(title_lines) * (title_size + 2) + 8 + sub_size + i * (sub_size + 2)}" text-anchor="middle" class="card-sub" style="font-size:{_fmt_px(sub_size)}">{e(line)}</text>')
+    parts.append('</g>')
+    return "".join(parts)
+
+
+def _render_hub_spoke(contract: dict, style: dict, diagram_type: str) -> str:
+    nodes = [n for n in contract.get("nodes", []) if isinstance(n, dict) and n.get("id")]
+    node_by_id = {str(n["id"]): n for n in nodes}
+    hub_id = str(contract.get("hub_id", ""))
+    if hub_id not in node_by_id:
+        raise DiagramTypeError("hub_spoke requires hub_id to match a node id")
+    spokes = [n for n in nodes if str(n["id"]) != hub_id]
+    order = {str(n["id"]): i for i, n in enumerate(nodes)}
+    spokes.sort(key=lambda n: (n.get("order", order[str(n["id"])]), order[str(n["id"])]))
+    metrics = layout_metrics(style)
+    width = int(contract.get("width", 1500))
+    margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
+    hub_radius = float(contract.get("hub_radius", 118))
+    spoke_w = float(contract.get("spoke_width", 280))
+    spoke_h = float(contract.get("spoke_height", 86))
+    center_x = width / 2
+    positions: dict[str, tuple[float, float, float, float]] = {}
+    left = spokes[: math.ceil(len(spokes) / 2)]
+    right = spokes[math.ceil(len(spokes) / 2):]
+    left_x = margin_x + 95
+    right_x = width - margin_x - 95 - spoke_w
+    column_gap = 34
+    left_total = len(left) * spoke_h + max(0, len(left) - 1) * column_gap
+    right_total = len(right) * spoke_h + max(0, len(right) - 1) * column_gap
+    content_half_h = max(hub_radius + 20, left_total / 2, right_total / 2)
+    center_y = int(max(float(contract.get("center_y", 390)), metrics["top_y"] + content_half_h + 28))
+    for i, node in enumerate(left):
+        positions[str(node["id"])] = (left_x, center_y - left_total / 2 + i * (spoke_h + column_gap), spoke_w, spoke_h)
+    for i, node in enumerate(right):
+        positions[str(node["id"])] = (right_x, center_y - right_total / 2 + i * (spoke_h + column_gap), spoke_w, spoke_h)
+    content_bottom = max([center_y + hub_radius + 20] + [y + h for _x, y, _w, h in positions.values()])
+    min_height = int(content_bottom + 92)
+    height = int(max(contract.get("height", min_height), min_height))
+
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+    parts.append(f'<circle cx="{center_x}" cy="{center_y}" r="{hub_radius + 20}" fill="none" stroke="{kind_accent(style, "hub")}" stroke-opacity="0.16" stroke-width="1.4"/>')
+    for node in spokes:
+        node_id = str(node["id"])
+        edge_cls = "edge edge-dashed" if node.get("style") == "dashed" else "edge"
+        x, y, w, h = positions[node_id]
+        target_x = x + w if x < center_x else x
+        target_y = y + h / 2
+        sx, sy = _circle_anchor(center_x, center_y, hub_radius, target_x, target_y)
+        parts.append(_path(f"M {round(sx, 2)} {round(sy, 2)} L {round(target_x, 2)} {round(target_y, 2)}", f"{edge_cls} hub-spoke-link", "arrow"))
+    parts.append(_render_hub_core(node_by_id[hub_id], center_x, center_y, hub_radius, style, width))
+    for node in spokes:
+        parts.append(_render_spoke_block(node, *positions[str(node["id"])], style, width))
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
+def render(contract: dict, contract_path: Path | None = None, style: dict | None = None) -> str:
+    if style is None:
+        style = style_for_contract(contract, contract_path)
+    diagram_type, strategy, _warnings = diagram_for_contract(contract)
+    if strategy == "table":
+        return _render_table(contract, style, diagram_type)
+    if strategy == "tree":
+        return _render_tree(contract, style, diagram_type)
+    if strategy == "hub_spoke":
+        return _render_hub_spoke(contract, style, diagram_type)
+    if strategy == "grouped_layered":
+        return _render_grouped_layered(contract, style, contract_path, diagram_type)
+    raise DiagramTypeError(f"unsupported render strategy: {strategy}")
 
     parts.append('</svg>')
     return "\n".join(parts) + "\n"
@@ -941,16 +1445,28 @@ def contract_warnings(contract: dict, contract_path: Path | None = None) -> list
     warnings: list[str] = []
     # Validate style early so CLI failures are explicit and do not fall back.
     style_for_contract(contract, contract_path)
-    layout = contract.get("layout", "auto")
-    if resolve_layout_strategy(layout) is None:
-        warnings.append(
-            f'layout "{layout}" is not rendered specially; falling back to grouped/layered placement'
-        )
+    diagram_type, strategy, type_warnings = diagram_for_contract(contract)
+    warnings.extend(type_warnings)
 
     node_ids = [n.get("id") for n in contract.get("nodes", []) if n.get("id")]
     node_id_set = set(node_ids)
     if len(node_ids) != len(node_id_set):
         warnings.append("duplicate node ids may collapse cards or edges")
+
+    if diagram_type == "registry_table":
+        columns = contract.get("columns", [])
+        rows = contract.get("rows", [])
+        if not isinstance(columns, list) or not columns:
+            raise DiagramTypeError("registry_table requires columns")
+        if not isinstance(rows, list):
+            raise DiagramTypeError("registry_table rows must be a list")
+        column_ids = [c.get("id") for c in columns if isinstance(c, dict) and c.get("id")]
+        if len(column_ids) != len(set(column_ids)):
+            warnings.append("duplicate registry_table column ids may collapse cells")
+    elif diagram_type == "taxonomy_tree":
+        _tree_maps(contract)
+    elif diagram_type == "hub_spoke" and contract.get("hub_id") not in node_id_set:
+        raise DiagramTypeError("hub_spoke requires hub_id to match a node id")
 
     skipped_edges = []
     for edge in contract.get("edges", []):
@@ -962,11 +1478,7 @@ def contract_warnings(contract: dict, contract_path: Path | None = None) -> list
         suffix = "..." if len(skipped_edges) > 5 else ""
         warnings.append(f"edges with missing endpoints will be skipped: {examples}{suffix}")
 
-    unsupported_annotations = [
-        a.get("placement", "footer")
-        for a in contract.get("annotations", [])
-        if a.get("placement", "footer") not in {"footer", "legend"}
-    ]
+    unsupported_annotations = [a.get("placement", "footer") for a in contract.get("annotations", []) if a.get("placement", "footer") not in {"footer", "legend"}]
     if unsupported_annotations:
         placements = ", ".join(sorted(set(str(p) for p in unsupported_annotations)))
         warnings.append(f"non-footer annotations are contract guidance only and were not rendered: {placements}")
@@ -974,6 +1486,8 @@ def contract_warnings(contract: dict, contract_path: Path | None = None) -> list
     labeled_edges = [edge for edge in contract.get("edges", []) if edge.get("label")]
     if labeled_edges:
         warnings.append("edge labels are contract guidance only and were not rendered")
+    if strategy != "grouped_layered" and contract.get("groups"):
+        warnings.append(f'groups are ignored by diagram_type "{diagram_type}"')
     return warnings
 
 
@@ -988,7 +1502,7 @@ def main(argv: list[str]) -> int:
         for warning in contract_warnings(contract, contract_path):
             print(f"warning: {warning}", file=sys.stderr)
         svg = render(contract, contract_path)
-    except StyleError as exc:
+    except (StyleError, DiagramTypeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     output_path.parent.mkdir(parents=True, exist_ok=True)

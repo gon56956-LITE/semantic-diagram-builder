@@ -2,7 +2,7 @@
 
 Use these patterns as selection guidance. They are not templates with fixed domain content.
 
-## layered
+## layered_knowledge_topology / source_boundary_map / boundary_ownership_map
 
 Use for knowledge architecture, abstraction layers, source-boundary maps, and navigation/synthesis/source separation.
 
@@ -18,7 +18,7 @@ Rules:
 - If a layer uses a class/backbone pill, reserve a gutter between that pill and the content cards so they do not collide.
 - Put explanatory text in footer, side callouts, or layer whitespace, not on connector corridors.
 
-## hierarchy
+## taxonomy_tree
 
 Use for parent-child trees, object taxonomies, and nested concept maps.
 
@@ -35,7 +35,7 @@ Rules:
 - Center is the hub; spokes should be semantically comparable.
 - Avoid crossing spokes with secondary edges; move secondary relations to a legend or separate detail diagram.
 
-## topology
+## topology guidance
 
 Use for non-tree object relationship maps.
 
@@ -44,7 +44,7 @@ Rules:
 - Keep primary edges visually stronger than secondary edges.
 - If edges cross often, split into multiple diagrams.
 
-## boundary_map
+## source_boundary_map
 
 Use when the key message is a boundary between source-of-truth objects and derived/synthesis/navigation objects.
 

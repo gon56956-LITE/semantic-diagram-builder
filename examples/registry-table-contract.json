@@ -1,0 +1,55 @@
+{
+  "title": "Semantic Register Reference",
+  "subtitle": "Standard registry_table diagram type",
+  "diagram_type": "registry_table",
+  "style": "accent-blueprint",
+  "width": 1500,
+  "columns": [
+    {"id": "term", "label": "Term", "width": 220},
+    {"id": "definition", "label": "Definition", "width": 460},
+    {"id": "type", "label": "Type", "width": 170, "align": "center"},
+    {"id": "owner", "label": "Owner", "width": 210},
+    {"id": "related", "label": "Related Items"}
+  ],
+  "rows": [
+    {
+      "id": "domain",
+      "kind": "capability",
+      "term": "Domain Map",
+      "definition": "Aligned view of systems, interfaces, boundaries, and reusable knowledge modules.",
+      "type": "Map",
+      "owner": "Architecture",
+      "related": "Interfaces, Modules, Boundaries"
+    },
+    {
+      "id": "source",
+      "kind": "source",
+      "term": "Controlled Source",
+      "definition": "Authoritative document or system record used to validate derived knowledge.",
+      "type": "Authority",
+      "owner": "Document Control",
+      "related": "Revision, Approval"
+    },
+    {
+      "id": "risk",
+      "kind": "risk",
+      "term": "Risk Constraint",
+      "definition": "Condition that limits how an asset, parameter, or process module can be reused.",
+      "type": "Governance",
+      "owner": "Quality",
+      "related": "CTQ, Exception"
+    },
+    {
+      "id": "module",
+      "kind": "package",
+      "term": "Reusable Module",
+      "definition": "Approved knowledge package that can be referenced by maps, taxonomies, or workflows.",
+      "type": "Asset",
+      "owner": "Knowledge Ops",
+      "related": "Package, Instance"
+    }
+  ],
+  "annotations": [
+    {"text": "registry_table uses columns + rows; groups and card routing are not required.", "placement": "footer"}
+  ]
+}

@@ -73,10 +73,10 @@
       "title": "IBM Plex Mono,JetBrains Mono,Consolas,monospace",
       "title_size": "27px",
       "subtitle_size": "13px",
-      "group_label_size": "12px",
-      "card_title_size": "16px",
-      "card_sub_size": "12px",
-      "note_size": "12px",
+      "group_label_size": "15px",
+      "card_title_size": "17px",
+      "card_sub_size": "13px",
+      "note_size": "14px",
       "title_letter_spacing": ".04em",
       "label_letter_spacing": ".08em",
       "title_transform": "uppercase"
@@ -110,6 +110,10 @@
       "stroke_mode": "accent",
       "stroke_width": 1.3,
       "radius": 6,
+      "padding_x": 18,
+      "icon_gap": 14,
+      "title_line_height": 19,
+      "subtitle_gap": 10,
       "shadow": {
         "enabled": false
       }
@@ -129,12 +133,38 @@
       "fanin_opacity": 0.9,
       "dasharray": "6 5",
       "dashed_opacity": 0.68
+    },
+    "table": {
+      "fill": "panel_fill",
+      "header_fill": "panel_fill_strong",
+      "stroke": "line_primary",
+      "stroke_width": 1,
+      "grid_opacity": 0.58,
+      "radius": 6,
+      "header_size": "15.5px",
+      "cell_size": "17px"
+    },
+    "tree_node": {
+      "source": "card"
+    },
+    "hub": {
+      "source": "card"
+    },
+    "spoke": {
+      "source": "card"
+    },
+    "metadata_panel": {
+      "fill": "panel_fill",
+      "stroke": "line_primary",
+      "stroke_opacity": 0.6
     }
   },
   "qa": {
     "reference_image": "C:/Users/gon56956/Downloads/Accent Blueprint style.png",
     "reference_contracts": [
-      "examples/accent-blueprint-boundary-contract.json"
+      "examples/accent-blueprint-boundary-contract.json",
+      "examples/registry-table-contract.json",
+      "examples/taxonomy-tree-contract.json"
     ]
   }
 }

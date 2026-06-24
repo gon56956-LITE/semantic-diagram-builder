@@ -19,6 +19,7 @@ def render_gallery_html(contract_paths: list[Path]) -> str:
         contract = json.loads(contract_path.read_text(encoding="utf-8-sig"))
         svg = renderer.render(contract, contract_path)
         style_name = contract.get("style", "")
+        diagram_type = contract.get("diagram_type", contract.get("layout", ""))
         title = contract.get("title", contract_path.stem)
         sections.append(
             f"""
@@ -26,6 +27,7 @@ def render_gallery_html(contract_paths: list[Path]) -> str:
   <header>
     <strong>{html.escape(str(title))}</strong>
     <span>{html.escape(str(style_name))}</span>
+    <span>{html.escape(str(diagram_type))}</span>
     <code>{html.escape(str(contract_path))}</code>
   </header>
   <div class="svg-wrap">{svg}</div>

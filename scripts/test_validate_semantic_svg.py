@@ -63,6 +63,15 @@ def main() -> int:
         "outside card bounds",
     )
     assert_pass(
+        "card css without card nodes",
+        """
+<svg width="400" height="260">
+<style>.card-title{fill:#0F172A}</style>
+<text x="20" y="40" class="table-header">Header</text>
+</svg>
+""",
+    )
+    assert_pass(
         "bottom bus explains larger layer padding",
         """
 <svg width="600" height="520">

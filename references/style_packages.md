@@ -16,7 +16,7 @@ Required fields:
 - `version`: style package version.
 - `metrics`: numeric layout metric overrides. Keep these equal across styles when geometry must remain identical.
 - `tokens.colors`: color tokens as `#RRGGBB`, `rgba(r,g,b,a)`, or `none`.
-- `components`: declarative renderer component settings for canvas, group, card, icon, and connector.
+- `components`: declarative renderer component settings for canvas, group, card, icon, connector, table, tree_node, hub, spoke, and metadata_panel.
 - `qa`: optional reference image and reference contracts.
 
 Style packages may define:
@@ -27,6 +27,8 @@ Style packages may define:
 - card fill, radius, border mode, and shadow behavior.
 - icon fill mode and stroke widths.
 - connector primary/fanout/fanin colors, stroke width, dash style, and marker colors.
+- table fill, header fill, grid opacity, and table typography.
+- tree, hub, spoke, and metadata panel visual defaults.
 - semantic accent mapping by node `kind`.
 
 Style packages may not:
@@ -34,6 +36,7 @@ Style packages may not:
 - execute Python or JavaScript.
 - fetch remote assets.
 - replace fan-out/fan-in routing logic.
+- change the selected `diagram_type` or layout strategy.
 - hide invalid SVG colors behind raw snippets.
 
 ## Accent Blueprint

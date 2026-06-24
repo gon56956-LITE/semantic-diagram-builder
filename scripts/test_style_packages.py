@@ -65,6 +65,8 @@ def main() -> int:
         '#F4F8FF',
         '#FF9F2E',
         '#6EE66E',
+        'fill="context-stroke"',
+        '[data-style="accent-blueprint"] .card-title',
     ):
         if required not in accent_svg:
             raise AssertionError(f"accent-blueprint SVG missing {required}")
@@ -108,9 +110,17 @@ def main() -> int:
     else:
         raise AssertionError("invalid color token should raise StyleError")
 
-    gallery_html = gallery.render_gallery_html([ROOT / "examples" / "accent-blueprint-boundary-contract.json"])
+    gallery_html = gallery.render_gallery_html([
+        ROOT / "examples" / "accent-blueprint-boundary-contract.json",
+        ROOT / "examples" / "registry-table-contract.json",
+        ROOT / "examples" / "taxonomy-tree-contract.json",
+        ROOT / "examples" / "hub-spoke-contract.json",
+    ])
     if "accent-blueprint" not in gallery_html or "<svg" not in gallery_html:
         raise AssertionError("style gallery did not embed rendered SVG")
+    for diagram_type in ("source_boundary_map", "registry_table", "taxonomy_tree", "hub_spoke"):
+        if f'data-diagram-type="{diagram_type}"' not in gallery_html:
+            raise AssertionError(f"style gallery missing {diagram_type}")
 
     print("style package selftest: PASS")
     return 0

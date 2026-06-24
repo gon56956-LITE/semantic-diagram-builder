@@ -11,7 +11,7 @@ import re
 import sys
 from pathlib import Path
 
-HEX_OR_NONE = re.compile(r'^(#[0-9A-Fa-f]{6}|none|url\(#[-A-Za-z0-9_]+\))$')
+HEX_OR_NONE = re.compile(r'^(#[0-9A-Fa-f]{6}|none|context-stroke|url\(#[-A-Za-z0-9_]+\))$')
 ATTR = re.compile(r'(fill|stroke)="([^"]+)"')
 SVG_SIZE = re.compile(r'<svg[^>]*width="([0-9.]+)"[^>]*height="([0-9.]+)"')
 CARD_RE = re.compile(
@@ -231,7 +231,7 @@ def _layer_rects(svg: str) -> list[tuple[float, float, float, float]]:
     for m in LAYER_RE.finditer(svg):
         x, y, w, h = _rect_values(m)
         after = svg[m.end(): m.end() + 140].lstrip()
-        if GROUP_LABEL_RE.match(after) and w >= 500 and h >= 120:
+        if (GROUP_LABEL_RE.match(after) or 'class="group-panel"' in m.group(0)) and w >= 500 and h >= 120:
             layers.append((x, y, w, h))
     layers.sort(key=lambda r: r[1])
     return layers
@@ -420,13 +420,13 @@ def check_svg(svg: str) -> list[str]:
         width, height = map(float, size.groups())
 
     cards = CARD_RE.findall(svg)
-    if 'card-title' in svg and not cards:
+    if re.search(r'<text[^>]*class="[^"]*\bcard-title\b', svg) and not cards:
         fail('card text exists but no card groups were recognized', issues)
     if 'class="edge' in svg and not _connector_paths(svg):
         fail('connector paths exist but no connector geometry was recognized', issues)
 
     for attr, value in ATTR.findall(svg):
-        if value.startswith('#') or value in {'none'} or value.startswith('url(#'):
+        if value.startswith('#') or value in {'none', 'context-stroke'} or value.startswith('url(#'):
             if not HEX_OR_NONE.match(value):
                 fail(f'invalid {attr} value: {value}', issues)
         elif value not in {'currentColor'}:

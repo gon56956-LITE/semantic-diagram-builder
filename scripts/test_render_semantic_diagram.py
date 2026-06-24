@@ -58,6 +58,69 @@ def assert_rounded_paths(svg: str, required_classes: set[str], label: str) -> No
             raise AssertionError(f"{label} should use a rounded Q elbow, got: {d}")
 
 
+def text_font_sizes(svg: str, class_name: str) -> list[float]:
+    sizes = []
+    for attrs in re.findall(r'<text\b([^>]*)>', svg):
+        class_match = re.search(r'class="([^"]+)"', attrs)
+        style_match = re.search(r'font-size:([0-9.]+)px', attrs)
+        if not class_match or not style_match:
+            continue
+        if class_name in class_match.group(1).split():
+            sizes.append(float(style_match.group(1)))
+    return sizes
+
+
+def css_font_size(svg: str, class_name: str) -> float:
+    match = re.search(rf'\.{re.escape(class_name)}\{{font:[^}}]*?([0-9.]+)px', svg)
+    if not match:
+        raise AssertionError(f"missing CSS font size for {class_name}")
+    return float(match.group(1))
+
+
+def assert_card_type_scale(label: str, svg: str) -> None:
+    title_sizes = text_font_sizes(svg, "card-title")
+    sub_sizes = text_font_sizes(svg, "card-sub")
+    if not title_sizes or min(title_sizes) < 20.5:
+        raise AssertionError(f"{label} card titles should use canvas-aware readable font sizes")
+    if max(title_sizes) - min(title_sizes) > 0.2:
+        raise AssertionError(f"{label} card titles should use one diagram-level font scale")
+    if max(title_sizes) > 23.5:
+        raise AssertionError(f"{label} card titles should not grow with individual card width")
+    if not sub_sizes or min(sub_sizes) < 15.5:
+        raise AssertionError(f"{label} card subtitles should use canvas-aware readable font sizes")
+    if max(sub_sizes) - min(sub_sizes) > 0.2:
+        raise AssertionError(f"{label} card subtitles should use one diagram-level font scale")
+    if max(sub_sizes) > 17.5:
+        raise AssertionError(f"{label} card subtitles should not grow with individual card width")
+
+
+def assert_table_scale(svg: str) -> None:
+    header_sizes = text_font_sizes(svg, "table-header")
+    cell_sizes = text_font_sizes(svg, "table-cell") + text_font_sizes(svg, "table-cell-secondary")
+    if not header_sizes or min(header_sizes) < 15:
+        raise AssertionError("registry_table headers should be readable at gallery scale")
+    if not cell_sizes or min(cell_sizes) < 16:
+        raise AssertionError("registry_table cells should be readable at gallery scale")
+    for kind in ("capability", "source", "risk", "package"):
+        if f'data-kind="{kind}"' not in svg:
+            raise AssertionError(f"registry_table should render semantic badges for {kind}")
+
+
+def assert_hub_spoke_design(svg: str) -> None:
+    if 'class="hub-core card"' not in svg:
+        raise AssertionError("hub_spoke should render a designed central hub core")
+    if svg.count('class="hub-spoke-node spoke-block card"') < 4:
+        raise AssertionError("hub_spoke should render designed spoke blocks instead of generic cards")
+    if 'class="edge hub-spoke-link"' not in svg and 'hub-spoke-link' not in svg:
+        raise AssertionError("hub_spoke should render explicit hub-spoke connector links")
+    title_sizes = text_font_sizes(svg, "card-title")
+    sub_sizes = text_font_sizes(svg, "card-sub")
+    if not title_sizes or min(title_sizes) < 18:
+        raise AssertionError("hub_spoke labels should remain readable")
+    if not sub_sizes or min(sub_sizes) < 13.5:
+        raise AssertionError("hub_spoke subtitles should remain readable")
+
+
 def q_turns(svg: str, required_classes: set[str]) -> list[tuple[float, float, float]]:
     turns = []
     pattern = re.compile(
@@ -74,7 +137,37 @@ def q_turns(svg: str, required_classes: set[str]) -> list[tuple[float, float, fl
 
 def main() -> int:
     layered = load_contract("ocs-r300-layered-contract.json")
-    assert_valid("single-row layered example", layered)
+    layered_svg = assert_valid("single-row layered example", layered)
+    if 'data-diagram-type="layered_knowledge_topology"' not in layered_svg:
+        raise AssertionError("layered example should declare the standard diagram type")
+    assert_card_type_scale("layered", layered_svg)
+    if css_font_size(layered_svg, "group-label") < 15:
+        raise AssertionError("layer labels should be readable at gallery scale")
+    if css_font_size(layered_svg, "note") < 14:
+        raise AssertionError("legend/footer notes should be readable at gallery scale")
+
+    legacy = copy.deepcopy(layered)
+    legacy.pop("diagram_type", None)
+    legacy["layout"] = "layered"
+    legacy_warnings = renderer.contract_warnings(legacy)
+    if not any("deprecated" in warning and "layered_knowledge_topology" in warning for warning in legacy_warnings):
+        raise AssertionError("legacy layout should be accepted with a deprecation warning")
+
+    conflict = copy.deepcopy(layered)
+    conflict["diagram_type"] = "source_boundary_map"
+    conflict["layout"] = "layered"
+    conflict_warnings = renderer.contract_warnings(conflict)
+    if not any("takes precedence" in warning for warning in conflict_warnings):
+        raise AssertionError("diagram_type should take precedence over conflicting layout")
+
+    unknown = copy.deepcopy(layered)
+    unknown["diagram_type"] = "unknown_type"
+    try:
+        renderer.render(unknown)
+    except renderer.DiagramTypeError:
+        pass
+    else:
+        raise AssertionError("unknown diagram_type should fail explicitly")
 
     multi = load_contract("ocs-r300-multirrow-contract.json")
     svg = assert_valid("multi-row routed example", multi)
@@ -136,6 +229,41 @@ def main() -> int:
     simple_svg = renderer.render(simple)
     if 'class="edge fanout route-shared bus"' in simple_svg or 'class="edge fanin route-shared bus"' in simple_svg:
         raise AssertionError("routing.mode=simple should not emit row-level buses")
+
+    registry = load_contract("registry-table-contract.json")
+    registry_svg = assert_valid("registry table example", registry)
+    if 'data-diagram-type="registry_table"' not in registry_svg or 'class="table-header"' not in registry_svg:
+        raise AssertionError("registry_table should render table headers and declare its diagram type")
+    if 'class="card node-card"' in registry_svg:
+        raise AssertionError("registry_table should render as a table, not as grouped cards")
+    assert_table_scale(registry_svg)
+
+    tree = load_contract("taxonomy-tree-contract.json")
+    tree_svg = assert_valid("taxonomy tree example", tree)
+    if 'data-diagram-type="taxonomy_tree"' not in tree_svg or 'class="edge taxonomy-link"' not in tree_svg:
+        raise AssertionError("taxonomy_tree should render parent-child connectors")
+    assert_card_type_scale("taxonomy_tree", tree_svg)
+    if css_font_size(tree_svg, "tree-level-label") < 15:
+        raise AssertionError("taxonomy level labels should be readable at gallery scale")
+    conflict_tree = copy.deepcopy(tree)
+    conflict_tree["edges"] = [{"from": "maps", "to": "glossary", "relation": "parent"}]
+    try:
+        renderer.contract_warnings(conflict_tree)
+    except renderer.DiagramTypeError:
+        pass
+    else:
+        raise AssertionError("taxonomy_tree parent conflicts should fail")
+
+    hub = load_contract("hub-spoke-contract.json")
+    hub_svg = assert_valid("hub-spoke example", hub)
+    if 'data-diagram-type="hub_spoke"' not in hub_svg or 'id="node-hub"' not in hub_svg:
+        raise AssertionError("hub_spoke should render the declared hub")
+    if 'edge-dashed' not in hub_svg:
+        raise AssertionError("hub_spoke should preserve dashed spoke style")
+    assert_hub_spoke_design(hub_svg)
+    size_match = re.search(r'<svg[^>]*height="([0-9.]+)"', hub_svg)
+    if not size_match or float(size_match.group(1)) > 720:
+        raise AssertionError("hub_spoke should use a compact content-driven canvas height")
 
     print("render_semantic_diagram selftest: PASS")
     return 0

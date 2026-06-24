@@ -19,14 +19,10 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - What relation does each edge mean?
    - Which text is an annotation rather than a node?
    - Which node is the entry point or source of truth?
-2. Choose a layout pattern.
-   - The bundled renderer currently renders grouped/layered placement for `auto` and `layered`. Other layout names are contract/design guidance unless you manually author the SVG or extend the renderer.
-   - `layered`: abstraction layers, knowledge architecture, source-boundary maps.
-   - `hierarchy`: parent-child object trees.
-   - `hub_spoke`: one center with surrounding domains/capabilities.
-   - `topology`: object-relation maps with non-tree connections.
-   - `boundary_map`: source-of-truth vs derived/synthesis objects.
-   - `auto`: choose the closest pattern from the contract.
+2. Choose a standard diagram type.
+   - New contracts should declare `diagram_type`. Legacy `layout` is accepted only for compatibility and will produce a warning.
+   - Supported standard types: `layered_knowledge_topology`, `source_boundary_map`, `boundary_ownership_map`, `registry_table`, `taxonomy_tree`, and `hub_spoke`.
+   - See `references/diagram_types.md` for required fields and boundaries.
 3. Choose a visual style package.
    - `style` is required. Use `modern-tech` for the migrated current style, `accent-blueprint` for the blue enterprise blueprint style, or a relative path to a custom `style.json`.
    - Style packages are declarative JSON only; do not execute Python or external code from a style.
@@ -45,7 +41,7 @@ Minimum contract:
 {
   "title": "Diagram title",
   "subtitle": "Optional subtitle",
-  "layout": "auto",
+  "diagram_type": "layered_knowledge_topology",
   "style": "modern-tech",
   "groups": [
     {"id": "g1", "label": "Group label", "type": "layer"}
@@ -71,6 +67,8 @@ Useful node fields:
 - `group`: group/layer id.
 - `row`, `col`: optional 0-based placement controls inside the node's group. Use them for multi-row sibling sets that need stable routing.
 - `importance`: `primary`, `normal`, or `secondary`.
+- For `taxonomy_tree`, use `parent` to point to the parent node id.
+- For `hub_spoke`, use `order` to stabilize spoke order.
 
 Useful group fields:
 
@@ -87,6 +85,15 @@ Useful edge fields:
 - `relation`: semantic relation; keep it source-faithful.
 - `style`: `primary`, `secondary`, or `dashed`.
 - `label`: use sparingly; prefer legends/annotations when labels would collide with paths. The bundled renderer treats edge labels as contract guidance and warns instead of placing them automatically.
+
+Useful table fields for `registry_table`:
+
+- `columns[]`: each column needs `id` and `label`; optional `width`, `align`, and `kind`.
+- `rows[]`: each row is an object keyed by column id; optional `id`, `kind`, and `accent`.
+
+Useful hub field for `hub_spoke`:
+
+- `hub_id`: node id to render at the center.
 
 Useful annotation placements:
 
@@ -150,10 +157,13 @@ Before final delivery, verify:
 py scripts/render_semantic_diagram.py examples/ocs-r300-layered-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/ocs-r300-multirrow-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/accent-blueprint-boundary-contract.json output.svg
-py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/accent-blueprint-boundary-contract.json
+py scripts/render_semantic_diagram.py examples/registry-table-contract.json output.svg
+py scripts/render_semantic_diagram.py examples/taxonomy-tree-contract.json output.svg
+py scripts/render_semantic_diagram.py examples/hub-spoke-contract.json output.svg
+py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/accent-blueprint-boundary-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
 ```
 
-The script is a conservative grouped/layered renderer, not a full diagram engine. Unsupported layout names, unsupported annotation placements, and edge labels produce warnings and are left as contract guidance. If a diagram needs a special layout, use the script output as a starting point and make surgical SVG adjustments while preserving the QA rules above. After manual edits, rerun `scripts/validate_semantic_svg.py` because hand-edited icons, connectors, and layer heights are common failure points.
+The script is a conservative standard-type renderer, not a full arbitrary graph engine. Unsupported diagram types, unsupported annotation placements, and edge labels produce errors or warnings and are left as contract guidance. If a diagram needs a special layout, use the script output as a starting point and make surgical SVG adjustments while preserving the QA rules above. After manual edits, rerun `scripts/validate_semantic_svg.py` because hand-edited icons, connectors, and layer heights are common failure points.
 
 ## Example policy
 
