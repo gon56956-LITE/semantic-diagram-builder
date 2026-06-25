@@ -38,6 +38,10 @@ DIAGRAM_TYPES: dict[str, dict[str, str]] = {
         "strategy": "object_relationship",
         "description": "ER-style object relationship diagram with entity tables, relationships, attributes, and cardinality labels.",
     },
+    "capability_domain_map": {
+        "strategy": "capability_map",
+        "description": "Banded capability/domain map with level labels, aligned columns, and capability dependency overlays.",
+    },
 }
 
 BOUNDARY_OWNERSHIP_VARIANTS = {
@@ -52,6 +56,7 @@ LEGACY_LAYOUT_TYPES = {
     "hub_spoke": "hub_spoke",
     "registry_table": "registry_table",
     "object_relationship": "object_relationship_diagram",
+    "capability_map": "capability_domain_map",
 }
 
 GROUPED_LAYERED_TYPES = {
@@ -80,6 +85,8 @@ def _infer_type(contract: dict[str, Any]) -> str:
         return "hub_spoke"
     if isinstance(contract.get("entities"), list):
         return "object_relationship_diagram"
+    if isinstance(contract.get("levels"), list) and isinstance(contract.get("items"), list):
+        return "capability_domain_map"
     nodes = contract.get("nodes", [])
     if isinstance(nodes, list) and any(isinstance(node, dict) and node.get("parent") for node in nodes):
         return "taxonomy_tree"
@@ -573,6 +580,66 @@ def _validate_object_relationship_diagram(contract: dict[str, Any], diagram_type
         raise DiagramTypeError(f"{diagram_type} duplicate relationship ids")
 
 
+def _validate_capability_domain_map(contract: dict[str, Any], diagram_type: str) -> None:
+    _forbid_fields(contract, diagram_type, {"groups", "nodes", "edges", "rows", "hub_id", "domains", "external_partners", "entities"})
+    levels = _object_items(_list_field(contract, "levels", diagram_type, required=True), "levels", diagram_type)
+    columns = _object_items(_list_field(contract, "columns", diagram_type, required=True), "columns", diagram_type)
+    items = _object_items(_list_field(contract, "items", diagram_type, required=True), "items", diagram_type)
+    relationships = _object_items(_list_field(contract, "relationships", diagram_type, required=False, allow_empty=True), "relationships", diagram_type)
+
+    level_ids = set(_unique_required_ids(levels, "level", diagram_type))
+    column_ids = set(_unique_required_ids(columns, "column", diagram_type))
+    for idx, level in enumerate(levels):
+        _required_str(level, "label", f"{diagram_type} levels[{idx}]")
+        for key in ("kind", "accent"):
+            if key in level and level[key] not in (None, "") and not isinstance(level[key], str):
+                raise DiagramTypeError(f"{diagram_type} levels[{idx}].{key} must be a string")
+    for idx, column in enumerate(columns):
+        _required_str(column, "label", f"{diagram_type} columns[{idx}]")
+        if "width" in column:
+            _validate_number(column["width"], f"{diagram_type} columns[{idx}].width", minimum=80)
+        for key in ("kind", "accent"):
+            if key in column and column[key] not in (None, "") and not isinstance(column[key], str):
+                raise DiagramTypeError(f"{diagram_type} columns[{idx}].{key} must be a string")
+
+    item_ids = set(_unique_required_ids(items, "item", diagram_type))
+    for idx, item in enumerate(items):
+        _required_str(item, "label", f"{diagram_type} items[{idx}]")
+        level = _required_str(item, "level", f"{diagram_type} items[{idx}]")
+        column = _required_str(item, "column", f"{diagram_type} items[{idx}]")
+        if level not in level_ids:
+            raise DiagramTypeError(f'{diagram_type} items[{idx}].level "{level}" is not a level id')
+        if column not in column_ids:
+            raise DiagramTypeError(f'{diagram_type} items[{idx}].column "{column}" is not a column id')
+        for key in ("kind", "accent", "subtitle"):
+            if key in item and item[key] not in (None, "") and not isinstance(item[key], str):
+                raise DiagramTypeError(f"{diagram_type} items[{idx}].{key} must be a string")
+        if "badge" in item:
+            raise DiagramTypeError(f"{diagram_type} items[{idx}].badge is not supported; use levels[].kind or columns[].kind for header icons")
+        if "span" in item:
+            value = item["span"]
+            if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+                raise DiagramTypeError(f"{diagram_type} items[{idx}].span must be a positive integer")
+        if "order" in item:
+            _validate_number(item["order"], f"{diagram_type} items[{idx}].order")
+
+    for idx, relationship in enumerate(relationships):
+        source = _required_str(relationship, "from", f"{diagram_type} relationships[{idx}]")
+        target = _required_str(relationship, "to", f"{diagram_type} relationships[{idx}]")
+        _required_str(relationship, "relation", f"{diagram_type} relationships[{idx}]")
+        if source not in item_ids:
+            raise DiagramTypeError(f'{diagram_type} relationships[{idx}].from "{source}" is not an item id')
+        if target not in item_ids:
+            raise DiagramTypeError(f'{diagram_type} relationships[{idx}].to "{target}" is not an item id')
+        if source == target:
+            raise DiagramTypeError(f'{diagram_type} relationship "{source}->{target}" cannot point to itself')
+        style = relationship.get("style")
+        if style is not None and style not in RELATIONSHIP_STYLES:
+            raise DiagramTypeError(f'{diagram_type} relationships[{idx}].style "{style}" is not supported')
+        if "accent" in relationship and relationship["accent"] not in (None, "") and not isinstance(relationship["accent"], str):
+            raise DiagramTypeError(f"{diagram_type} relationships[{idx}].accent must be a string")
+
+
 def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None = None) -> list[str]:
     """Validate structural fields for a standard semantic diagram contract."""
     contract = _require_contract_dict(contract)
@@ -599,6 +666,8 @@ def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None 
         _validate_hub_spoke(contract, diagram_type)
     elif diagram_type == "object_relationship_diagram":
         _validate_object_relationship_diagram(contract, diagram_type)
+    elif diagram_type == "capability_domain_map":
+        _validate_capability_domain_map(contract, diagram_type)
     else:
         raise DiagramTypeError(f"unsupported diagram_type: {diagram_type}")
     return warnings

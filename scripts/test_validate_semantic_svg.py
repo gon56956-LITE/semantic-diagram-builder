@@ -167,6 +167,68 @@ def main() -> int:
 """,
         "cardinality label",
     )
+    assert_issue(
+        "capability map direct diagonal",
+        """
+<svg width="700" height="360" data-diagram-type="capability_domain_map">
+<g class="capability-level-icon capability-header-icon"></g>
+<g class="capability-column-icon capability-header-icon"></g>
+<text x="40" y="40" class="capability-level-label" style="font-size:15px">Level</text>
+<text x="200" y="40" class="capability-column-label" style="font-size:15px">Column</text>
+<g id="capability-item-a" class="capability-map-item card"><rect x="100" y="90" width="150" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">A</text></g>
+<g id="capability-item-b" class="capability-map-item card"><rect x="420" y="220" width="150" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">B</text></g>
+<path d="M 250 160 L 420 220" class="edge capability-map-link"/>
+</svg>
+""",
+        "direct diagonal",
+    )
+    assert_issue(
+        "capability map short card",
+        """
+<svg width="700" height="360" data-diagram-type="capability_domain_map">
+<g class="capability-level-icon capability-header-icon"></g>
+<g class="capability-column-icon capability-header-icon"></g>
+<text x="40" y="40" class="capability-level-label" style="font-size:15px">Level</text>
+<text x="200" y="40" class="capability-column-label" style="font-size:15px">Column</text>
+<g id="capability-item-a" class="capability-map-item card"><rect x="100" y="90" width="150" height="66" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">A</text></g>
+</svg>
+""",
+        "too short",
+    )
+    assert_issue(
+        "capability map near-card corridor",
+        """
+<svg width="700" height="480" data-diagram-type="capability_domain_map">
+<g class="capability-level-icon capability-header-icon"></g>
+<g class="capability-column-icon capability-header-icon"></g>
+<text x="40" y="40" class="capability-level-label" style="font-size:15px">Level</text>
+<text x="200" y="40" class="capability-column-label" style="font-size:15px">Column</text>
+<g id="capability-item-a" class="capability-map-item card"><rect x="180" y="80" width="100" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">A</text></g>
+<g id="capability-item-b" class="capability-map-item card"><rect x="180" y="300" width="100" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">B</text></g>
+<g id="capability-item-c" class="capability-map-item card"><rect x="120" y="190" width="100" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">C</text></g>
+<path d="M 225 162 L 225 300" class="edge capability-map-link" data-from="a" data-to="b"/>
+</svg>
+""",
+        "too close",
+    )
+    assert_issue(
+        "capability map shared same-color corridor",
+        """
+<svg width="700" height="520" data-diagram-type="capability_domain_map">
+<g class="capability-level-icon capability-header-icon"></g>
+<g class="capability-column-icon capability-header-icon"></g>
+<text x="40" y="40" class="capability-level-label" style="font-size:15px">Level</text>
+<text x="200" y="40" class="capability-column-label" style="font-size:15px">Column</text>
+<g id="capability-item-a" class="capability-map-item card"><rect x="20" y="80" width="80" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">A</text></g>
+<g id="capability-item-b" class="capability-map-item card"><rect x="320" y="240" width="80" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">B</text></g>
+<g id="capability-item-c" class="capability-map-item card"><rect x="20" y="180" width="80" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">C</text></g>
+<g id="capability-item-d" class="capability-map-item card"><rect x="320" y="340" width="80" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">D</text></g>
+<path d="M 100 121 L 200 121 L 200 281 L 320 281" class="edge capability-map-link" style="stroke:#F4F8FF" data-from="a" data-to="b"/>
+<path d="M 100 221 L 200 221 L 200 381 L 320 381" class="edge capability-map-link" style="stroke:#F4F8FF" data-from="c" data-to="d"/>
+</svg>
+""",
+        "same-color vertical corridor",
+    )
     print("validate_semantic_svg selftest: PASS")
     return 0
 

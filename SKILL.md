@@ -21,7 +21,7 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - Which node is the entry point or source of truth?
 2. Choose a standard diagram type.
    - New contracts should declare `diagram_type`. Legacy `layout` is accepted only for compatibility and will produce a warning.
-   - Supported standard types: `layered_knowledge_topology`, `source_boundary_map`, `boundary_ownership_map`, `registry_table`, `taxonomy_tree`, `hub_spoke`, and `object_relationship_diagram`.
+   - Supported standard types: `layered_knowledge_topology`, `source_boundary_map`, `boundary_ownership_map`, `registry_table`, `taxonomy_tree`, `hub_spoke`, `object_relationship_diagram`, and `capability_domain_map`.
    - Some diagram types support a top-level `variant` to choose a layout strategy. `diagram_type` answers "what is this diagram for"; `variant` answers "which arrangement should present it."
    - See `references/diagram_types.md` for required fields and boundaries.
    - See `references/diagram_type_maturity.md` before adding a new type or calling a type mature.
@@ -116,6 +116,16 @@ Useful object relationship fields for `object_relationship_diagram`:
 - Self relationships such as a category parent hierarchy are allowed when the relationship has explicit `row`/`col` or `x`/`y`; they render as a single connector from the diamond to the entity card.
 - Use explicit `entities[].row`/`col` and `relationships[].row`/`col` when the diagram needs stable ER-style placement. Reserve `x`/`y` for rare manual overrides. This renderer is for structured object maps, not arbitrary graph crossing minimization.
 
+Useful capability map fields for `capability_domain_map`:
+
+- `levels[]`: horizontal bands such as strategic objectives, business domains, sub-domains, capabilities, and enabling capabilities. Each level needs `id` and `label`.
+- `columns[]`: stable vertical alignment lanes. Each column needs `id` and `label`; optional `width`, `kind`, and `accent`.
+- `items[]`: capability/domain cards. Each item needs `id`, `label`, `level`, and `column`; optional `subtitle`, `kind`, `accent`, `order`, and `span`.
+- `levels[].kind/accent` and `columns[].kind/accent`: drive the prominent row and column header icons. Keep dense item cards focused on title and subtitle text instead of small per-card badges.
+- `relationships[]`: sparse parent/support overlays between item ids. Use these for the few links that add meaning; do not turn a capability map into an edge mesh.
+- `info_panels[]`: side panels for usage, notes, version, scope, or legend text.
+- Capability maps use a dedicated dense-card specification. The renderer keeps cards tall enough for two title lines plus one subtitle, renders semantic icons in row/column headers, reserves wider row/column corridors, and offsets repeated same-corridor routes so dense overlays remain distinguishable.
+
 Useful annotation placements:
 
 - `footer`: below the main structure.
@@ -184,11 +194,12 @@ py scripts/render_semantic_diagram.py examples/registry-table-contract.json outp
 py scripts/render_semantic_diagram.py examples/taxonomy-tree-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/hub-spoke-contract.json output.svg
 py scripts/render_semantic_diagram.py templates/object_relationship_diagram/reference-contract.json output.svg
+py scripts/render_semantic_diagram.py templates/capability_domain_map/reference-contract.json output.svg
 py scripts/validate_semantic_contract.py examples/ocs-r300-layered-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
 py scripts/test_contract_schema.py
 py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/ocs-r300-multirrow-contract.json examples/accent-blueprint-boundary-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
 py scripts/test_style_gallery_quality.py
-py scripts/build_style_gallery.py templates/template-gallery.html templates/layered_knowledge_topology/reference-contract.json templates/layered_knowledge_topology/stress-contract.json templates/source_boundary_map/reference-contract.json templates/source_boundary_map/stress-contract.json templates/boundary_ownership_map/reference-contract.json templates/boundary_ownership_map/stress-contract.json templates/registry_table/reference-contract.json templates/registry_table/stress-contract.json templates/taxonomy_tree/reference-contract.json templates/taxonomy_tree/stress-contract.json templates/hub_spoke/reference-contract.json templates/hub_spoke/stress-contract.json templates/object_relationship_diagram/reference-contract.json templates/object_relationship_diagram/stress-contract.json
+py scripts/build_style_gallery.py templates/template-gallery.html templates/layered_knowledge_topology/reference-contract.json templates/layered_knowledge_topology/stress-contract.json templates/source_boundary_map/reference-contract.json templates/source_boundary_map/stress-contract.json templates/boundary_ownership_map/reference-contract.json templates/boundary_ownership_map/stress-contract.json templates/registry_table/reference-contract.json templates/registry_table/stress-contract.json templates/taxonomy_tree/reference-contract.json templates/taxonomy_tree/stress-contract.json templates/hub_spoke/reference-contract.json templates/hub_spoke/stress-contract.json templates/object_relationship_diagram/reference-contract.json templates/object_relationship_diagram/stress-contract.json templates/capability_domain_map/reference-contract.json templates/capability_domain_map/stress-contract.json
 py scripts/test_template_library.py
 ```
 

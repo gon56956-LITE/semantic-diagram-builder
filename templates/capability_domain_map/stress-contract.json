@@ -1,0 +1,141 @@
+{
+  "title": "Capability / Domain Map Stress",
+  "subtitle": "Dense capability map with stacked sub-domains, shared enablers, and sparse dependencies",
+  "diagram_type": "capability_domain_map",
+  "style": "accent-blueprint",
+  "width": 2650,
+  "column_width": 200,
+  "column_gap": 56,
+  "level_gap": 40,
+  "item_height": 96,
+  "item_gap": 36,
+  "levels": [
+    {"id": "strategic", "label": "Strategic Objectives", "kind": "glossary", "accent": "accent_purple"},
+    {"id": "domain", "label": "Business Domains", "kind": "index", "accent": "accent_cyan"},
+    {"id": "subdomain", "label": "Sub-Domains", "kind": "source", "accent": "accent_cyan"},
+    {"id": "capability", "label": "Capabilities", "kind": "capability", "accent": "accent_green"},
+    {"id": "enabling", "label": "Enabling Capabilities", "kind": "process", "accent": "accent_orange"}
+  ],
+  "columns": [
+    {"id": "customer", "label": "Customer", "kind": "object", "accent": "accent_cyan"},
+    {"id": "product", "label": "Product", "kind": "package", "accent": "accent_cyan"},
+    {"id": "operations", "label": "Operations", "kind": "process", "accent": "accent_cyan"},
+    {"id": "quality", "label": "Quality", "kind": "quality", "accent": "accent_cyan"},
+    {"id": "finance", "label": "Finance", "kind": "registry", "accent": "accent_cyan"},
+    {"id": "people", "label": "People", "kind": "glossary", "accent": "accent_cyan"},
+    {"id": "technology", "label": "Technology", "kind": "query", "accent": "accent_cyan"},
+    {"id": "data", "label": "Data", "kind": "source", "accent": "accent_cyan"}
+  ],
+  "items": [
+    {"id": "growth", "label": "Growth", "subtitle": "revenue + market", "level": "strategic", "column": "customer", "kind": "glossary", "accent": "accent_purple"},
+    {"id": "experience", "label": "Customer Experience", "subtitle": "speed + trust", "level": "strategic", "column": "product", "span": 2, "kind": "glossary", "accent": "accent_purple"},
+    {"id": "resilience", "label": "Operational Resilience", "subtitle": "flow + continuity", "level": "strategic", "column": "quality", "span": 2, "kind": "glossary", "accent": "accent_purple"},
+    {"id": "compliance", "label": "Governed Scale", "subtitle": "control + evidence", "level": "strategic", "column": "technology", "span": 2, "kind": "glossary", "accent": "accent_purple"},
+    {"id": "customer_domain", "label": "Customer", "level": "domain", "column": "customer", "kind": "index"},
+    {"id": "product_domain", "label": "Product", "level": "domain", "column": "product", "kind": "index"},
+    {"id": "operations_domain", "label": "Operations", "level": "domain", "column": "operations", "kind": "index"},
+    {"id": "quality_domain", "label": "Quality", "level": "domain", "column": "quality", "kind": "index"},
+    {"id": "finance_domain", "label": "Finance", "level": "domain", "column": "finance", "kind": "index"},
+    {"id": "people_domain", "label": "People", "level": "domain", "column": "people", "kind": "index"},
+    {"id": "technology_domain", "label": "Technology", "level": "domain", "column": "technology", "kind": "index"},
+    {"id": "data_domain", "label": "Data", "level": "domain", "column": "data", "kind": "index"},
+    {"id": "lead_mgmt", "label": "Lead Management", "subtitle": "demand capture", "level": "subdomain", "column": "customer", "kind": "source"},
+    {"id": "customer_success", "label": "Customer Success", "subtitle": "adoption + care", "level": "subdomain", "column": "customer", "kind": "source"},
+    {"id": "portfolio", "label": "Portfolio", "subtitle": "offer strategy", "level": "subdomain", "column": "product", "kind": "source"},
+    {"id": "lifecycle", "label": "Lifecycle", "subtitle": "release governance", "level": "subdomain", "column": "product", "kind": "source"},
+    {"id": "planning", "label": "Planning", "subtitle": "demand + supply", "level": "subdomain", "column": "operations", "kind": "source"},
+    {"id": "manufacturing", "label": "Manufacturing", "subtitle": "execution", "level": "subdomain", "column": "operations", "kind": "source"},
+    {"id": "inspection", "label": "Inspection", "subtitle": "acceptance", "level": "subdomain", "column": "quality", "kind": "source"},
+    {"id": "risk_review", "label": "Risk Review", "subtitle": "exceptions", "level": "subdomain", "column": "quality", "kind": "source"},
+    {"id": "accounting", "label": "Accounting", "subtitle": "close + controls", "level": "subdomain", "column": "finance", "kind": "source"},
+    {"id": "fpna", "label": "FP&A", "subtitle": "forecast + plan", "level": "subdomain", "column": "finance", "kind": "source"},
+    {"id": "talent", "label": "Talent", "subtitle": "skills", "level": "subdomain", "column": "people", "kind": "source"},
+    {"id": "workforce_ops", "label": "Workforce Ops", "subtitle": "capacity", "level": "subdomain", "column": "people", "kind": "source"},
+    {"id": "platform_ops", "label": "Platform Ops", "subtitle": "run services", "level": "subdomain", "column": "technology", "kind": "source"},
+    {"id": "integration_ops", "label": "Integration Ops", "subtitle": "interfaces", "level": "subdomain", "column": "technology", "kind": "source"},
+    {"id": "data_governance", "label": "Data Governance", "subtitle": "standards", "level": "subdomain", "column": "data", "kind": "source"},
+    {"id": "analytics_ops", "label": "Analytics Ops", "subtitle": "insight delivery", "level": "subdomain", "column": "data", "kind": "source"},
+    {"id": "pipeline", "label": "Pipeline Management", "subtitle": "opportunity flow", "level": "capability", "column": "customer", "kind": "capability"},
+    {"id": "renewal", "label": "Renewal Management", "subtitle": "retention", "level": "capability", "column": "customer", "kind": "capability"},
+    {"id": "offer_design", "label": "Offer Design", "subtitle": "portfolio fit", "level": "capability", "column": "product", "kind": "capability"},
+    {"id": "change_control", "label": "Change Control", "subtitle": "release risk", "level": "capability", "column": "product", "kind": "capability"},
+    {"id": "production_flow", "label": "Production Flow", "subtitle": "schedule + build", "level": "capability", "column": "operations", "kind": "capability"},
+    {"id": "materials", "label": "Materials Control", "subtitle": "availability", "level": "capability", "column": "operations", "kind": "capability"},
+    {"id": "quality_release", "label": "Quality Release", "subtitle": "evidence review", "level": "capability", "column": "quality", "kind": "capability"},
+    {"id": "exception_mgmt", "label": "Exception Mgmt", "subtitle": "risk response", "level": "capability", "column": "quality", "kind": "capability"},
+    {"id": "margin_planning", "label": "Margin Planning", "subtitle": "profit view", "level": "capability", "column": "finance", "kind": "capability"},
+    {"id": "spend_control", "label": "Spend Control", "subtitle": "approval flow", "level": "capability", "column": "finance", "kind": "capability"},
+    {"id": "skills_planning", "label": "Skills Planning", "subtitle": "competency map", "level": "capability", "column": "people", "kind": "capability"},
+    {"id": "capacity_mgmt", "label": "Capacity Mgmt", "subtitle": "coverage", "level": "capability", "column": "people", "kind": "capability"},
+    {"id": "service_mgmt", "label": "Service Mgmt", "subtitle": "run + improve", "level": "capability", "column": "technology", "kind": "capability"},
+    {"id": "api_mgmt", "label": "API Mgmt", "subtitle": "interfaces", "level": "capability", "column": "technology", "kind": "capability"},
+    {"id": "semantic_layer", "label": "Semantic Layer", "subtitle": "shared meaning", "level": "capability", "column": "data", "kind": "capability"},
+    {"id": "decision_intel", "label": "Decision Intel", "subtitle": "trusted insight", "level": "capability", "column": "data", "kind": "capability"},
+    {"id": "data_platform", "label": "Data Platform", "level": "enabling", "column": "customer", "span": 2, "kind": "process", "accent": "accent_orange"},
+    {"id": "process_excellence", "label": "Process Excellence", "level": "enabling", "column": "operations", "span": 2, "kind": "process", "accent": "accent_orange"},
+    {"id": "risk_controls", "label": "Risk & Controls", "level": "enabling", "column": "finance", "span": 1, "kind": "risk", "accent": "accent_orange"},
+    {"id": "integration_layer", "label": "Integration Layer", "level": "enabling", "column": "technology", "span": 2, "kind": "process", "accent": "accent_orange"}
+  ],
+  "relationships": [
+    {"from": "growth", "to": "customer_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "experience", "to": "product_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "experience", "to": "operations_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "resilience", "to": "quality_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "resilience", "to": "finance_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "compliance", "to": "technology_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "compliance", "to": "data_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "lead_mgmt", "to": "pipeline", "relation": "contains"},
+    {"from": "customer_success", "to": "renewal", "relation": "contains"},
+    {"from": "portfolio", "to": "offer_design", "relation": "contains"},
+    {"from": "lifecycle", "to": "change_control", "relation": "contains"},
+    {"from": "manufacturing", "to": "production_flow", "relation": "contains"},
+    {"from": "planning", "to": "materials", "relation": "contains"},
+    {"from": "inspection", "to": "quality_release", "relation": "contains"},
+    {"from": "risk_review", "to": "exception_mgmt", "relation": "contains"},
+    {"from": "fpna", "to": "margin_planning", "relation": "contains"},
+    {"from": "accounting", "to": "spend_control", "relation": "contains"},
+    {"from": "talent", "to": "skills_planning", "relation": "contains"},
+    {"from": "workforce_ops", "to": "capacity_mgmt", "relation": "contains"},
+    {"from": "platform_ops", "to": "service_mgmt", "relation": "contains"},
+    {"from": "integration_ops", "to": "api_mgmt", "relation": "contains"},
+    {"from": "data_governance", "to": "semantic_layer", "relation": "contains"},
+    {"from": "analytics_ops", "to": "decision_intel", "relation": "contains"},
+    {"from": "data_platform", "to": "pipeline", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
+    {"from": "process_excellence", "to": "production_flow", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
+    {"from": "risk_controls", "to": "exception_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
+    {"from": "integration_layer", "to": "api_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange"}
+  ],
+  "info_panels": [
+    {
+      "id": "usage",
+      "title": "Usage",
+      "kind": "source",
+      "items": [
+        "Stress test: many domains and stacked cards should remain readable.",
+        "Relationships remain sparse; dense overlays belong in a separate dependency view."
+      ]
+    },
+    {
+      "id": "qa",
+      "title": "QA Focus",
+      "kind": "risk",
+      "items": [
+        "Level labels must remain readable.",
+        "Stacked cards must not overlap.",
+        "Connector lines should stay in row gaps."
+      ]
+    },
+    {
+      "id": "version",
+      "title": "Version",
+      "kind": "quality",
+      "items": [
+        {"label": "Template", "value": "capability stress v1"},
+        {"label": "Use", "value": "PPT architecture review"}
+      ]
+    }
+  ],
+  "annotations": [
+    {"text": "Stress template: large capability maps should use alignment first and sparse connectors second.", "placement": "footer"}
+  ]
+}

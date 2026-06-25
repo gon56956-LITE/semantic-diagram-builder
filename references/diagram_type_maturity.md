@@ -22,6 +22,7 @@ Use this matrix to decide whether a standard `diagram_type` is mature enough to 
 | `taxonomy_tree` | Mature for deterministic trees with dense leaves | Root and children with parent links. | Multi-level taxonomy with level labels and parent-child connectors. | Dense leaf level wraps into multiple rows and uses separate local fan-out corridors. | Dense levels wrap instead of forcing huge canvas; parent groups use distinct connector colors; wrapped fan-out corridors and row lanes are staggered; connectors do not become visually ambiguous. |
 | `hub_spoke` | Mature for designed hub-spoke maps | Center hub plus comparable spokes. | Designed hub core and spoke blocks with dashed optional relation. | Many spokes with mixed semantics, dashed spokes, and bottom `info_panels`. | Hub/spoke blocks are designed components, not generic cards; canvas height is content-driven; info panels count as content; dashed spokes are explained by relationship keys or notes. |
 | `object_relationship_diagram` | Reference implementation for ER-style object maps | Two entities with attributes, a relationship diamond, and cardinality labels. | Multi-entity object relationship map with PK/FK badges, weak entity, relationship diamonds, and cardinality key. | Dense object model with many entities, mixed relationship styles, fixed relationship slots, orthogonal routes, and info panels. | Entity cards use table-like sizing; relationship endpoints reference entities; diamonds use row/col slots; non-axis links route orthogonally; cardinality labels stay readable. |
+| `capability_domain_map` | Reference implementation for banded capability maps | Two levels, two columns, domain/capability items, and side usage panel. | Blueprint capability/domain map with objectives, domains, sub-domains, capabilities, enablers, and side panels. | Wide dense map with many columns, stacked sub-domains/capabilities, shared enablers, and sparse dependency overlays. | Level labels and column labels remain readable; stacked cards do not overlap; sparse connectors stay in row gaps; side panels render as readable blueprint blocks. |
 
 ## Shared Maturity Rules
 
@@ -48,6 +49,8 @@ Use this matrix to decide whether a standard `diagram_type` is mature enough to 
 | Relationship diamonds collide with entity cards. | `object_relationship_diagram` | Reserve horizontal and row corridors for diamonds; prefer relationship `row`/`col` slots over raw `x`/`y`. |
 | Dense ER links become ambiguous diagonal lines. | `object_relationship_diagram` | Relationship diamonds use fixed row/column slots, and non-axis card-to-diamond links route as orthogonal polylines. |
 | Relationship cardinality labels collide with entity cards or diamonds. | `object_relationship_diagram` | Place labels near anchors with enough clearance; use explicit diamond placement in reference templates. |
+| Capability maps become unreadable spiderwebs. | `capability_domain_map` | Keep relationships sparse; alignment and banding must carry the primary structure. |
+| Capability cards stack or span into adjacent lanes. | `capability_domain_map` | Use row/column slots, stack ordering, and canvas widening before shrinking text. |
 | Accent Blueprint becomes generic dark dashboard. | All Accent Blueprint outputs | Keep deep blue grid/white linework as the base; use accents sparingly for semantic differentiation. |
 
 ## Promotion Checklist
@@ -72,4 +75,3 @@ These are good next candidates because they are common semantic diagrams but nee
 | Candidate Type | Why Add It | Likely Strategy | First Stress Focus |
 | --- | --- | --- | --- |
 | `ontology_map` | Concept/class/relationship diagrams with instances and datatypes. | Graph-like ontology layout with constrained lanes or clustered regions. | Class/instance differentiation, relationship labels, avoiding generic graph spaghetti. |
-| `capability_domain_map` | Business capability/domain maps that are not strictly layered. | Matrix or nested-domain layout with rows/columns, capability bands, and ownership overlays. | Dense capability grids, domain ownership, shared capability boundaries, legend clarity. |

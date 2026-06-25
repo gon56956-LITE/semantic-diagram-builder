@@ -221,6 +221,32 @@ def assert_object_relationship_design(svg: str) -> None:
         raise AssertionError("object_relationship_diagram attribute rows should remain readable")
 
 
+def assert_capability_map_design(svg: str) -> None:
+    if 'data-diagram-type="capability_domain_map"' not in svg:
+        raise AssertionError("capability_domain_map should declare its diagram type")
+    if 'class="capability-map-item card"' not in svg:
+        raise AssertionError("capability_domain_map should render dedicated capability map items")
+    if 'capability-level-label' not in svg or 'capability-column-label' not in svg:
+        raise AssertionError("capability_domain_map should render level and column labels")
+    if svg.count('capability-level-icon') < 5 or svg.count('capability-column-icon') < 4:
+        raise AssertionError("capability_domain_map should render prominent row and column header icons")
+    if 'class="edge capability-map-link"' not in svg:
+        raise AssertionError("capability_domain_map should render capability relationship links")
+    if 'class="card node-card"' in svg:
+        raise AssertionError("capability_domain_map should not fall back to generic node cards")
+    if 'class="capability-badge semantic-badge"' in svg:
+        raise AssertionError("capability_domain_map should keep semantic badges out of dense item cards")
+    title_sizes = text_font_sizes(svg, "capability-title")
+    sub_sizes = text_font_sizes(svg, "capability-sub")
+    if not title_sizes or min(title_sizes) < 16:
+        raise AssertionError("capability_domain_map item titles should remain readable")
+    if sub_sizes and min(sub_sizes) < 13:
+        raise AssertionError("capability_domain_map item subtitles should remain readable")
+    item_heights = [float(value) for value in re.findall(r'class="capability-map-item card"[^>]*>.*?<rect [^>]*height="([0-9.]+)"', svg, re.S)]
+    if not item_heights or min(item_heights) < 94:
+        raise AssertionError("capability_domain_map item cards should be tall enough for dense title/subtitle content")
+
+
 def assert_no_direct_diagonal_object_links(svg: str) -> None:
     direct_line = re.compile(r'^M ([-0-9.]+) ([-0-9.]+) L ([-0-9.]+) ([-0-9.]+)$')
     for d in path_ds(svg, {"object-relationship-link"}):
@@ -488,6 +514,25 @@ def main() -> int:
     if not re.search(r'data-link-end="self"[^>]*data-card-anchor="top"[^>]*data-diamond-anchor="bottom"[^>]*data-relationship="category_parent"', object_stress_svg):
         raise AssertionError("object_relationship_diagram should honor explicit self-relationship anchors")
     assert_no_direct_diagonal_object_links(object_stress_svg)
+
+    capability_map = load_json("templates/capability_domain_map/reference-contract.json")
+    capability_svg = assert_valid("capability domain map reference template", capability_map)
+    assert_capability_map_design(capability_svg)
+    _dtype, capability_strategy, _warnings = renderer.diagram_for_contract(capability_map)
+    if capability_strategy != "capability_map":
+        raise AssertionError("capability_domain_map should select capability_map strategy")
+    if capability_svg.count('class="info-panel capability-side-panel"') < 3:
+        raise AssertionError("capability_domain_map should render side info panels")
+    capability_stress = load_json("templates/capability_domain_map/stress-contract.json")
+    capability_stress_svg = assert_valid("capability domain map stress template", capability_stress)
+    if capability_stress_svg.count('class="capability-map-item card"') < 40:
+        raise AssertionError("capability_domain_map stress template should exercise dense capability cards")
+    if capability_stress_svg.count('class="edge capability-map-link"') < 20:
+        raise AssertionError("capability_domain_map stress template should exercise sparse but meaningful overlays")
+    if capability_stress_svg.count('class="info-panel capability-side-panel"') < 3:
+        raise AssertionError("capability_domain_map stress template should render side panels")
+    if capability_stress_svg.count('capability-column-icon') < 8:
+        raise AssertionError("capability_domain_map stress template should exercise column header icons")
 
     print("render_semantic_diagram selftest: PASS")
     return 0

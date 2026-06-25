@@ -138,6 +138,41 @@ Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `h
 
 Rules: every relationship endpoint must reference an entity id; self relationships are supported for hierarchy or recursive ownership relations when the relationship has explicit `row`/`col` or `x`/`y` placement. Relationship labels render inside diamonds, so keep them short. Use `weak: true` for dashed weak-entity cards. Use PK/FK roles instead of embedding key semantics only in the attribute name. Plan relationship diamonds as fixed slots before evaluating connector paths; non-axis relationship links should route as orthogonal polylines rather than direct diagonals. Use explicit card or diamond anchors when a relationship sits near another diamond and the automatic side would make the connector appear to start or end on the wrong corner.
 
+## capability_domain_map
+
+Use for strategic objectives, business domains, sub-domains, capabilities, enabling capabilities, and sparse support/dependency overlays.
+
+Contract shape: `levels`, `columns`, `items`, optional `relationships`, optional `info_panels`, optional `annotations`.
+
+Renderer strategy: banded capability map with dedicated left-side level labels, stable column lanes, dense but legible capability cards, sparse orthogonal connector overlays, and right-side `info_panels`.
+
+Required fields:
+
+- `levels[].id`
+- `levels[].label`
+- `columns[].id`
+- `columns[].label`
+- `items[].id`
+- `items[].label`
+- `items[].level`
+- `items[].column`
+
+Optional fields:
+
+- `levels[].kind`, `accent`
+- `columns[].width`, `kind`, `accent`
+- `items[].subtitle`, `kind`, `accent`, `order`, `span`
+- `relationships[].from`, `to`, `relation`, optional `style`, optional `accent`
+- `info_panels[]` for usage, notes, version, legend, or scope panels
+
+Unsupported structural fields: `groups`, `nodes`, `edges`, `rows`, `hub_id`, `domains`, `external_partners`, `entities`.
+
+Rules: every item must reference a declared level and column. `items[].span` is a positive integer and should be used sparingly for objectives or shared enablers. Relationship endpoints must reference item ids and should remain sparse; the primary reading path is the grid alignment, not the connector mesh. Use this type when row/column alignment is the message; use `boundary_ownership_map` when ownership and external boundaries are the message.
+
+Spacing rules: capability cards are not the same component as layered topology cards. They reserve enough height for two title lines plus one short subtitle, and the renderer enforces wider row/column corridors so same-column stacked cards can route around each other without touching neighboring cards. Repeated same-corridor routes are offset into lanes; if many same-color overlays still compete for attention, widen the canvas or split the dependencies into a separate view.
+
+Header icon rules: dense capability cards do not render per-card badges. Use `levels[].kind/accent` and `columns[].kind/accent` to render prominent semantic icons in the row and column headers; the cards themselves stay focused on title and subtitle text.
+
 ## Planned Candidate Types
 
 The following types have design intent but are not mature renderer strategies yet. Do not declare them as `diagram_type` until they are promoted into the registry.
@@ -152,19 +187,9 @@ First strategy goal: constrained ontology layout with class lanes or clusters, e
 
 First stress focus: class/instance differentiation, relationship-label readability, one-to-many cardinality labels, and avoiding graph spaghetti.
 
-### capability_domain_map
-
-Use for strategic objectives, business domains, sub-domains, capabilities, enabling capabilities, and ownership overlays.
-
-Likely contract shape: `levels` or `bands`, `domains`, `capabilities`, optional `relationships`, `legend`, and `info_panels`.
-
-First strategy goal: grid/banded domain layout with dedicated row headers, nested capability blocks, optional dashed dependency overlays, and a side rule/version panel.
-
-First stress focus: dense capability grids, domain-width balancing, shared capability boundaries, and legend clarity.
-
 ## Shared info_panels
 
-`registry_table`, `hub_spoke`, and `object_relationship_diagram` support bottom information panels for dense legends, rules, use cases, metadata, cardinality keys, or relationship keys.
+`registry_table`, `hub_spoke`, `object_relationship_diagram`, and `capability_domain_map` support information panels for dense legends, rules, use cases, metadata, cardinality keys, relationship keys, or usage notes.
 
 Fields:
 

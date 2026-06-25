@@ -1685,6 +1685,373 @@ def _render_boundary_ownership_matrix(contract: dict, style: dict, diagram_type:
     return "\n".join(parts) + "\n"
 
 
+def _capability_header_icon_svg(kind: str, x: float, y: float, color: str, style: dict, class_name: str) -> str:
+    icon_kind = kind or "index"
+    return (
+        f'<g class="{class_name} capability-header-icon" data-kind="{e(icon_kind)}">'
+        f'<rect x="{x}" y="{y}" width="30" height="30" rx="6" fill="{pale_for(style, color)}" '
+        f'stroke="{color}" stroke-width="1.2" stroke-opacity="0.95"/>'
+        f'{icon_svg(icon_kind, x + 5, y + 5, color, style)}'
+        f'</g>'
+    )
+
+
+def _capability_item_svg(item: dict, x: float, y: float, w: float, h: float, style: dict, canvas_w: float) -> str:
+    kind = str(item.get("kind", "capability"))
+    color = _accent_color(style, item, "capability")
+    card = _style_component(style, "card")
+    fill = card.get("fill", "card_fill")
+    radius = min(float(card.get("radius", 8)), 6)
+    title_size = _clamp(16.5 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 16.5, 18.2)
+    sub_size = _clamp(13.2 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 13.0, 14.5)
+    text_primary = style_color(style, "text_primary", "#F4F8FF")
+    text_secondary = style_color(style, "text_secondary", "#C9DAF5")
+    text_x = x + 16
+    text_w = max(80, w - 30)
+    title_lines = wrap_text(str(item.get("label", item.get("id", "Capability"))), max_chars=max(8, int(text_w / (title_size * 0.55))), max_lines=2)
+    sub_lines = wrap_text(str(item.get("subtitle", "")), max_chars=max(10, int(text_w / (sub_size * 0.52))), max_lines=1) if item.get("subtitle") else []
+    title_line_h = title_size + 2
+    sub_gap = 4
+    block_h = len(title_lines) * title_line_h + (sub_gap + sub_size if sub_lines else 0)
+    text_y = y + (h - block_h) / 2 + title_size
+    parts = [f'<g id="capability-item-{e(item.get("id", ""))}" class="capability-map-item card" data-kind="{e(kind)}">']
+    parts.append(
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" '
+        f'{_paint_attr(style, "fill", fill, "#FFFFFF", card.get("fill_opacity"))} '
+        f'stroke="{color}" stroke-width="1.2"/>'
+    )
+    for idx, line in enumerate(title_lines):
+        parts.append(
+            f'<text x="{text_x}" y="{text_y + idx * title_line_h}" class="capability-title" '
+            f'style="font-size:{_fmt_px(title_size)};font-weight:700;fill:{text_primary}">{e(line)}</text>'
+        )
+    if sub_lines:
+        parts.append(
+            f'<text x="{text_x}" y="{text_y + len(title_lines) * title_line_h + sub_gap}" class="capability-sub" '
+            f'style="font-size:{_fmt_px(sub_size)};font-weight:500;fill:{text_secondary}">{e(sub_lines[0])}</text>'
+        )
+    parts.append('</g>')
+    return "".join(parts)
+
+
+def _render_capability_side_panels(
+    parts: list[str],
+    panels: list[dict],
+    style: dict,
+    x: float,
+    y: float,
+    w: float,
+    canvas_w: float,
+) -> float:
+    if not panels:
+        return 0.0
+    panel_gap = 18.0
+    cur_y = y
+    total = 0.0
+    body_size = _clamp(13.8 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 13.5, 15.0)
+    line_h = body_size + 4
+    for panel in panels:
+        h = _info_panel_height(panel, w, canvas_w)
+        color = _accent_color(style, panel, "object")
+        panel_id = str(panel.get("id", panel.get("title", "panel"))).lower().replace(" ", "-")
+        parts.append(f'<g class="info-panel capability-side-panel" data-panel-id="{e(panel_id)}">')
+        parts.append(_panel_rect_svg(style, x, cur_y, w, h, fill="panel_fill", stroke=color, stroke_opacity=0.64, radius=6))
+        parts.append(f'<text x="{x + 18}" y="{cur_y + 28}" class="info-panel-title">{e(panel.get("title", "Info"))}</text>')
+        text_y = cur_y + 56
+        max_chars = max(18, int((w - 48) / (body_size * 0.52)))
+        items = panel.get("items", [])
+        if not isinstance(items, list):
+            items = []
+        for item in items:
+            text, kind, accent = _info_panel_item_text(item)
+            if not text:
+                continue
+            item_color = style_color(style, accent, "") if accent else kind_accent(style, kind or panel.get("kind", "object"))
+            if not VALID_HEX.match(item_color):
+                item_color = color
+            lines = wrap_text(text, max_chars=max_chars, max_lines=3)
+            parts.append(f'<rect x="{x + 18}" y="{text_y - 10}" width="9" height="9" rx="2" fill="{item_color}" opacity="0.95"/>')
+            for idx, line in enumerate(lines):
+                parts.append(f'<text x="{x + 36}" y="{text_y + idx * line_h}" class="info-panel-item" style="font-size:{_fmt_px(body_size)}">{e(line)}</text>')
+            text_y += max(1, len(lines)) * line_h + 6
+        parts.append('</g>')
+        cur_y += h + panel_gap
+        total += h + panel_gap
+    return max(0.0, total - panel_gap)
+
+
+def _vertical_segment_blocked(
+    x: float,
+    y1: float,
+    y2: float,
+    obstacles: list[tuple[float, float, float, float]],
+) -> bool:
+    low = min(y1, y2)
+    high = max(y1, y2)
+    for ox, oy, ow, oh in obstacles:
+        if ox + 2 < x < ox + ow - 2 and max(low, oy + 2) < min(high, oy + oh - 2):
+            return True
+    return False
+
+
+def _capability_corridor_base_x(
+    a: tuple[float, float, float, float],
+    b: tuple[float, float, float, float],
+    obstacles: list[tuple[float, float, float, float]],
+    sy: float,
+    ty: float,
+    corridor_offset: float,
+) -> float:
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    left_x = min(ax, bx) - corridor_offset
+    right_x = max(ax + aw, bx + bw) + corridor_offset
+
+    def corridor_score(x: float) -> int:
+        low = min(sy, ty)
+        high = max(sy, ty)
+        score = 0
+        for ox, oy, ow, oh in obstacles:
+            if ox - 8 < x < ox + ow + 8 and max(low, oy - 8) < min(high, oy + oh + 8):
+                score += 1
+        return score
+
+    return left_x if corridor_score(left_x) <= corridor_score(right_x) else right_x
+
+
+def _capability_detour_corridor_key(
+    a: tuple[float, float, float, float],
+    b: tuple[float, float, float, float],
+    obstacles: list[tuple[float, float, float, float]],
+    corridor_offset: float,
+) -> float | None:
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    acx = ax + aw / 2
+    bcx = bx + bw / 2
+    if ay + ah <= by:
+        sx, sy = acx, ay + ah
+        tx, ty = bcx, by
+    elif by + bh <= ay:
+        sx, sy = acx, ay
+        tx, ty = bcx, by + bh
+    else:
+        return None
+    if abs(sx - tx) < EPS:
+        needs_detour = _vertical_segment_blocked(sx, sy, ty, obstacles)
+    else:
+        lane_y = (sy + ty) / 2
+        needs_detour = _vertical_segment_blocked(sx, sy, lane_y, obstacles) or _vertical_segment_blocked(tx, lane_y, ty, obstacles)
+    if not needs_detour:
+        return None
+    return round(_capability_corridor_base_x(a, b, obstacles, sy, ty, corridor_offset), 2)
+
+
+def _capability_lane_shift(index: int, corridor_offset: float) -> float:
+    offsets = [0.0, -8.0, 8.0, -14.0, 14.0, -20.0, 20.0]
+    raw = offsets[index % len(offsets)]
+    limit = max(0.0, corridor_offset - 10.0)
+    return max(-limit, min(limit, raw))
+
+
+def _capability_link_path(
+    a: tuple[float, float, float, float],
+    b: tuple[float, float, float, float],
+    obstacles: list[tuple[float, float, float, float]] | None = None,
+    corridor_offset: float = 20.0,
+    lane_shift: float = 0.0,
+) -> str:
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    obstacles = obstacles or []
+    acx, acy = ax + aw / 2, ay + ah / 2
+    bcx, bcy = bx + bw / 2, by + bh / 2
+
+    def detour_path(sx: float, sy: float, tx: float, ty: float) -> str:
+        direction = 1 if ty >= sy else -1
+        stub = 8.0
+        corridor_x = _capability_corridor_base_x(a, b, obstacles, sy, ty, corridor_offset) + lane_shift
+        return _rounded_path(
+            [
+                (sx, sy),
+                (sx, sy + direction * stub),
+                (corridor_x, sy + direction * stub),
+                (corridor_x, ty - direction * stub),
+                (tx, ty - direction * stub),
+                (tx, ty),
+            ],
+            radius=10,
+        )
+
+    if ay + ah <= by:
+        sx, sy = acx, ay + ah
+        tx, ty = bcx, by
+        if abs(sx - tx) < EPS:
+            if _vertical_segment_blocked(sx, sy, ty, obstacles):
+                return detour_path(sx, sy, tx, ty)
+            return _rounded_path([(sx, sy), (tx, ty)])
+        lane_y = (sy + ty) / 2
+        if _vertical_segment_blocked(sx, sy, lane_y, obstacles) or _vertical_segment_blocked(tx, lane_y, ty, obstacles):
+            return detour_path(sx, sy, tx, ty)
+        return _rounded_path([(sx, sy), (sx, lane_y), (tx, lane_y), (tx, ty)])
+    if by + bh <= ay:
+        sx, sy = acx, ay
+        tx, ty = bcx, by + bh
+        if abs(sx - tx) < EPS:
+            if _vertical_segment_blocked(sx, sy, ty, obstacles):
+                return detour_path(sx, sy, tx, ty)
+            return _rounded_path([(sx, sy), (tx, ty)])
+        lane_y = (sy + ty) / 2
+        if _vertical_segment_blocked(sx, sy, lane_y, obstacles) or _vertical_segment_blocked(tx, lane_y, ty, obstacles):
+            return detour_path(sx, sy, tx, ty)
+        return _rounded_path([(sx, sy), (sx, lane_y), (tx, lane_y), (tx, ty)])
+    if acx <= bcx:
+        return _rounded_path([(ax + aw, acy), (bx, bcy)])
+    return _rounded_path([(ax, acy), (bx + bw, bcy)])
+
+
+def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str) -> str:
+    metrics = layout_metrics(style)
+    levels = [level for level in contract.get("levels", []) if isinstance(level, dict)]
+    columns = [column for column in contract.get("columns", []) if isinstance(column, dict)]
+    items = [item for item in contract.get("items", []) if isinstance(item, dict)]
+    panels = _info_panels(contract)
+    margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
+    top_y = int(contract.get("top_y", metrics["top_y"]))
+    level_label_w = float(contract.get("level_label_width", 160))
+    col_gap = max(float(contract.get("column_gap", 44)), 44.0)
+    row_gap = max(float(contract.get("level_gap", 36)), 36.0)
+    item_h = max(float(contract.get("item_height", 96)), 96.0)
+    item_gap = max(float(contract.get("item_gap", 28)), 28.0)
+    default_col_w = max(float(contract.get("column_width", 205)), 200.0)
+    side_w = float(contract.get("side_panel_width", 300)) if panels else 0.0
+    side_gap = 30.0 if panels else 0.0
+    header_h = 56.0
+    label_gap = max(float(contract.get("label_gap", 44)), 44.0)
+    col_widths = [float(column.get("width", default_col_w)) for column in columns]
+    grid_w = sum(col_widths) + max(0, len(columns) - 1) * col_gap
+    map_w = level_label_w + label_gap + grid_w
+    natural_w = 2 * margin_x + map_w + side_gap + side_w
+    width = int(max(float(contract.get("width", 0)), natural_w))
+    content_x = (width - (map_w + side_gap + side_w)) / 2
+    map_x = content_x
+    grid_x = map_x + level_label_w + label_gap
+    side_x = map_x + map_w + side_gap
+
+    column_x: dict[str, float] = {}
+    cur_x = grid_x
+    for idx, column in enumerate(columns):
+        column_x[str(column["id"])] = cur_x
+        cur_x += col_widths[idx] + col_gap
+    column_index = {str(column["id"]): idx for idx, column in enumerate(columns)}
+
+    grouped: dict[tuple[str, str], list[dict]] = {}
+    for item in items:
+        grouped.setdefault((str(item.get("level")), str(item.get("column"))), []).append(item)
+    order_index = {id(item): idx for idx, item in enumerate(items)}
+    for stack in grouped.values():
+        stack.sort(key=lambda item: (item.get("order", order_index[id(item)]), order_index[id(item)]))
+
+    level_heights: dict[str, float] = {}
+    for level in levels:
+        level_id = str(level["id"])
+        max_stack = max((len(stack) for (stack_level, _col), stack in grouped.items() if stack_level == level_id), default=1)
+        level_heights[level_id] = max(float(level.get("height", 0) or 0), max(86.0, max_stack * item_h + max(0, max_stack - 1) * item_gap + 24))
+
+    map_y = top_y + header_h + 18
+    map_h = sum(level_heights[str(level["id"])] for level in levels) + max(0, len(levels) - 1) * row_gap
+    side_h = sum(_info_panel_height(panel, side_w, width) for panel in panels) + max(0, len(panels) - 1) * 18 if panels else 0
+    height = int(max(float(contract.get("height", 0)), map_y + max(map_h, side_h) + 76))
+
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+    line = style_color(style, "line_primary", "#F4F8FF")
+    secondary = style_color(style, "text_secondary", "#C9DAF5")
+    level_label_size = _clamp(14.5 * _clamp(width / 1500.0, 0.95, 1.08), 14.5, 16.0)
+    col_label_size = _clamp(14.5 * _clamp(width / 1500.0, 0.95, 1.08), 14.5, 16.0)
+
+    parts.append(_panel_rect_svg(style, map_x, top_y, map_w, header_h, fill="panel_fill", stroke=line, stroke_opacity=0.52, radius=6))
+    for idx, column in enumerate(columns):
+        cx = column_x[str(column["id"])]
+        cw = col_widths[idx]
+        color = _accent_color(style, column, "capability")
+        icon_kind = str(column.get("kind", "index"))
+        parts.append(f'<rect x="{cx}" y="{top_y + 9}" width="{cw}" height="{header_h - 18}" rx="5" fill="none" stroke="{color}" stroke-opacity="0.7" stroke-width="1"/>')
+        parts.append(_capability_header_icon_svg(icon_kind, cx + 12, top_y + 13, color, style, "capability-column-icon"))
+        parts.append(
+            f'<text x="{cx + 52}" y="{top_y + 35}" text-anchor="start" class="capability-column-label" '
+            f'style="font-size:{_fmt_px(col_label_size)};font-weight:700;fill:{line}">{e(column.get("label", column.get("id")))}</text>'
+        )
+
+    positions: dict[str, tuple[float, float, float, float]] = {}
+    level_y: dict[str, float] = {}
+    y = map_y
+    for level in levels:
+        level_id = str(level["id"])
+        row_h = level_heights[level_id]
+        level_y[level_id] = y
+        color = _accent_color(style, level, "capability")
+        icon_kind = str(level.get("kind", "capability"))
+        parts.append(_panel_rect_svg(style, map_x, y, map_w, row_h, fill="panel_fill", stroke=line, stroke_opacity=0.22, radius=6))
+        parts.append(f'<rect x="{map_x}" y="{y}" width="{level_label_w}" height="{row_h}" rx="5" fill="none" stroke="{color}" stroke-width="1.2" stroke-opacity="0.95"/>')
+        parts.append(_capability_header_icon_svg(icon_kind, map_x + 16, y + row_h / 2 - 15, color, style, "capability-level-icon"))
+        label_x = map_x + 58
+        label_w = max(70, level_label_w - 72)
+        label_lines = wrap_text(str(level.get("label", level_id)), max_chars=max(8, int(label_w / (level_label_size * 0.55))), max_lines=2)
+        start_y = y + row_h / 2 - (len(label_lines) - 1) * (level_label_size + 2) / 2 + level_label_size / 3
+        for idx, line_text in enumerate(label_lines):
+            parts.append(
+                f'<text x="{label_x}" y="{start_y + idx * (level_label_size + 2)}" '
+                f'text-anchor="start" class="capability-level-label" style="font-size:{_fmt_px(level_label_size)};font-weight:700;fill:{color}">{e(line_text)}</text>'
+            )
+        for (stack_level, col_id), stack in grouped.items():
+            if stack_level != level_id:
+                continue
+            if col_id not in column_x:
+                continue
+            col_idx = column_index[col_id]
+            span = 1
+            for stack_idx, item in enumerate(stack):
+                span = max(1, int(item.get("span", 1)))
+                item_x = column_x[col_id]
+                item_w = sum(col_widths[col_idx:min(len(col_widths), col_idx + span)]) + max(0, min(span, len(col_widths) - col_idx) - 1) * col_gap
+                stack_h = len(stack) * item_h + max(0, len(stack) - 1) * item_gap
+                item_y = y + (row_h - stack_h) / 2 + stack_idx * (item_h + item_gap)
+                positions[str(item["id"])] = (item_x, item_y, item_w, item_h)
+        y += row_h + row_gap
+
+    corridor_offset = col_gap / 2
+    corridor_counts: dict[float, int] = {}
+    for rel in contract.get("relationships", []) or []:
+        if not isinstance(rel, dict):
+            continue
+        source = str(rel.get("from", ""))
+        target = str(rel.get("to", ""))
+        if source not in positions or target not in positions:
+            continue
+        color = style_color(style, rel.get("accent"), "")
+        if not VALID_HEX.match(color):
+            color = style_color(style, "accent_orange" if rel.get("relation") in {"enables", "dependency", "supports"} else "line_primary", "#F4F8FF")
+        dash = ' stroke-dasharray="6 5"' if rel.get("style") in {"dashed", "secondary"} or rel.get("relation") in {"supports", "shared"} else ""
+        obstacles = [rect for item_id, rect in positions.items() if item_id not in {source, target}]
+        corridor_key = _capability_detour_corridor_key(positions[source], positions[target], obstacles, corridor_offset)
+        corridor_index = corridor_counts.get(corridor_key, 0) if corridor_key is not None else 0
+        if corridor_key is not None:
+            corridor_counts[corridor_key] = corridor_index + 1
+        lane_shift = _capability_lane_shift(corridor_index, corridor_offset) if corridor_key is not None else 0.0
+        path = _capability_link_path(positions[source], positions[target], obstacles, corridor_offset, lane_shift)
+        parts.append(f'<path d="{path}" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:{color};opacity:0.86"{dash} data-from="{e(source)}" data-to="{e(target)}" data-relation="{e(rel.get("relation", ""))}"/>')
+
+    for item_id in sorted(positions, key=lambda iid: (positions[iid][1], positions[iid][0])):
+        item = next(item for item in items if str(item.get("id")) == item_id)
+        parts.append(_capability_item_svg(item, *positions[item_id], style, width))
+
+    if panels:
+        _render_capability_side_panels(parts, panels, style, side_x, top_y, side_w, width)
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
 TREE_PARENT_RELATIONS = {"parent", "parent_of", "contains", "has_child", "classifies"}
 
 
@@ -2711,6 +3078,8 @@ def render(contract: dict, contract_path: Path | None = None, style: dict | None
         return _render_hub_spoke(contract, style, diagram_type)
     if strategy == "object_relationship":
         return _render_object_relationship(contract, style, diagram_type)
+    if strategy == "capability_map":
+        return _render_capability_domain_map(contract, style, diagram_type)
     if strategy == "boundary_matrix":
         return _render_boundary_ownership_matrix(contract, style, diagram_type)
     if strategy == "grouped_layered":

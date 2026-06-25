@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1128" height="541" viewBox="0 0 1128 541" role="img" aria-label="Capability Domain Map Minimal" data-style="modern-tech" data-diagram-type="capability_domain_map">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .info-panel-title{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .info-panel-item{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1128" height="541" rx="28" fill="#F8FBFF"/>
+<text x="564.0" y="54" text-anchor="middle" class="title">Capability Domain Map Minimal</text>
+<text x="564.0" y="80" text-anchor="middle" class="subtitle">Small capability/domain map contract</text>
+<rect x="70.0" y="115" width="658.0" height="56.0" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#334155" stroke-opacity="0.52" stroke-width="1"/>
+<rect x="274.0" y="124" width="205.0" height="38.0" rx="5" fill="none" stroke="#06B6D4" stroke-opacity="0.7" stroke-width="1"/>
+<g class="capability-column-icon capability-header-icon" data-kind="object"><rect x="286.0" y="128" width="30" height="30" rx="6" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="301.0" cy="143" r="8" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.7"/><path d="M296.0,143 H306.0 M301.0,138 V148" class="icon-line" stroke="#06B6D4"/></g>
+<text x="326.0" y="150" text-anchor="start" class="capability-column-label" style="font-size:14.5px;font-weight:700;fill:#334155">Customer</text>
+<rect x="523.0" y="124" width="205.0" height="38.0" rx="5" fill="none" stroke="#06B6D4" stroke-opacity="0.7" stroke-width="1"/>
+<g class="capability-column-icon capability-header-icon" data-kind="process"><rect x="535.0" y="128" width="30" height="30" rx="6" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="544.0" cy="144" r="4" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.6"/><circle cx="558.0" cy="137" r="4" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.6"/><circle cx="558.0" cy="151" r="4" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.6"/><path d="M548.0,144 H552.0 M554.0,140 L552.0,144 L554.0,148" class="icon-line" stroke="#06B6D4"/></g>
+<text x="575.0" y="150" text-anchor="start" class="capability-column-label" style="font-size:14.5px;font-weight:700;fill:#334155">Operations</text>
+<rect x="70.0" y="189.0" width="658.0" height="120.0" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#334155" stroke-opacity="0.22" stroke-width="1"/>
+<rect x="70.0" y="189.0" width="160.0" height="120.0" rx="5" fill="none" stroke="#06B6D4" stroke-width="1.2" stroke-opacity="0.95"/>
+<g class="capability-level-icon capability-header-icon" data-kind="index"><rect x="86.0" y="234.0" width="30" height="30" rx="6" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.2" stroke-opacity="0.95"/><rect x="91.0" y="239.0" width="18" height="20" rx="3" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.7"/><path d="M95.0,245.0 H105.0 M95.0,250.0 H105.0 M95.0,255.0 H102.0" class="icon-line" stroke="#06B6D4"/></g>
+<text x="128.0" y="245.58333333333334" text-anchor="start" class="capability-level-label" style="font-size:14.5px;font-weight:700;fill:#06B6D4">Business</text>
+<text x="128.0" y="262.08333333333337" text-anchor="start" class="capability-level-label" style="font-size:14.5px;font-weight:700;fill:#06B6D4">Domains</text>
+<rect x="70.0" y="345.0" width="658.0" height="120.0" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#334155" stroke-opacity="0.22" stroke-width="1"/>
+<rect x="70.0" y="345.0" width="160.0" height="120.0" rx="5" fill="none" stroke="#22C55E" stroke-width="1.2" stroke-opacity="0.95"/>
+<g class="capability-level-icon capability-header-icon" data-kind="capability"><rect x="86.0" y="390.0" width="30" height="30" rx="6" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.2" stroke-opacity="0.95"/><rect x="91.0" y="398.0" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M91.0,403.0 H111.0 M101.0,398.0 V414.0" class="icon-line" stroke="#22C55E"/></g>
+<text x="128.0" y="409.8333333333333" text-anchor="start" class="capability-level-label" style="font-size:14.5px;font-weight:700;fill:#22C55E">Capabilities</text>
+<path d="M 376.5 297.0 L 376.5 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#334155;opacity:0.86" data-from="customer_domain" data-to="customer_intake" data-relation="contains"/>
+<path d="M 625.5 297.0 L 625.5 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#334155;opacity:0.86" data-from="operations_domain" data-to="work_execution" data-relation="contains"/>
+<g id="capability-item-customer_domain" class="capability-map-item card" data-kind="index"><rect x="274.0" y="201.0" width="205.0" height="96.0" rx="6" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="1.2"/><text x="290.0" y="247.75" class="capability-title" style="font-size:16.5px;font-weight:700;fill:#0F172A">Customer</text><text x="290.0" y="270.25" class="capability-sub" style="font-size:13px;font-weight:500;fill:#64748B">front-office scope</text></g>
+<g id="capability-item-operations_domain" class="capability-map-item card" data-kind="index"><rect x="523.0" y="201.0" width="205.0" height="96.0" rx="6" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="1.2"/><text x="539.0" y="247.75" class="capability-title" style="font-size:16.5px;font-weight:700;fill:#0F172A">Operations</text><text x="539.0" y="270.25" class="capability-sub" style="font-size:13px;font-weight:500;fill:#64748B">execution scope</text></g>
+<g id="capability-item-customer_intake" class="capability-map-item card" data-kind="capability"><rect x="274.0" y="357.0" width="205.0" height="96.0" rx="6" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.2"/><text x="290.0" y="403.75" class="capability-title" style="font-size:16.5px;font-weight:700;fill:#0F172A">Customer Intake</text><text x="290.0" y="426.25" class="capability-sub" style="font-size:13px;font-weight:500;fill:#64748B">request capture</text></g>
+<g id="capability-item-work_execution" class="capability-map-item card" data-kind="capability"><rect x="523.0" y="357.0" width="205.0" height="96.0" rx="6" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.2"/><text x="539.0" y="403.75" class="capability-title" style="font-size:16.5px;font-weight:700;fill:#0F172A">Work Execution</text><text x="539.0" y="426.25" class="capability-sub" style="font-size:13px;font-weight:500;fill:#64748B">fulfillment control</text></g>
+<g class="info-panel capability-side-panel" data-panel-id="usage">
+<rect x="758.0" y="115" width="300.0" height="144.0" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#334155" stroke-opacity="0.64" stroke-width="1"/>
+<text x="776.0" y="143" class="info-panel-title">Usage</text>
+<rect x="776.0" y="161" width="9" height="9" rx="2" fill="#334155" opacity="0.95"/>
+<text x="794.0" y="171.0" class="info-panel-item" style="font-size:13.5px">Use for capability decomposition</text>
+<text x="794.0" y="188.5" class="info-panel-item" style="font-size:13.5px">across business domains.</text>
+<rect x="776.0" y="202.0" width="9" height="9" rx="2" fill="#334155" opacity="0.95"/>
+<text x="794.0" y="212.0" class="info-panel-item" style="font-size:13.5px">Keep relationships sparse;</text>
+<text x="794.0" y="229.5" class="info-panel-item" style="font-size:13.5px">alignment carries most structure.</text>
+</g>
+<text x="564.0" y="513" text-anchor="middle" class="note">Minimal template: use levels and columns to stabilize placement.</text>
+</svg>

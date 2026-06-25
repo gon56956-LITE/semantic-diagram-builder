@@ -1,0 +1,116 @@
+{
+  "title": "Capability / Domain Map Reference",
+  "subtitle": "Reference capability map with objectives, domains, sub-domains, capabilities, and enablers",
+  "diagram_type": "capability_domain_map",
+  "style": "accent-blueprint",
+  "width": 1720,
+  "column_width": 200,
+  "column_gap": 44,
+  "level_gap": 36,
+  "item_height": 96,
+  "item_gap": 28,
+  "levels": [
+    {"id": "strategic", "label": "Strategic Objectives", "kind": "glossary", "accent": "accent_purple"},
+    {"id": "domain", "label": "Business Domains", "kind": "index", "accent": "accent_cyan"},
+    {"id": "subdomain", "label": "Sub-Domains", "kind": "source", "accent": "accent_cyan"},
+    {"id": "capability", "label": "Capabilities", "kind": "capability", "accent": "accent_green"},
+    {"id": "enabling", "label": "Enabling Capabilities", "kind": "process", "accent": "accent_orange"}
+  ],
+  "columns": [
+    {"id": "customer", "label": "Customer", "kind": "object", "accent": "accent_cyan"},
+    {"id": "product", "label": "Product", "kind": "package", "accent": "accent_cyan"},
+    {"id": "operations", "label": "Operations", "kind": "process", "accent": "accent_cyan"},
+    {"id": "finance", "label": "Finance", "kind": "registry", "accent": "accent_cyan"},
+    {"id": "people", "label": "People", "kind": "glossary", "accent": "accent_cyan"},
+    {"id": "technology", "label": "Technology", "kind": "query", "accent": "accent_cyan"}
+  ],
+  "items": [
+    {"id": "grow_revenue", "label": "Grow Revenue", "level": "strategic", "column": "customer", "kind": "glossary", "accent": "accent_purple"},
+    {"id": "customer_experience", "label": "Improve Customer Experience", "level": "strategic", "column": "product", "span": 2, "kind": "glossary", "accent": "accent_purple"},
+    {"id": "operational_excellence", "label": "Operational Excellence", "level": "strategic", "column": "finance", "kind": "glossary", "accent": "accent_purple"},
+    {"id": "compliance_objective", "label": "Ensure Compliance", "level": "strategic", "column": "technology", "kind": "glossary", "accent": "accent_purple"},
+    {"id": "customer_domain", "label": "Customer", "level": "domain", "column": "customer", "kind": "index"},
+    {"id": "product_domain", "label": "Product", "level": "domain", "column": "product", "kind": "index"},
+    {"id": "operations_domain", "label": "Operations", "level": "domain", "column": "operations", "kind": "index"},
+    {"id": "finance_domain", "label": "Finance", "level": "domain", "column": "finance", "kind": "index"},
+    {"id": "people_domain", "label": "People", "level": "domain", "column": "people", "kind": "index"},
+    {"id": "technology_domain", "label": "Technology", "level": "domain", "column": "technology", "kind": "index"},
+    {"id": "marketing_sales", "label": "Marketing Sales Service", "subtitle": "demand + care", "level": "subdomain", "column": "customer", "kind": "source"},
+    {"id": "product_management", "label": "Product Mgmt", "subtitle": "portfolio control", "level": "subdomain", "column": "product", "kind": "source"},
+    {"id": "product_dev", "label": "Product Dev", "subtitle": "design lifecycle", "level": "subdomain", "column": "product", "kind": "source"},
+    {"id": "supply_chain", "label": "Supply Chain", "subtitle": "planning + flow", "level": "subdomain", "column": "operations", "kind": "source"},
+    {"id": "manufacturing", "label": "Manufacturing", "subtitle": "execution", "level": "subdomain", "column": "operations", "kind": "source"},
+    {"id": "accounting", "label": "Accounting", "subtitle": "close + report", "level": "subdomain", "column": "finance", "kind": "source"},
+    {"id": "treasury", "label": "Treasury", "subtitle": "cash control", "level": "subdomain", "column": "finance", "kind": "source"},
+    {"id": "hr", "label": "HR", "subtitle": "people ops", "level": "subdomain", "column": "people", "kind": "source"},
+    {"id": "talent", "label": "Talent", "subtitle": "skills + growth", "level": "subdomain", "column": "people", "kind": "source"},
+    {"id": "it_ops", "label": "IT Ops", "subtitle": "platform run", "level": "subdomain", "column": "technology", "kind": "source"},
+    {"id": "platforms", "label": "Platforms", "subtitle": "shared services", "level": "subdomain", "column": "technology", "kind": "source"},
+    {"id": "customer_acquisition", "label": "Customer Acquisition", "subtitle": "pipeline growth", "level": "capability", "column": "customer", "kind": "capability"},
+    {"id": "order_mgmt", "label": "Order Mgmt", "subtitle": "quote to order", "level": "capability", "column": "product", "kind": "capability"},
+    {"id": "product_development", "label": "Product Development", "subtitle": "release flow", "level": "capability", "column": "operations", "kind": "capability"},
+    {"id": "demand_planning", "label": "Demand Planning", "subtitle": "forecast balance", "level": "capability", "column": "finance", "kind": "capability"},
+    {"id": "workforce_mgmt", "label": "Workforce Mgmt", "subtitle": "capacity + skills", "level": "capability", "column": "people", "kind": "capability"},
+    {"id": "it_service_mgmt", "label": "IT Service Mgmt", "subtitle": "operate services", "level": "capability", "column": "technology", "kind": "capability"},
+    {"id": "data_analytics", "label": "Data & Analytics", "level": "enabling", "column": "customer", "kind": "process", "accent": "accent_orange"},
+    {"id": "process_management", "label": "Process Management", "level": "enabling", "column": "product", "kind": "process", "accent": "accent_orange"},
+    {"id": "risk_compliance", "label": "Risk & Compliance", "level": "enabling", "column": "operations", "kind": "risk", "accent": "accent_orange"},
+    {"id": "integration", "label": "Integration", "level": "enabling", "column": "finance", "kind": "process", "accent": "accent_orange"},
+    {"id": "technology_platforms", "label": "Technology Platforms", "level": "enabling", "column": "technology", "span": 1, "kind": "process", "accent": "accent_orange"}
+  ],
+  "relationships": [
+    {"from": "grow_revenue", "to": "customer_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "customer_experience", "to": "product_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "customer_experience", "to": "operations_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "operational_excellence", "to": "finance_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "compliance_objective", "to": "technology_domain", "relation": "guides", "accent": "accent_purple"},
+    {"from": "customer_domain", "to": "marketing_sales", "relation": "contains"},
+    {"from": "product_domain", "to": "product_management", "relation": "contains"},
+    {"from": "operations_domain", "to": "supply_chain", "relation": "contains"},
+    {"from": "finance_domain", "to": "accounting", "relation": "contains"},
+    {"from": "people_domain", "to": "hr", "relation": "contains"},
+    {"from": "technology_domain", "to": "it_ops", "relation": "contains"},
+    {"from": "marketing_sales", "to": "customer_acquisition", "relation": "contains"},
+    {"from": "product_management", "to": "order_mgmt", "relation": "contains"},
+    {"from": "manufacturing", "to": "product_development", "relation": "contains"},
+    {"from": "treasury", "to": "demand_planning", "relation": "contains"},
+    {"from": "talent", "to": "workforce_mgmt", "relation": "contains"},
+    {"from": "platforms", "to": "it_service_mgmt", "relation": "contains"},
+    {"from": "data_analytics", "to": "customer_acquisition", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
+    {"from": "risk_compliance", "to": "product_development", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
+    {"from": "technology_platforms", "to": "it_service_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange"}
+  ],
+  "info_panels": [
+    {
+      "id": "usage",
+      "title": "Usage",
+      "kind": "source",
+      "items": [
+        "Map capabilities to strategic objectives and identify gaps.",
+        "Use alignment and bands before adding many connector lines."
+      ]
+    },
+    {
+      "id": "notes",
+      "title": "Notes",
+      "kind": "risk",
+      "items": [
+        "Capabilities are reusable across domains.",
+        "Enablers support multiple capabilities.",
+        "Keep ownership overlays in a separate map when dense."
+      ]
+    },
+    {
+      "id": "version",
+      "title": "Version",
+      "kind": "quality",
+      "items": [
+        {"label": "Version", "value": "1.0"},
+        {"label": "Updated", "value": "2026-06-25"}
+      ]
+    }
+  ],
+  "annotations": [
+    {"text": "Reference template: banded capability map with sparse connector overlays.", "placement": "footer"}
+  ]
+}

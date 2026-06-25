@@ -19,6 +19,10 @@ CARD_RE = re.compile(
     r'<g\b(?=[^>]*(?:\bclass="[^"]*\bcard\b[^"]*"|\bid="node-[^"]+"))[^>]*>(.*?)</g>',
     re.S,
 )
+CAPABILITY_ITEM_RE = re.compile(
+    r'<g\b[^>]*\bid="capability-item-([^"]+)"[^>]*\bclass="[^"]*\bcapability-map-item\b[^"]*"[^>]*>(.*?)</g>',
+    re.S,
+)
 INFO_PANEL_RE = re.compile(r'<g\b(?=[^>]*\bclass="[^"]*\binfo-panel\b[^"]*")[^>]*>(.*?)</g>', re.S)
 RELATIONSHIP_DIAMOND_RE = re.compile(
     r'<g\b(?=[^>]*\bclass="[^"]*\brelationship-diamond\b[^"]*")[^>]*>.*?'
@@ -38,6 +42,10 @@ GROUP_LABEL_RE = re.compile(r'<text[^>]*class="group-label"[^>]*>')
 PATH_RE = re.compile(r'<path\b([^>]*)/?>')
 CLASS_RE = re.compile(r'class="([^"]+)"')
 D_RE = re.compile(r'\bd="([^"]+)"')
+DATA_FROM_RE = re.compile(r'\bdata-from="([^"]*)"')
+DATA_TO_RE = re.compile(r'\bdata-to="([^"]*)"')
+STROKE_STYLE_RE = re.compile(r'stroke\s*:\s*(#[0-9A-Fa-f]{6})')
+STROKE_ATTR_RE = re.compile(r'\bstroke="([^"]+)"')
 DIRECT_LINE_RE = re.compile(r'^M ([-0-9.]+) ([-0-9.]+) L ([-0-9.]+) ([-0-9.]+)$')
 MARKER_RE = re.compile(r'<marker\b([^>]*)>(.*?)</marker>', re.S)
 FILL_RE = re.compile(r'\bfill="([^"]+)"')
@@ -72,10 +80,14 @@ TEXT_MIN_SIZES = {
     'table-cell-secondary': 16.0,
     'info-panel-title': 14.5,
     'info-panel-item': 13.5,
+    'capability-level-label': 14.5,
+    'capability-column-label': 14.5,
 }
 INLINE_TEXT_MIN_SIZES = {
     'card-title': 18.0,
     'card-sub': 13.5,
+    'capability-title': 16.0,
+    'capability-sub': 13.0,
 }
 
 
@@ -109,6 +121,16 @@ def _path_attrs_with_classes(svg: str, wanted: set[str]) -> list[tuple[str, str,
         if matched:
             matches.append((attrs, dm.group(1), classes))
     return matches
+
+
+def _path_stroke(attrs: str) -> str:
+    style_match = STROKE_STYLE_RE.search(attrs)
+    if style_match:
+        return style_match.group(1).lower()
+    attr_match = STROKE_ATTR_RE.search(attrs)
+    if attr_match:
+        return attr_match.group(1).lower()
+    return ''
 
 
 def _axis_segment(a: tuple[float, float], b: tuple[float, float]) -> tuple[str | None, tuple[float, float], tuple[float, float]]:
@@ -280,6 +302,16 @@ def _card_rects(svg: str) -> list[tuple[float, float, float, float]]:
     return cards
 
 
+def _capability_item_rects(svg: str) -> dict[str, tuple[float, float, float, float]]:
+    items: dict[str, tuple[float, float, float, float]] = {}
+    for item_id, body in CAPABILITY_ITEM_RE.findall(svg):
+        rect = RECT_RE.search(body)
+        if not rect:
+            continue
+        items[item_id] = tuple(map(float, rect.groups()))  # type: ignore[assignment]
+    return items
+
+
 def _info_panel_rects(svg: str) -> list[tuple[float, float, float, float]]:
     panels = []
     for panel in INFO_PANEL_RE.findall(svg):
@@ -419,6 +451,16 @@ def _segment_crosses_card(seg: tuple[str, tuple[float, float], tuple[float, floa
     return False
 
 
+def _segment_crosses_expanded_card(
+    seg: tuple[str, tuple[float, float], tuple[float, float]],
+    card: tuple[float, float, float, float],
+    margin: float,
+) -> bool:
+    x, y, w, h = card
+    expanded = (x - margin, y - margin, w + 2 * margin, h + 2 * margin)
+    return _segment_crosses_card(seg, expanded)
+
+
 def _rects_overlap(a: tuple[float, float, float, float], b: tuple[float, float, float, float], pad: float = 0.0) -> bool:
     ax, ay, aw, ah = a
     bx, by, bw, bh = b
@@ -455,6 +497,60 @@ def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
         x1, y1, x2, y2 = map(float, match.groups())
         if abs(x1 - x2) >= EPS and abs(y1 - y2) >= EPS:
             fail('object relationship link uses a direct diagonal segment; route it orthogonally', issues)
+
+
+def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:
+    if _diagram_type(svg) != 'capability_domain_map':
+        return
+    item_rects = _capability_item_rects(svg)
+    if 'class="capability-map-item card"' not in svg:
+        fail('capability_domain_map should render dedicated capability map items', issues)
+    if 'class="capability-badge semantic-badge"' in svg:
+        fail('capability_domain_map should not render item badges; use row and column header icons', issues)
+    for item_id, (_x, _y, _w, h) in item_rects.items():
+        if h < 94:
+            fail(f'capability map item {item_id} is too short for dense title/subtitle content', issues)
+    if 'capability-level-label' not in svg:
+        fail('capability_domain_map should render level labels', issues)
+    if 'capability-column-label' not in svg:
+        fail('capability_domain_map should render column labels', issues)
+    if 'capability-level-icon' not in svg:
+        fail('capability_domain_map should render level header icons', issues)
+    if 'capability-column-icon' not in svg:
+        fail('capability_domain_map should render column header icons', issues)
+    vertical_lanes: list[tuple[float, float, float, str]] = []
+    for attrs, d, _classes in _path_attrs_with_classes(svg, {'capability-map-link'}):
+        match = DIRECT_LINE_RE.match(d)
+        if not match:
+            geom = _parse_path_geometry(d)
+        else:
+            x1, y1, x2, y2 = map(float, match.groups())
+            if abs(x1 - x2) >= EPS and abs(y1 - y2) >= EPS:
+                fail('capability map link uses a direct diagonal segment; route it orthogonally', issues)
+            geom = _parse_path_geometry(d)
+        source_match = DATA_FROM_RE.search(attrs)
+        target_match = DATA_TO_RE.search(attrs)
+        source = source_match.group(1) if source_match else ''
+        target = target_match.group(1) if target_match else ''
+        obstacles = {item_id: rect for item_id, rect in item_rects.items() if item_id not in {source, target}}
+        for seg in geom['segments']:
+            if any(_segment_crosses_expanded_card(seg, rect, 8.0) for rect in obstacles.values()):
+                fail('capability map link runs too close to a non-endpoint card; use a wider corridor', issues)
+                break
+            orient, a, b = seg
+            if orient == 'v' and abs(a[1] - b[1]) >= 36:
+                vertical_lanes.append((a[0], min(a[1], b[1]), max(a[1], b[1]), _path_stroke(attrs)))
+    for idx, lane in enumerate(vertical_lanes):
+        x, y1, y2, stroke = lane
+        if not stroke:
+            continue
+        for other_x, other_y1, other_y2, other_stroke in vertical_lanes[idx + 1:]:
+            if stroke != other_stroke or abs(x - other_x) >= 3:
+                continue
+            overlap = min(y2, other_y2) - max(y1, other_y1)
+            if overlap >= 36:
+                fail('capability map links share the same same-color vertical corridor; offset the route lanes', issues)
+                return
 
 
 def _check_connector_clearance(svg: str, issues: list[str]) -> None:
@@ -621,6 +717,7 @@ def check_svg(svg: str) -> list[str]:
     _check_group_label_shields(svg, issues)
     _check_canvas_density(svg, issues)
     _check_object_relationship_geometry(svg, issues)
+    _check_capability_map_geometry(svg, issues)
 
     dashed_count = svg.count('edge-dashed') + svg.count('stroke-dasharray')
     if dashed_count > 8:

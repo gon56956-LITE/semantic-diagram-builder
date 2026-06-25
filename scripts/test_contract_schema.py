@@ -186,6 +186,25 @@ def main() -> int:
     object_relationship_self_missing_slot["relationships"][0].pop("col", None)
     assert_schema_error("object relationship self missing placement", object_relationship_self_missing_slot, "self relationships need row/col or x/y placement")
 
+    capability_map = load_json("templates/capability_domain_map/reference-contract.json")
+    assert_schema_pass("capability domain map reference", capability_map)
+
+    capability_bad_level = copy.deepcopy(capability_map)
+    capability_bad_level["items"][0]["level"] = "missing"
+    assert_schema_error("capability missing level", capability_bad_level, "is not a level id")
+
+    capability_bad_column = copy.deepcopy(capability_map)
+    capability_bad_column["items"][0]["column"] = "missing"
+    assert_schema_error("capability missing column", capability_bad_column, "is not a column id")
+
+    capability_bad_relationship = copy.deepcopy(capability_map)
+    capability_bad_relationship["relationships"][0]["to"] = "missing"
+    assert_schema_error("capability missing relationship target", capability_bad_relationship, "is not an item id")
+
+    capability_bad_badge = copy.deepcopy(capability_map)
+    capability_bad_badge["items"][0]["badge"] = "CAP"
+    assert_schema_error("capability item badge", capability_bad_badge, "items[0].badge is not supported")
+
     print("contract schema selftest: PASS")
     return 0
 

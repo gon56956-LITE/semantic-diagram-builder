@@ -113,6 +113,22 @@
       "title": "Object Relationship Diagram Reference",
       "contract": "templates/object_relationship_diagram/reference-contract.json",
       "svg": "templates/object_relationship_diagram/reference.svg"
+    },
+    {
+      "diagram_type": "capability_domain_map",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Capability Domain Map Minimal",
+      "contract": "templates/capability_domain_map/minimal-contract.json",
+      "svg": "templates/capability_domain_map/minimal.svg"
+    },
+    {
+      "diagram_type": "capability_domain_map",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Capability / Domain Map Reference",
+      "contract": "templates/capability_domain_map/reference-contract.json",
+      "svg": "templates/capability_domain_map/reference.svg"
     }
   ],
   "gallery_templates": [
@@ -230,6 +246,23 @@
       "contract": "templates/object_relationship_diagram/stress-contract.json",
       "svg": "templates/object_relationship_diagram/stress.svg",
       "max_height": 1450
+    },
+    {
+      "diagram_type": "capability_domain_map",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Capability / Domain Map Reference",
+      "contract": "templates/capability_domain_map/reference-contract.json",
+      "svg": "templates/capability_domain_map/reference.svg"
+    },
+    {
+      "diagram_type": "capability_domain_map",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Capability / Domain Map Stress",
+      "contract": "templates/capability_domain_map/stress-contract.json",
+      "svg": "templates/capability_domain_map/stress.svg",
+      "max_height": 1300
     }
   ]
 }

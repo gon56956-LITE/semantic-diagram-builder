@@ -34,6 +34,7 @@ Use `references/diagram_type_maturity.md` as the checklist for deciding whether 
 | `taxonomy_tree` | `templates/taxonomy_tree/minimal-contract.json` | `templates/taxonomy_tree/reference-contract.json` | `templates/taxonomy_tree/stress-contract.json` |
 | `hub_spoke` | `templates/hub_spoke/minimal-contract.json` | `templates/hub_spoke/reference-contract.json` | `templates/hub_spoke/stress-contract.json` |
 | `object_relationship_diagram` | `templates/object_relationship_diagram/minimal-contract.json` | `templates/object_relationship_diagram/reference-contract.json` | `templates/object_relationship_diagram/stress-contract.json` |
+| `capability_domain_map` | `templates/capability_domain_map/minimal-contract.json` | `templates/capability_domain_map/reference-contract.json` | `templates/capability_domain_map/stress-contract.json` |
 
 ## Type Notes
 
@@ -103,6 +104,20 @@ Use for ER-style object models, entity relationship diagrams, MOC object links, 
 - Let non-axis links route as orthogonal polylines. Direct diagonal lines are a readability smell in dense ER diagrams.
 - Keep enough horizontal and row corridor space for relationship diamonds; dense templates should widen the canvas and increase `entity_col_gap` / `entity_row_gap` rather than letting diamonds sit on entity cards.
 - Do not use this type as a general graph renderer; when links become hard to read, split the model or move secondary relationships into an info panel.
+
+### Capability Domain Map
+
+Use for enterprise capability maps, domain maps, operating-model decomposition, and capability gap discussions.
+
+- Use `levels[]` for horizontal bands and `columns[]` for stable domain lanes.
+- Use `items[]` with `level` and `column`; use `order` when multiple cards stack in one level/column cell.
+- Use `levels[].kind/accent` and `columns[].kind/accent` for prominent header icons; do not put compact badges inside dense capability cards.
+- Use `span` sparingly for strategic objectives or shared enablers that truly cover adjacent lanes.
+- Keep connector overlays sparse. The map should remain readable from row/column alignment alone.
+- Capability map cards use a dedicated dense-card spec: size them for two title lines plus one subtitle, and keep row/column gaps wide enough for side-corridor routing.
+- When several connector overlays need the same vertical corridor, widen the canvas and let the renderer offset them into route lanes rather than stacking them on a single line.
+- Put usage rules, notes, and version blocks in `info_panels`; this type renders them as side panels to echo blueprint map conventions.
+- Use the stress template to check whether the canvas should widen before shrinking text or card spacing.
 
 ## QA
 
