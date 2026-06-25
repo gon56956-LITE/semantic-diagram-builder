@@ -97,6 +97,22 @@
       "contract": "templates/hub_spoke/reference-contract.json",
       "svg": "templates/hub_spoke/reference.svg",
       "max_height": 720
+    },
+    {
+      "diagram_type": "object_relationship_diagram",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Object Relationship Diagram Minimal",
+      "contract": "templates/object_relationship_diagram/minimal-contract.json",
+      "svg": "templates/object_relationship_diagram/minimal.svg"
+    },
+    {
+      "diagram_type": "object_relationship_diagram",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Object Relationship Diagram Reference",
+      "contract": "templates/object_relationship_diagram/reference-contract.json",
+      "svg": "templates/object_relationship_diagram/reference.svg"
     }
   ],
   "gallery_templates": [
@@ -197,6 +213,23 @@
       "contract": "templates/hub_spoke/stress-contract.json",
       "svg": "templates/hub_spoke/stress.svg",
       "max_height": 1300
+    },
+    {
+      "diagram_type": "object_relationship_diagram",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Object Relationship Diagram Reference",
+      "contract": "templates/object_relationship_diagram/reference-contract.json",
+      "svg": "templates/object_relationship_diagram/reference.svg"
+    },
+    {
+      "diagram_type": "object_relationship_diagram",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Object Relationship Diagram Stress",
+      "contract": "templates/object_relationship_diagram/stress-contract.json",
+      "svg": "templates/object_relationship_diagram/stress.svg",
+      "max_height": 1450
     }
   ]
 }

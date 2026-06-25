@@ -13,6 +13,8 @@ Each standard diagram type has:
 
 `templates/template-gallery.html` renders the reference and stress templates for visual review. Minimal templates remain available as starting points, but they are intentionally not used as the main visual QA gallery because they are too small to expose many layout problems. `templates/template-gallery-baseline.json` is the manifest used by `py scripts/test_template_library.py`.
 
+Use `references/diagram_type_maturity.md` as the checklist for deciding whether a template family is complete enough to call mature.
+
 ## Usage
 
 1. Pick the closest `diagram_type`.
@@ -31,6 +33,7 @@ Each standard diagram type has:
 | `registry_table` | `templates/registry_table/minimal-contract.json` | `templates/registry_table/reference-contract.json` | `templates/registry_table/stress-contract.json` |
 | `taxonomy_tree` | `templates/taxonomy_tree/minimal-contract.json` | `templates/taxonomy_tree/reference-contract.json` | `templates/taxonomy_tree/stress-contract.json` |
 | `hub_spoke` | `templates/hub_spoke/minimal-contract.json` | `templates/hub_spoke/reference-contract.json` | `templates/hub_spoke/stress-contract.json` |
+| `object_relationship_diagram` | `templates/object_relationship_diagram/minimal-contract.json` | `templates/object_relationship_diagram/reference-contract.json` | `templates/object_relationship_diagram/stress-contract.json` |
 
 ## Type Notes
 
@@ -84,6 +87,22 @@ Use for central hubs with surrounding comparable domains, systems, capabilities,
 - Use `nodes[].order` for deterministic spoke placement.
 - Use dashed spokes only for optional or indirect relationships.
 - Use `info_panels` for relationship keys, use cases, operating rules, and review metadata instead of overcrowding the spoke labels.
+
+### Object Relationship Diagram
+
+Use for ER-style object models, entity relationship diagrams, MOC object links, or ontology-lite maps where attributes and cardinalities matter.
+
+- Use `entities[]` rather than `nodes[]`; entity cards are table-like components, separate from layered cards.
+- Use `entities[].attributes[].role` for `pk` and `fk` badges instead of relying on raw text only.
+- Use relationship diamonds for named relationships and keep diamond labels short.
+- Use `from_cardinality` and `to_cardinality` near endpoints when relationship multiplicity matters.
+- Use entity `row`/`col` for card placement and relationship `row`/`col` for diamond placement. Half slots such as `col: 1.5` place diamonds between adjacent entity columns.
+- Use self relationships for recursive fields such as `ParentCategoryID`; place the diamond explicitly and connect it to the entity from the nearest stable anchor.
+- Place relationship diamonds before judging connector paths; cards should be arranged around those relationship slots so links stay short and structured.
+- Use explicit `from_anchor` / `to_anchor` and `from_diamond_anchor` / `to_diamond_anchor` only when a dense local cluster makes automatic side selection ambiguous.
+- Let non-axis links route as orthogonal polylines. Direct diagonal lines are a readability smell in dense ER diagrams.
+- Keep enough horizontal and row corridor space for relationship diamonds; dense templates should widen the canvas and increase `entity_col_gap` / `entity_row_gap` rather than letting diamonds sit on entity cards.
+- Do not use this type as a general graph renderer; when links become hard to read, split the model or move secondary relationships into an info panel.
 
 ## QA
 

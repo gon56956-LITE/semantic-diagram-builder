@@ -4,6 +4,8 @@ Use `diagram_type` for new contracts. `layout` is a legacy compatibility field a
 
 Run `py scripts/validate_semantic_contract.py contract.json` before rendering. The validator fails early when a contract mixes structures from different diagram types, references missing ids, or omits required fields.
 
+Use `references/diagram_type_maturity.md` to check whether a type has enough minimal, reference, stress, schema, renderer, validator, and gallery coverage to be treated as mature.
+
 ## layered_knowledge_topology
 
 Use for abstraction layers, knowledge architecture, navigation/synthesis/source separation, and multi-row sibling layers.
@@ -107,9 +109,62 @@ Unsupported structural fields: `groups`, `columns`, `rows`, `edges`.
 
 Rules: at least one spoke is required in addition to the hub; `nodes[].parent` and `nodes[].group` are not used by this type. Use `info_panels` rather than adding many dashed spokes when the relationship semantics need explanation.
 
+## object_relationship_diagram
+
+Use for object relationship diagrams, data-model sketches, MOC object links, ontology-lite entity maps, and ER-style views that need objects, attributes, relationships, keys, and cardinalities.
+
+Contract shape: `entities`, `relationships`, optional `info_panels`, `annotations`.
+
+Renderer strategy: ER-style entity table cards plus relationship diamonds. Explicit entity `row`/`col` controls table placement. Relationship `row`/`col` controls diamond placement on the same ER grid; half slots such as `col: 1.5` place diamonds between adjacent entity columns. Explicit relationship `x`/`y` is still accepted for rare manual overrides but should not be the normal template style.
+
+Required fields:
+
+- `entities[].id`
+- `entities[].label`
+- `relationships[].from`
+- `relationships[].to`
+- `relationships[].label`
+
+Optional fields:
+
+- `entities[].row`, `col`, `x`, `y`, `width`, `height`
+- `entities[].kind`, `accent`, `weak`
+- `entities[].attributes[].name`, optional `role: "pk" | "fk" | "attribute" | "derived"`, optional `type`
+- `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`
+- `relationships[].from_anchor`, `to_anchor`, `from_diamond_anchor`, `to_diamond_anchor` as `left`, `right`, `top`, or `bottom` for dense layouts where automatic anchor choice is ambiguous
+- `info_panels[]` for legend, cardinality key, scope notes, or version metadata
+
+Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `hub_id`, `domains`, `external_partners`.
+
+Rules: every relationship endpoint must reference an entity id; self relationships are supported for hierarchy or recursive ownership relations when the relationship has explicit `row`/`col` or `x`/`y` placement. Relationship labels render inside diamonds, so keep them short. Use `weak: true` for dashed weak-entity cards. Use PK/FK roles instead of embedding key semantics only in the attribute name. Plan relationship diamonds as fixed slots before evaluating connector paths; non-axis relationship links should route as orthogonal polylines rather than direct diagonals. Use explicit card or diamond anchors when a relationship sits near another diamond and the automatic side would make the connector appear to start or end on the wrong corner.
+
+## Planned Candidate Types
+
+The following types have design intent but are not mature renderer strategies yet. Do not declare them as `diagram_type` until they are promoted into the registry.
+
+### ontology_map
+
+Use for formal concept/class maps that need class boxes, relationship diamonds or labeled predicates, datatype attributes, and instance examples.
+
+Likely contract shape: `concepts`, `relationships`, optional `instances`, `datatypes`, `legend`, and `info_panels`.
+
+First strategy goal: constrained ontology layout with class lanes or clusters, explicit relationship labels, and separate instance/datatype styling so it does not collapse into a generic graph.
+
+First stress focus: class/instance differentiation, relationship-label readability, one-to-many cardinality labels, and avoiding graph spaghetti.
+
+### capability_domain_map
+
+Use for strategic objectives, business domains, sub-domains, capabilities, enabling capabilities, and ownership overlays.
+
+Likely contract shape: `levels` or `bands`, `domains`, `capabilities`, optional `relationships`, `legend`, and `info_panels`.
+
+First strategy goal: grid/banded domain layout with dedicated row headers, nested capability blocks, optional dashed dependency overlays, and a side rule/version panel.
+
+First stress focus: dense capability grids, domain-width balancing, shared capability boundaries, and legend clarity.
+
 ## Shared info_panels
 
-`registry_table` and `hub_spoke` support bottom information panels for dense legends, rules, use cases, metadata, or relationship keys.
+`registry_table`, `hub_spoke`, and `object_relationship_diagram` support bottom information panels for dense legends, rules, use cases, metadata, cardinality keys, or relationship keys.
 
 Fields:
 

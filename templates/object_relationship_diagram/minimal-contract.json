@@ -1,0 +1,46 @@
+{
+  "title": "Object Relationship Minimal",
+  "subtitle": "Minimal entity relationship contract",
+  "diagram_type": "object_relationship_diagram",
+  "style": "modern-tech",
+  "width": 950,
+  "entities": [
+    {
+      "id": "customer",
+      "label": "Customer",
+      "row": 0,
+      "col": 0,
+      "attributes": [
+        {"name": "CustomerID", "role": "pk"},
+        {"name": "Name"},
+        {"name": "Email"}
+      ]
+    },
+    {
+      "id": "order",
+      "label": "Order",
+      "row": 0,
+      "col": 1,
+      "attributes": [
+        {"name": "OrderID", "role": "pk"},
+        {"name": "CustomerID", "role": "fk"},
+        {"name": "Status"}
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "customer_order",
+      "label": "places",
+      "from": "customer",
+      "to": "order",
+      "from_cardinality": "1",
+      "to_cardinality": "0..*",
+      "row": 0,
+      "col": 0.5
+    }
+  ],
+  "annotations": [
+    {"text": "Minimal template: entity tables, relationship diamond, and cardinality labels.", "placement": "footer"}
+  ]
+}

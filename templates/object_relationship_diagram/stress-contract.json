@@ -1,0 +1,70 @@
+{
+  "title": "Object Relationship Diagram Stress",
+  "subtitle": "Dense ER-style map with many entities, weak entities, keys, optional relations, and metadata panels",
+  "diagram_type": "object_relationship_diagram",
+  "style": "accent-blueprint",
+  "width": 2200,
+  "entity_width": 240,
+  "entity_col_gap": 150,
+  "entity_row_gap": 190,
+  "entities": [
+    {"id": "account", "label": "Account", "kind": "capability", "row": 0, "col": 0, "attributes": [{"name": "AccountID", "role": "pk"}, {"name": "LegalName"}, {"name": "Segment"}, {"name": "Status"}]},
+    {"id": "customer", "label": "Customer Profile", "kind": "registry", "row": 0, "col": 1, "attributes": [{"name": "CustomerID", "role": "pk"}, {"name": "AccountID", "role": "fk"}, {"name": "PrimaryContactID", "role": "fk"}, {"name": "Region"}, {"name": "LifecycleState"}]},
+    {"id": "order", "label": "Commercial Order", "kind": "source", "row": 0, "col": 2, "attributes": [{"name": "OrderID", "role": "pk"}, {"name": "CustomerID", "role": "fk"}, {"name": "OrderDate"}, {"name": "Status"}, {"name": "Currency"}, {"name": "TotalAmount"}]},
+    {"id": "fulfillment", "label": "Fulfillment Plan", "kind": "process", "row": 0, "col": 3, "attributes": [{"name": "FulfillmentID", "role": "pk"}, {"name": "OrderID", "role": "fk"}, {"name": "ShipDate"}, {"name": "Carrier"}, {"name": "SLAStatus"}]},
+    {"id": "product", "label": "Product Master", "kind": "package", "row": 2, "col": 2, "attributes": [{"name": "ProductID", "role": "pk"}, {"name": "SKU"}, {"name": "CategoryID", "role": "fk"}, {"name": "LifecycleState"}, {"name": "UnitPrice"}]},
+    {"id": "contact", "label": "Contact", "kind": "object", "row": 1, "col": 0, "attributes": [{"name": "ContactID", "role": "pk"}, {"name": "AccountID", "role": "fk"}, {"name": "Email"}, {"name": "Phone"}, {"name": "Role"}]},
+    {"id": "address", "label": "Address", "kind": "object", "row": 1, "col": 1, "attributes": [{"name": "AddressID", "role": "pk"}, {"name": "CustomerID", "role": "fk"}, {"name": "Street"}, {"name": "City"}, {"name": "Country"}, {"name": "UsageType"}]},
+    {"id": "order_item", "label": "Order Item", "kind": "source", "row": 1, "col": 2, "weak": true, "attributes": [{"name": "OrderItemID", "role": "pk"}, {"name": "OrderID", "role": "fk"}, {"name": "ProductID", "role": "fk"}, {"name": "Quantity"}, {"name": "UnitPrice"}, {"name": "LineStatus"}]},
+    {"id": "payment", "label": "Payment", "kind": "quality", "row": 1, "col": 3, "attributes": [{"name": "PaymentID", "role": "pk"}, {"name": "OrderID", "role": "fk"}, {"name": "Method"}, {"name": "Amount"}, {"name": "ApprovalCode"}, {"name": "Status"}]},
+    {"id": "category", "label": "Category", "kind": "glossary", "row": 2, "col": 3, "attributes": [{"name": "CategoryID", "role": "pk"}, {"name": "ParentCategoryID", "role": "fk"}, {"name": "Name"}, {"name": "Description"}]}
+  ],
+  "relationships": [
+    {"id": "account_customer", "label": "owns", "from": "account", "to": "customer", "from_cardinality": "1", "to_cardinality": "1..*", "row": 0, "col": 0.5},
+    {"id": "customer_order", "label": "places", "from": "customer", "to": "order", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0, "col": 1.5},
+    {"id": "order_fulfillment", "label": "drives", "from": "order", "to": "fulfillment", "from_cardinality": "1", "to_cardinality": "0..1", "row": 0, "col": 2.5},
+    {"id": "account_contact", "label": "has", "from": "account", "to": "contact", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0.5, "col": 0},
+    {"id": "customer_address", "label": "uses", "from": "customer", "to": "address", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0.5, "col": 1},
+    {"id": "order_item_contains", "label": "contains", "from": "order", "to": "order_item", "from_cardinality": "1", "to_cardinality": "1..*", "row": 0.5, "col": 2},
+    {"id": "order_payment", "label": "settled by", "from": "order", "to": "payment", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0.5, "col": 2.5},
+    {"id": "item_product", "label": "refers to", "from": "order_item", "to": "product", "from_cardinality": "1..*", "to_cardinality": "1", "row": 1.5, "col": 2},
+    {"id": "product_category", "label": "classified as", "from": "product", "to": "category", "from_cardinality": "0..*", "to_cardinality": "1", "row": 2, "col": 2.5},
+    {"id": "category_parent", "label": "parent of", "from": "category", "to": "category", "from_cardinality": "0..1", "to_cardinality": "0..*", "style": "dashed", "row": 1.5, "col": 3, "from_anchor": "top", "from_diamond_anchor": "bottom"}
+  ],
+  "info_panels": [
+    {
+      "id": "legend",
+      "title": "Legend",
+      "kind": "object",
+      "items": [
+        {"label": "Entity", "value": "solid object table", "kind": "source"},
+        {"label": "Weak entity", "value": "dashed dependent object table", "kind": "object"},
+        {"label": "Relationship", "value": "labeled diamond between entity anchors", "kind": "process"},
+        {"label": "Cardinality", "value": "endpoint labels remain outside entity cards", "kind": "quality"}
+      ]
+    },
+    {
+      "id": "qa",
+      "title": "Stress QA Focus",
+      "kind": "risk",
+      "items": [
+        "Many tables should not make attribute text unreadable.",
+        "Relationship diamonds should remain between the connected entities.",
+        "PK and FK badges must stay inside the entity table card."
+      ]
+    },
+    {
+      "id": "metadata",
+      "title": "Model Metadata",
+      "kind": "source",
+      "items": [
+        {"label": "Version", "value": "object relationship stress v1"},
+        {"label": "Scope", "value": "logical object relationship map, not physical database schema"},
+        {"label": "Use", "value": "PPT and architecture review"}
+      ]
+    }
+  ],
+  "annotations": [
+    {"text": "Stress template: many ER objects should keep key badges, relationship diamonds, and cardinality labels readable.", "placement": "footer"}
+  ]
+}

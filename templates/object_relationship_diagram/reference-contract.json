@@ -1,0 +1,144 @@
+{
+  "title": "Object Relationship Diagram Reference",
+  "subtitle": "Reference ER-style object map with entity cards, relationship diamonds, attributes, keys, and cardinalities",
+  "diagram_type": "object_relationship_diagram",
+  "style": "accent-blueprint",
+  "width": 1500,
+  "entity_width": 225,
+  "entity_col_gap": 90,
+  "entity_row_gap": 120,
+  "entities": [
+    {
+      "id": "customer",
+      "label": "Customer",
+      "kind": "capability",
+      "row": 0,
+      "col": 0,
+      "attributes": [
+        {"name": "CustomerID", "role": "pk"},
+        {"name": "Name"},
+        {"name": "Email"},
+        {"name": "Phone"}
+      ]
+    },
+    {
+      "id": "order",
+      "label": "Order",
+      "kind": "source",
+      "row": 0,
+      "col": 1,
+      "attributes": [
+        {"name": "OrderID", "role": "pk"},
+        {"name": "OrderDate"},
+        {"name": "Status"},
+        {"name": "CustomerID", "role": "fk"}
+      ]
+    },
+    {
+      "id": "order_item",
+      "label": "Order Item",
+      "kind": "source",
+      "row": 0,
+      "col": 2,
+      "weak": true,
+      "attributes": [
+        {"name": "OrderItemID", "role": "pk"},
+        {"name": "OrderID", "role": "fk"},
+        {"name": "ProductID", "role": "fk"},
+        {"name": "Quantity"},
+        {"name": "UnitPrice"}
+      ]
+    },
+    {
+      "id": "product",
+      "label": "Product",
+      "kind": "package",
+      "row": 0,
+      "col": 3,
+      "attributes": [
+        {"name": "ProductID", "role": "pk"},
+        {"name": "Name"},
+        {"name": "SKU"},
+        {"name": "CategoryID", "role": "fk"},
+        {"name": "UnitPrice"}
+      ]
+    },
+    {
+      "id": "address",
+      "label": "Address",
+      "kind": "object",
+      "row": 1,
+      "col": 0,
+      "attributes": [
+        {"name": "AddressID", "role": "pk"},
+        {"name": "Street"},
+        {"name": "City"},
+        {"name": "State"},
+        {"name": "PostalCode"},
+        {"name": "Country"}
+      ]
+    },
+    {
+      "id": "payment",
+      "label": "Payment",
+      "kind": "quality",
+      "row": 1,
+      "col": 1,
+      "attributes": [
+        {"name": "PaymentID", "role": "pk"},
+        {"name": "OrderID", "role": "fk"},
+        {"name": "PaymentDate"},
+        {"name": "Amount"},
+        {"name": "Status"},
+        {"name": "Method"}
+      ]
+    },
+    {
+      "id": "category",
+      "label": "Category",
+      "kind": "glossary",
+      "row": 1,
+      "col": 3,
+      "attributes": [
+        {"name": "CategoryID", "role": "pk"},
+        {"name": "Name"},
+        {"name": "Description"}
+      ]
+    }
+  ],
+  "relationships": [
+    {"id": "places", "label": "places", "from": "customer", "to": "order", "from_cardinality": "1", "to_cardinality": "1..*", "row": 0, "col": 0.5},
+    {"id": "contains", "label": "contains", "from": "order", "to": "order_item", "from_cardinality": "1", "to_cardinality": "1..*", "row": 0, "col": 1.5},
+    {"id": "refers_to", "label": "refers to", "from": "order_item", "to": "product", "from_cardinality": "1..*", "to_cardinality": "1", "row": 0, "col": 2.5},
+    {"id": "has_address", "label": "has", "from": "customer", "to": "address", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0.5, "col": 0},
+    {"id": "has_payment", "label": "has", "from": "order", "to": "payment", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0.5, "col": 1},
+    {"id": "assigned_to", "label": "assigned to", "from": "product", "to": "category", "from_cardinality": "0..*", "to_cardinality": "1", "row": 0.5, "col": 3}
+  ],
+  "info_panels": [
+    {
+      "id": "legend",
+      "title": "Legend",
+      "kind": "object",
+      "items": [
+        {"label": "Entity", "value": "solid table card", "kind": "source"},
+        {"label": "Weak entity", "value": "dashed table card", "kind": "object"},
+        {"label": "Relationship", "value": "orange diamond", "kind": "process"},
+        {"label": "PK / FK", "value": "primary and foreign key badges", "kind": "ontology"}
+      ]
+    },
+    {
+      "id": "cardinality",
+      "title": "Cardinality Key",
+      "kind": "quality",
+      "items": [
+        {"label": "1", "value": "one"},
+        {"label": "1..*", "value": "one to many"},
+        {"label": "0..*", "value": "zero to many"},
+        {"label": "0..1", "value": "zero to one"}
+      ]
+    }
+  ],
+  "annotations": [
+    {"text": "Reference template: entities use table cards; relationships use labeled diamonds and endpoint cardinalities.", "placement": "footer"}
+  ]
+}

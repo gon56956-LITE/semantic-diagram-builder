@@ -31,6 +31,8 @@ from semantic_diagram_types import DiagramTypeError, normalize_diagram_type, val
 
 
 VALID_HEX = re.compile(r"^#[0-9A-Fa-f]{6}$")
+EPS = 1e-6
+ANCHOR_SIDES = {"left", "right", "top", "bottom"}
 
 # Stable layout metrics. Keep these named so generated diagrams do not drift
 # into inconsistent card heights, row gaps, or layer padding.
@@ -2106,6 +2108,596 @@ def _render_hub_spoke(contract: dict, style: dict, diagram_type: str) -> str:
     return "\n".join(parts) + "\n"
 
 
+def _entity_attributes(entity: dict) -> list[dict]:
+    attrs = entity.get("attributes", [])
+    if not isinstance(attrs, list):
+        return []
+    return [attr for attr in attrs if isinstance(attr, dict)]
+
+
+def _entity_size(entity: dict, default_w: float, header_h: float, row_h: float) -> tuple[float, float]:
+    attrs = _entity_attributes(entity)
+    width = float(entity.get("width", default_w))
+    height = float(entity.get("height", header_h + max(2, len(attrs)) * row_h + 12))
+    return width, height
+
+
+def _rect_center(rect: tuple[float, float, float, float]) -> tuple[float, float]:
+    x, y, w, h = rect
+    return x + w / 2, y + h / 2
+
+
+def _rect_anchor(rect: tuple[float, float, float, float], target: tuple[float, float]) -> tuple[float, float]:
+    return _rect_anchor_with_side(rect, target)[0]
+
+
+def _rect_anchor_on_side(rect: tuple[float, float, float, float], side: str) -> tuple[float, float]:
+    x, y, w, h = rect
+    cx, cy = _rect_center(rect)
+    if side == "left":
+        return x, cy
+    if side == "right":
+        return x + w, cy
+    if side == "top":
+        return cx, y
+    if side == "bottom":
+        return cx, y + h
+    return cx, cy
+
+
+def _rect_anchor_with_side(
+    rect: tuple[float, float, float, float],
+    target: tuple[float, float],
+    preferred_side: str | None = None,
+) -> tuple[tuple[float, float], str]:
+    x, y, w, h = rect
+    cx, cy = _rect_center(rect)
+    if preferred_side in ANCHOR_SIDES:
+        return _rect_anchor_on_side(rect, preferred_side), preferred_side
+    dx = target[0] - cx
+    dy = target[1] - cy
+    if abs(dx) >= abs(dy):
+        return ((x + w, cy), "right") if dx >= 0 else ((x, cy), "left")
+    return ((cx, y + h), "bottom") if dy >= 0 else ((cx, y), "top")
+
+
+def _diamond_anchor(cx: float, cy: float, w: float, h: float, target: tuple[float, float]) -> tuple[float, float]:
+    return _diamond_anchor_with_side(cx, cy, w, h, target)[0]
+
+
+def _diamond_anchor_on_side(cx: float, cy: float, w: float, h: float, side: str) -> tuple[float, float]:
+    if side == "left":
+        return cx - w / 2, cy
+    if side == "right":
+        return cx + w / 2, cy
+    if side == "top":
+        return cx, cy - h / 2
+    if side == "bottom":
+        return cx, cy + h / 2
+    return cx, cy
+
+
+def _diamond_anchor_with_side(
+    cx: float,
+    cy: float,
+    w: float,
+    h: float,
+    target: tuple[float, float],
+    preferred_side: str | None = None,
+) -> tuple[tuple[float, float], str]:
+    if preferred_side in ANCHOR_SIDES:
+        return _diamond_anchor_on_side(cx, cy, w, h, preferred_side), preferred_side
+    dx = target[0] - cx
+    dy = target[1] - cy
+    if abs(dx) < EPS and abs(dy) < EPS:
+        return (cx, cy), "center"
+    scale_x = (w / 2) / abs(dx) if abs(dx) > EPS else float("inf")
+    scale_y = (h / 2) / abs(dy) if abs(dy) > EPS else float("inf")
+    scale = min(scale_x, scale_y)
+    side = "right" if abs(dx) >= abs(dy) and dx >= 0 else "left" if abs(dx) >= abs(dy) else "bottom" if dy >= 0 else "top"
+    return (cx + dx * scale, cy + dy * scale), side
+
+
+def _rect_overlaps(a: tuple[float, float, float, float], b: tuple[float, float, float, float], pad: float = 0.0) -> bool:
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    return ax - pad < bx + bw and ax + aw + pad > bx and ay - pad < by + bh and ay + ah + pad > by
+
+
+def _relationship_box(cx: float, cy: float, w: float, h: float) -> tuple[float, float, float, float]:
+    return cx - w / 2, cy - h / 2, w, h
+
+
+def _relationship_overlaps_entity(cx: float, cy: float, w: float, h: float, rects: list[tuple[float, float, float, float]]) -> bool:
+    box = _relationship_box(cx, cy, w, h)
+    return any(_rect_overlaps(box, rect, 10.0) for rect in rects)
+
+
+def _slot_axis_value(centers: dict[int, float], coord: float) -> float:
+    if not centers:
+        return 0.0
+    keys = sorted(centers)
+    if abs(coord - round(coord)) < EPS and int(round(coord)) in centers:
+        return centers[int(round(coord))]
+    diffs = [centers[b] - centers[a] for a, b in zip(keys, keys[1:])]
+    step = sum(diffs) / len(diffs) if diffs else 260.0
+    lower = max((key for key in keys if key <= coord), default=None)
+    upper = min((key for key in keys if key >= coord), default=None)
+    if lower is not None and upper is not None and lower != upper:
+        span = upper - lower
+        ratio = (coord - lower) / span
+        return centers[lower] + (centers[upper] - centers[lower]) * ratio
+    if lower is not None:
+        return centers[lower] + (coord - lower) * step
+    if upper is not None:
+        return centers[upper] - (upper - coord) * step
+    return centers[keys[0]]
+
+
+def _object_relationship_grid(contract: dict, positions: dict[str, tuple[float, float, float, float]]) -> dict:
+    row_values: dict[int, list[float]] = {}
+    col_values: dict[int, list[float]] = {}
+    for entity in contract.get("entities", []) or []:
+        if not isinstance(entity, dict):
+            continue
+        entity_id = str(entity.get("id", ""))
+        if entity_id not in positions:
+            continue
+        cx, cy = _rect_center(positions[entity_id])
+        if isinstance(entity.get("row"), int):
+            row_values.setdefault(int(entity["row"]), []).append(cy)
+        if isinstance(entity.get("col"), int):
+            col_values.setdefault(int(entity["col"]), []).append(cx)
+    rows = {row: sum(values) / len(values) for row, values in row_values.items()}
+    cols = {col: sum(values) / len(values) for col, values in col_values.items()}
+    return {"rows": rows, "cols": cols}
+
+
+def _orthogonal_link_points(
+    start: tuple[float, float],
+    end: tuple[float, float],
+    start_side: str,
+    end_side: str,
+) -> list[tuple[float, float]]:
+    if abs(start[0] - end[0]) < EPS or abs(start[1] - end[1]) < EPS:
+        return [start, end]
+    start_horizontal = start_side in {"left", "right"}
+    end_horizontal = end_side in {"left", "right"}
+    if start_horizontal != end_horizontal and start_side in ANCHOR_SIDES and end_side in ANCHOR_SIDES:
+        sx_vec, sy_vec = _side_vector(start_side)
+        ex_vec, ey_vec = _side_vector(end_side)
+        stub = min(34.0, max(18.0, (abs(start[0] - end[0]) + abs(start[1] - end[1])) / 8))
+        start_stub = (start[0] + sx_vec * stub, start[1] + sy_vec * stub)
+        end_stub = (end[0] + ex_vec * stub, end[1] + ey_vec * stub)
+        corner = (start_stub[0], end_stub[1]) if start_horizontal else (end_stub[0], start_stub[1])
+        points = [start, start_stub, corner, end_stub, end]
+        cleaned = [points[0]]
+        for point in points[1:]:
+            if abs(point[0] - cleaned[-1][0]) >= EPS or abs(point[1] - cleaned[-1][1]) >= EPS:
+                cleaned.append(point)
+        return cleaned
+    if start_horizontal and end_horizontal:
+        mid_x = (start[0] + end[0]) / 2
+        points = [start, (mid_x, start[1]), (mid_x, end[1]), end]
+    elif not start_horizontal and not end_horizontal:
+        mid_y = (start[1] + end[1]) / 2
+        points = [start, (start[0], mid_y), (end[0], mid_y), end]
+    elif start_horizontal and not end_horizontal:
+        points = [start, (end[0], start[1]), end]
+    else:
+        points = [start, (start[0], end[1]), end]
+    cleaned = [points[0]]
+    for point in points[1:]:
+        if abs(point[0] - cleaned[-1][0]) >= EPS or abs(point[1] - cleaned[-1][1]) >= EPS:
+            cleaned.append(point)
+    return cleaned
+
+
+def _side_vector(side: str) -> tuple[float, float]:
+    if side == "left":
+        return -1.0, 0.0
+    if side == "right":
+        return 1.0, 0.0
+    if side == "top":
+        return 0.0, -1.0
+    if side == "bottom":
+        return 0.0, 1.0
+    return 0.0, 0.0
+
+
+def _label_text_box(x: float, y: float, text: str, size: float, anchor: str) -> tuple[float, float, float, float]:
+    width = max(22.0, len(text) * size * 0.62 + 10.0)
+    height = size + 8.0
+    if anchor == "end":
+        bx = x - width
+    elif anchor == "middle":
+        bx = x - width / 2
+    else:
+        bx = x
+    return bx, y - height / 2, width, height
+
+
+def _label_overlaps_any(box: tuple[float, float, float, float], boxes: list[tuple[float, float, float, float]], pad: float = 0.0) -> bool:
+    return any(_rect_overlaps(box, other, pad) for other in boxes)
+
+
+def _cardinality_candidates(
+    text: str,
+    anchor: tuple[float, float],
+    side: str,
+    rect: tuple[float, float, float, float],
+    size: float,
+) -> list[tuple[float, float, str, tuple[float, float, float, float]]]:
+    x, y, w, h = rect
+    ax, ay = anchor
+    candidates: list[tuple[float, float, str]] = []
+    if side == "right":
+        for dy in (-16, 18, -38, 40, -62, 64, -86, 88):
+            candidates.append((x + w + 12, ay + dy, "start"))
+    elif side == "left":
+        for dy in (-16, 18, -38, 40, -62, 64, -86, 88):
+            candidates.append((x - 12, ay + dy, "end"))
+    elif side == "top":
+        for dx, text_anchor in ((14, "start"), (-14, "end"), (38, "start"), (-38, "end"), (64, "start"), (-64, "end"), (0, "middle")):
+            candidates.append((ax + dx, y - 20, text_anchor))
+    elif side == "bottom":
+        for dx, text_anchor in ((14, "start"), (-14, "end"), (38, "start"), (-38, "end"), (64, "start"), (-64, "end"), (0, "middle")):
+            candidates.append((ax + dx, y + h + 18, text_anchor))
+    else:
+        candidates.append((ax + 12, ay - 14, "start"))
+    return [(cx, cy, text_anchor, _label_text_box(cx, cy, text, size, text_anchor)) for cx, cy, text_anchor in candidates]
+
+
+def _render_cardinality_label(
+    text: str,
+    anchor: tuple[float, float],
+    side: str,
+    rect: tuple[float, float, float, float],
+    size: float,
+    style: dict,
+    relationship_id: str,
+    endpoint: str,
+    obstacle_boxes: list[tuple[float, float, float, float]],
+    used_boxes: list[tuple[float, float, float, float]],
+) -> str:
+    candidates = _cardinality_candidates(text, anchor, side, rect, size)
+    chosen = candidates[0]
+    for candidate in candidates:
+        _cx, _cy, _anchor, box = candidate
+        if not _label_overlaps_any(box, obstacle_boxes, 3.0) and not _label_overlaps_any(box, used_boxes, 2.0):
+            chosen = candidate
+            break
+    cx, cy, text_anchor, box = chosen
+    used_boxes.append(box)
+    bx, by, bw, bh = box
+    fill = style_color(style, "background_dark", "#031E42")
+    stroke = style_color(style, "line_primary", "#F4F8FF")
+    text_color = style_color(style, "text_primary", "#F4F8FF")
+    return (
+        f'<g class="cardinality-label-wrap" data-relationship="{relationship_id}" data-endpoint="{endpoint}">'
+        f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" rx="3" fill="{fill}" fill-opacity="0.72" '
+        f'stroke="{stroke}" stroke-opacity="0.28" stroke-width="0.7"/>'
+        f'<text x="{cx}" y="{cy}" dominant-baseline="middle" text-anchor="{text_anchor}" '
+        f'class="note cardinality-label" style="font-size:{_fmt_px(size)};fill:{text_color}">{e(text)}</text>'
+        f'</g>'
+    )
+
+
+def _render_object_entity(entity: dict, rect: tuple[float, float, float, float], style: dict, canvas_w: float) -> str:
+    x, y, w, h = rect
+    kind = str(entity.get("kind", "object"))
+    color = _accent_color(style, entity, "object")
+    card = _style_component(style, "card")
+    fill = card.get("fill", "card_fill")
+    header_fill = "panel_fill_strong"
+    radius = min(float(card.get("radius", 8)), 7)
+    header_h = float(entity.get("header_height", 42))
+    row_h = float(entity.get("attribute_row_height", 26))
+    title_size = _clamp(18.0 * _clamp(canvas_w / 1500.0, 0.98, 1.08), 18.0, 19.5)
+    attr_size = _clamp(13.5 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 13.2, 14.8)
+    dash = ' stroke-dasharray="7 5"' if entity.get("weak") else ""
+    parts = [f'<g id="entity-{e(entity.get("id", ""))}" class="object-entity-card card" data-kind="{e(kind)}">']
+    parts.append(
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" '
+        f'{_paint_attr(style, "fill", fill, "#FFFFFF", card.get("fill_opacity"))} '
+        f'stroke="{color}" stroke-width="1.3"{dash}/>'
+    )
+    parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{header_h}" rx="{radius}" {_paint_attr(style, "fill", header_fill, "#FFFFFF", 0.06)}/>')
+    title_lines = wrap_text(str(entity.get("label", entity.get("id", "Entity"))), max_chars=max(8, int((w - 28) / (title_size * 0.58))), max_lines=1)
+    parts.append(
+        f'<text x="{x + w/2}" y="{y + header_h/2 + title_size/3}" text-anchor="middle" class="card-title" '
+        f'style="font-size:{_fmt_px(title_size)}">{e(title_lines[0])}</text>'
+    )
+    parts.append(f'<line x1="{x}" y1="{y + header_h}" x2="{x + w}" y2="{y + header_h}" stroke="{color}" stroke-opacity="0.62" stroke-width="1"/>')
+    text_primary = style_color(style, "text_primary", "#0F172A")
+    text_secondary = style_color(style, "text_secondary", "#64748B")
+    badge_fill = style_color(style, "background_dark", "#031E42")
+    attrs = _entity_attributes(entity)
+    for idx, attr in enumerate(attrs):
+        ay = y + header_h + idx * row_h
+        if idx > 0:
+            parts.append(f'<line x1="{x}" y1="{ay}" x2="{x + w}" y2="{ay}" stroke="{color}" stroke-opacity="0.25" stroke-width="1"/>')
+        role = str(attr.get("role", "attribute")).lower()
+        label = "PK" if role == "pk" else "FK" if role == "fk" else ""
+        attr_name = str(attr.get("name", "attribute"))
+        attr_type = str(attr.get("type", ""))
+        tx = x + 16
+        if label:
+            badge_color = style_color(style, "accent_cyan" if role == "pk" else "accent_purple", color)
+            parts.append(f'<rect x="{x + 12}" y="{ay + row_h/2 - 9}" width="30" height="18" rx="4" fill="{badge_fill}" stroke="{badge_color}" stroke-width="1"/>')
+            parts.append(f'<text x="{x + 27}" y="{ay + row_h/2 + 5}" text-anchor="middle" class="entity-key-badge" style="font-size:12px;fill:{badge_color};font-weight:700">{label}</text>')
+            tx = x + 50
+        name_lines = wrap_text(attr_name, max_chars=max(7, int((w - (tx - x) - 16) / (attr_size * 0.52))), max_lines=1)
+        parts.append(f'<text x="{tx}" y="{ay + row_h/2 + attr_size/3}" class="entity-attr" style="font-size:{_fmt_px(attr_size)};fill:{text_primary}">{e(name_lines[0])}</text>')
+        if attr_type:
+            parts.append(f'<text x="{x + w - 14}" y="{ay + row_h/2 + attr_size/3}" text-anchor="end" class="entity-attr-secondary" style="font-size:{_fmt_px(attr_size)};fill:{text_secondary}">{e(attr_type)}</text>')
+    parts.append('</g>')
+    return "".join(parts)
+
+
+def _object_relationship_layout(contract: dict, style: dict) -> tuple[int, int, dict[str, tuple[float, float, float, float]], float, dict]:
+    metrics = layout_metrics(style)
+    entities = [e for e in contract.get("entities", []) if isinstance(e, dict) and e.get("id")]
+    margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
+    top_y = int(contract.get("top_y", metrics["top_y"]))
+    default_w = float(contract.get("entity_width", 220))
+    header_h = float(contract.get("entity_header_height", 42))
+    row_h = float(contract.get("attribute_row_height", 26))
+    col_gap = float(contract.get("entity_col_gap", 110))
+    row_gap = float(contract.get("entity_row_gap", 120))
+    max_diamond_w = max(
+        [float(rel.get("diamond_width", 96)) for rel in contract.get("relationships", []) if isinstance(rel, dict)]
+        or [96.0]
+    )
+    col_gap = max(col_gap, float(contract.get("relationship_col_gap_min", max_diamond_w + 48)))
+    row_gap = max(row_gap, float(contract.get("relationship_row_gap_min", 132)))
+    sizes = {str(entity["id"]): _entity_size(entity, default_w, header_h, row_h) for entity in entities}
+    rows: dict[int, list[dict]] = {}
+    for idx, entity in enumerate(entities):
+        row = int(entity.get("row", 0))
+        rows.setdefault(row, []).append(entity)
+    for row_entities in rows.values():
+        row_entities.sort(key=lambda entity: (entity.get("col", entities.index(entity)), entities.index(entity)))
+    max_row_w = 0.0
+    for row_entities in rows.values():
+        if any("col" in entity for entity in row_entities):
+            max_col = max(int(entity.get("col", 0)) for entity in row_entities)
+            row_w = (max_col + 1) * default_w + max_col * col_gap
+        else:
+            row_w = sum(sizes[str(entity["id"])][0] for entity in row_entities) + max(0, len(row_entities) - 1) * col_gap
+        max_row_w = max(max_row_w, row_w)
+    width = int(max(contract.get("width", 1500), max_row_w + 2 * margin_x))
+    positions: dict[str, tuple[float, float, float, float]] = {}
+    y = top_y
+    for row in sorted(rows):
+        row_entities = rows[row]
+        explicit_cols = any("col" in entity for entity in row_entities)
+        if explicit_cols:
+            max_col = max(int(entity.get("col", 0)) for entity in row_entities)
+            row_w = (max_col + 1) * default_w + max_col * col_gap
+        else:
+            row_w = sum(sizes[str(entity["id"])][0] for entity in row_entities) + max(0, len(row_entities) - 1) * col_gap
+        row_h_actual = max(sizes[str(entity["id"])][1] for entity in row_entities)
+        row_x = (width - row_w) / 2
+        x = row_x
+        for entity in row_entities:
+            entity_id = str(entity["id"])
+            ew, eh = sizes[entity_id]
+            if explicit_cols:
+                ex = row_x + int(entity.get("col", 0)) * (default_w + col_gap)
+            else:
+                ex = x
+            ex = float(entity.get("x", ex))
+            ey = float(entity.get("y", y + (row_h_actual - eh) / 2))
+            positions[entity_id] = (ex, ey, ew, eh)
+            x += ew + col_gap
+        y += row_h_actual + row_gap
+    grid = _object_relationship_grid(contract, positions)
+    entity_rects = list(positions.values())
+    relationship_bottoms = []
+    for rel in contract.get("relationships", []) or []:
+        if not isinstance(rel, dict):
+            continue
+        source = str(rel.get("from", ""))
+        target = str(rel.get("to", ""))
+        if source not in positions or target not in positions:
+            continue
+        cx, cy = _relationship_center(rel, positions[source], positions[target], entity_rects, grid)
+        relationship_bottoms.append(cy + float(rel.get("diamond_height", 46)) / 2)
+    content_bottom = max(
+        [ey + eh for ex, ey, ew, eh in positions.values()] + relationship_bottoms,
+        default=top_y,
+    )
+    panels = _info_panels(contract)
+    panel_y = content_bottom + 36
+    _layouts, panels_h = _info_panel_layouts(panels, margin_x, panel_y, width - 2 * margin_x, width)
+    height = int(max(contract.get("height", 0), panel_y + panels_h + 64 if panels else content_bottom + 82))
+    return width, height, positions, panel_y, grid
+
+
+def _auto_relationship_center(source_rect: tuple[float, float, float, float], target_rect: tuple[float, float, float, float]) -> tuple[float, float]:
+    sx, sy, sw, sh = source_rect
+    tx, ty, tw, th = target_rect
+    scx, scy = _rect_center(source_rect)
+    tcx, tcy = _rect_center(target_rect)
+
+    if sx + sw <= tx:
+        return (sx + sw + tx) / 2, (scy + tcy) / 2
+    if tx + tw <= sx:
+        return (tx + tw + sx) / 2, (scy + tcy) / 2
+    if sy + sh <= ty:
+        return (scx + tcx) / 2, (sy + sh + ty) / 2
+    if ty + th <= sy:
+        return (scx + tcx) / 2, (ty + th + sy) / 2
+    return (scx + tcx) / 2, (scy + tcy) / 2
+
+
+def _relationship_center(
+    rel: dict,
+    source_rect: tuple[float, float, float, float],
+    target_rect: tuple[float, float, float, float],
+    entity_rects: list[tuple[float, float, float, float]],
+    grid: dict,
+) -> tuple[float, float]:
+    diamond_w = float(rel.get("diamond_width", 96))
+    diamond_h = float(rel.get("diamond_height", 46))
+    if isinstance(rel.get("row"), (int, float)) or isinstance(rel.get("col"), (int, float)):
+        auto_x, auto_y = _auto_relationship_center(source_rect, target_rect)
+        cx = _slot_axis_value(grid.get("cols", {}), float(rel["col"])) if isinstance(rel.get("col"), (int, float)) else auto_x
+        cy = _slot_axis_value(grid.get("rows", {}), float(rel["row"])) if isinstance(rel.get("row"), (int, float)) else auto_y
+        return cx, cy
+    if isinstance(rel.get("x"), (int, float)) and isinstance(rel.get("y"), (int, float)):
+        cx, cy = float(rel["x"]), float(rel["y"])
+        if not _relationship_overlaps_entity(cx, cy, diamond_w, diamond_h, entity_rects):
+            return cx, cy
+        return _auto_relationship_center(source_rect, target_rect)
+    sx, sy = _rect_center(source_rect)
+    tx, ty = _rect_center(target_rect)
+    cx, cy = _auto_relationship_center(source_rect, target_rect)
+    if _relationship_overlaps_entity(cx, cy, diamond_w, diamond_h, entity_rects):
+        return (sx + tx) / 2, (sy + ty) / 2
+    return cx, cy
+
+
+def _render_relationship_diamond(rel: dict, cx: float, cy: float, style: dict, canvas_w: float) -> str:
+    color = style_color(style, rel.get("accent"), "")
+    if not VALID_HEX.match(color):
+        color = style_color(style, "accent_orange", "#FF9F2E")
+    w = float(rel.get("diamond_width", 96))
+    h = float(rel.get("diamond_height", 46))
+    label = str(rel.get("label", rel.get("id", "rel")))
+    label_size = _clamp(13.5 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 13.5, 14.5)
+    lines = wrap_text(label, max_chars=max(6, int((w - 18) / (label_size * 0.55))), max_lines=2)
+    path = f"M {cx} {cy - h/2} L {cx + w/2} {cy} L {cx} {cy + h/2} L {cx - w/2} {cy} Z"
+    slot_attrs = ""
+    if isinstance(rel.get("row"), (int, float)):
+        slot_attrs += f' data-slot-row="{e(rel["row"])}"'
+    if isinstance(rel.get("col"), (int, float)):
+        slot_attrs += f' data-slot-col="{e(rel["col"])}"'
+    parts = [f'<g id="relationship-{e(rel.get("id", label))}" class="relationship-diamond" data-relation="{e(label)}"{slot_attrs}>']
+    parts.append(f'<path d="{path}" fill="{pale_for(style, color)}" stroke="{color}" stroke-width="1.4"/>')
+    start_y = cy + label_size / 3 - (len(lines) - 1) * (label_size + 1) / 2
+    for idx, line in enumerate(lines):
+        parts.append(f'<text x="{cx}" y="{start_y + idx * (label_size + 1)}" text-anchor="middle" class="note" style="font-size:{_fmt_px(label_size)};fill:{style_color(style, "text_primary", "#F4F8FF")}">{e(line)}</text>')
+    parts.append('</g>')
+    return "".join(parts)
+
+
+def _render_object_relationship(contract: dict, style: dict, diagram_type: str) -> str:
+    width, height, positions, panel_y, grid = _object_relationship_layout(contract, style)
+    margin_x = int(contract.get("canvas_margin_x", layout_metrics(style)["canvas_margin_x"]))
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+    diamond_specs: list[tuple[dict, float, float]] = []
+    link_parts: list[str] = []
+    label_parts: list[str] = []
+    entity_rects = list(positions.values())
+    used_label_boxes: list[tuple[float, float, float, float]] = []
+    line_color = style_color(style, "line_primary", "#F4F8FF")
+    card_label_size = _clamp(14.0 * _clamp(width / 1500.0, 0.95, 1.08), 13.5, 15.0)
+    relationship_layouts: list[tuple[dict, str, str, float, float, float, float]] = []
+    all_diamond_boxes: list[tuple[float, float, float, float]] = []
+    for rel in contract.get("relationships", []) or []:
+        if not isinstance(rel, dict):
+            continue
+        source = str(rel.get("from", ""))
+        target = str(rel.get("to", ""))
+        if source not in positions or target not in positions:
+            continue
+        source_rect = positions[source]
+        target_rect = positions[target]
+        cx, cy = _relationship_center(rel, source_rect, target_rect, entity_rects, grid)
+        diamond_w = float(rel.get("diamond_width", 96))
+        diamond_h = float(rel.get("diamond_height", 46))
+        relationship_layouts.append((rel, source, target, cx, cy, diamond_w, diamond_h))
+        all_diamond_boxes.append(_relationship_box(cx, cy, diamond_w, diamond_h))
+
+    for rel, source, target, cx, cy, diamond_w, diamond_h in relationship_layouts:
+        source_rect = positions[source]
+        target_rect = positions[target]
+        color = style_color(style, rel.get("accent"), "")
+        if not VALID_HEX.match(color):
+            color = line_color
+        dash = ' stroke-dasharray="6 5"' if rel.get("style") in {"dashed", "secondary"} else ""
+        rel_id = e(rel.get("id", f"{source}-{target}"))
+        label_obstacles = entity_rects + all_diamond_boxes
+        if source == target:
+            card_anchor, card_side = _rect_anchor_with_side(source_rect, (cx, cy), rel.get("from_anchor") or rel.get("to_anchor"))
+            d_anchor, d_side = _diamond_anchor_with_side(
+                cx,
+                cy,
+                diamond_w,
+                diamond_h,
+                card_anchor,
+                rel.get("from_diamond_anchor") or rel.get("to_diamond_anchor"),
+            )
+            self_points = _orthogonal_link_points(d_anchor, card_anchor, d_side, card_side)
+            self_route = "axis" if len(self_points) == 2 else "orthogonal"
+            link_parts.append(f'<path d="{_rounded_path(self_points)}" class="edge object-relationship-link" style="stroke:{color};opacity:0.9"{dash} data-route="{self_route}" data-link-end="self" data-card-anchor="{card_side}" data-diamond-anchor="{d_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+            for key, endpoint in (("from_cardinality", "from"), ("to_cardinality", "to")):
+                card = rel.get(key)
+                if card:
+                    label_parts.append(
+                        _render_cardinality_label(
+                            str(card),
+                            card_anchor,
+                            card_side,
+                            source_rect,
+                            card_label_size,
+                            style,
+                            rel_id,
+                            endpoint,
+                            label_obstacles,
+                            used_label_boxes,
+                        )
+                    )
+            diamond_specs.append((rel, cx, cy))
+            continue
+        s_anchor, s_side = _rect_anchor_with_side(source_rect, (cx, cy), rel.get("from_anchor"))
+        t_anchor, t_side = _rect_anchor_with_side(target_rect, (cx, cy), rel.get("to_anchor"))
+        d_from, d_from_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, s_anchor, rel.get("from_diamond_anchor"))
+        d_to, d_to_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, t_anchor, rel.get("to_diamond_anchor"))
+        source_points = _orthogonal_link_points(s_anchor, d_from, s_side, d_from_side)
+        target_points = _orthogonal_link_points(d_to, t_anchor, d_to_side, t_side)
+        source_route = "axis" if len(source_points) == 2 else "orthogonal"
+        target_route = "axis" if len(target_points) == 2 else "orthogonal"
+        link_parts.append(f'<path d="{_rounded_path(source_points)}" class="edge object-relationship-link" style="stroke:{color};opacity:0.9"{dash} data-route="{source_route}" data-link-end="from" data-card-anchor="{s_side}" data-diamond-anchor="{d_from_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+        link_parts.append(f'<path d="{_rounded_path(target_points)}" class="edge object-relationship-link" style="stroke:{color};opacity:0.9"{dash} data-route="{target_route}" data-link-end="to" data-card-anchor="{t_side}" data-diamond-anchor="{d_to_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+        for key, anchor, side, rect, endpoint in (
+            ("from_cardinality", s_anchor, s_side, source_rect, "from"),
+            ("to_cardinality", t_anchor, t_side, target_rect, "to"),
+        ):
+            card = rel.get(key)
+            if card:
+                label_parts.append(
+                    _render_cardinality_label(
+                        str(card),
+                        anchor,
+                        side,
+                        rect,
+                        card_label_size,
+                        style,
+                        rel_id,
+                        endpoint,
+                        label_obstacles,
+                        used_label_boxes,
+                    )
+                )
+        diamond_specs.append((rel, cx, cy))
+
+    parts.extend(link_parts)
+    for entity_id in sorted(positions, key=lambda eid: (positions[eid][1], positions[eid][0])):
+        entity = next(entity for entity in contract.get("entities", []) if str(entity.get("id")) == entity_id)
+        parts.append(_render_object_entity(entity, positions[entity_id], style, width))
+    for rel, cx, cy in diamond_specs:
+        parts.append(_render_relationship_diamond(rel, cx, cy, style, width))
+    parts.extend(label_parts)
+    panels = _info_panels(contract)
+    _render_info_panels(parts, panels, style, margin_x, panel_y, width - 2 * margin_x, width)
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
 def render(contract: dict, contract_path: Path | None = None, style: dict | None = None) -> str:
     if style is None:
         style = style_for_contract(contract, contract_path)
@@ -2117,6 +2709,8 @@ def render(contract: dict, contract_path: Path | None = None, style: dict | None
         return _render_tree(contract, style, diagram_type)
     if strategy == "hub_spoke":
         return _render_hub_spoke(contract, style, diagram_type)
+    if strategy == "object_relationship":
+        return _render_object_relationship(contract, style, diagram_type)
     if strategy == "boundary_matrix":
         return _render_boundary_ownership_matrix(contract, style, diagram_type)
     if strategy == "grouped_layered":

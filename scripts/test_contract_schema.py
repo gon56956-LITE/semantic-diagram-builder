@@ -157,6 +157,35 @@ def main() -> int:
     hub_one_node["nodes"] = [hub_one_node["nodes"][0]]
     assert_schema_error("hub one node", hub_one_node, "at least one spoke node")
 
+    object_relationship = load_json("templates/object_relationship_diagram/reference-contract.json")
+    assert_schema_pass("object relationship reference", object_relationship)
+
+    object_relationship_with_nodes = copy.deepcopy(object_relationship)
+    object_relationship_with_nodes["nodes"] = [{"id": "n", "label": "N"}]
+    assert_schema_error("object relationship mixed nodes", object_relationship_with_nodes, 'does not support top-level "nodes"')
+
+    object_relationship_bad_endpoint = copy.deepcopy(object_relationship)
+    object_relationship_bad_endpoint["relationships"][0]["to"] = "missing"
+    assert_schema_error("object relationship missing endpoint", object_relationship_bad_endpoint, "is not an entity id")
+
+    object_relationship_bad_role = copy.deepcopy(object_relationship)
+    object_relationship_bad_role["entities"][0]["attributes"][0]["role"] = "primary"
+    assert_schema_error("object relationship bad attribute role", object_relationship_bad_role, "is not supported")
+
+    object_relationship_bad_slot = copy.deepcopy(object_relationship)
+    object_relationship_bad_slot["relationships"][0]["col"] = True
+    assert_schema_error("object relationship bad relationship slot", object_relationship_bad_slot, "relationships[0].col must be a number")
+
+    object_relationship_bad_anchor = copy.deepcopy(object_relationship)
+    object_relationship_bad_anchor["relationships"][0]["from_diamond_anchor"] = "upper-left"
+    assert_schema_error("object relationship bad anchor", object_relationship_bad_anchor, "must be one of")
+
+    object_relationship_self_missing_slot = copy.deepcopy(object_relationship)
+    object_relationship_self_missing_slot["relationships"][0]["to"] = object_relationship_self_missing_slot["relationships"][0]["from"]
+    object_relationship_self_missing_slot["relationships"][0].pop("row", None)
+    object_relationship_self_missing_slot["relationships"][0].pop("col", None)
+    assert_schema_error("object relationship self missing placement", object_relationship_self_missing_slot, "self relationships need row/col or x/y placement")
+
     print("contract schema selftest: PASS")
     return 0
 

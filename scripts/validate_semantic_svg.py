@@ -20,6 +20,16 @@ CARD_RE = re.compile(
     re.S,
 )
 INFO_PANEL_RE = re.compile(r'<g\b(?=[^>]*\bclass="[^"]*\binfo-panel\b[^"]*")[^>]*>(.*?)</g>', re.S)
+RELATIONSHIP_DIAMOND_RE = re.compile(
+    r'<g\b(?=[^>]*\bclass="[^"]*\brelationship-diamond\b[^"]*")[^>]*>.*?'
+    r'<path\b[^>]*\bd="M ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) Z"',
+    re.S,
+)
+CARDINALITY_LABEL_RE = re.compile(
+    r'<g\b(?=[^>]*\bclass="[^"]*\bcardinality-label-wrap\b[^"]*")[^>]*>.*?'
+    r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"',
+    re.S,
+)
 RECT_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"')
 TEXT_RE = re.compile(r'<text[^>]*class="card-(title|sub)"[^>]*>(.*?)</text>')
 TEXT_TAG_RE = re.compile(r'<text\b([^>]*)>', re.S)
@@ -28,6 +38,7 @@ GROUP_LABEL_RE = re.compile(r'<text[^>]*class="group-label"[^>]*>')
 PATH_RE = re.compile(r'<path\b([^>]*)/?>')
 CLASS_RE = re.compile(r'class="([^"]+)"')
 D_RE = re.compile(r'\bd="([^"]+)"')
+DIRECT_LINE_RE = re.compile(r'^M ([-0-9.]+) ([-0-9.]+) L ([-0-9.]+) ([-0-9.]+)$')
 MARKER_RE = re.compile(r'<marker\b([^>]*)>(.*?)</marker>', re.S)
 FILL_RE = re.compile(r'\bfill="([^"]+)"')
 STYLE_FONT_RE = re.compile(r'\bfont\s*:[^;}]*?([0-9.]+)px', re.S)
@@ -279,6 +290,20 @@ def _info_panel_rects(svg: str) -> list[tuple[float, float, float, float]]:
     return panels
 
 
+def _relationship_diamond_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    diamonds = []
+    for match in RELATIONSHIP_DIAMOND_RE.finditer(svg):
+        coords = list(map(float, match.groups()))
+        xs = coords[0::2]
+        ys = coords[1::2]
+        diamonds.append((min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys)))
+    return diamonds
+
+
+def _cardinality_label_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    return [tuple(map(float, match.groups())) for match in CARDINALITY_LABEL_RE.finditer(svg)]
+
+
 def _diagram_type(svg: str) -> str:
     match = DATA_DIAGRAM_RE.search(svg)
     return match.group(1) if match else ''
@@ -392,6 +417,44 @@ def _segment_crosses_card(seg: tuple[str, tuple[float, float], tuple[float, floa
             return False
         return max(min(a[1], b[1]), y + 2) < min(max(a[1], b[1]), y + h - 2)
     return False
+
+
+def _rects_overlap(a: tuple[float, float, float, float], b: tuple[float, float, float, float], pad: float = 0.0) -> bool:
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    return ax - pad < bx + bw and ax + aw + pad > bx and ay - pad < by + bh and ay + ah + pad > by
+
+
+def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
+    if _diagram_type(svg) != 'object_relationship_diagram':
+        return
+    cards = _card_rects(svg)
+    diamonds = _relationship_diamond_rects(svg)
+    if not diamonds:
+        fail('object_relationship_diagram should render relationship diamonds', issues)
+        return
+    for idx, diamond in enumerate(diamonds, start=1):
+        if any(_rects_overlap(diamond, card, 8.0) for card in cards):
+            fail(f'relationship diamond {idx} overlaps an entity card', issues)
+    label_rects = _cardinality_label_rects(svg)
+    label_text_count = 0
+    for match in TEXT_TAG_RE.finditer(svg):
+        class_match = CLASS_RE.search(match.group(1))
+        if class_match and 'cardinality-label' in class_match.group(1).split():
+            label_text_count += 1
+    if label_text_count and len(label_rects) < label_text_count:
+        fail('object relationship cardinality labels should use layout wrappers', issues)
+    obstacles = cards + diamonds
+    for idx, label in enumerate(label_rects, start=1):
+        if any(_rects_overlap(label, obstacle, 1.0) for obstacle in obstacles):
+            fail(f'cardinality label {idx} overlaps an entity card or relationship diamond', issues)
+    for _attrs, d, _classes in _path_attrs_with_classes(svg, {'object-relationship-link'}):
+        match = DIRECT_LINE_RE.match(d)
+        if not match:
+            continue
+        x1, y1, x2, y2 = map(float, match.groups())
+        if abs(x1 - x2) >= EPS and abs(y1 - y2) >= EPS:
+            fail('object relationship link uses a direct diagonal segment; route it orthogonally', issues)
 
 
 def _check_connector_clearance(svg: str, issues: list[str]) -> None:
@@ -557,6 +620,7 @@ def check_svg(svg: str) -> list[str]:
     _check_text_scale(svg, issues)
     _check_group_label_shields(svg, issues)
     _check_canvas_density(svg, issues)
+    _check_object_relationship_geometry(svg, issues)
 
     dashed_count = svg.count('edge-dashed') + svg.count('stroke-dasharray')
     if dashed_count > 8:

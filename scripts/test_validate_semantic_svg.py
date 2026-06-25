@@ -134,6 +134,39 @@ def main() -> int:
 </svg>
 """,
     )
+    assert_issue(
+        "object relationship diamond overlaps entity",
+        """
+<svg width="600" height="360" data-diagram-type="object_relationship_diagram">
+<g id="entity-a" class="object-entity-card card"><rect x="100" y="100" width="180" height="120" fill="#FFFFFF" stroke="#334155"/><text class="card-title" style="font-size:18px">A</text></g>
+<g id="relationship-r" class="relationship-diamond"><path d="M 210 123 L 258 146 L 210 169 L 162 146 Z" fill="#FFFFFF" stroke="#FF9F2E"/></g>
+</svg>
+""",
+        "overlaps an entity card",
+    )
+    assert_issue(
+        "object relationship direct diagonal",
+        """
+<svg width="600" height="360" data-diagram-type="object_relationship_diagram">
+<g id="entity-a" class="object-entity-card card"><rect x="80" y="80" width="120" height="90" fill="#FFFFFF" stroke="#334155"/><text class="card-title" style="font-size:18px">A</text></g>
+<g id="entity-b" class="object-entity-card card"><rect x="360" y="210" width="120" height="90" fill="#FFFFFF" stroke="#334155"/><text class="card-title" style="font-size:18px">B</text></g>
+<g id="relationship-r" class="relationship-diamond"><path d="M 280 145 L 328 168 L 280 191 L 232 168 Z" fill="#FFFFFF" stroke="#FF9F2E"/></g>
+<path d="M 200 125 L 232 168" class="edge object-relationship-link"/>
+</svg>
+""",
+        "direct diagonal",
+    )
+    assert_issue(
+        "object relationship cardinality label overlaps entity",
+        """
+<svg width="600" height="360" data-diagram-type="object_relationship_diagram">
+<g id="entity-a" class="object-entity-card card"><rect x="80" y="80" width="160" height="100" fill="#FFFFFF" stroke="#334155"/><text class="card-title" style="font-size:18px">A</text></g>
+<g id="relationship-r" class="relationship-diamond"><path d="M 330 110 L 378 133 L 330 156 L 282 133 Z" fill="#FFFFFF" stroke="#FF9F2E"/></g>
+<g class="cardinality-label-wrap"><rect x="100" y="100" width="40" height="24" fill="#031E42"/><text x="110" y="116" class="note cardinality-label" style="font-size:15px">0..*</text></g>
+</svg>
+""",
+        "cardinality label",
+    )
     print("validate_semantic_svg selftest: PASS")
     return 0
 

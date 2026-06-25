@@ -194,6 +194,44 @@ def assert_boundary_matrix_design(svg: str) -> None:
         raise AssertionError("boundary matrix item subtitles should remain readable")
 
 
+def assert_object_relationship_design(svg: str) -> None:
+    if 'data-diagram-type="object_relationship_diagram"' not in svg:
+        raise AssertionError("object_relationship_diagram should declare its diagram type")
+    if svg.count('class="object-entity-card card"') < 6:
+        raise AssertionError("object_relationship_diagram should render entity table cards")
+    if svg.count('class="relationship-diamond"') < 5:
+        raise AssertionError("object_relationship_diagram should render relationship diamonds")
+    if 'class="edge object-relationship-link"' not in svg:
+        raise AssertionError("object_relationship_diagram should render relationship links")
+    if "PK" not in svg or "FK" not in svg:
+        raise AssertionError("object_relationship_diagram should render PK/FK badges")
+    if 'class="note cardinality-label"' not in svg or "1..*" not in svg:
+        raise AssertionError("object_relationship_diagram should render cardinality labels")
+    if 'class="cardinality-label-wrap"' not in svg:
+        raise AssertionError("object_relationship_diagram cardinality labels should use layout wrappers")
+    if 'stroke-dasharray="7 5"' not in svg:
+        raise AssertionError("object_relationship_diagram should support weak entity dashed cards")
+    if 'data-slot-row=' not in svg or 'data-slot-col=' not in svg:
+        raise AssertionError("object_relationship_diagram should expose relationship grid slots")
+    title_sizes = text_font_sizes(svg, "card-title")
+    table_sizes = text_font_sizes(svg, "entity-attr")
+    if not title_sizes or min(title_sizes) < 18:
+        raise AssertionError("object_relationship_diagram entity titles should remain readable")
+    if not table_sizes or min(table_sizes) < 13:
+        raise AssertionError("object_relationship_diagram attribute rows should remain readable")
+
+
+def assert_no_direct_diagonal_object_links(svg: str) -> None:
+    direct_line = re.compile(r'^M ([-0-9.]+) ([-0-9.]+) L ([-0-9.]+) ([-0-9.]+)$')
+    for d in path_ds(svg, {"object-relationship-link"}):
+        match = direct_line.match(d)
+        if not match:
+            continue
+        x1, y1, x2, y2 = map(float, match.groups())
+        if abs(x1 - x2) >= 0.1 and abs(y1 - y2) >= 0.1:
+            raise AssertionError(f"object_relationship_diagram should not use direct diagonal links, got: {d}")
+
+
 def q_turns(svg: str, required_classes: set[str]) -> list[tuple[float, float, float]]:
     turns = []
     pattern = re.compile(
@@ -430,6 +468,26 @@ def main() -> int:
         raise AssertionError("hub_spoke stress template should render operating info panels")
     if hub_stress_svg.count('class="hub-spoke-node spoke-block card"') < 10:
         raise AssertionError("hub_spoke stress template should exercise many designed spoke blocks")
+
+    object_relationship = load_json("templates/object_relationship_diagram/reference-contract.json")
+    object_relationship_svg = assert_valid("object relationship reference template", object_relationship)
+    assert_object_relationship_design(object_relationship_svg)
+    _dtype, object_strategy, _warnings = renderer.diagram_for_contract(object_relationship)
+    if object_strategy != "object_relationship":
+        raise AssertionError("object_relationship_diagram should select object_relationship strategy")
+    object_stress = load_json("templates/object_relationship_diagram/stress-contract.json")
+    object_stress_svg = assert_valid("object relationship stress template", object_stress)
+    if object_stress_svg.count('class="object-entity-card card"') < 9:
+        raise AssertionError("object_relationship_diagram stress template should exercise many entity cards")
+    if object_stress_svg.count('class="relationship-diamond"') < 9:
+        raise AssertionError("object_relationship_diagram stress template should exercise many relationships")
+    if object_stress_svg.count('data-route="orthogonal"') < 2:
+        raise AssertionError("object_relationship_diagram stress template should exercise orthogonal relationship routing")
+    if len(re.findall(r'<path\b[^>]*class="edge object-relationship-link"[^>]*data-relationship="category_parent"', object_stress_svg)) != 1:
+        raise AssertionError("object_relationship_diagram self relationships should render as one connector")
+    if not re.search(r'data-link-end="self"[^>]*data-card-anchor="top"[^>]*data-diamond-anchor="bottom"[^>]*data-relationship="category_parent"', object_stress_svg):
+        raise AssertionError("object_relationship_diagram should honor explicit self-relationship anchors")
+    assert_no_direct_diagonal_object_links(object_stress_svg)
 
     print("render_semantic_diagram selftest: PASS")
     return 0
