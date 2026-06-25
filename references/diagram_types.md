@@ -30,17 +30,42 @@ Schema rules are the same as `layered_knowledge_topology`.
 
 Use for domains, owners, stewards, applications, systems, data assets, and shared responsibility boundaries.
 
-Contract shape: `groups`, `nodes`, `edges`, `annotations`.
+Default contract shape: `groups`, `nodes`, `edges`, `annotations`.
 
-Renderer strategy: grouped/layered cards. Use containment and dashed responsibility links before adding dense edge meshes.
+Default renderer strategy: grouped/layered cards. Use containment and dashed responsibility links before adding dense edge meshes.
 
 Schema rules are the same as `layered_knowledge_topology`.
+
+Variant: `domain_ownership_matrix`.
+
+Use when the message is domain ownership, enterprise boundary, external partner boundary, and RACI/ownership assignments rather than layer-to-layer flow.
+
+Contract shape: `boundary`, `domains`, `external_partners`, `relationships`, `ownership_key`, `ownership_assignments`, `annotations`.
+
+Required fields:
+
+- `variant: "domain_ownership_matrix"`
+- `domains[].id`
+- `domains[].label`
+- `domains[].systems[].id` and `label` when systems are present
+- `domains[].assets[].id` and `label` when assets are present
+
+Optional fields:
+
+- `boundary.label`
+- `domains[].subtitle`, `kind`, `accent`, `owner`
+- `external_partners[].id`, `label`, `subtitle`, `kind`, `accent`
+- `relationships[].from`, `to`, `relation`, optional `style: "dashed"`, optional `accent`
+- `ownership_key[].code`, `label`, `description`
+- `ownership_assignments.columns[]` + `rows[]`, using the same column/row rules as `registry_table`
+
+Rules: relationship endpoints must reference a domain, system, asset, or external partner id. Do not mix this variant with top-level `groups`, `nodes`, or `edges`.
 
 ## registry_table
 
 Use for glossary, CTQ register, parameter register, risk register, status register, or compact index tables.
 
-Contract shape: `columns`, `rows`, `annotations`.
+Contract shape: `columns`, `rows`, optional `info_panels`, `annotations`.
 
 Required fields:
 
@@ -48,11 +73,11 @@ Required fields:
 - `columns[].label`
 - `rows[]` keyed by column id
 
-Optional fields: `columns[].width`, `columns[].align`, `rows[].id`, `rows[].kind`, `rows[].accent`.
+Optional fields: `columns[].width`, `columns[].align`, `rows[].id`, `rows[].kind`, `rows[].accent`, `info_panels[]`.
 
 Unsupported structural fields: `groups`, `nodes`, `edges`, `hub_id`.
 
-Rules: column ids must be unique; each row may only use column ids plus `id`, `kind`, and `accent`; each row must include every declared column id.
+Rules: column ids must be unique; each row may only use column ids plus `id`, `kind`, and `accent`; each row must include every declared column id. Use `info_panels` for legend, owner, version, rule, or review metadata that would make the table itself too wide.
 
 ## taxonomy_tree
 
@@ -72,12 +97,23 @@ Rules: node ids must be unique; each parent must reference another node id; edge
 
 Use for central hub/platform/module maps with surrounding comparable domains, capabilities, systems, or assets.
 
-Contract shape: `hub_id`, `nodes`, `annotations`.
+Contract shape: `hub_id`, `nodes`, optional `info_panels`, `annotations`.
 
 Required field: `hub_id` matching one node id.
 
-Optional field: `nodes[].order` controls deterministic spoke placement.
+Optional fields: `nodes[].order` controls deterministic spoke placement; `info_panels[]` adds bottom legend/use-case/rule panels.
 
 Unsupported structural fields: `groups`, `columns`, `rows`, `edges`.
 
-Rules: at least one spoke is required in addition to the hub; `nodes[].parent` and `nodes[].group` are not used by this type.
+Rules: at least one spoke is required in addition to the hub; `nodes[].parent` and `nodes[].group` are not used by this type. Use `info_panels` rather than adding many dashed spokes when the relationship semantics need explanation.
+
+## Shared info_panels
+
+`registry_table` and `hub_spoke` support bottom information panels for dense legends, rules, use cases, metadata, or relationship keys.
+
+Fields:
+
+- `info_panels[].title`
+- `info_panels[].items[]` as strings or objects
+- Optional `info_panels[].id`, `kind`, `accent`
+- Optional item object fields: `label`, `value`, `text`, `kind`, `accent`

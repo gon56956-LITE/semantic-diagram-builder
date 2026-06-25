@@ -28,6 +28,10 @@ def load_contract(name: str) -> dict:
     return json.loads((ROOT / "examples" / name).read_text(encoding="utf-8-sig"))
 
 
+def load_json(path: str) -> dict:
+    return json.loads((ROOT / path).read_text(encoding="utf-8-sig"))
+
+
 def assert_valid(name: str, contract: dict) -> str:
     svg = renderer.render(contract)
     issues = validator.check_svg(svg)
@@ -46,6 +50,18 @@ def path_ds(svg: str, required_classes: set[str]) -> list[str]:
         classes = set(class_match.group(1).split())
         if required_classes <= classes:
             matches.append(d_match.group(1))
+    return matches
+
+
+def path_attrs(svg: str, required_classes: set[str]) -> list[str]:
+    matches = []
+    for attrs in re.findall(r'<path\b([^>]*)/?>', svg):
+        class_match = re.search(r'class="([^"]+)"', attrs)
+        if not class_match:
+            continue
+        classes = set(class_match.group(1).split())
+        if required_classes <= classes:
+            matches.append(attrs)
     return matches
 
 
@@ -75,6 +91,30 @@ def css_font_size(svg: str, class_name: str) -> float:
     if not match:
         raise AssertionError(f"missing CSS font size for {class_name}")
     return float(match.group(1))
+
+
+def node_rects(svg: str) -> dict[str, tuple[float, float, float, float]]:
+    rects = {}
+    pattern = re.compile(
+        r'<g id="node-([^"]+)"[^>]*><rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"'
+    )
+    for node_id, x, y, w, h in pattern.findall(svg):
+        rects[node_id] = (float(x), float(y), float(w), float(h))
+    return rects
+
+
+def first_q_lanes_from(svg: str, source_bottoms: set[float]) -> set[float]:
+    lanes = set()
+    start_pattern = re.compile(r'^M ([-0-9.]+) ([-0-9.]+)\b')
+    q_pattern = re.compile(r'\bQ [-0-9.]+ ([-0-9.]+) [-0-9.]+ [-0-9.]+')
+    for d in path_ds(svg, {"taxonomy-link"}):
+        start = start_pattern.search(d)
+        q = q_pattern.search(d)
+        if not start or not q:
+            continue
+        if round(float(start.group(2)), 1) in source_bottoms:
+            lanes.add(round(float(q.group(1)), 1))
+    return lanes
 
 
 def assert_card_type_scale(label: str, svg: str) -> None:
@@ -119,6 +159,39 @@ def assert_hub_spoke_design(svg: str) -> None:
         raise AssertionError("hub_spoke labels should remain readable")
     if not sub_sizes or min(sub_sizes) < 13.5:
         raise AssertionError("hub_spoke subtitles should remain readable")
+
+
+def assert_boundary_matrix_design(svg: str) -> None:
+    if 'class="boundary-matrix-item"' not in svg:
+        raise AssertionError("boundary_ownership_map domain_ownership_matrix should render compact matrix items")
+    if 'class="edge boundary-matrix-link"' not in svg:
+        raise AssertionError("boundary_ownership_map domain_ownership_matrix should render relationship links")
+    if "OWNERSHIP KEY (RACI)" not in svg or "OWNERSHIP ASSIGNMENTS" not in svg:
+        raise AssertionError("boundary_ownership_map domain_ownership_matrix should render RACI key and assignment table")
+    if 'class="card node-card"' in svg:
+        raise AssertionError("boundary_ownership_map domain_ownership_matrix should not fall back to generic node cards")
+    item_heights = [
+        float(value)
+        for value in re.findall(
+            r'<g id="matrix-item-[^"]+" class="boundary-matrix-item"[^>]*>\s*<rect [^>]*height="([0-9.]+)"',
+            svg,
+        )
+    ]
+    if not item_heights or min(item_heights) < 76:
+        raise AssertionError("boundary matrix item cards should be tall enough for dense title/subtitle content")
+    external_link_attrs = [
+        attrs
+        for attrs in path_attrs(svg, {"boundary-matrix-link"})
+        if re.search(r'data-to="(payment_gateway|logistics_provider|cloud_provider|regulatory_authority|regulator|identity_provider)"', attrs)
+    ]
+    if not external_link_attrs or any('data-corridor-x=' not in attrs for attrs in external_link_attrs):
+        raise AssertionError("boundary matrix external links should route through domain-gap corridors")
+    title_sizes = text_font_sizes(svg, "matrix-title")
+    sub_sizes = text_font_sizes(svg, "matrix-sub")
+    if not title_sizes or min(title_sizes) < 18:
+        raise AssertionError("boundary matrix item titles should remain readable")
+    if not sub_sizes or min(sub_sizes) < 13.5:
+        raise AssertionError("boundary matrix item subtitles should remain readable")
 
 
 def q_turns(svg: str, required_classes: set[str]) -> list[tuple[float, float, float]]:
@@ -237,6 +310,32 @@ def main() -> int:
     if 'class="card node-card"' in registry_svg:
         raise AssertionError("registry_table should render as a table, not as grouped cards")
     assert_table_scale(registry_svg)
+    registry_stress = load_json("templates/registry_table/stress-contract.json")
+    registry_stress_svg = assert_valid("registry table stress template", registry_stress)
+    registry_width_match = re.search(r'<svg[^>]*width="([0-9.]+)"', registry_stress_svg)
+    if not registry_width_match or float(registry_width_match.group(1)) < 2300:
+        raise AssertionError("registry_table stress template should allow a wide canvas for dense columns")
+    if registry_stress_svg.count('class="info-panel"') < 3:
+        raise AssertionError("registry_table stress template should render bottom info panels")
+    if registry_stress_svg.count('class="table-badge semantic-badge"') < 8:
+        raise AssertionError("registry_table stress template should exercise many semantic badges")
+
+    boundary_minimal = load_json("templates/boundary_ownership_map/minimal-contract.json")
+    _dtype, minimal_strategy, _warnings = renderer.diagram_for_contract(boundary_minimal)
+    if minimal_strategy != "grouped_layered":
+        raise AssertionError("boundary_ownership_map without variant should keep grouped_layered strategy")
+    boundary_minimal_svg = assert_valid("boundary ownership minimal template", boundary_minimal)
+    if 'class="card node-card"' not in boundary_minimal_svg:
+        raise AssertionError("boundary_ownership_map minimal template should still render grouped node cards")
+
+    boundary_matrix = load_json("templates/boundary_ownership_map/reference-contract.json")
+    _dtype, matrix_strategy, _warnings = renderer.diagram_for_contract(boundary_matrix)
+    if matrix_strategy != "boundary_matrix":
+        raise AssertionError("boundary_ownership_map domain_ownership_matrix should select boundary_matrix strategy")
+    boundary_matrix_svg = assert_valid("boundary ownership matrix template", boundary_matrix)
+    if 'data-variant="domain_ownership_matrix"' not in boundary_matrix_svg:
+        raise AssertionError("boundary_ownership_map matrix SVG should expose data-variant")
+    assert_boundary_matrix_design(boundary_matrix_svg)
 
     tree = load_contract("taxonomy-tree-contract.json")
     tree_svg = assert_valid("taxonomy tree example", tree)
@@ -245,6 +344,67 @@ def main() -> int:
     assert_card_type_scale("taxonomy_tree", tree_svg)
     if css_font_size(tree_svg, "tree-level-label") < 15:
         raise AssertionError("taxonomy level labels should be readable at gallery scale")
+    stress_tree = load_json("templates/taxonomy_tree/stress-contract.json")
+    stress_tree_svg = assert_valid("taxonomy tree stress template", stress_tree)
+    width_match = re.search(r'<svg[^>]*width="([0-9.]+)"', stress_tree_svg)
+    if not width_match or float(width_match.group(1)) > 1800:
+        raise AssertionError("taxonomy_tree should wrap dense levels instead of forcing an overly wide canvas")
+    stress_rects = node_rects(stress_tree_svg)
+    leaf_ids = {
+        "domain_map",
+        "ownership_map",
+        "flow_overview",
+        "glossary",
+        "parameter_register",
+        "risk_register",
+        "work_module",
+        "training_module",
+        "playbook",
+        "source_doc",
+        "quality_record",
+        "test_result",
+    }
+    leaf_rows = {round(stress_rects[node_id][1], 1) for node_id in leaf_ids}
+    if len(leaf_rows) < 2:
+        raise AssertionError("taxonomy_tree dense leaf level should wrap into multiple visual rows")
+    level1_parent_ids = {"maps", "registries", "modules", "evidence"}
+    level1_bottoms = {
+        round(stress_rects[node_id][1] + stress_rects[node_id][3], 1)
+        for node_id in level1_parent_ids
+    }
+    level1_lanes = first_q_lanes_from(stress_tree_svg, level1_bottoms)
+    if len(level1_lanes) < 3:
+        raise AssertionError("taxonomy_tree Level 1 parents should use separate local fan-out lanes")
+    taxonomy_attrs = path_attrs(stress_tree_svg, {"taxonomy-link"})
+    level1_edge_attrs = [
+        attrs for attrs in taxonomy_attrs
+        if re.search(r'data-parent="(maps|registries|modules|evidence)"', attrs)
+    ]
+    level1_colors = {
+        color.upper()
+        for attrs in level1_edge_attrs
+        for color in re.findall(r'style="[^"]*stroke:(#[0-9A-Fa-f]{6})', attrs)
+    }
+    if len(level1_colors) < 4:
+        raise AssertionError("taxonomy_tree Level 1 fan-out groups should use distinct connector colors")
+    wrapped_corridors = {
+        re.search(r'data-parent="([^"]+)"', attrs).group(1): float(re.search(r'data-corridor-x="([-0-9.]+)"', attrs).group(1))
+        for attrs in level1_edge_attrs
+        if 'data-corridor-x=' in attrs and re.search(r'data-parent="([^"]+)"', attrs)
+    }
+    if len(wrapped_corridors) < 2:
+        raise AssertionError("taxonomy_tree stress case should exercise wrapped parent corridors")
+    if len(set(round(value, 1) for value in wrapped_corridors.values())) != len(wrapped_corridors):
+        raise AssertionError("taxonomy_tree wrapped fan-out groups should not share the same vertical corridor")
+    wrapped_row_lanes = {
+        re.search(r'data-parent="([^"]+)"', attrs).group(1): float(re.search(r'data-row-lane-y="([-0-9.]+)"', attrs).group(1))
+        for attrs in level1_edge_attrs
+        if 'data-row-lane-y=' in attrs and re.search(r'data-parent="([^"]+)"', attrs)
+    }
+    if len(wrapped_row_lanes) < 2:
+        raise AssertionError("taxonomy_tree stress case should exercise wrapped row lanes")
+    if len(set(round(value, 1) for value in wrapped_row_lanes.values())) != len(wrapped_row_lanes):
+        raise AssertionError("taxonomy_tree wrapped fan-out groups should use staggered row lanes")
     conflict_tree = copy.deepcopy(tree)
     conflict_tree["edges"] = [{"from": "maps", "to": "glossary", "relation": "parent"}]
     try:
@@ -264,6 +424,12 @@ def main() -> int:
     size_match = re.search(r'<svg[^>]*height="([0-9.]+)"', hub_svg)
     if not size_match or float(size_match.group(1)) > 720:
         raise AssertionError("hub_spoke should use a compact content-driven canvas height")
+    hub_stress = load_json("templates/hub_spoke/stress-contract.json")
+    hub_stress_svg = assert_valid("hub-spoke stress template", hub_stress)
+    if hub_stress_svg.count('class="info-panel"') < 3:
+        raise AssertionError("hub_spoke stress template should render operating info panels")
+    if hub_stress_svg.count('class="hub-spoke-node spoke-block card"') < 10:
+        raise AssertionError("hub_spoke stress template should exercise many designed spoke blocks")
 
     print("render_semantic_diagram selftest: PASS")
     return 0

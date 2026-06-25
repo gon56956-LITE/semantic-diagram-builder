@@ -3,7 +3,10 @@
   "subtitle": "Stress contract with multiple levels and many leaf nodes",
   "diagram_type": "taxonomy_tree",
   "style": "accent-blueprint",
-  "width": 2400,
+  "width": 1700,
+  "card_width": 220,
+  "tree_max_per_row": 6,
+  "tree_col_gap": 44,
   "nodes": [
     {"id": "root", "label": "Knowledge Asset System", "subtitle": "root class", "kind": "hub"},
     {"id": "maps", "label": "Map Assets", "subtitle": "structured views", "kind": "capability", "parent": "root", "order": 0},

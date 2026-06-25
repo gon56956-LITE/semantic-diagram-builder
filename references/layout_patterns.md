@@ -53,6 +53,18 @@ Rules:
 - Do not imply derived notes replace controlled source documents.
 - Place authority/disclaimer notes in footer or boundary band, not on arrows.
 
+## boundary_ownership_map: domain_ownership_matrix
+
+Use when a boundary/ownership map needs to show who owns domains, systems, assets, external partners, and RACI assignments in one technical blueprint.
+
+Rules:
+- Use `diagram_type: "boundary_ownership_map"` with `variant: "domain_ownership_matrix"`.
+- Put the enterprise boundary in the main canvas and render each domain as a vertical swimlane column.
+- Put systems/applications and data/assets inside their owning domain column; keep external partners outside the enterprise boundary.
+- Put shared responsibility and optional external links in sparse dashed connectors. Do not use dashed styling as decoration.
+- Put ownership key and assignment rows in the bottom band so the main boundary map remains readable.
+- Prefer this variant when the main question is "who owns what?" Use the default grouped/layered variant when the main question is "how does ownership flow across layers?"
+
 ## Multi-row sibling routing
 
 Use this when one sibling set no longer fits in a single readable row.

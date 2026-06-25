@@ -1,25 +1,61 @@
 {
   "title": "Hub Spoke Stress",
-  "subtitle": "Stress contract with many spokes and mixed semantics",
+  "subtitle": "Designed hub-spoke map with many spokes, external links, governance controls, and operating notes",
   "diagram_type": "hub_spoke",
   "style": "accent-blueprint",
-  "width": 1700,
-  "spoke_height": 104,
+  "width": 1800,
+  "spoke_height": 112,
+  "spoke_width": 330,
+  "hub_radius": 132,
   "hub_id": "hub",
   "nodes": [
     {"id": "hub", "label": "Knowledge Integration Hub", "subtitle": "routing + orchestration + monitoring", "kind": "hub"},
-    {"id": "portal", "label": "Knowledge Portal", "subtitle": "entry point", "kind": "index", "order": 0},
-    {"id": "domain", "label": "Domain Maps", "subtitle": "systems + ownership", "kind": "capability", "order": 1},
-    {"id": "registry", "label": "Semantic Registers", "subtitle": "terms + parameters", "kind": "registry", "order": 2},
-    {"id": "taxonomy", "label": "Risk Taxonomy", "subtitle": "constraints", "kind": "risk", "order": 3},
-    {"id": "analytics", "label": "Analytics Views", "subtitle": "decision support", "kind": "query", "order": 4},
-    {"id": "packages", "label": "Knowledge Packages", "subtitle": "approved modules", "kind": "package", "order": 5},
-    {"id": "sources", "label": "Controlled Sources", "subtitle": "authority", "kind": "source", "order": 6},
-    {"id": "governance", "label": "Governance Rules", "subtitle": "ownership + approvals", "kind": "quality", "order": 7},
-    {"id": "external", "label": "External Systems", "subtitle": "optional links", "kind": "ontology", "order": 8, "style": "dashed"},
-    {"id": "monitoring", "label": "Monitoring and Logging", "subtitle": "health signals", "kind": "process", "order": 9}
+    {"id": "portal", "label": "Knowledge Portal", "subtitle": "request intake + navigation", "kind": "index", "order": 0},
+    {"id": "domain", "label": "Domain Boundary Maps", "subtitle": "systems + ownership corridors", "kind": "capability", "order": 1},
+    {"id": "registry", "label": "Semantic Registers", "subtitle": "terms + parameters + CTQs", "kind": "registry", "order": 2},
+    {"id": "taxonomy", "label": "Risk and Defect Taxonomy", "subtitle": "classification + constraints", "kind": "risk", "order": 3},
+    {"id": "playbooks", "label": "Exception Playbooks", "subtitle": "known deviations + mitigations", "kind": "process", "order": 4, "style": "dashed"},
+    {"id": "analytics", "label": "Analytics and Review Views", "subtitle": "readiness + decision support", "kind": "query", "order": 5},
+    {"id": "packages", "label": "Reusable Knowledge Packages", "subtitle": "approved modules + instances", "kind": "package", "order": 6},
+    {"id": "sources", "label": "Controlled Source Library", "subtitle": "WI / PLM / MOC authority", "kind": "source", "order": 7},
+    {"id": "governance", "label": "Governance and Approval Rules", "subtitle": "ownership + reuse permissions", "kind": "quality", "order": 8},
+    {"id": "external", "label": "External Provider Interfaces", "subtitle": "optional out-of-scope links", "kind": "ontology", "order": 9, "style": "dashed"},
+    {"id": "monitoring", "label": "Monitoring and Audit Trail", "subtitle": "health signals + trace logs", "kind": "process", "order": 10},
+    {"id": "automation", "label": "Automation Services", "subtitle": "refresh jobs + validators", "kind": "query", "order": 11}
+  ],
+  "info_panels": [
+    {
+      "id": "flow-key",
+      "title": "Relationship / Flow Key",
+      "kind": "hub",
+      "items": [
+        {"label": "Solid spokes", "value": "primary managed relationship through the hub", "kind": "capability"},
+        {"label": "Dashed spokes", "value": "optional, exception, or external relationship requiring extra review", "kind": "ontology"},
+        {"label": "Orange accent", "value": "transformation path, dependency, or operational handoff", "kind": "process"}
+      ]
+    },
+    {
+      "id": "use-cases",
+      "title": "Use Cases",
+      "kind": "query",
+      "items": [
+        "Find the approved source package for a domain, CTQ, or defect class.",
+        "Trace a reusable module back to its controlled source and owner.",
+        "Identify external or optional dependencies before reuse in another product line."
+      ]
+    },
+    {
+      "id": "operating-rules",
+      "title": "Operating Rules",
+      "kind": "risk",
+      "items": [
+        {"label": "Owner", "value": "hub owner maintains routing rules and stale-link reports"},
+        {"label": "Quality gate", "value": "new module cannot be published without source and approval evidence"},
+        {"label": "Cadence", "value": "weekly automation check; monthly architecture review"}
+      ]
+    }
   ],
   "annotations": [
-    {"text": "Stress template: many spokes should remain legible and use a compact content-driven canvas.", "placement": "footer"}
+    {"text": "Stress template: designed hub-spoke maps should stay legible with many spokes, dashed relationships, and bottom operating panels.", "placement": "footer"}
   ]
 }

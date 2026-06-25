@@ -196,7 +196,7 @@
       "title": "Hub Spoke Stress",
       "contract": "templates/hub_spoke/stress-contract.json",
       "svg": "templates/hub_spoke/stress.svg",
-      "max_height": 900
+      "max_height": 1300
     }
   ]
 }

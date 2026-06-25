@@ -1,28 +1,164 @@
 {
   "title": "Registry Table Stress",
-  "subtitle": "Stress contract with many columns, long text, and semantic badges",
+  "subtitle": "Dense semantic register with long definitions, status signals, owners, risks, and governance notes",
   "diagram_type": "registry_table",
   "style": "accent-blueprint",
-  "width": 1900,
+  "width": 2400,
+  "row_height": 112,
   "columns": [
-    {"id": "term", "label": "Term", "width": 230},
-    {"id": "definition", "label": "Definition", "width": 440},
+    {"id": "term", "label": "Term", "width": 250},
+    {"id": "definition", "label": "Definition", "width": 520},
     {"id": "type", "label": "Type", "width": 165, "align": "center"},
-    {"id": "owner", "label": "Owner", "width": 220},
-    {"id": "state", "label": "State", "width": 180},
-    {"id": "risk", "label": "Risk / Constraint", "width": 300},
+    {"id": "owner", "label": "Owner", "width": 230},
+    {"id": "state", "label": "Lifecycle State", "width": 190},
+    {"id": "risk", "label": "Risk / Constraint", "width": 330},
+    {"id": "evidence", "label": "Required Evidence", "width": 280},
     {"id": "related", "label": "Related Items"}
   ],
   "rows": [
-    {"id": "domain", "kind": "capability", "term": "Domain Map", "definition": "Aligned view of systems, interfaces, boundaries, and reusable knowledge modules.", "type": "Map", "owner": "Architecture", "state": "Approved", "risk": "Scope must match declared domain boundary.", "related": "Interfaces, Modules, Owners"},
-    {"id": "source", "kind": "source", "term": "Controlled Source", "definition": "Authoritative document or system record used to validate derived knowledge.", "type": "Authority", "owner": "Document Control", "state": "Controlled", "risk": "Revision mismatch invalidates derived content.", "related": "Revision, Approval"},
-    {"id": "risk", "kind": "risk", "term": "Risk Constraint", "definition": "Condition that limits how an asset, parameter, or process module can be reused.", "type": "Governance", "owner": "Quality", "state": "Active", "risk": "Exceptions require explicit approval.", "related": "CTQ, Exception"},
-    {"id": "module", "kind": "package", "term": "Reusable Module", "definition": "Approved knowledge package that can be referenced by maps, taxonomies, or workflows.", "type": "Asset", "owner": "Knowledge Ops", "state": "Reusable", "risk": "Must cite source boundary and owner.", "related": "Package, Instance"},
-    {"id": "interface", "kind": "query", "term": "System Interface", "definition": "Boundary where one system or team exchanges data, decisions, or responsibilities.", "type": "Interface", "owner": "Systems", "state": "Reviewed", "risk": "Ambiguous ownership causes handoff gaps.", "related": "Domain, Owner"},
-    {"id": "taxonomy", "kind": "glossary", "term": "Classification Node", "definition": "Named category in a hierarchy used to classify knowledge objects.", "type": "Taxonomy", "owner": "Architecture", "state": "Draft", "risk": "Do not skip parent levels without rule.", "related": "Parent, Child"},
-    {"id": "metric", "kind": "quality", "term": "Quality Metric", "definition": "Measure used to evaluate quality, completeness, or readiness of an asset.", "type": "Metric", "owner": "Quality", "state": "Approved", "risk": "Metric definition must be stable.", "related": "CTQ, Threshold"}
+    {
+      "id": "domain",
+      "kind": "capability",
+      "term": "Domain Map",
+      "definition": "Aligned view of systems, interfaces, ownership boundaries, reusable knowledge modules, and the operating scope they belong to.",
+      "type": "Map",
+      "owner": "Enterprise Architecture",
+      "state": "Approved baseline",
+      "risk": "Scope must match the declared domain boundary; hidden cross-domain ownership must be called out.",
+      "evidence": "Owner approval + interface inventory",
+      "related": "Interfaces, Modules, Owners, Boundary Map"
+    },
+    {
+      "id": "source",
+      "kind": "source",
+      "term": "Controlled Source",
+      "definition": "Authoritative document, PLM record, MOC package, or system record used to validate derived knowledge assets.",
+      "type": "Authority",
+      "owner": "Document Control",
+      "state": "Controlled",
+      "risk": "Revision mismatch invalidates derived content and must trigger re-review before reuse.",
+      "evidence": "Revision, effective date, approver",
+      "related": "Revision, Approval, Change Notice"
+    },
+    {
+      "id": "risk",
+      "kind": "risk",
+      "term": "Risk Constraint",
+      "definition": "Condition that limits how an asset, parameter, process step, or reusable module can be reused across products.",
+      "type": "Governance",
+      "owner": "Quality Engineering",
+      "state": "Active control",
+      "risk": "Exceptions require explicit owner approval and traceability to the affected knowledge object.",
+      "evidence": "Exception log + mitigation owner",
+      "related": "CTQ, Exception, Control Plan"
+    },
+    {
+      "id": "module",
+      "kind": "package",
+      "term": "Reusable Knowledge Module",
+      "definition": "Approved package that can be referenced by maps, taxonomies, procedures, dashboards, or workflow diagrams without rewriting the source logic.",
+      "type": "Asset",
+      "owner": "Knowledge Operations",
+      "state": "Reusable",
+      "risk": "Must cite source boundary, steward, and allowed-use conditions before downstream reuse.",
+      "evidence": "Module record + source links",
+      "related": "Package, Instance, Taxonomy Node"
+    },
+    {
+      "id": "interface",
+      "kind": "query",
+      "term": "System Interface",
+      "definition": "Boundary where systems, teams, or process owners exchange data, decisions, events, or responsibilities.",
+      "type": "Interface",
+      "owner": "Systems Architecture",
+      "state": "Reviewed",
+      "risk": "Ambiguous ownership causes handoff gaps, duplicate records, and stale downstream knowledge.",
+      "evidence": "Interface owner + data contract",
+      "related": "Domain, Owner, Data Flow"
+    },
+    {
+      "id": "taxonomy",
+      "kind": "glossary",
+      "term": "Classification Node",
+      "definition": "Named category in a hierarchy used to classify knowledge objects while preserving parent-child meaning.",
+      "type": "Taxonomy",
+      "owner": "Architecture Board",
+      "state": "Draft review",
+      "risk": "Do not skip parent levels unless a rule explains why the shortcut is allowed.",
+      "evidence": "Parent rule + examples",
+      "related": "Parent, Child, Registry Term"
+    },
+    {
+      "id": "metric",
+      "kind": "quality",
+      "term": "Quality Metric",
+      "definition": "Measure used to evaluate completeness, freshness, approval status, or reuse readiness of a knowledge asset.",
+      "type": "Metric",
+      "owner": "Quality Systems",
+      "state": "Approved",
+      "risk": "Metric definition must be stable enough for trend comparison across review cycles.",
+      "evidence": "Metric definition + threshold",
+      "related": "CTQ, Threshold, Review Gate"
+    },
+    {
+      "id": "external",
+      "kind": "ontology",
+      "term": "External System Reference",
+      "definition": "Pointer to an out-of-bound system or provider whose data influences the register but is not governed inside this knowledge boundary.",
+      "type": "External",
+      "owner": "Integration Owner",
+      "state": "Watched",
+      "risk": "Provider schema or SLA changes may break assumptions without changing internal records.",
+      "evidence": "Interface SLA + escalation path",
+      "related": "External Partner, API, SLA"
+    },
+    {
+      "id": "exception",
+      "kind": "process",
+      "term": "Exception Playbook",
+      "definition": "Reusable response pattern for known deviations, incomplete evidence, late approvals, or temporary source gaps.",
+      "type": "Process",
+      "owner": "Governance Lead",
+      "state": "Conditional",
+      "risk": "Playbook cannot become a permanent bypass for missing controlled-source evidence.",
+      "evidence": "Deviation record + sunset date",
+      "related": "Risk, Approval, Audit Trail"
+    }
+  ],
+  "info_panels": [
+    {
+      "id": "legend",
+      "title": "Semantic Badge Key",
+      "kind": "capability",
+      "items": [
+        {"label": "Cyan", "value": "maps, interfaces, selected active domains", "kind": "capability"},
+        {"label": "Yellow", "value": "governance, quality controls, active risk constraints", "kind": "quality"},
+        {"label": "Green", "value": "approved reusable modules and reusable assets", "kind": "package"},
+        {"label": "Purple", "value": "external systems, optional links, out-of-bound references", "kind": "ontology"}
+      ]
+    },
+    {
+      "id": "rules",
+      "title": "Registry Rules",
+      "kind": "risk",
+      "items": [
+        "Every term must resolve to one accountable owner and one evidence requirement.",
+        "Lifecycle state must describe current use permission, not project mood.",
+        "Long definitions should wrap inside cells without shrinking the register into unreadable type."
+      ]
+    },
+    {
+      "id": "metadata",
+      "title": "Review Metadata",
+      "kind": "source",
+      "items": [
+        {"label": "Cadence", "value": "monthly semantic review; immediate review on controlled-source change"},
+        {"label": "Consumers", "value": "architecture, quality, document control, knowledge operations"},
+        {"label": "Version", "value": "stress template v1.1"}
+      ]
+    }
   ],
   "annotations": [
-    {"text": "Stress template: long rows should wrap inside cells while badges remain semantic.", "placement": "footer"}
+    {"text": "Stress template: long rows, semantic badges, and governance panels should remain readable without turning the table into a dashboard.", "placement": "footer"}
   ]
 }

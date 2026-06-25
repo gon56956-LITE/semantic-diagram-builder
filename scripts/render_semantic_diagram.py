@@ -240,6 +240,8 @@ def style_block(style: dict) -> str:
     {scope} .table-header{{font:700 {table_header_size} {mono};fill:{style_color(style, "text_primary", "#0F172A")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
     {scope} .table-cell{{font:500 {table_cell_size} {sans};fill:{style_color(style, "text_primary", "#0F172A")}}}
     {scope} .table-cell-secondary{{font:500 {table_cell_size} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
+    {scope} .info-panel-title{{font:700 {_font_css(style, "tokens.typography.group_label_size", "15px")} {mono};fill:{style_color(style, "text_primary", "#0F172A")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
+    {scope} .info-panel-item{{font:500 {_font_css(style, "tokens.typography.note_size", "14px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
     {scope} .tree-level-label{{font:700 {_font_css(style, "tokens.typography.group_label_size", "15px")} {mono};fill:{style_color(style, "text_secondary", "#64748B")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
     {scope} .hub-label{{font:700 {_font_css(style, "tokens.typography.group_label_size", "13px")} {mono};fill:{style_color(style, "text_secondary", "#64748B")};letter-spacing:{typography.get("label_letter_spacing", ".06em")};text-transform:uppercase}}
     {scope} .icon-line{{fill:none;stroke-width:{_style_component(style, "icon").get("line_width", 1.8)};stroke-linecap:round;stroke-linejoin:round}}
@@ -673,9 +675,10 @@ def _side_x(layout: dict, side: str) -> float:
     return x + w - layout["side_gutter"] / 2
 
 
-def _path(d: str, classes: str, marker: str | None = None) -> str:
+def _path(d: str, classes: str, marker: str | None = None, extra_attrs: str = "") -> str:
     marker_attr = f' marker-end="url(#{marker})"' if marker else ""
-    return f'<path d="{d}" class="{classes}"{marker_attr}/>'
+    extra = f" {extra_attrs.strip()}" if extra_attrs.strip() else ""
+    return f'<path d="{d}" class="{classes}"{marker_attr}{extra}/>'
 
 
 def _vertical_branch(x: float, start_y: float, end_y: float) -> str:
@@ -995,8 +998,10 @@ def _group_label_svg(style: dict, x: float, y: float, w: float, label: str) -> s
 
 
 def _svg_shell_start(contract: dict, style: dict, width: float, height: float, diagram_type: str) -> list[str]:
+    variant = contract.get("variant")
+    variant_attr = f' data-variant="{e(variant)}"' if isinstance(variant, str) and variant.strip() else ""
     parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{e(contract.get("title", "Semantic Diagram"))}" data-style="{e(style_id(style))}" data-diagram-type="{e(diagram_type)}">'
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{e(contract.get("title", "Semantic Diagram"))}" data-style="{e(style_id(style))}" data-diagram-type="{e(diagram_type)}"{variant_attr}>'
     ]
     parts.append(style_block(style))
     parts.extend(_canvas_parts(style, width, height))
@@ -1113,6 +1118,12 @@ def _render_table(contract: dict, style: dict, diagram_type: str) -> str:
         raise DiagramTypeError("registry_table requires non-empty columns")
     margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
     width = int(contract.get("width", 1500))
+    fixed_w = sum(float(col.get("width")) for col in columns if isinstance(col.get("width"), (int, float)) and col.get("width") > 0)
+    auto_count = sum(1 for col in columns if not (isinstance(col.get("width"), (int, float)) and col.get("width") > 0))
+    min_auto_col_w = float(contract.get("min_auto_column_width", 180))
+    required_table_w = fixed_w + auto_count * min_auto_col_w
+    if required_table_w > width - 2 * margin_x:
+        width = int(math.ceil(required_table_w + 2 * margin_x))
     table_x = margin_x
     table_y = int(contract.get("top_y", metrics["top_y"]))
     table_w = width - 2 * margin_x
@@ -1123,7 +1134,11 @@ def _render_table(contract: dict, style: dict, diagram_type: str) -> str:
     cell_style = f'font-size:{_fmt_px(text_metrics["cell_size"])}'
     term_style = f'{cell_style};font-weight:700'
     line_h = text_metrics["line_h"]
-    height = int(max(contract.get("height", 0), table_y + header_h + max(1, len(rows)) * row_h + 110))
+    table_h = header_h + max(1, len(rows)) * row_h
+    panels = _info_panels(contract)
+    panel_y = table_y + table_h + 24
+    _panel_layouts, panels_h = _info_panel_layouts(panels, table_x, panel_y, table_w, width)
+    height = int(max(contract.get("height", 0), panel_y + panels_h + 72 if panels else table_y + table_h + 110))
     col_widths = _column_widths(columns, table_w)
     table = _style_component(style, "table")
     radius = table.get("radius", _style_component(style, "card").get("radius", 8))
@@ -1135,7 +1150,7 @@ def _render_table(contract: dict, style: dict, diagram_type: str) -> str:
 
     parts = _svg_shell_start(contract, style, width, height, diagram_type)
     parts.append(
-        f'<rect x="{table_x}" y="{table_y}" width="{table_w}" height="{header_h + max(1, len(rows)) * row_h}" rx="{radius}" {_paint_attr(style, "fill", fill, "#FFFFFF", table.get("fill_opacity"))} stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="{table.get("stroke_width", 1)}"/>'
+        f'<rect x="{table_x}" y="{table_y}" width="{table_w}" height="{table_h}" rx="{radius}" {_paint_attr(style, "fill", fill, "#FFFFFF", table.get("fill_opacity"))} stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="{table.get("stroke_width", 1)}"/>'
     )
     parts.append(
         f'<rect x="{table_x}" y="{table_y}" width="{table_w}" height="{header_h}" rx="{radius}" {_paint_attr(style, "fill", header_fill, "#EEF6FF", table.get("header_opacity"))}/>'
@@ -1144,7 +1159,7 @@ def _render_table(contract: dict, style: dict, diagram_type: str) -> str:
     for idx, col in enumerate(columns):
         col_w = col_widths[idx]
         if idx > 0:
-            parts.append(f'<line x1="{cur_x}" y1="{table_y}" x2="{cur_x}" y2="{table_y + header_h + max(1, len(rows)) * row_h}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
+            parts.append(f'<line x1="{cur_x}" y1="{table_y}" x2="{cur_x}" y2="{table_y + table_h}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
         anchor, offset = _text_anchor_for(col.get("align"))
         text_x = cur_x + 16 + (col_w - 32) * offset
         parts.append(f'<text x="{text_x}" y="{table_y + header_h / 2 + text_metrics["header_size"] / 3}" text-anchor="{anchor}" class="table-header" style="{header_style}">{e(col.get("label", col.get("id")))}</text>')
@@ -1185,6 +1200,484 @@ def _render_table(contract: dict, style: dict, diagram_type: str) -> str:
                 parts.append(_table_badge_svg(style, row_kind, cur_x + 16, y + row_h / 2 - badge_size / 2, badge_size, row_accent))
             cur_x += col_w
 
+    _render_info_panels(parts, panels, style, table_x, panel_y, table_w, width)
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
+def _accent_color(style: dict, item: dict, fallback_kind: str = "object") -> str:
+    raw = item.get("accent")
+    if raw:
+        color = style_color(style, raw, "")
+        if VALID_HEX.match(color):
+            return color
+    color = kind_accent(style, item.get("kind", fallback_kind))
+    return color if VALID_HEX.match(color) else style_color(style, "line_primary", "#F4F8FF")
+
+
+def _panel_rect_svg(
+    style: dict,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    *,
+    stroke: str | None = None,
+    dasharray: str | None = None,
+    radius: float | None = None,
+    fill: str = "panel_fill",
+    fill_opacity: float | None = None,
+    stroke_opacity: float = 0.62,
+) -> str:
+    group = _style_component(style, "group")
+    stroke_color = stroke or style_color(style, group.get("stroke", "line_primary"), "#334155")
+    rx = radius if radius is not None else group.get("radius", 8)
+    dash_attr = f' stroke-dasharray="{dasharray}"' if dasharray and dasharray != "none" else ""
+    fill_attrs = _paint_attr(style, "fill", fill, "#FFFFFF", fill_opacity if fill_opacity is not None else group.get("opacity"))
+    return (
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" {fill_attrs} '
+        f'stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="{group.get("stroke_width", 1)}"{dash_attr}/>'
+    )
+
+
+def _info_panels(contract: dict) -> list[dict]:
+    panels = contract.get("info_panels", [])
+    if not isinstance(panels, list):
+        return []
+    return [panel for panel in panels if isinstance(panel, dict)]
+
+
+def _info_panel_item_text(item: object) -> tuple[str, str, str]:
+    if isinstance(item, dict):
+        label = str(item.get("label", "")).strip()
+        value = str(item.get("value", item.get("text", ""))).strip()
+        kind = str(item.get("kind", "")).strip()
+        if label and value:
+            return f"{label}: {value}", kind, str(item.get("accent", "")).strip()
+        return label or value, kind, str(item.get("accent", "")).strip()
+    return str(item), "", ""
+
+
+def _info_panel_height(panel: dict, panel_w: float, canvas_w: float) -> float:
+    body_size = _clamp(14.0 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 14.0, 15.2)
+    line_h = body_size + 4
+    content_w = max(120, panel_w - 42)
+    max_chars = max(16, int(content_w / (body_size * 0.52)))
+    items = panel.get("items", [])
+    if not isinstance(items, list):
+        items = []
+    total = 46.0
+    for item in items:
+        text, _kind, _accent = _info_panel_item_text(item)
+        if not text:
+            continue
+        total += max(1, len(wrap_text(text, max_chars=max_chars, max_lines=3))) * line_h + 6
+    return max(92.0, total + 14)
+
+
+def _info_panel_layouts(panels: list[dict], x: float, y: float, w: float, canvas_w: float) -> tuple[list[tuple[dict, float, float, float, float]], float]:
+    if not panels:
+        return [], 0.0
+    gap = 18.0
+    cols = min(3, len(panels))
+    panel_w = (w - (cols - 1) * gap) / cols
+    layouts: list[tuple[dict, float, float, float, float]] = []
+    total_h = 0.0
+    row_y = y
+    for start in range(0, len(panels), cols):
+        row_panels = panels[start:start + cols]
+        heights = [_info_panel_height(panel, panel_w, canvas_w) for panel in row_panels]
+        row_h = max(heights)
+        row_w = len(row_panels) * panel_w + (len(row_panels) - 1) * gap
+        row_x = x + (w - row_w) / 2
+        for idx, panel in enumerate(row_panels):
+            layouts.append((panel, row_x + idx * (panel_w + gap), row_y, panel_w, row_h))
+        row_y += row_h + gap
+        total_h += row_h + gap
+    return layouts, total_h - gap
+
+
+def _render_info_panels(parts: list[str], panels: list[dict], style: dict, x: float, y: float, w: float, canvas_w: float) -> float:
+    layouts, total_h = _info_panel_layouts(panels, x, y, w, canvas_w)
+    body_size = _clamp(14.0 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 14.0, 15.2)
+    line_h = body_size + 4
+    for panel, px, py, pw, ph in layouts:
+        color = _accent_color(style, panel, "object")
+        panel_id = str(panel.get("id", panel.get("title", "panel"))).lower().replace(" ", "-")
+        parts.append(f'<g class="info-panel" data-panel-id="{e(panel_id)}">')
+        parts.append(_panel_rect_svg(style, px, py, pw, ph, fill="panel_fill", stroke=color, stroke_opacity=0.62, radius=6))
+        parts.append(f'<text x="{px + 18}" y="{py + 28}" class="info-panel-title">{e(panel.get("title", "Info"))}</text>')
+        items = panel.get("items", [])
+        if not isinstance(items, list):
+            items = []
+        text_y = py + 56
+        max_chars = max(16, int(max(120, pw - 48) / (body_size * 0.52)))
+        for item in items:
+            text, kind, accent = _info_panel_item_text(item)
+            if not text:
+                continue
+            item_color = style_color(style, accent, "") if accent else kind_accent(style, kind or panel.get("kind", "object"))
+            if not VALID_HEX.match(item_color):
+                item_color = color
+            lines = wrap_text(text, max_chars=max_chars, max_lines=3)
+            parts.append(f'<rect x="{px + 18}" y="{text_y - 10}" width="9" height="9" rx="2" fill="{item_color}" opacity="0.95"/>')
+            for idx, line in enumerate(lines):
+                parts.append(
+                    f'<text x="{px + 36}" y="{text_y + idx * line_h}" class="info-panel-item" '
+                    f'style="font-size:{_fmt_px(body_size)}">{e(line)}</text>'
+                )
+            text_y += max(1, len(lines)) * line_h + 6
+        parts.append('</g>')
+    return total_h
+
+
+def _matrix_text_lines(text: object, max_chars: int, max_lines: int) -> list[str]:
+    return wrap_text(str(text or ""), max_chars=max_chars, max_lines=max_lines)
+
+
+def _matrix_item_svg(item: dict, x: float, y: float, w: float, h: float, style: dict, canvas_w: float) -> str:
+    kind = str(item.get("kind", "object"))
+    color = _accent_color(style, item, kind)
+    text_primary = style_color(style, "text_primary", "#0F172A")
+    text_secondary = style_color(style, "text_secondary", "#64748B")
+    title_size = _clamp(18.0 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 18.0, 19.5)
+    sub_size = _clamp(14.0 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 13.5, 15.0)
+    text_x = x + 42
+    text_w = max(70, w - 54)
+    title_lines = _matrix_text_lines(item.get("label", item.get("id", "Item")), max(7, int(text_w / (title_size * 0.55))), 2)
+    sub_lines = _matrix_text_lines(item.get("subtitle", ""), max(9, int(text_w / (sub_size * 0.5))), 1)
+    title_line_h = title_size + 2
+    sub_line_h = sub_size + 2
+    sub_gap = 4
+    block_h = len(title_lines) * title_line_h + (sub_gap + sub_line_h if sub_lines else 0)
+    top = y + (h - block_h) / 2
+    parts = [f'<g id="matrix-item-{e(item.get("id", ""))}" class="boundary-matrix-item" data-kind="{e(kind)}">']
+    parts.append(
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" '
+        f'{_paint_attr(style, "fill", "card_fill", "#FFFFFF", 1)} stroke="{color}" stroke-width="1.2"/>'
+    )
+    parts.append(icon_svg(kind, x + 14, y + h / 2 - 10, color, style))
+    for idx, line in enumerate(title_lines):
+        parts.append(
+            f'<text x="{text_x}" y="{top + title_size + idx * title_line_h}" '
+            f'text-anchor="start" class="matrix-title" style="font-size:{_fmt_px(title_size)};font-weight:700;fill:{text_primary}">{e(line)}</text>'
+        )
+    if sub_lines:
+        sub_y = top + len(title_lines) * title_line_h + sub_gap + sub_size
+        parts.append(
+            f'<text x="{text_x}" y="{sub_y}" text-anchor="start" class="matrix-sub" '
+            f'style="font-size:{_fmt_px(sub_size)};font-weight:500;fill:{text_secondary}">{e(sub_lines[0])}</text>'
+        )
+    parts.append('</g>')
+    return "".join(parts)
+
+
+def _matrix_connector_path(a: tuple[float, float, float, float], b: tuple[float, float, float, float]) -> str:
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    if ax + aw / 2 <= bx + bw / 2:
+        sx, sy = ax + aw, ay + ah / 2
+        tx, ty = bx, by + bh / 2
+    else:
+        sx, sy = ax, ay + ah / 2
+        tx, ty = bx + bw, by + bh / 2
+    if abs(sy - ty) < 2:
+        return _rounded_path([(sx, sy), (tx, ty)])
+    mid_x = (sx + tx) / 2
+    return _rounded_path([(sx, sy), (mid_x, sy), (mid_x, ty), (tx, ty)])
+
+
+def _matrix_external_connector_path(
+    source: tuple[float, float, float, float],
+    target: tuple[float, float, float, float],
+    corridor_x: float,
+    exit_y: float,
+) -> str:
+    sx = source[0] + source[2] if corridor_x >= source[0] + source[2] / 2 else source[0]
+    sy = source[1] + source[3] / 2
+    tx = target[0] + target[2] / 2
+    ty = target[1]
+    return _rounded_path([(sx, sy), (corridor_x, sy), (corridor_x, exit_y), (tx, exit_y), (tx, ty)])
+
+
+def _render_compact_table(
+    parts: list[str],
+    style: dict,
+    title: str,
+    columns: list[dict],
+    rows: list[dict],
+    x: float,
+    y: float,
+    w: float,
+    canvas_w: float,
+) -> float:
+    if not columns:
+        return 0
+    metrics = _table_text_metrics(style, canvas_w)
+    header_size = _clamp(metrics["header_size"] - 1.0, 13.5, 16.0)
+    cell_size = _clamp(metrics["cell_size"] - 2.2, 13.5, 16.0)
+    title_h = 28
+    header_h = 34
+    row_h = 34
+    h = title_h + header_h + max(1, len(rows)) * row_h
+    table = _style_component(style, "table")
+    stroke_color, stroke_opacity = style_paint(style, table.get("stroke", "line_primary"), "#334155")
+    stroke_opacity = table.get("grid_opacity", stroke_opacity if stroke_opacity is not None else 0.55)
+    parts.append(_panel_rect_svg(style, x, y, w, h, fill="panel_fill", stroke=stroke_color, stroke_opacity=stroke_opacity, radius=6))
+    parts.append(f'<text x="{x + w/2}" y="{y + 20}" text-anchor="middle" class="table-header" style="font-size:{_fmt_px(header_size)}">{e(title)}</text>')
+    col_widths = _column_widths(columns, w - 24)
+    table_x = x + 12
+    table_y = y + title_h
+    parts.append(f'<line x1="{table_x}" y1="{table_y}" x2="{table_x + w - 24}" y2="{table_y}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
+    cur_x = table_x
+    for idx, col in enumerate(columns):
+        col_w = col_widths[idx]
+        if idx > 0:
+            parts.append(f'<line x1="{cur_x}" y1="{table_y}" x2="{cur_x}" y2="{table_y + header_h + max(1, len(rows))*row_h}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
+        anchor, offset = _text_anchor_for(col.get("align"))
+        text_x = cur_x + 10 + (col_w - 20) * offset
+        parts.append(f'<text x="{text_x}" y="{table_y + 22}" text-anchor="{anchor}" class="table-header" style="font-size:{_fmt_px(header_size)}">{e(col.get("label", col.get("id")))}</text>')
+        cur_x += col_w
+    parts.append(f'<line x1="{table_x}" y1="{table_y + header_h}" x2="{table_x + w - 24}" y2="{table_y + header_h}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
+    if not rows:
+        parts.append(f'<text x="{x + w/2}" y="{table_y + header_h + 22}" text-anchor="middle" class="table-cell-secondary" style="font-size:{_fmt_px(cell_size)}">No rows</text>')
+    for row_idx, row in enumerate(rows):
+        row_y = table_y + header_h + row_idx * row_h
+        if row_idx > 0:
+            parts.append(f'<line x1="{table_x}" y1="{row_y}" x2="{table_x + w - 24}" y2="{row_y}" stroke="{stroke_color}" stroke-opacity="{stroke_opacity}" stroke-width="1"/>')
+        cur_x = table_x
+        for idx, col in enumerate(columns):
+            col_w = col_widths[idx]
+            anchor, offset = _text_anchor_for(col.get("align"))
+            text_x = cur_x + 10 + (col_w - 20) * offset
+            max_chars = max(5, int((col_w - 20) / max(7.0, cell_size * 0.52)))
+            lines = wrap_text(str(row.get(col["id"], "")), max_chars=max_chars, max_lines=1)
+            klass = "table-cell" if idx == 0 else "table-cell-secondary"
+            parts.append(f'<text x="{text_x}" y="{row_y + 22}" text-anchor="{anchor}" class="{klass}" style="font-size:{_fmt_px(cell_size)}">{e(lines[0])}</text>')
+            cur_x += col_w
+    return h
+
+
+def _render_boundary_ownership_matrix(contract: dict, style: dict, diagram_type: str) -> str:
+    metrics = layout_metrics(style)
+    width = int(contract.get("width", 1700))
+    margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
+    top_y = int(contract.get("top_y", metrics["top_y"]))
+    domains = [d for d in contract.get("domains", []) if isinstance(d, dict)]
+    externals = [p for p in contract.get("external_partners", []) if isinstance(p, dict)]
+    assignments = contract.get("ownership_assignments") if isinstance(contract.get("ownership_assignments"), dict) else {}
+    assignment_columns = [c for c in assignments.get("columns", []) if isinstance(c, dict)]
+    assignment_rows = [r for r in assignments.get("rows", []) if isinstance(r, dict)]
+    ownership_key = [k for k in contract.get("ownership_key", []) if isinstance(k, dict)]
+
+    legend_h = 56
+    map_y = top_y + legend_h + 18
+    item_h = 78
+    item_gap = 10
+    domain_header_h = 42
+    lane_pad = 18
+    max_domain_items = max((len(d.get("systems", []) or []) + len(d.get("assets", []) or []) + (1 if d.get("owner") else 0) for d in domains), default=1)
+    boundary_h = max(320, 78 + domain_header_h + max_domain_items * (item_h + item_gap) + 34)
+    external_gap_y = 24 if externals else 0
+    external_cols = 0
+    external_rows = 0
+    external_h = 0
+    if externals:
+        external_available_w = width - 2 * margin_x - 48
+        external_cols = max(1, min(len(externals), min(5, int((external_available_w + 18) / (210 + 18)))))
+        external_rows = math.ceil(len(externals) / external_cols)
+        external_h = 62 + external_rows * item_h + max(0, external_rows - 1) * item_gap + 24
+    table_y = map_y + boundary_h + external_gap_y + external_h + 26
+    bottom_h = max(130, 28 + 34 + max(1, len(assignment_rows)) * 34)
+    height = int(max(contract.get("height", 0), table_y + bottom_h + 72))
+
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+    line = style_color(style, "line_primary", "#F4F8FF")
+    secondary = style_color(style, "text_secondary", "#C9DAF5")
+    cyan = style_color(style, "accent_cyan", "#16D9FF")
+    yellow = style_color(style, "accent_yellow", "#FFD84D")
+    green = style_color(style, "accent_green", "#6EE66E")
+    purple = style_color(style, "accent_purple", "#B56CFF")
+    orange = style_color(style, "accent_orange", "#FF9F2E")
+    panel_fill = "panel_fill"
+
+    legend_x = margin_x
+    legend_y = top_y - 8
+    legend_w = width - 2 * margin_x
+    parts.append(_panel_rect_svg(style, legend_x, legend_y, legend_w, legend_h, fill=panel_fill, stroke=line, stroke_opacity=0.58, radius=6))
+    legend_items = [
+        ("Domain", cyan, "rect"),
+        ("System / Application", green, "rect"),
+        ("Data / Asset", yellow, "rect"),
+        ("External", purple, "rect"),
+        ("Ownership Boundary", line, "line"),
+        ("Shared Responsibility", purple, "dash"),
+        ("Data Flow", orange, "arrow"),
+    ]
+    lx = legend_x + 18
+    ly = legend_y + 22
+    for label, color, shape in legend_items:
+        if shape == "line":
+            parts.append(f'<line x1="{lx}" y1="{ly}" x2="{lx+30}" y2="{ly}" stroke="{color}" stroke-width="1.4"/>')
+        elif shape == "dash":
+            parts.append(f'<line x1="{lx}" y1="{ly}" x2="{lx+30}" y2="{ly}" stroke="{color}" stroke-width="1.4" stroke-dasharray="6 5"/>')
+        elif shape == "arrow":
+            parts.append(f'<path d="M {lx} {ly} L {lx+30} {ly}" class="edge" marker-end="url(#arrow)" style="stroke:{color};opacity:0.95"/>')
+        else:
+            parts.append(f'<rect x="{lx}" y="{ly-7}" width="28" height="14" rx="3" fill="none" stroke="{color}" stroke-width="1.3"/>')
+        parts.append(f'<text x="{lx+40}" y="{ly+4}" class="note" style="font-size:14px">{e(label)}</text>')
+        lx += max(128, len(label) * 8 + 70)
+
+    boundary_x = margin_x
+    boundary_w = width - 2 * margin_x
+    boundary = contract.get("boundary") if isinstance(contract.get("boundary"), dict) else {}
+    boundary_label = boundary.get("label", "Enterprise Boundary")
+    parts.append(_panel_rect_svg(style, boundary_x, map_y, boundary_w, boundary_h, fill="panel_fill", stroke=line, stroke_opacity=0.7, radius=8, dasharray="10 7"))
+    parts.append(f'<text x="{boundary_x + boundary_w/2}" y="{map_y + 28}" text-anchor="middle" class="group-label">{e(boundary_label)}</text>')
+
+    domain_gap = 18
+    domain_count = max(1, len(domains))
+    domain_area_x = boundary_x + 28
+    domain_area_y = map_y + 58
+    domain_area_w = boundary_w - 56
+    domain_col_w = (domain_area_w - (domain_count - 1) * domain_gap) / domain_count
+    item_positions: dict[str, tuple[float, float, float, float]] = {}
+    domain_positions: dict[str, tuple[float, float, float, float]] = {}
+    item_domains: dict[str, str] = {}
+    domain_palette = [cyan, cyan, orange, yellow, green]
+    for idx, domain in enumerate(domains):
+        dx = domain_area_x + idx * (domain_col_w + domain_gap)
+        dy = domain_area_y
+        domain_id = str(domain["id"])
+        color = _accent_color(style, domain, "capability") if domain.get("accent") else domain_palette[idx % len(domain_palette)]
+        parts.append(_panel_rect_svg(style, dx, dy, domain_col_w, boundary_h - 86, fill="panel_fill", stroke=color, stroke_opacity=0.7, radius=6))
+        parts.append(f'<text x="{dx + domain_col_w/2}" y="{dy + 24}" text-anchor="middle" class="group-label" style="fill:{line}">{e(domain.get("label", domain.get("id")))}</text>')
+        if domain.get("subtitle"):
+            parts.append(f'<text x="{dx + domain_col_w/2}" y="{dy + 43}" text-anchor="middle" class="note" style="font-size:14px">{e(domain.get("subtitle"))}</text>')
+        item_x = dx + lane_pad
+        item_w = domain_col_w - 2 * lane_pad
+        item_y = dy + domain_header_h + 16
+        domain_rect = (dx, dy, domain_col_w, boundary_h - 86)
+        item_positions[domain_id] = domain_rect
+        domain_positions[domain_id] = domain_rect
+        item_domains[domain_id] = domain_id
+        for item in list(domain.get("systems", []) or []) + list(domain.get("assets", []) or []):
+            item_id = str(item["id"])
+            item_positions[item_id] = (item_x, item_y, item_w, item_h)
+            item_domains[item_id] = domain_id
+            parts.append(_matrix_item_svg(item, item_x, item_y, item_w, item_h, style, width))
+            item_y += item_h + item_gap
+        if domain.get("owner"):
+            owner_id = f'{domain.get("id")}_owner'
+            owner_item = {
+                "id": owner_id,
+                "label": str(domain.get("owner")),
+                "subtitle": "owner / steward",
+                "kind": "quality",
+                "accent": "accent_yellow",
+            }
+            item_positions[owner_id] = (item_x, item_y, item_w, item_h)
+            item_domains[owner_id] = domain_id
+            parts.append(_matrix_item_svg(owner_item, item_x, item_y, item_w, item_h, style, width))
+
+    external_ids: set[str] = set()
+    if externals:
+        ex_x = boundary_x
+        ex_y = map_y + boundary_h + external_gap_y
+        ex_w = boundary_w
+        parts.append(_panel_rect_svg(style, ex_x, ex_y, ex_w, external_h, fill="panel_fill", stroke=purple, stroke_opacity=0.78, radius=8))
+        parts.append(f'<text x="{ex_x + ex_w/2}" y="{ex_y + 30}" text-anchor="middle" class="group-label" style="fill:{line}">EXTERNAL PARTNERS</text>')
+        external_card_gap = 18
+        raw_item_w = (ex_w - 48 - (external_cols - 1) * external_card_gap) / external_cols
+        item_w = min(260, raw_item_w)
+        row_w = external_cols * item_w + (external_cols - 1) * external_card_gap
+        row_x0 = ex_x + (ex_w - row_w) / 2
+        item_y0 = ex_y + 62
+        for idx, item in enumerate(externals):
+            item.setdefault("kind", "object")
+            item.setdefault("accent", "accent_purple")
+            row = idx // external_cols
+            col = idx % external_cols
+            item_x = row_x0 + col * (item_w + external_card_gap)
+            item_y = item_y0 + row * (item_h + item_gap)
+            item_id = str(item["id"])
+            external_ids.add(item_id)
+            item_positions[item_id] = (item_x, item_y, item_w, item_h)
+            parts.append(_matrix_item_svg(item, item_x, item_y, item_w, item_h, style, width))
+
+    domain_order = [str(domain["id"]) for domain in domains if domain.get("id")]
+
+    def source_corridor_x(source_id: str, target_rect: tuple[float, float, float, float]) -> float:
+        domain_id = item_domains.get(source_id)
+        if not domain_id or domain_id not in domain_positions:
+            source_rect = item_positions[source_id]
+            return source_rect[0] + source_rect[2] / 2
+        dx, _dy, dw, _dh = domain_positions[domain_id]
+        domain_idx = domain_order.index(domain_id) if domain_id in domain_order else 0
+        candidates: list[float] = []
+        if domain_idx < len(domain_order) - 1:
+            candidates.append(dx + dw + domain_gap / 2)
+        if domain_idx > 0:
+            candidates.append(dx - domain_gap / 2)
+        if not candidates:
+            candidates.append(dx + dw + domain_gap / 2)
+        target_center = target_rect[0] + target_rect[2] / 2
+        return min(candidates, key=lambda value: abs(value - target_center))
+
+    corridor_use_count: dict[float, int] = {}
+    corridor_offsets = [0, -5, 5, -8, 8]
+    for rel in contract.get("relationships", []) or []:
+        if not isinstance(rel, dict):
+            continue
+        source = str(rel.get("from", ""))
+        target = str(rel.get("to", ""))
+        if source not in item_positions or target not in item_positions:
+            continue
+        color = style_color(style, rel.get("accent"), "")
+        if not VALID_HEX.match(color):
+            color = orange if rel.get("relation") in {"data_flow", "flow", "feeds"} else purple if rel.get("style") == "dashed" else line
+        dash = ' stroke-dasharray="6 5"' if rel.get("style") == "dashed" or rel.get("relation") in {"shared_responsibility", "external"} else ""
+        extra_attrs = ""
+        if target in external_ids and source in item_domains:
+            base_corridor_x = source_corridor_x(source, item_positions[target])
+            corridor_key = round(base_corridor_x, 1)
+            corridor_idx = corridor_use_count.get(corridor_key, 0)
+            corridor_use_count[corridor_key] = corridor_idx + 1
+            corridor_x = base_corridor_x + corridor_offsets[corridor_idx % len(corridor_offsets)]
+            exit_y = map_y + boundary_h + external_gap_y / 2
+            path = _matrix_external_connector_path(item_positions[source], item_positions[target], corridor_x, exit_y)
+            extra_attrs = f' data-corridor-x="{round(corridor_x, 2)}"'
+        else:
+            path = _matrix_connector_path(item_positions[source], item_positions[target])
+        parts.append(f'<path d="{path}" class="edge boundary-matrix-link" marker-end="url(#arrow)" style="stroke:{color};opacity:0.86"{dash} data-from="{e(source)}" data-to="{e(target)}"{extra_attrs}/>')
+
+    key_w = min(430, (width - 2 * margin_x) * 0.34)
+    table_gap = 22
+    table_x = margin_x + key_w + table_gap
+    table_w = width - 2 * margin_x - key_w - table_gap
+    parts.append(_panel_rect_svg(style, margin_x, table_y, key_w, bottom_h, fill="panel_fill", stroke=line, stroke_opacity=0.58, radius=6))
+    parts.append(f'<text x="{margin_x + 18}" y="{table_y + 26}" class="table-header">OWNERSHIP KEY (RACI)</text>')
+    key_y = table_y + 56
+    for idx, item in enumerate(ownership_key[:5]):
+        y = key_y + idx * 25
+        code = str(item.get("code", ""))
+        label = str(item.get("label", ""))
+        desc = str(item.get("description", ""))
+        parts.append(f'<text x="{margin_x + 22}" y="{y}" class="table-cell" style="font-size:16px;font-weight:700">{e(code)}</text>')
+        parts.append(f'<text x="{margin_x + 55}" y="{y}" class="table-cell-secondary" style="font-size:16px">{e(label)}{e(" - " + desc if desc else "")}</text>')
+
+    _render_compact_table(
+        parts,
+        style,
+        "OWNERSHIP ASSIGNMENTS",
+        assignment_columns,
+        assignment_rows,
+        table_x,
+        table_y,
+        table_w,
+        width,
+    )
     _append_annotations(parts, contract, style, width, height)
     parts.append('</svg>')
     return "\n".join(parts) + "\n"
@@ -1261,7 +1754,10 @@ def _render_tree(contract: dict, style: dict, diagram_type: str) -> str:
     margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
     card_w = float(contract.get("card_width", 230))
     card_h = float(contract.get("card_height", metrics["card_h"]))
-    level_gap = float(contract.get("level_gap", 84))
+    col_gap = float(contract.get("tree_col_gap", contract.get("card_col_gap", metrics["card_col_gap"])))
+    row_gap = max(float(contract.get("tree_row_gap", 88)), 72.0)
+    level_gap = max(float(contract.get("level_gap", 132)), 108.0)
+    max_per_row = max(1, int(contract.get("tree_max_per_row", contract.get("max_nodes_per_row", 6))))
     leaf_slots: dict[str, int] = {}
     centers: dict[str, float] = {}
     depths: dict[str, int] = {}
@@ -1281,27 +1777,208 @@ def _render_tree(contract: dict, style: dict, diagram_type: str) -> str:
 
     for root in roots:
         assign(root, 0)
-    leaf_count = max(1, leaf_index)
-    min_width = int(2 * margin_x + leaf_count * card_w + max(0, leaf_count - 1) * 44)
+    ordered_by_depth: dict[int, list[str]] = {}
+    for node_id in node_by_id:
+        ordered_by_depth.setdefault(depths[node_id], []).append(node_id)
+    for depth_nodes in ordered_by_depth.values():
+        depth_nodes.sort(key=lambda node_id: (centers[node_id], node_by_id[node_id].get("order", 0), node_id))
+
+    max_cols = max(1, max(min(max_per_row, len(nodes)) for nodes in ordered_by_depth.values()))
+    min_width = int(2 * margin_x + max_cols * card_w + max(0, max_cols - 1) * col_gap)
     width = int(max(contract.get("width", 1500), min_width))
     top_y = int(contract.get("top_y", metrics["top_y"]))
     max_depth = max(depths.values())
-    height = int(max(contract.get("height", 0), top_y + (max_depth + 1) * card_h + max_depth * level_gap + 110))
-    span = max(1.0, width - 2 * margin_x - card_w)
-    step = span / max(1, leaf_count - 1)
+    depth_starts: dict[int, float] = {}
+    y = float(top_y)
+    for depth in range(max_depth + 1):
+        depth_starts[depth] = y
+        row_count = max(1, math.ceil(len(ordered_by_depth.get(depth, [])) / max_per_row))
+        y += row_count * card_h + max(0, row_count - 1) * row_gap
+        if depth < max_depth:
+            y += level_gap
+    height = int(max(contract.get("height", 0), y + 110))
+
     positions: dict[str, tuple[float, float, float, float]] = {}
-    for node_id, slot_center in centers.items():
-        cx = margin_x + card_w / 2 + slot_center * step
-        y = top_y + depths[node_id] * (card_h + level_gap)
-        positions[node_id] = (cx - card_w / 2, y, card_w, card_h)
+    visual_rows: dict[str, tuple[int, int, float]] = {}
+    row_rects: dict[tuple[int, int], list[tuple[float, float, float, float]]] = {}
+    for depth, depth_nodes in ordered_by_depth.items():
+        depth_max_cols = max(1, min(max_per_row, len(depth_nodes)))
+        grid_w = depth_max_cols * card_w + max(0, depth_max_cols - 1) * col_gap
+        grid_x0 = (width - grid_w) / 2
+        for idx, node_id in enumerate(depth_nodes):
+            row = idx // max_per_row
+            col = idx % max_per_row
+            row_nodes = depth_nodes[row * max_per_row:(row + 1) * max_per_row]
+            offset_cols = (depth_max_cols - len(row_nodes)) / 2
+            x = grid_x0 + (col + offset_cols) * (card_w + col_gap)
+            node_y = depth_starts[depth] + row * (card_h + row_gap)
+            rect = (x, node_y, card_w, card_h)
+            positions[node_id] = rect
+            visual_rows[node_id] = (depth, row, x + card_w / 2)
+            row_rects.setdefault((depth, row), []).append(rect)
+
+    target_parents_by_row: dict[tuple[int, int], dict[str, list[str]]] = {}
+    for child_id, parent_id in parent_map.items():
+        depth, row, _cx = visual_rows[child_id]
+        if row > 0:
+            target_parents_by_row.setdefault((depth, row), {}).setdefault(parent_id, []).append(child_id)
+
+    def corridor_slots_for(depth: int, row: int) -> list[float]:
+        blockers: list[tuple[float, float, float, float]] = []
+        for earlier_row in range(row):
+            blockers.extend(row_rects.get((depth, earlier_row), []))
+        if not blockers:
+            return [width / 2]
+        slots = [margin_x / 2, width - margin_x / 2]
+        for earlier_row in range(row):
+            ordered = sorted(row_rects.get((depth, earlier_row), []))
+            for left, right in zip(ordered, ordered[1:]):
+                gap_left = left[0] + left[2]
+                gap_right = right[0]
+                gap_w = gap_right - gap_left
+                if gap_w < 20:
+                    continue
+                center = (gap_left + gap_right) / 2
+                offsets = [0.0]
+                if gap_w >= 58:
+                    offsets = [-12.0, 12.0, 0.0]
+                if gap_w >= 86:
+                    offsets = [-24.0, 0.0, 24.0]
+                for offset in offsets:
+                    candidate = center + offset
+                    if gap_left + 10 <= candidate <= gap_right - 10:
+                        slots.append(candidate)
+        valid = sorted({
+            round(candidate, 2) for candidate in slots
+            if not any(rx + 2 < candidate < rx + rw - 2 for rx, _ry, rw, _rh in blockers)
+        })
+        return valid or [margin_x / 2, width - margin_x / 2]
+
+    parent_corridors: dict[tuple[int, int, str], float] = {}
+    for row_key, parent_children in target_parents_by_row.items():
+        depth, row = row_key
+        slots = corridor_slots_for(depth, row)
+        used: list[float] = []
+
+        def desired_x(parent_id: str) -> float:
+            child_centers = [center_top(positions[child_id])[0] for child_id in parent_children[parent_id]]
+            parent_x, _parent_y = center_bottom(positions[parent_id])
+            return (sum(child_centers) / len(child_centers) + parent_x) / 2
+
+        for parent_id in sorted(parent_children, key=lambda pid: (desired_x(pid), positions[pid][0], pid)):
+            available = [slot for slot in slots if all(abs(slot - existing) >= 16 for existing in used)]
+            chosen = min(available or slots, key=lambda slot: abs(slot - desired_x(parent_id)))
+            used.append(chosen)
+            parent_corridors[(depth, row, parent_id)] = chosen
+
+    def corridor_x_for(parent_id: str, child_id: str, target_x: float) -> float:
+        depth, row, _cx = visual_rows[child_id]
+        assigned = parent_corridors.get((depth, row, parent_id))
+        if assigned is not None:
+            return assigned
+        slots = corridor_slots_for(depth, row)
+        return min(slots, key=lambda candidate: abs(candidate - target_x))
+
+    lane_parents_by_child_depth: dict[int, list[str]] = {}
+    for child_id, parent_id in parent_map.items():
+        child_depth = visual_rows[child_id][0]
+        parents = lane_parents_by_child_depth.setdefault(child_depth, [])
+        if parent_id not in parents:
+            parents.append(parent_id)
+    for parents in lane_parents_by_child_depth.values():
+        parents.sort(key=lambda node_id: (positions[node_id][1], positions[node_id][0], node_id))
+
+    family_palette = [
+        style_color(style, "accent_cyan", "#16D9FF"),
+        style_color(style, "accent_yellow", "#FFD84D"),
+        style_color(style, "accent_green", "#6EE66E"),
+        style_color(style, "accent_purple", "#B56CFF"),
+        style_color(style, "accent_orange", "#FF9F2E"),
+    ]
+
+    def parent_rank(parent_id: str, child_depth: int) -> int:
+        parents = lane_parents_by_child_depth.get(child_depth, [parent_id])
+        return parents.index(parent_id) if parent_id in parents else 0
+
+    def tree_edge_color(parent_id: str, child_depth: int) -> str:
+        explicit = node_by_id[parent_id].get("accent")
+        if isinstance(explicit, str) and VALID_HEX.match(explicit):
+            return explicit
+        parents = lane_parents_by_child_depth.get(child_depth, [parent_id])
+        if len(parents) > 1:
+            return family_palette[parent_rank(parent_id, child_depth) % len(family_palette)]
+        color = kind_accent(style, node_by_id[parent_id].get("kind", "object"))
+        return color if VALID_HEX.match(color) else style_color(style, "line_primary", "#F4F8FF")
+
+    def parent_lane_y(parent_id: str, child_depth: int, fallback_y: float) -> float:
+        parents = lane_parents_by_child_depth.get(child_depth, [parent_id])
+        parent_bottom = positions[parent_id][1] + positions[parent_id][3]
+        first_row_top = depth_starts[child_depth]
+        lane_top = parent_bottom + 22
+        lane_bottom = first_row_top - 22
+        if lane_bottom <= lane_top:
+            return fallback_y
+        rank = parent_rank(parent_id, child_depth)
+        return lane_top + (rank + 1) * (lane_bottom - lane_top) / (len(parents) + 1)
+
+    def target_row_lane_y(parent_id: str, child_depth: int, child_row: int, fallback_y: float) -> float:
+        if child_row <= 0:
+            return fallback_y
+        parents = sorted(
+            target_parents_by_row.get((child_depth, child_row), {}),
+            key=lambda node_id: (positions[node_id][0], node_id),
+        )
+        if not parents:
+            return fallback_y
+        prev_row_bottom = depth_starts[child_depth] + (child_row - 1) * (card_h + row_gap) + card_h
+        row_top = depth_starts[child_depth] + child_row * (card_h + row_gap)
+        lane_top = prev_row_bottom + 20
+        lane_bottom = row_top - 20
+        if lane_bottom <= lane_top:
+            return fallback_y
+        rank = parents.index(parent_id) if parent_id in parents else 0
+        return lane_top + (rank + 1) * (lane_bottom - lane_top) / (len(parents) + 1)
+
+    def tree_edge_route(parent_id: str, child_id: str) -> tuple[str, dict[str, float]]:
+        sx, sy = center_bottom(positions[parent_id])
+        tx, ty = center_top(positions[child_id])
+        child_depth, child_row, _cx = visual_rows[child_id]
+        top_lane_y = parent_lane_y(parent_id, child_depth, (sy + ty) / 2)
+        if child_row == 0:
+            if abs(tx - sx) < 1e-6:
+                return _rounded_path([(sx, sy), (tx, ty)]), {"lane_y": top_lane_y}
+            return _rounded_path([(sx, sy), (sx, top_lane_y), (tx, top_lane_y), (tx, ty)]), {"lane_y": top_lane_y}
+        corridor_x = corridor_x_for(parent_id, child_id, tx)
+        prev_row_bottom = depth_starts[child_depth] + (child_row - 1) * (card_h + row_gap) + card_h
+        target_corridor_y = target_row_lane_y(parent_id, child_depth, child_row, (prev_row_bottom + ty) / 2)
+        return _rounded_path([
+            (sx, sy),
+            (sx, top_lane_y),
+            (corridor_x, top_lane_y),
+            (corridor_x, target_corridor_y),
+            (tx, target_corridor_y),
+            (tx, ty),
+        ]), {"lane_y": top_lane_y, "corridor_x": corridor_x, "row_lane_y": target_corridor_y}
 
     parts = _svg_shell_start(contract, style, width, height, diagram_type)
     for child, parent in parent_map.items():
-        parts.append(_path(edge_path(positions[parent], positions[child]), "edge taxonomy-link", "arrow"))
-    for node_id in sorted(positions, key=lambda nid: (depths[nid], positions[nid][0])):
+        child_depth = visual_rows[child][0]
+        route, route_meta = tree_edge_route(parent, child)
+        color = tree_edge_color(parent, child_depth)
+        meta_attrs = " ".join(
+            f'data-{key.replace("_", "-")}="{round(value, 2)}"'
+            for key, value in route_meta.items()
+        )
+        parts.append(_path(
+            route,
+            "edge taxonomy-link",
+            "arrow",
+            f'data-parent="{e(parent)}" data-child="{e(child)}" {meta_attrs} style="stroke:{color};opacity:0.92"',
+        ))
+    for node_id in sorted(positions, key=lambda nid: (depths[nid], positions[nid][1], positions[nid][0])):
         parts.append(make_card(node_by_id[node_id], *positions[node_id], style, width))
     for depth in range(max_depth + 1):
-        parts.append(f'<text x="{margin_x}" y="{top_y + depth * (card_h + level_gap) - 14}" class="tree-level-label">Level {depth}</text>')
+        parts.append(f'<text x="{margin_x}" y="{depth_starts[depth] - 14}" class="tree-level-label">Level {depth}</text>')
     _append_annotations(parts, contract, style, width, height)
     parts.append('</svg>')
     return "\n".join(parts) + "\n"
@@ -1402,7 +2079,12 @@ def _render_hub_spoke(contract: dict, style: dict, diagram_type: str) -> str:
     for i, node in enumerate(right):
         positions[str(node["id"])] = (right_x, center_y - right_total / 2 + i * (spoke_h + column_gap), spoke_w, spoke_h)
     content_bottom = max([center_y + hub_radius + 20] + [y + h for _x, y, _w, h in positions.values()])
-    min_height = int(content_bottom + 92)
+    panels = _info_panels(contract)
+    panel_y = content_bottom + 28
+    panel_x = margin_x
+    panel_w = width - 2 * margin_x
+    _panel_layouts, panels_h = _info_panel_layouts(panels, panel_x, panel_y, panel_w, width)
+    min_height = int(panel_y + panels_h + 64 if panels else content_bottom + 92)
     height = int(max(contract.get("height", min_height), min_height))
 
     parts = _svg_shell_start(contract, style, width, height, diagram_type)
@@ -1418,6 +2100,7 @@ def _render_hub_spoke(contract: dict, style: dict, diagram_type: str) -> str:
     parts.append(_render_hub_core(node_by_id[hub_id], center_x, center_y, hub_radius, style, width))
     for node in spokes:
         parts.append(_render_spoke_block(node, *positions[str(node["id"])], style, width))
+    _render_info_panels(parts, panels, style, panel_x, panel_y, panel_w, width)
     _append_annotations(parts, contract, style, width, height)
     parts.append('</svg>')
     return "\n".join(parts) + "\n"
@@ -1434,6 +2117,8 @@ def render(contract: dict, contract_path: Path | None = None, style: dict | None
         return _render_tree(contract, style, diagram_type)
     if strategy == "hub_spoke":
         return _render_hub_spoke(contract, style, diagram_type)
+    if strategy == "boundary_matrix":
+        return _render_boundary_ownership_matrix(contract, style, diagram_type)
     if strategy == "grouped_layered":
         return _render_grouped_layered(contract, style, contract_path, diagram_type)
     raise DiagramTypeError(f"unsupported render strategy: {strategy}")

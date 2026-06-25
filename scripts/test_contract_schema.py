@@ -19,6 +19,10 @@ def load_contract(name: str) -> dict:
     return json.loads((ROOT / "examples" / name).read_text(encoding="utf-8-sig"))
 
 
+def load_json(path: str) -> dict:
+    return json.loads((ROOT / path).read_text(encoding="utf-8-sig"))
+
+
 def assert_schema_pass(name: str, contract: dict) -> None:
     try:
         renderer.contract_warnings(contract, ROOT / "examples" / f"{name}.json")
@@ -72,6 +76,21 @@ def main() -> int:
     bad_coord["nodes"][0]["row"] = -1
     assert_schema_error("grouped negative row", bad_coord, "must be a non-negative integer")
 
+    boundary_matrix = load_json("templates/boundary_ownership_map/reference-contract.json")
+    assert_schema_pass("boundary ownership matrix", boundary_matrix)
+
+    bad_boundary_variant = copy.deepcopy(boundary_matrix)
+    bad_boundary_variant["variant"] = "unknown_matrix"
+    assert_schema_error("boundary unknown variant", bad_boundary_variant, "unsupported boundary_ownership_map variant")
+
+    bad_boundary_missing_domains = copy.deepcopy(boundary_matrix)
+    del bad_boundary_missing_domains["domains"]
+    assert_schema_error("boundary matrix missing domains", bad_boundary_missing_domains, 'requires "domains"')
+
+    bad_boundary_relationship = copy.deepcopy(boundary_matrix)
+    bad_boundary_relationship["relationships"][0]["to"] = "missing"
+    assert_schema_error("boundary matrix missing relationship target", bad_boundary_relationship, "is not a boundary matrix item id")
+
     registry = load_contract("registry-table-contract.json")
     registry_with_nodes = copy.deepcopy(registry)
     registry_with_nodes["nodes"] = [{"id": "n", "label": "N"}]
@@ -84,6 +103,13 @@ def main() -> int:
     registry_unknown_key = copy.deepcopy(registry)
     registry_unknown_key["rows"][0]["typo"] = "extra"
     assert_schema_error("registry unknown column", registry_unknown_key, "unknown column keys")
+
+    registry_stress = load_json("templates/registry_table/stress-contract.json")
+    assert_schema_pass("registry stress with info panels", registry_stress)
+
+    registry_bad_panel = copy.deepcopy(registry_stress)
+    registry_bad_panel["info_panels"][0]["items"][0]["unknown"] = "nope"
+    assert_schema_error("registry bad info panel item", registry_bad_panel, "unknown keys")
 
     taxonomy = load_contract("taxonomy-tree-contract.json")
     taxonomy_no_links = copy.deepcopy(taxonomy)
@@ -112,6 +138,9 @@ def main() -> int:
     assert_schema_error("taxonomy cycle", taxonomy_cycle, "cannot contain cycles")
 
     hub = load_contract("hub-spoke-contract.json")
+    hub_stress = load_json("templates/hub_spoke/stress-contract.json")
+    assert_schema_pass("hub stress with info panels", hub_stress)
+
     missing_hub = copy.deepcopy(hub)
     missing_hub["hub_id"] = "missing"
     assert_schema_error("hub missing hub_id", missing_hub, "hub_id to match a node id")

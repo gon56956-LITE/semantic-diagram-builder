@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="509" viewBox="0 0 1100 509" role="img" aria-label="Taxonomy Tree Minimal" data-style="modern-tech" data-diagram-type="taxonomy_tree">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="557" viewBox="0 0 1100 557" role="img" aria-label="Taxonomy Tree Minimal" data-style="modern-tech" data-diagram-type="taxonomy_tree">
 <defs>
   <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
   <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
@@ -20,18 +20,20 @@
     [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
     [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
     [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .info-panel-title{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .info-panel-item{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
     [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
     [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
     [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   </style>
 </defs>
-<rect x="0" y="0" width="1100" height="509" rx="28" fill="#F8FBFF"/>
+<rect x="0" y="0" width="1100" height="557" rx="28" fill="#F8FBFF"/>
 <text x="550.0" y="54" text-anchor="middle" class="title">Taxonomy Tree Minimal</text>
 <text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for a taxonomy tree</text>
-<path d="M 185.0 215.0 L 185.0 299.0" class="edge taxonomy-link" marker-end="url(#arrow)"/>
-<g id="node-root" class="card node-card"><rect x="70.0" y="115.0" width="230.0" height="100.0" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><circle cx="98.0" cy="165.0" r="8" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M93.0,165.0 H103.0 M98.0,160.0 V170.0" class="icon-line" stroke="#2F7DFF"/><text x="124.0" y="152.99" text-anchor="start" class="card-title" style="font-size:20.5px">Knowledge</text><text x="124.0" y="175.13" text-anchor="start" class="card-title" style="font-size:20.5px">Assets</text><text x="124.0" y="195.96" text-anchor="start" class="card-sub" style="font-size:15.5px">root class</text></g>
-<g id="node-maps" class="card node-card"><rect x="70.0" y="299.0" width="230.0" height="100.0" rx="20" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2.2" filter="url(#shadow)"/><rect x="88.0" y="342.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M88.0,347.0 H108.0 M98.0,342.0 V358.0" class="icon-line" stroke="#0EA5E9"/><text x="124.0" y="348.06" text-anchor="start" class="card-title" style="font-size:20.5px">Maps</text><text x="124.0" y="368.89" text-anchor="start" class="card-sub" style="font-size:15.5px">child class</text></g>
+<path d="M 550.0 215.0 L 550.0 347.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="root" data-child="maps" data-lane-y="281.0" style="stroke:#2F7DFF;opacity:0.92"/>
+<g id="node-root" class="card node-card"><rect x="435.0" y="115.0" width="230.0" height="100.0" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><circle cx="463.0" cy="165.0" r="8" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M458.0,165.0 H468.0 M463.0,160.0 V170.0" class="icon-line" stroke="#2F7DFF"/><text x="489.0" y="152.99" text-anchor="start" class="card-title" style="font-size:20.5px">Knowledge</text><text x="489.0" y="175.13" text-anchor="start" class="card-title" style="font-size:20.5px">Assets</text><text x="489.0" y="195.96" text-anchor="start" class="card-sub" style="font-size:15.5px">root class</text></g>
+<g id="node-maps" class="card node-card"><rect x="435.0" y="347.0" width="230.0" height="100.0" rx="20" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2.2" filter="url(#shadow)"/><rect x="453.0" y="390.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M453.0,395.0 H473.0 M463.0,390.0 V406.0" class="icon-line" stroke="#0EA5E9"/><text x="489.0" y="396.06" text-anchor="start" class="card-title" style="font-size:20.5px">Maps</text><text x="489.0" y="416.89" text-anchor="start" class="card-sub" style="font-size:15.5px">child class</text></g>
 <text x="70" y="101.0" class="tree-level-label">Level 0</text>
-<text x="70" y="285.0" class="tree-level-label">Level 1</text>
-<text x="550.0" y="481" text-anchor="middle" class="note">Use nodes[].parent for deterministic hierarchy placement.</text>
+<text x="70" y="333.0" class="tree-level-label">Level 1</text>
+<text x="550.0" y="529" text-anchor="middle" class="note">Use nodes[].parent for deterministic hierarchy placement.</text>
 </svg>

@@ -22,6 +22,7 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
 2. Choose a standard diagram type.
    - New contracts should declare `diagram_type`. Legacy `layout` is accepted only for compatibility and will produce a warning.
    - Supported standard types: `layered_knowledge_topology`, `source_boundary_map`, `boundary_ownership_map`, `registry_table`, `taxonomy_tree`, and `hub_spoke`.
+   - Some diagram types support a top-level `variant` to choose a layout strategy. `diagram_type` answers "what is this diagram for"; `variant` answers "which arrangement should present it."
    - See `references/diagram_types.md` for required fields and boundaries.
    - Start from `templates/<diagram_type>/minimal-contract.json` for a small starter, `reference-contract.json` for a normal rich pattern, or `stress-contract.json` when you need QA coverage for dense content.
 3. Choose a visual style package.
@@ -91,10 +92,18 @@ Useful table fields for `registry_table`:
 
 - `columns[]`: each column needs `id` and `label`; optional `width`, `align`, and `kind`.
 - `rows[]`: each row is an object keyed by column id; optional `id`, `kind`, and `accent`.
+- `info_panels[]`: optional bottom panels for legend, owner, version, rules, or review metadata.
+
+Useful boundary ownership fields:
+
+- Default `boundary_ownership_map` contracts use grouped/layered `groups`, `nodes`, and `edges`.
+- Set `variant: "domain_ownership_matrix"` when the content is naturally domain swimlanes plus ownership assignments.
+- For `domain_ownership_matrix`, use `boundary`, `domains[]`, `domains[].systems[]`, `domains[].assets[]`, optional `external_partners[]`, `relationships[]`, `ownership_key[]`, and `ownership_assignments.columns/rows`.
 
 Useful hub field for `hub_spoke`:
 
 - `hub_id`: node id to render at the center.
+- `info_panels[]`: optional bottom panels for relationship keys, use cases, operating rules, or review metadata.
 
 Useful annotation placements:
 

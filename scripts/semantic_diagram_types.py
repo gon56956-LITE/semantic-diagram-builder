@@ -36,6 +36,11 @@ DIAGRAM_TYPES: dict[str, dict[str, str]] = {
     },
 }
 
+BOUNDARY_OWNERSHIP_VARIANTS = {
+    "grouped_layered": "grouped_layered",
+    "domain_ownership_matrix": "boundary_matrix",
+}
+
 LEGACY_LAYOUT_TYPES = {
     "layered": "layered_knowledge_topology",
     "boundary_map": "source_boundary_map",
@@ -55,9 +60,12 @@ ROUTING_MODES = {"auto", "row_bus_side_trunk", "simple"}
 ROUTING_SIDES = {"left", "right"}
 COLUMN_ALIGNS = {"left", "center", "right"}
 ROW_META_KEYS = {"id", "kind", "accent"}
+INFO_PANEL_ITEM_KEYS = {"label", "value", "text", "kind", "accent"}
 
 
 def _infer_type(contract: dict[str, Any]) -> str:
+    if isinstance(contract.get("domains"), list):
+        return "boundary_ownership_map"
     if isinstance(contract.get("columns"), list) and isinstance(contract.get("rows"), list):
         return "registry_table"
     if contract.get("hub_id"):
@@ -66,6 +74,21 @@ def _infer_type(contract: dict[str, Any]) -> str:
     if isinstance(nodes, list) and any(isinstance(node, dict) and node.get("parent") for node in nodes):
         return "taxonomy_tree"
     return "layered_knowledge_topology"
+
+
+def _strategy_for_contract(diagram_type: str, contract: dict[str, Any]) -> str:
+    if diagram_type != "boundary_ownership_map":
+        return DIAGRAM_TYPES[diagram_type]["strategy"]
+    variant = contract.get("variant")
+    if variant in (None, "", "reference", "minimal", "stress"):
+        return "grouped_layered"
+    if not isinstance(variant, str):
+        raise DiagramTypeError("boundary_ownership_map variant must be a string")
+    strategy = BOUNDARY_OWNERSHIP_VARIANTS.get(variant)
+    if not strategy:
+        supported = ", ".join(sorted(BOUNDARY_OWNERSHIP_VARIANTS))
+        raise DiagramTypeError(f'unsupported boundary_ownership_map variant "{variant}"; supported variants: {supported}')
+    return strategy
 
 
 def normalize_diagram_type(contract: dict[str, Any]) -> tuple[str, str, list[str]]:
@@ -86,7 +109,7 @@ def normalize_diagram_type(contract: dict[str, Any]) -> tuple[str, str, list[str
                 )
             elif not mapped:
                 warnings.append(f'layout "{raw_layout}" is ignored because diagram_type is declared')
-        return diagram_type, DIAGRAM_TYPES[diagram_type]["strategy"], warnings
+        return diagram_type, _strategy_for_contract(diagram_type, contract), warnings
 
     if isinstance(raw_layout, str) and raw_layout.strip():
         layout = raw_layout.strip()
@@ -98,7 +121,7 @@ def normalize_diagram_type(contract: dict[str, Any]) -> tuple[str, str, list[str
             warnings.append(f'layout "{layout}" is deprecated; use diagram_type "{diagram_type}"')
         else:
             raise DiagramTypeError(f'unsupported layout "{layout}"; declare diagram_type explicitly')
-        return diagram_type, DIAGRAM_TYPES[diagram_type]["strategy"], warnings
+        return diagram_type, _strategy_for_contract(diagram_type, contract), warnings
 
     raise DiagramTypeError('contract must declare top-level "diagram_type"')
 
@@ -195,6 +218,38 @@ def _validate_annotations(contract: dict[str, Any], diagram_type: str) -> None:
             raise DiagramTypeError(f'{diagram_type} annotations[{idx}] requires non-empty "text"')
 
 
+def _validate_info_panels(contract: dict[str, Any], diagram_type: str) -> None:
+    panels = _list_field(contract, "info_panels", diagram_type, required=False, allow_empty=True)
+    for panel_idx, panel in enumerate(panels):
+        if not isinstance(panel, dict):
+            raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}] must be an object")
+        _required_str(panel, "title", f"{diagram_type} info_panels[{panel_idx}]")
+        if "id" in panel and panel["id"] not in (None, "") and not isinstance(panel["id"], str):
+            raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}].id must be a string")
+        if "kind" in panel and panel["kind"] not in (None, "") and not isinstance(panel["kind"], str):
+            raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}].kind must be a string")
+        if "accent" in panel and panel["accent"] not in (None, "") and not isinstance(panel["accent"], str):
+            raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}].accent must be a string")
+        items = panel.get("items", [])
+        if items in (None, ""):
+            continue
+        if not isinstance(items, list):
+            raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}].items must be a list")
+        for item_idx, item in enumerate(items):
+            if isinstance(item, str):
+                if not item.strip():
+                    raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}].items[{item_idx}] must not be empty")
+                continue
+            if not isinstance(item, dict):
+                raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}].items[{item_idx}] must be a string or object")
+            unknown = sorted(set(item) - INFO_PANEL_ITEM_KEYS)
+            if unknown:
+                joined = ", ".join(unknown)
+                raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}].items[{item_idx}] has unknown keys: {joined}")
+            if not any(str(item.get(key, "")).strip() for key in ("label", "value", "text")):
+                raise DiagramTypeError(f"{diagram_type} info_panels[{panel_idx}].items[{item_idx}] requires label, value, or text")
+
+
 def _validate_number(value: Any, context: str, *, minimum: float | None = None) -> None:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise DiagramTypeError(f"{context} must be a number")
@@ -203,7 +258,7 @@ def _validate_number(value: Any, context: str, *, minimum: float | None = None) 
 
 
 def _validate_grouped_layered(contract: dict[str, Any], diagram_type: str) -> None:
-    _forbid_fields(contract, diagram_type, {"columns", "rows", "hub_id"})
+    _forbid_fields(contract, diagram_type, {"columns", "rows", "hub_id", "domains", "external_partners", "relationships", "ownership_assignments", "ownership_key", "info_panels"})
     groups = _object_items(_list_field(contract, "groups", diagram_type, required=True), "groups", diagram_type)
     nodes = _object_items(_list_field(contract, "nodes", diagram_type, required=True), "nodes", diagram_type)
     edges = _object_items(_list_field(contract, "edges", diagram_type, required=False, allow_empty=True), "edges", diagram_type)
@@ -248,35 +303,116 @@ def _validate_grouped_layered(contract: dict[str, Any], diagram_type: str) -> No
             raise DiagramTypeError(f'{diagram_type} edges[{idx}].to "{target}" is not a node id')
 
 
-def _validate_registry_table(contract: dict[str, Any], diagram_type: str) -> None:
-    _forbid_fields(contract, diagram_type, {"groups", "nodes", "edges", "hub_id"})
-    columns = _object_items(_list_field(contract, "columns", diagram_type, required=True), "columns", diagram_type)
-    rows = _object_items(_list_field(contract, "rows", diagram_type, required=True, allow_empty=True), "rows", diagram_type)
-
+def _validate_columns_rows(owner: dict[str, Any], diagram_type: str, context: str) -> None:
+    columns = _object_items(_list_field(owner, "columns", diagram_type, required=True), f"{context}.columns", diagram_type)
+    rows = _object_items(_list_field(owner, "rows", diagram_type, required=True, allow_empty=True), f"{context}.rows", diagram_type)
     column_ids = _unique_required_ids(columns, "column", diagram_type)
     for idx, column in enumerate(columns):
-        _required_str(column, "label", f"{diagram_type} columns[{idx}]")
+        _required_str(column, "label", f"{diagram_type} {context}.columns[{idx}]")
         if "width" in column:
-            _validate_number(column["width"], f"{diagram_type} columns[{idx}].width", minimum=1)
+            _validate_number(column["width"], f"{diagram_type} {context}.columns[{idx}].width", minimum=1)
         align = column.get("align")
         if align is not None and align not in COLUMN_ALIGNS:
-            raise DiagramTypeError(f'{diagram_type} columns[{idx}].align must be "left", "center", or "right"')
-
+            raise DiagramTypeError(f'{diagram_type} {context}.columns[{idx}].align must be "left", "center", or "right"')
     _optional_ids(rows, "row", diagram_type)
     allowed_keys = set(column_ids) | ROW_META_KEYS
     for row_idx, row in enumerate(rows):
         unknown = sorted(set(row) - allowed_keys)
         if unknown:
             joined = ", ".join(unknown)
-            raise DiagramTypeError(f"{diagram_type} rows[{row_idx}] has unknown column keys: {joined}")
+            raise DiagramTypeError(f"{diagram_type} {context}.rows[{row_idx}] has unknown column keys: {joined}")
         missing = [column_id for column_id in column_ids if column_id not in row]
         if missing:
             joined = ", ".join(missing)
-            raise DiagramTypeError(f"{diagram_type} rows[{row_idx}] is missing column keys: {joined}")
+            raise DiagramTypeError(f"{diagram_type} {context}.rows[{row_idx}] is missing column keys: {joined}")
+
+
+def _collect_boundary_matrix_item_ids(items: list[dict[str, Any]], diagram_type: str, context: str) -> set[str]:
+    ids = set(_unique_required_ids(items, context, diagram_type))
+    for idx, item in enumerate(items):
+        _required_str(item, "label", f"{diagram_type} {context}[{idx}]")
+        for nested_key in ("systems", "assets"):
+            nested = item.get(nested_key, [])
+            if nested in (None, ""):
+                continue
+            if not isinstance(nested, list):
+                raise DiagramTypeError(f'{diagram_type} {context}[{idx}].{nested_key} must be a list')
+            nested_objects = _object_items(nested, f"{context}[{idx}].{nested_key}", diagram_type)
+            nested_ids = _unique_required_ids(nested_objects, nested_key[:-1], diagram_type)
+            for nested_idx, nested_item in enumerate(nested_objects):
+                _required_str(nested_item, "label", f"{diagram_type} {context}[{idx}].{nested_key}[{nested_idx}]")
+            overlap = ids & set(nested_ids)
+            if overlap:
+                joined = ", ".join(sorted(overlap))
+                raise DiagramTypeError(f"{diagram_type} duplicate boundary matrix item ids: {joined}")
+            ids.update(nested_ids)
+    return ids
+
+
+def _validate_boundary_ownership_map(contract: dict[str, Any], diagram_type: str) -> None:
+    strategy = _strategy_for_contract(diagram_type, contract)
+    if strategy == "grouped_layered":
+        _validate_grouped_layered(contract, diagram_type)
+        return
+
+    _forbid_fields(contract, diagram_type, {"groups", "nodes", "edges", "columns", "rows", "hub_id", "info_panels"})
+    domains = _object_items(_list_field(contract, "domains", diagram_type, required=True), "domains", diagram_type)
+    domain_ids = _collect_boundary_matrix_item_ids(domains, diagram_type, "domains")
+    external_items = _object_items(
+        _list_field(contract, "external_partners", diagram_type, required=False, allow_empty=True),
+        "external_partners",
+        diagram_type,
+    )
+    external_ids = set(_unique_required_ids(external_items, "external_partner", diagram_type)) if external_items else set()
+    for idx, item in enumerate(external_items):
+        _required_str(item, "label", f"{diagram_type} external_partners[{idx}]")
+    overlap = domain_ids & external_ids
+    if overlap:
+        joined = ", ".join(sorted(overlap))
+        raise DiagramTypeError(f"{diagram_type} duplicate boundary matrix item ids: {joined}")
+    known_ids = domain_ids | external_ids
+
+    boundary = contract.get("boundary", {})
+    if boundary not in ({}, None) and not isinstance(boundary, dict):
+        raise DiagramTypeError(f"{diagram_type} boundary must be an object")
+
+    relationships = _object_items(
+        _list_field(contract, "relationships", diagram_type, required=False, allow_empty=True),
+        "relationships",
+        diagram_type,
+    )
+    for idx, relationship in enumerate(relationships):
+        source = _required_str(relationship, "from", f"{diagram_type} relationships[{idx}]")
+        target = _required_str(relationship, "to", f"{diagram_type} relationships[{idx}]")
+        _required_str(relationship, "relation", f"{diagram_type} relationships[{idx}]")
+        if source not in known_ids:
+            raise DiagramTypeError(f'{diagram_type} relationships[{idx}].from "{source}" is not a boundary matrix item id')
+        if target not in known_ids:
+            raise DiagramTypeError(f'{diagram_type} relationships[{idx}].to "{target}" is not a boundary matrix item id')
+
+    ownership_key = _object_items(
+        _list_field(contract, "ownership_key", diagram_type, required=False, allow_empty=True),
+        "ownership_key",
+        diagram_type,
+    )
+    for idx, item in enumerate(ownership_key):
+        _required_str(item, "code", f"{diagram_type} ownership_key[{idx}]")
+        _required_str(item, "label", f"{diagram_type} ownership_key[{idx}]")
+
+    assignments = contract.get("ownership_assignments")
+    if assignments is not None:
+        if not isinstance(assignments, dict):
+            raise DiagramTypeError(f"{diagram_type} ownership_assignments must be an object")
+        _validate_columns_rows(assignments, diagram_type, "ownership_assignments")
+
+
+def _validate_registry_table(contract: dict[str, Any], diagram_type: str) -> None:
+    _forbid_fields(contract, diagram_type, {"groups", "nodes", "edges", "hub_id"})
+    _validate_columns_rows(contract, diagram_type, "")
 
 
 def _validate_taxonomy_tree(contract: dict[str, Any], diagram_type: str) -> None:
-    _forbid_fields(contract, diagram_type, {"groups", "columns", "rows", "hub_id"})
+    _forbid_fields(contract, diagram_type, {"groups", "columns", "rows", "hub_id", "info_panels"})
     nodes = _object_items(_list_field(contract, "nodes", diagram_type, required=True), "nodes", diagram_type)
     edges = _object_items(_list_field(contract, "edges", diagram_type, required=False, allow_empty=True), "edges", diagram_type)
 
@@ -370,6 +506,7 @@ def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None 
     contract = _require_contract_dict(contract)
     _require_title(contract)
     _validate_annotations(contract, diagram_type or str(contract.get("diagram_type") or contract.get("layout") or "contract"))
+    _validate_info_panels(contract, diagram_type or str(contract.get("diagram_type") or contract.get("layout") or "contract"))
 
     if diagram_type is None:
         diagram_type, _strategy, warnings = normalize_diagram_type(contract)
@@ -378,7 +515,9 @@ def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None 
         if diagram_type not in DIAGRAM_TYPES:
             raise DiagramTypeError(f"unsupported diagram_type: {diagram_type}")
 
-    if diagram_type in GROUPED_LAYERED_TYPES:
+    if diagram_type == "boundary_ownership_map":
+        _validate_boundary_ownership_map(contract, diagram_type)
+    elif diagram_type in GROUPED_LAYERED_TYPES:
         _validate_grouped_layered(contract, diagram_type)
     elif diagram_type == "registry_table":
         _validate_registry_table(contract, diagram_type)

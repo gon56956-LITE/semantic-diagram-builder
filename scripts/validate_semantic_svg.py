@@ -19,6 +19,7 @@ CARD_RE = re.compile(
     r'<g\b(?=[^>]*(?:\bclass="[^"]*\bcard\b[^"]*"|\bid="node-[^"]+"))[^>]*>(.*?)</g>',
     re.S,
 )
+INFO_PANEL_RE = re.compile(r'<g\b(?=[^>]*\bclass="[^"]*\binfo-panel\b[^"]*")[^>]*>(.*?)</g>', re.S)
 RECT_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"')
 TEXT_RE = re.compile(r'<text[^>]*class="card-(title|sub)"[^>]*>(.*?)</text>')
 TEXT_TAG_RE = re.compile(r'<text\b([^>]*)>', re.S)
@@ -58,6 +59,8 @@ TEXT_MIN_SIZES = {
     'table-header': 14.5,
     'table-cell': 16.0,
     'table-cell-secondary': 16.0,
+    'info-panel-title': 14.5,
+    'info-panel-item': 13.5,
 }
 INLINE_TEXT_MIN_SIZES = {
     'card-title': 18.0,
@@ -266,6 +269,16 @@ def _card_rects(svg: str) -> list[tuple[float, float, float, float]]:
     return cards
 
 
+def _info_panel_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    panels = []
+    for panel in INFO_PANEL_RE.findall(svg):
+        rect = RECT_RE.search(panel)
+        if not rect:
+            continue
+        panels.append(tuple(map(float, rect.groups())))
+    return panels
+
+
 def _diagram_type(svg: str) -> str:
     match = DATA_DIAGRAM_RE.search(svg)
     return match.group(1) if match else ''
@@ -347,8 +360,9 @@ def _check_canvas_density(svg: str, issues: list[str]) -> None:
     cards = _card_rects(svg)
     if not cards:
         return
-    max_card_bottom = max(y + h for _x, y, _w, h in cards)
-    bottom_whitespace = height - max_card_bottom
+    content_rects = cards + _info_panel_rects(svg)
+    max_content_bottom = max(y + h for _x, y, _w, h in content_rects)
+    bottom_whitespace = height - max_content_bottom
     if bottom_whitespace > 140:
         fail(f'hub_spoke canvas has excessive bottom whitespace: {bottom_whitespace:.0f}px', issues)
 

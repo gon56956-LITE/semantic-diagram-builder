@@ -53,9 +53,12 @@ Use when the key message is what derives from controlled source material and wha
 
 Use for domains, ownership, stewardship, and interface boundaries.
 
-- Use group panels as boundaries.
+- The minimal template uses the default grouped/layered contract for simple ownership chains.
+- The reference and stress templates use `variant: "domain_ownership_matrix"` for domain swimlanes, enterprise boundary, external partners, and bottom RACI/ownership tables.
+- Matrix items use a dedicated compact card specification, separate from layered diagram cards; size them for two title lines plus one short subtitle.
+- Place external partner panels below the enterprise boundary when cross-boundary relationships would otherwise cut across several domain lanes; route those links through domain-gap corridors.
 - Use yellow/amber accents for governance or shared ownership in `accent-blueprint`.
-- Use dashed connectors only for optional, indirect, or responsibility links.
+- Use dashed connectors only for optional, indirect, shared-responsibility, or external-boundary links.
 
 ### Registry Table
 
@@ -63,7 +66,7 @@ Use for glossary, ontology, CTQ, risk, or parameter registries.
 
 - Rows must include every declared column id.
 - Use `rows[].kind` to drive semantic badges.
-- Keep registry notes in footer annotations unless a custom layout is needed.
+- Use `info_panels` for badge keys, ownership rules, metadata, or review notes that should remain visible beside the table.
 
 ### Taxonomy Tree
 
@@ -80,6 +83,7 @@ Use for central hubs with surrounding comparable domains, systems, capabilities,
 - Set `hub_id` to the center node.
 - Use `nodes[].order` for deterministic spoke placement.
 - Use dashed spokes only for optional or indirect relationships.
+- Use `info_panels` for relationship keys, use cases, operating rules, and review metadata instead of overcrowding the spoke labels.
 
 ## QA
 

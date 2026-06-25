@@ -1,49 +1,144 @@
 {
   "title": "Boundary Ownership Map Stress",
-  "subtitle": "Stress contract with domains, systems, assets, and owner assignments",
+  "subtitle": "Stress contract for dense domain swimlanes, external parties, and ownership assignments",
   "diagram_type": "boundary_ownership_map",
+  "variant": "domain_ownership_matrix",
   "style": "accent-blueprint",
   "width": 1900,
-  "max_nodes_per_row": 4,
-  "groups": [
-    {"id": "domains", "label": "Enterprise domains", "type": "layer"},
-    {"id": "systems", "label": "Systems and applications", "type": "layer"},
-    {"id": "assets", "label": "Data and knowledge assets", "type": "layer"},
-    {"id": "ownership", "label": "Ownership and stewardship", "type": "layer"}
+  "boundary": {
+    "label": "Enterprise Boundary"
+  },
+  "domains": [
+    {
+      "id": "customer",
+      "label": "Customer Domain",
+      "subtitle": "market + service",
+      "kind": "capability",
+      "accent": "accent_cyan",
+      "systems": [
+        {"id": "crm", "label": "CRM System", "subtitle": "customer records", "kind": "registry"},
+        {"id": "marketing", "label": "Marketing Automation", "subtitle": "campaign events", "kind": "query"}
+      ],
+      "assets": [
+        {"id": "customer_data", "label": "Customer Data", "subtitle": "golden records", "kind": "package"}
+      ],
+      "owner": "Customer Data Owner"
+    },
+    {
+      "id": "product",
+      "label": "Product Domain",
+      "subtitle": "portfolio + lifecycle",
+      "kind": "capability",
+      "accent": "accent_cyan",
+      "systems": [
+        {"id": "plm", "label": "PLM System", "subtitle": "product master", "kind": "source"},
+        {"id": "product_catalog", "label": "Product Catalog", "subtitle": "commercial view", "kind": "registry"}
+      ],
+      "assets": [
+        {"id": "product_data", "label": "Product Data", "subtitle": "controlled asset", "kind": "package"}
+      ],
+      "owner": "Product Data Owner"
+    },
+    {
+      "id": "operations",
+      "label": "Operations Domain",
+      "subtitle": "execution + supply",
+      "kind": "process",
+      "accent": "accent_orange",
+      "systems": [
+        {"id": "erp", "label": "ERP System", "subtitle": "planning records", "kind": "source"},
+        {"id": "mes", "label": "MES System", "subtitle": "manufacturing evidence", "kind": "source"}
+      ],
+      "assets": [
+        {"id": "operations_data", "label": "Operations Data", "subtitle": "execution evidence", "kind": "risk"}
+      ],
+      "owner": "Operations Data Owner"
+    },
+    {
+      "id": "finance",
+      "label": "Finance Domain",
+      "subtitle": "controls + reporting",
+      "kind": "quality",
+      "accent": "accent_yellow",
+      "systems": [
+        {"id": "accounting", "label": "Accounting", "subtitle": "ledger controls", "kind": "quality"},
+        {"id": "finance_planning", "label": "Financial Planning", "subtitle": "forecast + budget", "kind": "quality"}
+      ],
+      "assets": [
+        {"id": "financial_data", "label": "Financial Data", "subtitle": "governed asset", "kind": "quality"}
+      ],
+      "owner": "Finance Data Owner"
+    },
+    {
+      "id": "people",
+      "label": "People Domain",
+      "subtitle": "talent + learning",
+      "kind": "capability",
+      "accent": "accent_green",
+      "systems": [
+        {"id": "hris", "label": "HRIS System", "subtitle": "talent records", "kind": "registry"},
+        {"id": "lms", "label": "Learning System", "subtitle": "training records", "kind": "package"}
+      ],
+      "assets": [
+        {"id": "people_data", "label": "People Data", "subtitle": "restricted asset", "kind": "risk"}
+      ],
+      "owner": "People Data Owner"
+    },
+    {
+      "id": "technology",
+      "label": "Technology Domain",
+      "subtitle": "platform + access",
+      "kind": "capability",
+      "accent": "accent_purple",
+      "systems": [
+        {"id": "iam", "label": "IAM Platform", "subtitle": "access control", "kind": "risk"},
+        {"id": "data_platform", "label": "Data Platform", "subtitle": "shared services", "kind": "hub"}
+      ],
+      "assets": [
+        {"id": "security_data", "label": "Security Data", "subtitle": "audit evidence", "kind": "evidence"}
+      ],
+      "owner": "Technology Owner"
+    }
   ],
-  "nodes": [
-    {"id": "customer", "label": "Customer Domain", "subtitle": "market + service", "kind": "capability", "group": "domains"},
-    {"id": "product", "label": "Product Domain", "subtitle": "portfolio", "kind": "capability", "group": "domains"},
-    {"id": "operations", "label": "Operations Domain", "subtitle": "execution", "kind": "process", "group": "domains"},
-    {"id": "finance", "label": "Finance Domain", "subtitle": "controls", "kind": "quality", "group": "domains"},
-    {"id": "crm", "label": "CRM System", "subtitle": "customer records", "kind": "registry", "group": "systems"},
-    {"id": "plm", "label": "PLM System", "subtitle": "product records", "kind": "source", "group": "systems"},
-    {"id": "mes", "label": "MES System", "subtitle": "execution records", "kind": "source", "group": "systems"},
-    {"id": "erp", "label": "ERP System", "subtitle": "financial controls", "kind": "source", "group": "systems"},
-    {"id": "customer_data", "label": "Customer Data", "subtitle": "shared asset", "kind": "package", "group": "assets"},
-    {"id": "product_data", "label": "Product Data", "subtitle": "controlled asset", "kind": "package", "group": "assets"},
-    {"id": "operations_data", "label": "Operations Data", "subtitle": "regulated asset", "kind": "risk", "group": "assets"},
-    {"id": "finance_data", "label": "Financial Data", "subtitle": "governed asset", "kind": "quality", "group": "assets"},
-    {"id": "business_owner", "label": "Business Owner", "subtitle": "accountable", "kind": "quality", "group": "ownership"},
-    {"id": "system_owner", "label": "System Owner", "subtitle": "responsible", "kind": "quality", "group": "ownership"},
-    {"id": "data_steward", "label": "Data Steward", "subtitle": "quality guardrail", "kind": "risk", "group": "ownership"},
-    {"id": "security_owner", "label": "Security Owner", "subtitle": "access guardrail", "kind": "risk", "group": "ownership"}
+  "external_partners": [
+    {"id": "payment_gateway", "label": "Payment Gateway", "subtitle": "transaction processor", "kind": "object"},
+    {"id": "logistics_provider", "label": "Logistics Provider", "subtitle": "shipment events", "kind": "object"},
+    {"id": "cloud_provider", "label": "Cloud Provider", "subtitle": "platform services", "kind": "hub"},
+    {"id": "regulator", "label": "Regulatory Authority", "subtitle": "audit boundary", "kind": "risk"},
+    {"id": "identity_provider", "label": "Identity Provider", "subtitle": "federated access", "kind": "object"}
   ],
-  "edges": [
-    {"from": "customer", "to": "crm", "relation": "uses"},
-    {"from": "product", "to": "plm", "relation": "uses"},
-    {"from": "operations", "to": "mes", "relation": "uses"},
-    {"from": "finance", "to": "erp", "relation": "uses"},
-    {"from": "crm", "to": "customer_data", "relation": "owns_record"},
-    {"from": "plm", "to": "product_data", "relation": "owns_record"},
-    {"from": "mes", "to": "operations_data", "relation": "owns_record"},
-    {"from": "erp", "to": "finance_data", "relation": "owns_record"},
-    {"from": "customer_data", "to": "business_owner", "relation": "accountable"},
-    {"from": "product_data", "to": "system_owner", "relation": "responsible"},
-    {"from": "operations_data", "to": "data_steward", "relation": "stewarded_by"},
-    {"from": "finance_data", "to": "security_owner", "relation": "guarded_by"}
+  "relationships": [
+    {"from": "customer_data", "to": "payment_gateway", "relation": "shared_responsibility", "style": "dashed", "accent": "accent_purple"},
+    {"from": "operations_data", "to": "logistics_provider", "relation": "data_flow", "accent": "accent_orange"},
+    {"from": "financial_data", "to": "regulator", "relation": "reporting", "style": "dashed", "accent": "accent_yellow"},
+    {"from": "data_platform", "to": "cloud_provider", "relation": "hosting_boundary", "style": "dashed", "accent": "accent_purple"},
+    {"from": "iam", "to": "identity_provider", "relation": "federation", "style": "dashed", "accent": "accent_purple"}
   ],
+  "ownership_key": [
+    {"code": "R", "label": "Responsible", "description": "Executes / ensures"},
+    {"code": "A", "label": "Accountable", "description": "Owns outcome"},
+    {"code": "C", "label": "Consulted", "description": "Provides input"},
+    {"code": "I", "label": "Informed", "description": "Kept updated"}
+  ],
+  "ownership_assignments": {
+    "columns": [
+      {"id": "asset", "label": "Data / Asset", "width": 220},
+      {"id": "domain", "label": "Business Owner", "width": 190},
+      {"id": "data_owner", "label": "Data Owner", "width": 210},
+      {"id": "system_owner", "label": "System Owner", "width": 210},
+      {"id": "steward", "label": "Steward", "width": 210},
+      {"id": "raci", "label": "RACI", "align": "center", "width": 110}
+    ],
+    "rows": [
+      {"id": "customer", "asset": "Customer Data", "domain": "CRO", "data_owner": "Head of Customer Ops", "system_owner": "CRM Owner", "steward": "Customer Data Steward", "raci": "A/R"},
+      {"id": "product", "asset": "Product Data", "domain": "CPO", "data_owner": "Product Data Owner", "system_owner": "PLM Owner", "steward": "Product Steward", "raci": "A/R"},
+      {"id": "operations", "asset": "Operations Data", "domain": "COO", "data_owner": "Operations Data Owner", "system_owner": "MES Owner", "steward": "Ops Steward", "raci": "A/R"},
+      {"id": "finance", "asset": "Financial Data", "domain": "CFO", "data_owner": "Finance Data Owner", "system_owner": "Finance Owner", "steward": "Finance Steward", "raci": "A/R"},
+      {"id": "people", "asset": "People Data", "domain": "CHRO", "data_owner": "People Data Owner", "system_owner": "HRIS Owner", "steward": "People Steward", "raci": "A/R"},
+      {"id": "security", "asset": "Security Data", "domain": "CIO", "data_owner": "Security Owner", "system_owner": "IAM Owner", "steward": "Security Steward", "raci": "A/R"}
+    ]
+  },
   "annotations": [
-    {"text": "Stress template: repeated boundary rows should keep spacing and ownership links readable.", "placement": "footer"}
+    {"text": "Stress template: dense ownership maps should keep domain lanes, external boundaries, and RACI assignments readable.", "placement": "footer"}
   ]
 }
