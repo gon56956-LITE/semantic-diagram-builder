@@ -4,7 +4,7 @@ Use `diagram_type` for new contracts. `layout` is a legacy compatibility field a
 
 Run `py scripts/validate_semantic_contract.py contract.json` before rendering. The validator fails early when a contract mixes structures from different diagram types, references missing ids, or omits required fields.
 
-Use `references/diagram_type_maturity.md` to check whether a type has enough minimal, reference, stress, schema, renderer, validator, and gallery coverage to be treated as mature.
+Use `references/diagram_type_maturity.md` to check whether a type has enough minimal, reference, stress, schema, renderer, validator, and gallery coverage to be treated as mature. Use `references/diagram_type_readiness.md` to decide whether a type is stable, beta, or experimental for production use.
 
 ## layered_knowledge_topology
 
@@ -130,13 +130,13 @@ Optional fields:
 - `entities[].row`, `col`, `x`, `y`, `width`, `height`
 - `entities[].kind`, `accent`, `weak`
 - `entities[].attributes[].name`, optional `role: "pk" | "fk" | "attribute" | "derived"`, optional `type`
-- `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`
+- `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`, `lane_offset`
 - `relationships[].from_anchor`, `to_anchor`, `from_diamond_anchor`, `to_diamond_anchor` as `left`, `right`, `top`, or `bottom` for dense layouts where automatic anchor choice is ambiguous
 - `info_panels[]` for legend, cardinality key, scope notes, or version metadata
 
 Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `hub_id`, `domains`, `external_partners`.
 
-Rules: every relationship endpoint must reference an entity id; self relationships are supported for hierarchy or recursive ownership relations when the relationship has explicit `row`/`col` or `x`/`y` placement. Relationship labels render inside diamonds, so keep them short. Use `weak: true` for dashed weak-entity cards. Use PK/FK roles instead of embedding key semantics only in the attribute name. Plan relationship diamonds as fixed slots before evaluating connector paths; non-axis relationship links should route as orthogonal polylines rather than direct diagonals. Use explicit card or diamond anchors when a relationship sits near another diamond and the automatic side would make the connector appear to start or end on the wrong corner.
+Rules: every relationship endpoint must reference an entity id; self relationships are supported for hierarchy or recursive ownership relations when the relationship has explicit `row`/`col` or `x`/`y` placement. Relationship labels render inside diamonds, so keep them short. Use `weak: true` for dashed weak-entity cards. Use PK/FK roles instead of embedding key semantics only in the attribute name. Plan relationship diamonds as fixed slots before evaluating connector paths; non-axis relationship links should route as orthogonal polylines rather than direct diagonals. Use `lane_offset` when multiple relations would otherwise share the same long corridor. Use explicit card or diamond anchors when a relationship sits near another diamond and the automatic side would make the connector appear to start or end on the wrong corner.
 
 ## ontology_map
 
@@ -160,7 +160,7 @@ Optional fields:
 - `concepts[].row`, `col`, `x`, `y`, `width`, `height`
 - `concepts[].kind`, `accent`, `subtitle`
 - `concepts[].attributes[].name`, optional `type`, `kind`, `accent`
-- `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`
+- `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`, `lane_offset`
 - `relationships[].from_anchor`, `to_anchor`, `from_diamond_anchor`, `to_diamond_anchor` as `left`, `right`, `top`, or `bottom`
 - `instances[].subtitle`, `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`
 - `info_panels[].placement: "left" | "right"` for side legend/about/rules/version panels; omitted placement renders a bottom panel

@@ -180,6 +180,10 @@ def main() -> int:
     object_relationship_bad_anchor["relationships"][0]["from_diamond_anchor"] = "upper-left"
     assert_schema_error("object relationship bad anchor", object_relationship_bad_anchor, "must be one of")
 
+    object_relationship_bad_lane_offset = copy.deepcopy(object_relationship)
+    object_relationship_bad_lane_offset["relationships"][0]["lane_offset"] = True
+    assert_schema_error("object relationship bad lane offset", object_relationship_bad_lane_offset, "lane_offset must be a number")
+
     object_relationship_self_missing_slot = copy.deepcopy(object_relationship)
     object_relationship_self_missing_slot["relationships"][0]["to"] = object_relationship_self_missing_slot["relationships"][0]["from"]
     object_relationship_self_missing_slot["relationships"][0].pop("row", None)
@@ -204,6 +208,10 @@ def main() -> int:
     ontology_bad_attr = copy.deepcopy(ontology)
     ontology_bad_attr["concepts"][0]["attributes"][0].pop("name", None)
     assert_schema_error("ontology bad attribute", ontology_bad_attr, 'requires non-empty "name"')
+
+    ontology_bad_lane_offset = copy.deepcopy(ontology)
+    ontology_bad_lane_offset["relationships"][0]["lane_offset"] = "wide"
+    assert_schema_error("ontology bad lane offset", ontology_bad_lane_offset, "lane_offset must be a number")
 
     capability_map = load_json("templates/capability_domain_map/reference-contract.json")
     assert_schema_pass("capability domain map reference", capability_map)

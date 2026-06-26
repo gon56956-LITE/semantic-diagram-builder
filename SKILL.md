@@ -25,6 +25,7 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - Some diagram types support a top-level `variant` to choose a layout strategy. `diagram_type` answers "what is this diagram for"; `variant` answers "which arrangement should present it."
    - See `references/diagram_types.md` for required fields and boundaries.
    - See `references/diagram_type_maturity.md` before adding a new type or calling a type mature.
+   - See `references/diagram_type_readiness.md` before using a type in a production diagram; it records `stable`, `beta`, and `experimental` boundaries.
    - Start from `templates/<diagram_type>/minimal-contract.json` for a small starter, `reference-contract.json` for a normal rich pattern, or `stress-contract.json` when you need QA coverage for dense content.
 3. Choose a visual style package.
    - `style` is required. Use `modern-tech` for the migrated current style, `accent-blueprint` for the blue enterprise blueprint style, or a relative path to a custom `style.json`.
@@ -112,6 +113,7 @@ Useful object relationship fields for `object_relationship_diagram`:
 - `entities[].attributes[]`: table rows inside an entity card. Each attribute needs `name`; optional `role` is `pk`, `fk`, `attribute`, or `derived`.
 - `relationships[]`: labeled relationship diamonds and links. Each relationship needs `from`, `to`, and `label`; optional `id`, `from_cardinality`, `to_cardinality`, `style`, `accent`, `row`, `col`, `x`, and `y`.
 - Prefer `relationships[].row` and `relationships[].col` to place relationship diamonds on the same ER grid as entity cards. Half slots such as `col: 1.5` place a diamond between two entity columns.
+- Use `relationships[].lane_offset` to slightly offset the middle corridor of a relationship when several relationships share the same row/column corridor.
 - Use `from_anchor`, `to_anchor`, `from_diamond_anchor`, and `to_diamond_anchor` with `left`, `right`, `top`, or `bottom` when a dense ER-style diagram needs a relationship to use a fixed card or diamond side.
 - Self relationships such as a category parent hierarchy are allowed when the relationship has explicit `row`/`col` or `x`/`y`; they render as a single connector from the diamond to the entity card.
 - Use explicit `entities[].row`/`col` and `relationships[].row`/`col` when the diagram needs stable ER-style placement. Reserve `x`/`y` for rare manual overrides. This renderer is for structured object maps, not arbitrary graph crossing minimization.
@@ -121,6 +123,7 @@ Useful ontology fields for `ontology_map`:
 - `concepts[]`: concept/class cards. Each concept needs `id` and `label`; optional `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`, and `attributes`.
 - `concepts[].attributes[]`: datatype or property rows. Each attribute needs `name`; optional `type`, `kind`, and `accent`.
 - `relationships[]`: labeled predicate diamonds between concepts. Each relationship needs `from`, `to`, and `label`; optional `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `style`, `accent`, and anchor controls.
+- `relationships[].lane_offset`: optional pixel offset for the middle route corridor when several predicates share a slot band.
 - `instances[]`: example instance cards. Each instance needs `id`, `label`, and `concept`; optional `subtitle`, `row`, `col`, `x`, `y`, `kind`, and `accent`.
 - `info_panels[]`: ontology maps may use `placement: "left"` or `placement: "right"` for side legend/about/rules/version panels; panels without placement render at the bottom.
 - Ontology maps reuse the object relationship geometry engine but use ontology-specific concept and instance components. Use this type when the concepts/classes and examples are the message; use `object_relationship_diagram` when PK/FK table structure is the message.

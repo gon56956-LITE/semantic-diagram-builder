@@ -488,6 +488,26 @@ def _rects_overlap(a: tuple[float, float, float, float], b: tuple[float, float, 
     return ax - pad < bx + bw and ax + aw + pad > bx and ay - pad < by + bh and ay + ah + pad > by
 
 
+def _axis_segment_overlap_length(
+    a: tuple[str, tuple[float, float], tuple[float, float]],
+    b: tuple[str, tuple[float, float], tuple[float, float]],
+    tolerance: float = 1.5,
+) -> float:
+    orient_a, a1, a2 = a
+    orient_b, b1, b2 = b
+    if orient_a != orient_b:
+        return 0.0
+    if orient_a == 'h':
+        if abs(a1[1] - b1[1]) > tolerance:
+            return 0.0
+        return max(0.0, min(max(a1[0], a2[0]), max(b1[0], b2[0])) - max(min(a1[0], a2[0]), min(b1[0], b2[0])))
+    if orient_a == 'v':
+        if abs(a1[0] - b1[0]) > tolerance:
+            return 0.0
+        return max(0.0, min(max(a1[1], a2[1]), max(b1[1], b2[1])) - max(min(a1[1], a2[1]), min(b1[1], b2[1])))
+    return 0.0
+
+
 def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
     diagram_type = _diagram_type(svg)
     if diagram_type not in {'object_relationship_diagram', 'ontology_map'}:
@@ -524,11 +544,16 @@ def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
     for idx, label in enumerate(label_rects, start=1):
         if any(_rects_overlap(label, obstacle, 1.0) for obstacle in obstacles):
             fail(f'cardinality label {idx} overlaps an entity card or relationship diamond', issues)
+    relationship_segments: list[tuple[str, tuple[str, tuple[float, float], tuple[float, float]]]] = []
+    dashed_relationship_seen = False
     for attrs, d, _classes in _path_attrs_with_classes(svg, {'object-relationship-link'}):
         rel_match = DATA_RELATIONSHIP_RE.search(attrs)
         rel_id = rel_match.group(1) if rel_match else ''
+        if 'stroke-dasharray' in attrs:
+            dashed_relationship_seen = True
         geom = _parse_path_geometry(d)
         for seg in geom['segments']:
+            relationship_segments.append((rel_id, seg))
             for diamond_id, diamond in diamonds_by_id:
                 if diamond_id == rel_id:
                     continue
@@ -540,6 +565,15 @@ def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
         x1, y1, x2, y2 = map(float, match.groups())
         if abs(x1 - x2) >= EPS and abs(y1 - y2) >= EPS:
             fail('object relationship link uses a direct diagonal segment; route it orthogonally', issues)
+    plain_text = re.sub(r'<[^>]+>', ' ', svg)
+    if dashed_relationship_seen and not (re.search(r'dashed', plain_text, re.I) and re.search(r'optional|review|relation|relationship', plain_text, re.I)):
+        fail('dashed object relationship links should be explained by a legend or info panel', issues)
+    for idx, (rel_id, seg) in enumerate(relationship_segments):
+        for other_rel_id, other_seg in relationship_segments[idx + 1:]:
+            if rel_id == other_rel_id:
+                continue
+            if _axis_segment_overlap_length(seg, other_seg) >= 36.0:
+                fail(f'object relationship links for {rel_id or "unknown"} and {other_rel_id or "unknown"} share the same corridor; offset one lane', issues)
 
 
 def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:

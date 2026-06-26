@@ -40,7 +40,8 @@
         {"label": "Entity", "value": "solid object table", "kind": "source"},
         {"label": "Weak entity", "value": "dashed dependent object table", "kind": "object"},
         {"label": "Relationship", "value": "labeled diamond between entity anchors", "kind": "process"},
-        {"label": "Cardinality", "value": "endpoint labels remain outside entity cards", "kind": "quality"}
+        {"label": "Cardinality", "value": "endpoint labels remain outside entity cards", "kind": "quality"},
+        {"label": "Dashed optional relation", "value": "recursive or optional relationship", "kind": "risk"}
       ]
     },
     {

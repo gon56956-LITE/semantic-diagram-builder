@@ -545,6 +545,8 @@ def main() -> int:
         raise AssertionError("object_relationship_diagram stress template should exercise many relationships")
     if object_stress_svg.count('data-route="orthogonal"') < 2:
         raise AssertionError("object_relationship_diagram stress template should exercise orthogonal relationship routing")
+    if "Dashed optional relation" not in object_stress_svg:
+        raise AssertionError("object_relationship_diagram stress template should explain dashed optional relationships")
     if len(re.findall(r'<path\b[^>]*class="edge object-relationship-link"[^>]*data-relationship="category_parent"', object_stress_svg)) != 1:
         raise AssertionError("object_relationship_diagram self relationships should render as one connector")
     if not re.search(r'data-link-end="self"[^>]*data-card-anchor="top"[^>]*data-diamond-anchor="bottom"[^>]*data-relationship="category_parent"', object_stress_svg):

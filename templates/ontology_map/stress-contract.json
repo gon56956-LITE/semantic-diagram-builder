@@ -24,9 +24,9 @@
     {"id": "places", "label": "places", "from": "customer", "to": "order", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0, "col": 0.5},
     {"id": "contains", "label": "contains", "from": "order", "to": "product", "from_cardinality": "1..*", "to_cardinality": "1..*", "row": 0, "col": 1.5},
     {"id": "stored_at", "label": "stored at", "from": "product", "to": "location", "from_cardinality": "0..*", "to_cardinality": "1..*", "row": 0, "col": 2.5},
-    {"id": "supplied_by", "label": "supplied by", "from": "product", "to": "supplier", "from_cardinality": "0..*", "to_cardinality": "1..*", "row": 0.5, "col": 1},
+    {"id": "supplied_by", "label": "supplied by", "from": "product", "to": "supplier", "from_cardinality": "0..*", "to_cardinality": "1..*", "row": 0.5, "col": 1, "lane_offset": -24},
     {"id": "constrained_by", "label": "constrained by", "from": "order", "to": "risk", "from_cardinality": "0..*", "to_cardinality": "0..*", "row": 0.5, "col": 1.5},
-    {"id": "proved_by", "label": "proved by", "from": "order", "to": "evidence", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0.5, "col": 2},
+    {"id": "proved_by", "label": "proved by", "from": "order", "to": "evidence", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0.5, "col": 2, "lane_offset": 24},
     {"id": "governed_by", "label": "governed by", "from": "risk", "to": "policy", "from_cardinality": "1..*", "to_cardinality": "1", "x": 1510, "y": 660, "from_anchor": "bottom", "to_anchor": "bottom", "from_diamond_anchor": "left", "to_diamond_anchor": "right"},
     {"id": "reviewed_by", "label": "reviewed by", "from": "evidence", "to": "policy", "from_cardinality": "0..*", "to_cardinality": "1", "style": "dashed", "row": 1, "col": 2.5}
   ],
@@ -47,7 +47,7 @@
         {"label": "Relationship", "value": "labeled diamond", "kind": "process"},
         {"label": "Instance", "value": "green example card", "kind": "package"},
         {"label": "Datatype", "value": "attribute type column", "kind": "source"},
-        {"label": "Dashed", "value": "optional or review relation", "kind": "risk"}
+        {"label": "Dashed optional relation", "value": "review or optional link", "kind": "risk"}
       ]
     },
     {

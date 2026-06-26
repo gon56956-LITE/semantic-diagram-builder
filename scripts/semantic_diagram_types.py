@@ -574,6 +574,8 @@ def _validate_object_relationship_diagram(contract: dict[str, Any], diagram_type
         for coord in ("row", "col", "x", "y", "diamond_width", "diamond_height"):
             if coord in relationship:
                 _validate_number(relationship[coord], f"{diagram_type} relationships[{rel_idx}].{coord}", minimum=0)
+        if "lane_offset" in relationship:
+            _validate_number(relationship["lane_offset"], f"{diagram_type} relationships[{rel_idx}].lane_offset")
         for key in ("from_cardinality", "to_cardinality"):
             value = relationship.get(key)
             if value is not None and not isinstance(value, str):
@@ -668,6 +670,8 @@ def _validate_ontology_map(contract: dict[str, Any], diagram_type: str) -> None:
         for coord in ("row", "col", "x", "y", "diamond_width", "diamond_height"):
             if coord in relationship:
                 _validate_number(relationship[coord], f"{diagram_type} relationships[{rel_idx}].{coord}", minimum=0)
+        if "lane_offset" in relationship:
+            _validate_number(relationship["lane_offset"], f"{diagram_type} relationships[{rel_idx}].lane_offset")
         for key in ("from_cardinality", "to_cardinality"):
             value = relationship.get(key)
             if value is not None and not isinstance(value, str):

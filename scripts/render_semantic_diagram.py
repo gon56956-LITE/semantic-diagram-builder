@@ -3027,6 +3027,14 @@ def _points_cross_any_rect(points: list[tuple[float, float]], rects: list[tuple[
     return False
 
 
+def _axis_segment_orientation(a: tuple[float, float], b: tuple[float, float]) -> str | None:
+    if abs(a[0] - b[0]) < EPS and abs(a[1] - b[1]) >= EPS:
+        return "v"
+    if abs(a[1] - b[1]) < EPS and abs(a[0] - b[0]) >= EPS:
+        return "h"
+    return None
+
+
 def _relationship_natural_anchor_sides(
     source_rect: tuple[float, float, float, float],
     target_rect: tuple[float, float, float, float],
@@ -3085,8 +3093,9 @@ def _relationship_link_pair(
         t_anchor, t_side = _rect_anchor_with_side(target_rect, (cx, cy), target_side)
         d_from, d_from_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, s_anchor, from_diamond_side)
         d_to, d_to_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, t_anchor, to_diamond_side)
-        source_points = _orthogonal_link_points(s_anchor, d_from, s_side, d_from_side)
-        target_points = _orthogonal_link_points(d_to, t_anchor, d_to_side, t_side)
+        lane_offset = float(rel.get("lane_offset", 0.0))
+        source_points = _offset_relationship_lane(_orthogonal_link_points(s_anchor, d_from, s_side, d_from_side), lane_offset)
+        target_points = _offset_relationship_lane(_orthogonal_link_points(d_to, t_anchor, d_to_side, t_side), lane_offset)
         crosses = int(_points_cross_any_rect(source_points, avoid_rects, 8.0)) + int(_points_cross_any_rect(target_points, avoid_rects, 8.0))
         bends = max(0, len(source_points) - 2) + max(0, len(target_points) - 2)
         score = (crosses, bends)
@@ -3097,6 +3106,37 @@ def _relationship_link_pair(
             break
     assert best is not None
     return best
+
+
+def _offset_relationship_lane(points: list[tuple[float, float]], offset: float) -> list[tuple[float, float]]:
+    if abs(offset) < EPS or len(points) < 4:
+        return points
+    best_idx: int | None = None
+    best_orient: str | None = None
+    best_length = 0.0
+    for idx, (a, b) in enumerate(zip(points, points[1:])):
+        if idx == 0 or idx + 1 >= len(points) - 1:
+            continue
+        orient = _axis_segment_orientation(a, b)
+        if not orient:
+            continue
+        length = abs(b[0] - a[0]) if orient == "h" else abs(b[1] - a[1])
+        if length > best_length:
+            best_idx = idx
+            best_orient = orient
+            best_length = length
+    if best_idx is None or best_orient is None:
+        return points
+    shifted = list(points)
+    a = shifted[best_idx]
+    b = shifted[best_idx + 1]
+    if best_orient == "h":
+        shifted[best_idx] = (a[0], a[1] + offset)
+        shifted[best_idx + 1] = (b[0], b[1] + offset)
+    else:
+        shifted[best_idx] = (a[0] + offset, a[1])
+        shifted[best_idx + 1] = (b[0] + offset, b[1])
+    return shifted
 
 
 def _ontology_instance_link_points(
