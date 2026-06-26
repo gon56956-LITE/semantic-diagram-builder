@@ -1533,7 +1533,16 @@ def _render_matrix_primary_preview(
         parts.append(f'<text x="{ex + 44}" y="{ey + 28}" class="matrix-preview-title" style="font-size:{_fmt_px(note_size)};font-weight:700;fill:{line}">{e(label)}</text>')
         parts.append(f'<text x="{ex + 44}" y="{ey + 52}" class="matrix-preview-sub" style="font-size:{_fmt_px(note_size - 0.8)};fill:{secondary}">{e(sub)}</text>')
         parts.append('</g>')
-    parts.append(f'<text x="{x + 34}" y="{y + h - 28}" class="note" style="font-size:{_fmt_px(note_size)};fill:{secondary}">Too many edges here. Read the matrix for type, strength, and coverage.</text>')
+    footer = "Too many edges here. Read the matrix for type, strength, and coverage."
+    footer_chars = max(18, int((w - 68) / (note_size * 0.54)))
+    footer_lines = wrap_text(footer, max_chars=footer_chars, max_lines=2)
+    footer_line_h = note_size + 5
+    footer_y = y + h - 28 - (len(footer_lines) - 1) * footer_line_h
+    for idx, line_text in enumerate(footer_lines):
+        parts.append(
+            f'<text x="{x + 34}" y="{footer_y + idx * footer_line_h}" class="note" '
+            f'style="font-size:{_fmt_px(note_size)};fill:{secondary}">{e(line_text)}</text>'
+        )
     parts.append('</g>')
 
 

@@ -128,7 +128,8 @@
 <text x="126.0" y="1274.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Return</text>
 <text x="126.0" y="1298.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">reverse flow</text>
 </g>
-<text x="82.0" y="1352.0" class="note" style="font-size:17.4px;fill:#C9DAF5">Too many edges here. Read the matrix for type, strength, and coverage.</text>
+<text x="82.0" y="1329.6" class="note" style="font-size:17.4px;fill:#C9DAF5">Too many edges here. Read the matrix for type,</text>
+<text x="82.0" y="1352.0" class="note" style="font-size:17.4px;fill:#C9DAF5">strength, and coverage.</text>
 </g>
 <g class="relationship-matrix-grid">
 <rect x="648.0" y="118.0" width="1704.0" height="1262.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.56" stroke-width="1"/>

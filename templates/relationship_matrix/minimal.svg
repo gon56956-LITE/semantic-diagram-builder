@@ -64,7 +64,8 @@
 <text x="116.24102564102563" y="448.0" class="matrix-preview-title" style="font-size:16px;font-weight:700;fill:#334155">Payment</text>
 <text x="116.24102564102563" y="472.0" class="matrix-preview-sub" style="font-size:15.2px;fill:#64748B">settlement</text>
 </g>
-<text x="82.0" y="740.0" class="note" style="font-size:16px;fill:#64748B">Too many edges here. Read the matrix for type, strength, and coverage.</text>
+<text x="82.0" y="719.0" class="note" style="font-size:16px;fill:#64748B">Too many edges here. Read the matrix for type, strength,</text>
+<text x="82.0" y="740.0" class="note" style="font-size:16px;fill:#64748B">and coverage.</text>
 </g>
 <g class="relationship-matrix-grid">
 <rect x="648.0" y="118.0" width="1264.0" height="650.0" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#334155" stroke-opacity="0.56" stroke-width="1"/>

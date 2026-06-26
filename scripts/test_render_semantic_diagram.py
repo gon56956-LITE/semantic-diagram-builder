@@ -115,6 +115,38 @@ def info_panel_rects(svg: str) -> dict[str, tuple[float, float, float, float]]:
     return rects
 
 
+def group_rect(svg: str, group_id: str) -> tuple[float, float, float, float]:
+    match = re.search(
+        rf'<g id="{re.escape(group_id)}"[^>]*>\s*'
+        r'<rect x="([-0-9.]+)" y="([-0-9.]+)" width="([-0-9.]+)" height="([-0-9.]+)"',
+        svg,
+        re.S,
+    )
+    if not match:
+        raise AssertionError(f"expected measurable group rect for {group_id}")
+    return tuple(float(value) for value in match.groups())
+
+
+def relationship_diamond_center(svg: str, relationship_id: str) -> tuple[float, float]:
+    match = re.search(
+        rf'<g id="relationship-{re.escape(relationship_id)}"[^>]*>\s*'
+        r'<path d="M ([-0-9.]+) [-0-9.]+ L [-0-9.]+ ([-0-9.]+)',
+        svg,
+        re.S,
+    )
+    if not match:
+        raise AssertionError(f"expected measurable relationship diamond for {relationship_id}")
+    return float(match.group(1)), float(match.group(2))
+
+
+def ontology_instance_link_end(svg: str, instance_id: str) -> tuple[float, float]:
+    match = re.search(rf'<path d="([^"]+)"[^>]*\bdata-to="{re.escape(instance_id)}"', svg)
+    if not match:
+        raise AssertionError(f"expected ontology instance link to {instance_id}")
+    values = [float(value) for value in re.findall(r'[-0-9.]+', match.group(1))]
+    return values[-2], values[-1]
+
+
 def assert_bottom_panels_pack_like_masonry(svg: str, lower_panel_id: str) -> None:
     rects = info_panel_rects(svg)
     if lower_panel_id not in rects:
@@ -144,6 +176,23 @@ def assert_three_bottom_panels_use_side_stack(svg: str) -> None:
     right_stack_h = metadata_y + metadata_h - qa_y
     if abs(legend_y - qa_y) > 1 or legend_h + 1 < right_stack_h:
         raise AssertionError("left bottom panel should span the right-side stack height")
+
+
+def assert_ontology_stress_layout(svg: str) -> None:
+    first_row = group_rect(svg, "instance-customer_acme")
+    beta = group_rect(svg, "instance-customer_beta")
+    sku_b44 = group_rect(svg, "instance-sku_b44")
+    if beta[1] - (first_row[1] + first_row[3]) < 56:
+        raise AssertionError("ontology_map stress second instance row should leave readable routing space")
+    for instance_id, rect in (("customer_beta", beta), ("sku_b44", sku_b44)):
+        end_x, end_y = ontology_instance_link_end(svg, instance_id)
+        center_top = (rect[0] + rect[2] / 2, rect[1])
+        if abs(end_x - center_top[0]) > 1 or abs(end_y - center_top[1]) > 1:
+            raise AssertionError("ontology_map stress instance links should land on centered top anchors")
+    governed = relationship_diamond_center(svg, "governed_by")
+    reviewed = relationship_diamond_center(svg, "reviewed_by")
+    if governed[0] > reviewed[0] - 80 or governed[1] < reviewed[1] + 120:
+        raise AssertionError("ontology_map governed_by diamond should sit lower and left of the reviewed_by diamond")
 
 
 def first_q_lanes_from(svg: str, source_bottoms: set[float]) -> set[float]:
@@ -347,6 +396,9 @@ def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
     for removed_text in ("When To Use", "How To Read", "Metadata", "Companion Views Guide"):
         if removed_text in svg:
             raise AssertionError(f"relationship_matrix should not render explanatory dashboard panel: {removed_text}")
+    full_preview_note = "Too many edges here. Read the matrix for type, strength, and coverage."
+    if f">{full_preview_note}</text>" in svg:
+        raise AssertionError("relationship_matrix preview footer should wrap instead of overflowing its container")
     if 'class="matrix-cell"' not in svg or 'class="matrix-cell-value"' not in svg:
         raise AssertionError("relationship_matrix should render matrix cells and values")
     if 'class="matrix-row-label"' not in svg or 'class="matrix-col-label"' not in svg:
@@ -724,12 +776,11 @@ def main() -> int:
     if ontology_stress_svg.count('class="info-panel"') < 3:
         raise AssertionError("ontology_map stress template should exercise bottom info panels")
     assert_bottom_panels_pack_like_masonry(ontology_stress_svg, "metadata")
+    assert_ontology_stress_layout(ontology_stress_svg)
     assert_no_direct_diagonal_object_links(ontology_stress_svg)
     reviewed_links = re.findall(r'<path\b[^>]*\bdata-relationship="reviewed_by"[^>]*/>', ontology_stress_svg)
     if len(reviewed_links) < 2 or any('data-route="axis"' not in link for link in reviewed_links[:2]):
         raise AssertionError("ontology_map reviewed_by relation should stay on the direct Evidence-Policy axis")
-    if 'L 1510.0 745.0' in ontology_stress_svg:
-        raise AssertionError("ontology_map governed_by diamond should not be pushed into the low instance corridor")
 
     capability_map = load_json("templates/capability_domain_map/reference-contract.json")
     capability_svg = assert_valid("capability domain map reference template", capability_map)
