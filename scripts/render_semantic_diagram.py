@@ -1282,22 +1282,31 @@ def _info_panel_layouts(panels: list[dict], x: float, y: float, w: float, canvas
     if not panels:
         return [], 0.0
     gap = 18.0
+    if len(panels) == 3 and w < 1650:
+        left_w = (w - gap) * 0.46
+        right_w = w - gap - left_w
+        right_h1 = _info_panel_height(panels[1], right_w, canvas_w)
+        right_h2 = _info_panel_height(panels[2], right_w, canvas_w)
+        right_total_h = right_h1 + gap + right_h2
+        left_h = max(_info_panel_height(panels[0], left_w, canvas_w), right_total_h)
+        layouts = [
+            (panels[0], x, y, left_w, left_h),
+            (panels[1], x + left_w + gap, y, right_w, right_h1),
+            (panels[2], x + left_w + gap, y + right_h1 + gap, right_w, right_h2),
+        ]
+        return layouts, left_h
     cols = min(3, len(panels))
     panel_w = (w - (cols - 1) * gap) / cols
     layouts: list[tuple[dict, float, float, float, float]] = []
-    total_h = 0.0
-    row_y = y
-    for start in range(0, len(panels), cols):
-        row_panels = panels[start:start + cols]
-        heights = [_info_panel_height(panel, panel_w, canvas_w) for panel in row_panels]
-        row_h = max(heights)
-        row_w = len(row_panels) * panel_w + (len(row_panels) - 1) * gap
-        row_x = x + (w - row_w) / 2
-        for idx, panel in enumerate(row_panels):
-            layouts.append((panel, row_x + idx * (panel_w + gap), row_y, panel_w, row_h))
-        row_y += row_h + gap
-        total_h += row_h + gap
-    return layouts, total_h - gap
+    col_bottoms = [y for _ in range(cols)]
+    for panel in panels:
+        col_idx = min(range(cols), key=lambda idx: (col_bottoms[idx], idx))
+        panel_x = x + col_idx * (panel_w + gap)
+        panel_y = col_bottoms[col_idx]
+        panel_h = _info_panel_height(panel, panel_w, canvas_w)
+        layouts.append((panel, panel_x, panel_y, panel_w, panel_h))
+        col_bottoms[col_idx] = panel_y + panel_h + gap
+    return layouts, max(col_bottoms) - y - gap
 
 
 def _render_info_panels(parts: list[str], panels: list[dict], style: dict, x: float, y: float, w: float, canvas_w: float) -> float:
@@ -1374,10 +1383,12 @@ def _matrix_rel_index(relationships: list[dict]) -> dict[tuple[str, str], dict]:
     return rels
 
 
-def _matrix_selected(contract: dict, relationships: list[dict]) -> tuple[str, str]:
-    selected = contract.get("selected_cell")
-    if isinstance(selected, dict) and selected.get("from") and selected.get("to"):
-        return str(selected["from"]), str(selected["to"])
+def _matrix_focus_cell(contract: dict, relationships: list[dict]) -> tuple[str, str]:
+    focus = contract.get("focus_cell", contract.get("selected_cell"))
+    if isinstance(focus, dict) and focus.get("from") and focus.get("to"):
+        return str(focus["from"]), str(focus["to"])
+    if not relationships:
+        return "", ""
     best = max(enumerate(relationships), key=lambda pair: (int(pair[1].get("strength", 1)), -pair[0]))[1]
     return str(best.get("from", "")), str(best.get("to", ""))
 
@@ -1421,7 +1432,7 @@ def _render_matrix_panel(
     color = _accent_color(style, panel, "object")
     scale = _clamp(canvas_w / 2200.0, 0.98, 1.1)
     title_size = _clamp(17.5 * scale, 17.5, 19.2)
-    body_size = _clamp(16.0 * scale, 16.0, 17.4)
+    body_size = _clamp(17.2 * scale, 17.0, 18.4)
     line_h = body_size + 5
     parts.append(f'<g class="info-panel relationship-matrix-panel {class_name}" data-panel-id="{e(panel_id)}">')
     parts.append(_panel_rect_svg(style, x, y, w, h, fill="panel_fill", stroke=color, stroke_opacity=0.62, radius=6))
@@ -1474,7 +1485,8 @@ def _render_matrix_primary_preview(
     positions: dict[str, tuple[float, float, float, float]] = {}
     count = max(1, len(entities))
     if count >= 8:
-        dense_card_w = min(card_w, max(142, w * 0.25))
+        dense_card_w = min(210, max(176, w * 0.32))
+        card_h = 76
         top = y + 118
         bottom = y + h - 96
         lane_counts = [math.ceil(count / 2), count // 2]
@@ -1515,10 +1527,11 @@ def _render_matrix_primary_preview(
         parts.append(f'<g class="matrix-preview-node" data-entity="{e(entity["id"])}">')
         parts.append(_panel_rect_svg(style, ex, ey, ew, eh, fill="panel_fill", stroke=color, stroke_opacity=0.9, radius=6))
         parts.append(icon_svg(str(entity.get("kind", "object")), ex + 12, ey + eh / 2 - 10, color, style))
-        label = wrap_text(str(entity.get("label", entity["id"])), max_chars=max(8, int((ew - 48) / 7.8)), max_lines=1)[0]
-        sub = str(entity.get("subtitle", "Entity"))
+        preview_chars = max(9, int((ew - 50) / 8.2))
+        label = wrap_text(str(entity.get("label", entity["id"])), max_chars=preview_chars, max_lines=1)[0]
+        sub = wrap_text(str(entity.get("subtitle", "Entity")), max_chars=preview_chars, max_lines=1)[0]
         parts.append(f'<text x="{ex + 44}" y="{ey + 28}" class="matrix-preview-title" style="font-size:{_fmt_px(note_size)};font-weight:700;fill:{line}">{e(label)}</text>')
-        parts.append(f'<text x="{ex + 44}" y="{ey + 49}" class="matrix-preview-sub" style="font-size:{_fmt_px(note_size - 1.4)};fill:{secondary}">{e(sub)}</text>')
+        parts.append(f'<text x="{ex + 44}" y="{ey + 52}" class="matrix-preview-sub" style="font-size:{_fmt_px(note_size - 0.8)};fill:{secondary}">{e(sub)}</text>')
         parts.append('</g>')
     parts.append(f'<text x="{x + 34}" y="{y + h - 28}" class="note" style="font-size:{_fmt_px(note_size)};fill:{secondary}">Too many edges here. Read the matrix for type, strength, and coverage.</text>')
     parts.append('</g>')
@@ -1530,8 +1543,8 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
     entity_ids = [str(entity["id"]) for entity in entities]
     relationships = _matrix_relationships(contract)
     rel_index = _matrix_rel_index(relationships)
-    selected_from, selected_to = _matrix_selected(contract, relationships)
-    selected_rel = rel_index.get((selected_from, selected_to))
+    focus_from, focus_to = _matrix_focus_cell(contract, relationships)
+    focus_rel = rel_index.get((focus_from, focus_to))
     stats = _matrix_stats(entity_ids, relationships)
     entity_by_id = {str(entity["id"]): entity for entity in entities}
 
@@ -1541,21 +1554,21 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
     top_y = float(contract.get("top_y", 118))
     gap = 20.0
     main_y = top_y
-    left_w = 660.0
-    right_w = 460.0
+    left_w = 580.0
     matrix_pad_x = 20.0
+    bottom_panel_h = 330.0
 
     def matrix_label_size_for(canvas_w: float) -> float:
         scale = _clamp(canvas_w / 2200.0, 0.98, 1.1)
         return _clamp(18.5 * scale, 18.2, 20.2)
 
-    base_width = int(max(float(contract.get("width", 0) or 0), 2280, 1180 + n * 88))
+    base_width = int(max(float(contract.get("width", 0) or 0), 1960, 1180 + n * 88))
     label_size = matrix_label_size_for(base_width)
     longest_label_w = max((len(label) * label_size * 0.54 for label in labels), default=0.0)
     row_label_w = max(220.0, longest_label_w + 78.0)
     min_cell_w = max(92.0, longest_label_w + 22.0)
     min_center_w = row_label_w + n * min_cell_w + 2 * matrix_pad_x
-    min_width = 2 * margin + left_w + right_w + 2 * gap + min_center_w
+    min_width = 2 * margin + left_w + gap + min_center_w
     width = int(max(base_width, math.ceil(min_width)))
 
     label_size = matrix_label_size_for(width)
@@ -1563,21 +1576,21 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
     row_label_w = max(220.0, longest_label_w + 78.0)
     min_cell_w = max(92.0, longest_label_w + 22.0)
     min_center_w = row_label_w + n * min_cell_w + 2 * matrix_pad_x
-    min_width = 2 * margin + left_w + right_w + 2 * gap + min_center_w
+    min_width = 2 * margin + left_w + gap + min_center_w
     width = int(max(width, math.ceil(min_width)))
 
-    center_w = width - 2 * margin - left_w - right_w - 2 * gap
+    center_w = width - 2 * margin - left_w - gap
     cell_w = max(min_cell_w, (center_w - 2 * matrix_pad_x - row_label_w) / max(1, n))
     cell_h = _clamp(cell_w * 0.82, 82.0, 96.0)
     matrix_w = row_label_w + n * cell_w
     header_h = 94.0
     matrix_h = header_h + n * cell_h
     main_h = max(650.0, matrix_h + 112.0)
-    height = int(max(float(contract.get("height", 0) or 0), main_y + main_h + 72))
+    bottom_y = main_y + main_h + gap
+    height = int(max(float(contract.get("height", 0) or 0), bottom_y + bottom_panel_h + 72))
 
     left_x = margin
     center_x = left_x + left_w + gap
-    right_x = center_x + center_w + gap
     line = style_color(style, "line_primary", "#F4F8FF")
     secondary = style_color(style, "text_secondary", "#C9DAF5")
     grid_color = style_color(style, "line_primary", "#F4F8FF")
@@ -1629,12 +1642,8 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
             x = matrix_x + row_label_w + col_idx * cell_w
             y = matrix_y + header_h + row_idx * cell_h
             rel = rel_index.get((source_id, target_id))
-            selected = source_id == selected_from and target_id == selected_to
             state = "empty" if rel is None else str(rel.get("type", "direct"))
             parts.append(f'<rect x="{x}" y="{y}" width="{cell_w}" height="{cell_h}" class="matrix-cell" data-from="{e(source_id)}" data-to="{e(target_id)}" data-state="{e(state)}" fill="none"/>')
-            if selected:
-                sel_color = style_color(style, "accent_cyan", "#16D9FF")
-                parts.append(f'<rect x="{x + 6}" y="{y + 6}" width="{cell_w - 12}" height="{cell_h - 12}" rx="6" fill="none" stroke="{sel_color}" stroke-width="2.3" class="matrix-selected-cell"/>')
             cell_text_y = y + cell_h / 2 + cell_size * 0.32
             if source_id == target_id:
                 parts.append(f'<text x="{x + cell_w/2}" y="{cell_text_y}" text-anchor="middle" class="matrix-cell-value" style="font-size:{_fmt_px(cell_size)};fill:{secondary}">-</text>')
@@ -1649,75 +1658,84 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
             parts.append(f'<text x="{x + cell_w/2}" y="{cell_text_y}" text-anchor="middle" class="matrix-cell-value" style="font-size:{_fmt_px(cell_size)};font-weight:700;fill:{color}">{strength}</text>')
     parts.append('</g>')
 
-    detail_h = _clamp(main_h * 0.32, 300.0, 340.0)
-    summary_h = 250.0
-    top_conn_h = main_h - detail_h - summary_h - 2 * gap
-    selected_label_from = entity_by_id.get(selected_from, {}).get("label", selected_from)
-    selected_label_to = entity_by_id.get(selected_to, {}).get("label", selected_to)
+    bottom_x = margin
+    bottom_w = width - 2 * margin
+    detail_w = max(520.0, bottom_w * 0.34)
+    summary_w = max(480.0, bottom_w * 0.28)
+    top_conn_w = bottom_w - detail_w - summary_w - 2 * gap
+    if top_conn_w < 520.0:
+        equal_w = (bottom_w - 2 * gap) / 3
+        detail_w = summary_w = top_conn_w = equal_w
+    detail_x = bottom_x
+    summary_x = detail_x + detail_w + gap
+    top_conn_x = summary_x + summary_w + gap
+    focus_label_from = entity_by_id.get(focus_from, {}).get("label", focus_from)
+    focus_label_to = entity_by_id.get(focus_to, {}).get("label", focus_to)
     detail_items = [
-        {"label": "From", "value": selected_label_from},
-        {"label": "To", "value": selected_label_to},
+        {"label": "From", "value": focus_label_from},
+        {"label": "To", "value": focus_label_to},
     ]
-    if selected_rel:
+    if focus_rel:
         detail_items.extend([
-            {"label": "Type", "value": MATRIX_TYPE_LABELS.get(str(selected_rel.get("type")), str(selected_rel.get("type"))), "kind": str(selected_rel.get("type"))},
-            {"label": "Strength", "value": f'{selected_rel.get("strength", 1)}'},
-            {"label": "Path", "value": selected_rel.get("path", f"{selected_label_from} -> {selected_label_to}")},
-            selected_rel.get("note", selected_rel.get("label", "Selected relationship is present.")),
+            {"label": "Type", "value": MATRIX_TYPE_LABELS.get(str(focus_rel.get("type")), str(focus_rel.get("type"))), "kind": str(focus_rel.get("type"))},
+            {"label": "Strength", "value": f'{focus_rel.get("strength", 1)}'},
+            {"label": "Path", "value": focus_rel.get("path", f"{focus_label_from} -> {focus_label_to}")},
+            focus_rel.get("note", focus_rel.get("label", "Relationship is declared in the matrix.")),
         ])
     else:
-        detail_items.append("No relationship is declared for this selected cell.")
-    detail_y = main_y
-    _render_matrix_panel(parts, {"id": "selected_cell", "title": "Relationship Details", "kind": "query", "items": detail_items}, style, right_x, detail_y, right_w, detail_h, width, class_name="matrix-selected-detail-panel")
+        detail_items.append("No relationship is declared for this focus pair.")
+    detail_y = bottom_y
+    _render_matrix_panel(parts, {"id": "focus_cell", "title": "Focus Relationship", "kind": "query", "items": detail_items}, style, detail_x, detail_y, detail_w, bottom_panel_h, width, class_name="matrix-focus-detail-panel")
 
-    summary_y = detail_y + detail_h + gap
+    summary_y = bottom_y
     total = max(1, stats["total"])
     parts.append('<g class="matrix-summary-panel info-panel">')
-    parts.append(_panel_rect_svg(style, right_x, summary_y, right_w, summary_h, fill="panel_fill", stroke=line, stroke_opacity=0.62, radius=6))
-    parts.append(f'<text x="{right_x + 18}" y="{summary_y + 32}" class="info-panel-title" style="font-size:{_fmt_px(panel_title_size)}">SUMMARY</text>')
-    metric_w = (right_w - 56) / 3
+    parts.append(_panel_rect_svg(style, summary_x, summary_y, summary_w, bottom_panel_h, fill="panel_fill", stroke=line, stroke_opacity=0.62, radius=6))
+    parts.append(f'<text x="{summary_x + 18}" y="{summary_y + 32}" class="info-panel-title" style="font-size:{_fmt_px(panel_title_size)}">SUMMARY</text>')
+    metric_w = (summary_w - 56) / 3
     metric_y = summary_y + 80
     for idx, (value, label) in enumerate(((n, "Entities"), (stats["total"], "Relationships"), (stats["strong"], "Strong"))):
-        mx = right_x + 18 + idx * metric_w
+        mx = summary_x + 18 + idx * metric_w
         parts.append(f'<text x="{mx}" y="{metric_y}" class="matrix-summary-value" style="font-size:30px;font-weight:700;fill:{line}">{value}</text>')
         parts.append(f'<text x="{mx}" y="{metric_y + 24}" class="note" style="font-size:{_fmt_px(note_size - 1)}">{label}</text>')
     dist_y = summary_y + 132
-    bar_x = right_x + 154
-    bar_w = right_w - 230
+    bar_x = summary_x + 154
+    bar_w = summary_w - 230
     for idx, rel_type in enumerate(("direct", "indirect", "dependency")):
         color = _matrix_type_color(style, rel_type, 1)
         count = stats["counts"][rel_type]
         pct = round(count / total * 100)
         y = dist_y + idx * 34
         fill_w = bar_w * count / total
-        parts.append(f'<text x="{right_x + 24}" y="{y}" class="matrix-summary-label" style="font-size:{_fmt_px(note_size)};font-weight:700;fill:{line}">{MATRIX_TYPE_LABELS[rel_type]}</text>')
+        parts.append(f'<text x="{summary_x + 24}" y="{y}" class="matrix-summary-label" style="font-size:{_fmt_px(note_size)};font-weight:700;fill:{line}">{MATRIX_TYPE_LABELS[rel_type]}</text>')
         parts.append(f'<rect x="{bar_x}" y="{y - 13}" width="{bar_w}" height="14" rx="2" fill="{style_color(style, "background_dark", "#031E42")}" stroke="{line}" stroke-opacity="0.18"/>')
         parts.append(f'<rect x="{bar_x}" y="{y - 13}" width="{fill_w}" height="14" rx="2" fill="{color}" opacity="0.86" class="matrix-distribution-bar"/>')
-        parts.append(f'<text x="{right_x + right_w - 24}" y="{y}" text-anchor="end" class="note" style="font-size:{_fmt_px(note_size)}">{count} ({pct}%)</text>')
+        parts.append(f'<text x="{summary_x + summary_w - 24}" y="{y}" text-anchor="end" class="note" style="font-size:{_fmt_px(note_size)}">{count} ({pct}%)</text>')
     parts.append('</g>')
 
     connected_rows = sorted(
         ((entity_id, values["count"], values["strong"]) for entity_id, values in stats["connected"].items()),
         key=lambda row: (-row[1], -row[2], entity_by_id[row[0]].get("label", row[0])),
     )
-    top_conn_y = summary_y + summary_h + gap
-    max_rows = max(3, int((top_conn_h - 72) // 38))
+    top_conn_y = bottom_y
+    top_conn_h = bottom_panel_h
+    max_rows = max(3, int((top_conn_h - 72) // 32))
     connected_rows = connected_rows[:max_rows]
     parts.append('<g class="matrix-top-connected-panel info-panel">')
-    parts.append(_panel_rect_svg(style, right_x, top_conn_y, right_w, top_conn_h, fill="panel_fill", stroke=line, stroke_opacity=0.62, radius=6))
-    parts.append(f'<text x="{right_x + 18}" y="{top_conn_y + 32}" class="info-panel-title" style="font-size:{_fmt_px(panel_title_size)}">TOP CONNECTED ENTITIES</text>')
+    parts.append(_panel_rect_svg(style, top_conn_x, top_conn_y, top_conn_w, top_conn_h, fill="panel_fill", stroke=line, stroke_opacity=0.62, radius=6))
+    parts.append(f'<text x="{top_conn_x + 18}" y="{top_conn_y + 32}" class="info-panel-title" style="font-size:{_fmt_px(panel_title_size)}">TOP CONNECTED ENTITIES</text>')
     max_count = max((row[1] for row in connected_rows), default=1)
     for idx, (entity_id, count_value, strong_value) in enumerate(connected_rows):
-        y = top_conn_y + 78 + idx * 38
+        y = top_conn_y + 76 + idx * 32
         label = entity_by_id[entity_id].get("label", entity_id)
-        rank_bar_x = right_x + right_w - 206
+        rank_bar_x = top_conn_x + top_conn_w - 206
         rank_bar_w = 112 * count_value / max_count
-        parts.append(f'<text x="{right_x + 28}" y="{y}" class="matrix-rank" style="font-size:{_fmt_px(note_size)};fill:{secondary}">{idx + 1}</text>')
-        parts.append(f'<text x="{right_x + 58}" y="{y}" class="matrix-rank-label" style="font-size:{_fmt_px(note_size + 0.6)};font-weight:700;fill:{line}">{e(label)}</text>')
+        parts.append(f'<text x="{top_conn_x + 28}" y="{y}" class="matrix-rank" style="font-size:{_fmt_px(note_size)};fill:{secondary}">{idx + 1}</text>')
+        parts.append(f'<text x="{top_conn_x + 58}" y="{y}" class="matrix-rank-label" style="font-size:{_fmt_px(note_size + 0.6)};font-weight:700;fill:{line}">{e(label)}</text>')
         parts.append(f'<rect x="{rank_bar_x}" y="{y - 13}" width="112" height="14" rx="2" fill="{style_color(style, "background_dark", "#031E42")}" stroke="{line}" stroke-opacity="0.18"/>')
         parts.append(f'<rect x="{rank_bar_x}" y="{y - 13}" width="{rank_bar_w}" height="14" rx="2" fill="{style_color(style, "accent_cyan", "#16D9FF")}" opacity="0.82"/>')
-        parts.append(f'<text x="{right_x + right_w - 78}" y="{y}" class="matrix-rank-value" style="font-size:{_fmt_px(note_size)};fill:{line}">{count_value}</text>')
-        parts.append(f'<text x="{right_x + right_w - 34}" y="{y}" class="matrix-rank-strong" style="font-size:{_fmt_px(note_size)};fill:{style_color(style, "accent_yellow", "#FFD84D")}">{strong_value}</text>')
+        parts.append(f'<text x="{top_conn_x + top_conn_w - 78}" y="{y}" class="matrix-rank-value" style="font-size:{_fmt_px(note_size)};fill:{line}">{count_value}</text>')
+        parts.append(f'<text x="{top_conn_x + top_conn_w - 34}" y="{y}" class="matrix-rank-strong" style="font-size:{_fmt_px(note_size)};fill:{style_color(style, "accent_yellow", "#FFD84D")}">{strong_value}</text>')
     parts.append('</g>')
 
     _append_annotations(parts, contract, style, width, height)
@@ -1726,58 +1744,10 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
 
 
 def _ontology_panel_groups(panels: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
-    left = [panel for panel in panels if panel.get("placement") == "left"]
-    right = [panel for panel in panels if panel.get("placement") == "right"]
-    bottom = [panel for panel in panels if panel.get("placement") not in {"left", "right"}]
-    return left, right, bottom
-
-
-def _ontology_side_panel_height(panels: list[dict], panel_w: float, canvas_w: float) -> float:
-    if not panels:
-        return 0.0
-    gap = 18.0
-    return sum(_info_panel_height(panel, panel_w, canvas_w) for panel in panels) + (len(panels) - 1) * gap
-
-
-def _render_ontology_side_panels(parts: list[str], panels: list[dict], style: dict, x: float, y: float, w: float, canvas_w: float) -> float:
-    if not panels:
-        return 0.0
-    gap = 18.0
-    cur_y = y
-    body_size = _clamp(14.0 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 14.0, 15.2)
-    line_h = body_size + 4
-    total = 0.0
-    for panel in panels:
-        h = _info_panel_height(panel, w, canvas_w)
-        color = _accent_color(style, panel, "object")
-        panel_id = str(panel.get("id", panel.get("title", "panel"))).lower().replace(" ", "-")
-        parts.append(f'<g class="info-panel ontology-side-panel" data-panel-id="{e(panel_id)}" data-placement="{e(panel.get("placement", ""))}">')
-        parts.append(_panel_rect_svg(style, x, cur_y, w, h, fill="panel_fill", stroke=color, stroke_opacity=0.62, radius=6))
-        parts.append(f'<text x="{x + 18}" y="{cur_y + 28}" class="info-panel-title">{e(panel.get("title", "Info"))}</text>')
-        items = panel.get("items", [])
-        if not isinstance(items, list):
-            items = []
-        text_y = cur_y + 56
-        max_chars = max(16, int(max(120, w - 48) / (body_size * 0.52)))
-        for item in items:
-            text, kind, accent = _info_panel_item_text(item)
-            if not text:
-                continue
-            item_color = style_color(style, accent, "") if accent else kind_accent(style, kind or panel.get("kind", "object"))
-            if not VALID_HEX.match(item_color):
-                item_color = color
-            lines = wrap_text(text, max_chars=max_chars, max_lines=3)
-            parts.append(f'<rect x="{x + 18}" y="{text_y - 10}" width="9" height="9" rx="2" fill="{item_color}" opacity="0.95"/>')
-            for idx, line in enumerate(lines):
-                parts.append(
-                    f'<text x="{x + 36}" y="{text_y + idx * line_h}" class="info-panel-item" '
-                    f'style="font-size:{_fmt_px(body_size)}">{e(line)}</text>'
-                )
-            text_y += max(1, len(lines)) * line_h + 6
-        parts.append('</g>')
-        cur_y += h + gap
-        total += h + gap
-    return total - gap
+    # Dense ontology maps stay more readable when the concept canvas keeps the
+    # horizontal space; legacy left/right placement is treated as bottom-panel
+    # ordering guidance instead of reserving side gutters.
+    return [], [], panels
 
 
 def _matrix_text_lines(text: object, max_chars: int, max_lines: int) -> list[str]:
@@ -2180,52 +2150,6 @@ def _capability_item_svg(item: dict, x: float, y: float, w: float, h: float, sty
     return "".join(parts)
 
 
-def _render_capability_side_panels(
-    parts: list[str],
-    panels: list[dict],
-    style: dict,
-    x: float,
-    y: float,
-    w: float,
-    canvas_w: float,
-) -> float:
-    if not panels:
-        return 0.0
-    panel_gap = 18.0
-    cur_y = y
-    total = 0.0
-    body_size = _clamp(13.8 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 13.5, 15.0)
-    line_h = body_size + 4
-    for panel in panels:
-        h = _info_panel_height(panel, w, canvas_w)
-        color = _accent_color(style, panel, "object")
-        panel_id = str(panel.get("id", panel.get("title", "panel"))).lower().replace(" ", "-")
-        parts.append(f'<g class="info-panel capability-side-panel" data-panel-id="{e(panel_id)}">')
-        parts.append(_panel_rect_svg(style, x, cur_y, w, h, fill="panel_fill", stroke=color, stroke_opacity=0.64, radius=6))
-        parts.append(f'<text x="{x + 18}" y="{cur_y + 28}" class="info-panel-title">{e(panel.get("title", "Info"))}</text>')
-        text_y = cur_y + 56
-        max_chars = max(18, int((w - 48) / (body_size * 0.52)))
-        items = panel.get("items", [])
-        if not isinstance(items, list):
-            items = []
-        for item in items:
-            text, kind, accent = _info_panel_item_text(item)
-            if not text:
-                continue
-            item_color = style_color(style, accent, "") if accent else kind_accent(style, kind or panel.get("kind", "object"))
-            if not VALID_HEX.match(item_color):
-                item_color = color
-            lines = wrap_text(text, max_chars=max_chars, max_lines=3)
-            parts.append(f'<rect x="{x + 18}" y="{text_y - 10}" width="9" height="9" rx="2" fill="{item_color}" opacity="0.95"/>')
-            for idx, line in enumerate(lines):
-                parts.append(f'<text x="{x + 36}" y="{text_y + idx * line_h}" class="info-panel-item" style="font-size:{_fmt_px(body_size)}">{e(line)}</text>')
-            text_y += max(1, len(lines)) * line_h + 6
-        parts.append('</g>')
-        cur_y += h + panel_gap
-        total += h + panel_gap
-    return max(0.0, total - panel_gap)
-
-
 def _vertical_segment_blocked(
     x: float,
     y1: float,
@@ -2300,6 +2224,18 @@ def _capability_lane_shift(index: int, corridor_offset: float) -> float:
     return max(-limit, min(limit, raw))
 
 
+def _capability_level_label_width(contract: dict, levels: list[dict]) -> float:
+    if contract.get("level_label_width") is not None:
+        return float(contract["level_label_width"])
+    labels = [str(level.get("label", level.get("id", ""))) for level in levels]
+    tokens = [token for label in labels for token in re.split(r"\s+", label.strip()) if token]
+    longest_token = max((len(token) for token in tokens), default=9)
+    text_w = longest_token * 15.5 * 0.56
+    min_w = float(contract.get("level_label_min_width", 148))
+    max_w = float(contract.get("level_label_max_width", 240))
+    return _clamp(text_w + 84, min_w, max_w)
+
+
 def _capability_link_path(
     a: tuple[float, float, float, float],
     b: tuple[float, float, float, float],
@@ -2364,25 +2300,22 @@ def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str
     panels = _info_panels(contract)
     margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
     top_y = int(contract.get("top_y", metrics["top_y"]))
-    level_label_w = float(contract.get("level_label_width", 160))
+    level_label_w = _capability_level_label_width(contract, levels)
     col_gap = max(float(contract.get("column_gap", 44)), 44.0)
     row_gap = max(float(contract.get("level_gap", 36)), 36.0)
     item_h = max(float(contract.get("item_height", 96)), 96.0)
     item_gap = max(float(contract.get("item_gap", 28)), 28.0)
     default_col_w = max(float(contract.get("column_width", 205)), 200.0)
-    side_w = float(contract.get("side_panel_width", 300)) if panels else 0.0
-    side_gap = 30.0 if panels else 0.0
     header_h = 56.0
     label_gap = max(float(contract.get("label_gap", 44)), 44.0)
     col_widths = [float(column.get("width", default_col_w)) for column in columns]
     grid_w = sum(col_widths) + max(0, len(columns) - 1) * col_gap
     map_w = level_label_w + label_gap + grid_w
-    natural_w = 2 * margin_x + map_w + side_gap + side_w
+    natural_w = 2 * margin_x + map_w
     width = int(max(float(contract.get("width", 0)), natural_w))
-    content_x = (width - (map_w + side_gap + side_w)) / 2
+    content_x = (width - map_w) / 2
     map_x = content_x
     grid_x = map_x + level_label_w + label_gap
-    side_x = map_x + map_w + side_gap
 
     column_x: dict[str, float] = {}
     cur_x = grid_x
@@ -2406,8 +2339,9 @@ def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str
 
     map_y = top_y + header_h + 18
     map_h = sum(level_heights[str(level["id"])] for level in levels) + max(0, len(levels) - 1) * row_gap
-    side_h = sum(_info_panel_height(panel, side_w, width) for panel in panels) + max(0, len(panels) - 1) * 18 if panels else 0
-    height = int(max(float(contract.get("height", 0)), map_y + max(map_h, side_h) + 76))
+    panel_y = map_y + map_h + 36
+    _panel_layouts, panels_h = _info_panel_layouts(panels, margin_x, panel_y, width - 2 * margin_x, width)
+    height = int(max(float(contract.get("height", 0)), panel_y + panels_h + 64 if panels else map_y + map_h + 76))
 
     parts = _svg_shell_start(contract, style, width, height, diagram_type)
     line = style_color(style, "line_primary", "#F4F8FF")
@@ -2494,7 +2428,7 @@ def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str
         parts.append(_capability_item_svg(item, *positions[item_id], style, width))
 
     if panels:
-        _render_capability_side_panels(parts, panels, style, side_x, top_y, side_w, width)
+        _render_info_panels(parts, panels, style, margin_x, panel_y, width - 2 * margin_x, width)
     _append_annotations(parts, contract, style, width, height)
     parts.append('</svg>')
     return "\n".join(parts) + "\n"
@@ -3688,17 +3622,8 @@ def _object_relationship_layout(contract: dict, style: dict, diagram_type: str) 
         left_panels, right_panels, bottom_panels = _ontology_panel_groups(panels)
     panel_y = content_bottom + 36
     _layouts, panels_h = _info_panel_layouts(bottom_panels, margin_x, panel_y, width - 2 * margin_x, width)
-    side_panel_w = float(contract.get("ontology_side_panel_width", 220))
-    side_top = top_y
-    side_h = 0.0
-    if diagram_type == "ontology_map":
-        side_h = max(
-            _ontology_side_panel_height(left_panels, side_panel_w, width),
-            _ontology_side_panel_height(right_panels, side_panel_w, width),
-        )
     bottom_h = panel_y + panels_h + 64 if bottom_panels else content_bottom + 82
-    side_bottom_h = side_top + side_h + 64 if side_h else 0
-    height = int(max(contract.get("height", 0), bottom_h, side_bottom_h))
+    height = int(max(contract.get("height", 0), bottom_h))
     return width, height, positions, panel_y, grid
 
 
@@ -3926,11 +3851,7 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
     parts.extend(label_parts)
     panels = _info_panels(contract)
     if diagram_type == "ontology_map":
-        left_panels, right_panels, bottom_panels = _ontology_panel_groups(panels)
-        side_panel_w = float(contract.get("ontology_side_panel_width", 220))
-        side_top = int(contract.get("top_y", layout_metrics(style)["top_y"]))
-        _render_ontology_side_panels(parts, left_panels, style, margin_x, side_top, side_panel_w, width)
-        _render_ontology_side_panels(parts, right_panels, style, width - margin_x - side_panel_w, side_top, side_panel_w, width)
+        _left_panels, _right_panels, bottom_panels = _ontology_panel_groups(panels)
         _render_info_panels(parts, bottom_panels, style, margin_x, panel_y, width - 2 * margin_x, width)
     else:
         _render_info_panels(parts, panels, style, margin_x, panel_y, width - 2 * margin_x, width)

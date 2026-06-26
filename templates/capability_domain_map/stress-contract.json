@@ -3,7 +3,7 @@
   "subtitle": "Dense capability map with stacked sub-domains, shared enablers, and sparse dependencies",
   "diagram_type": "capability_domain_map",
   "style": "accent-blueprint",
-  "width": 2650,
+  "width": 2300,
   "column_width": 200,
   "column_gap": 56,
   "level_gap": 40,

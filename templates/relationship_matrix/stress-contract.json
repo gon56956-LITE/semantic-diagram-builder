@@ -3,7 +3,7 @@
   "subtitle": "Dense static companion view with many same-entity relationships",
   "diagram_type": "relationship_matrix",
   "style": "accent-blueprint",
-  "width": 2600,
+  "width": 2400,
   "entities": [
     {"id": "customer", "label": "Customer", "subtitle": "account owner", "kind": "capability", "accent": "accent_cyan", "order": 0},
     {"id": "order", "label": "Order", "subtitle": "commercial event", "kind": "source", "accent": "accent_cyan", "order": 1},
@@ -63,7 +63,7 @@
     {"from": "invoice", "to": "payment", "type": "dependency", "strength": 2, "path": "Invoice controls payment reconciliation"},
     {"from": "return", "to": "payment", "type": "dependency", "strength": 1, "path": "Refund requires payment reference"}
   ],
-  "selected_cell": {"from": "payment", "to": "shipment"},
+  "focus_cell": {"from": "payment", "to": "shipment"},
   "annotations": [
     {"text": "Stress template: dense relationship matrices should remain readable without turning into an interactive dashboard.", "placement": "footer"}
   ]

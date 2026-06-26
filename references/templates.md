@@ -117,7 +117,7 @@ Use for concept/class maps, glossary ontologies, semantic model sketches, and li
 - Use `instances[].lane_offset` when several instance examples point to the same concept or would otherwise reuse the same long dashed corridor.
 - Use `concept_anchor` and `instance_anchor` on an instance only when the automatic concept-to-instance link would cross a predicate diamond.
 - Place relationship diamonds with `row`/`col` or polished `x`/`y` coordinates before judging connector paths; ontology maps reuse the object relationship geometry engine.
-- Use side `info_panels` with `placement: "left"` or `placement: "right"` for legends, about/rules, and version cards when matching the blueprint reference style.
+- Use bottom `info_panels` for legends, about/rules, and version cards so the ontology core keeps the horizontal canvas. Legacy `placement: "left"` or `"right"` values are accepted but render below the map.
 - Split the ontology if every concept needs many predicates; this type is for structured ontology maps, not arbitrary graph layout.
 
 ### Capability Domain Map
@@ -129,9 +129,9 @@ Use for enterprise capability maps, domain maps, operating-model decomposition, 
 - Use `levels[].kind/accent` and `columns[].kind/accent` for prominent header icons; do not put compact badges inside dense capability cards.
 - Use `span` sparingly for strategic objectives or shared enablers that truly cover adjacent lanes.
 - Keep connector overlays sparse. The map should remain readable from row/column alignment alone.
-- Capability map cards use a dedicated dense-card spec: size them for two title lines plus one subtitle, and keep row/column gaps wide enough for side-corridor routing.
+- Capability map cards use a dedicated dense-card spec: size them for two title lines plus one subtitle, and keep row/column gaps wide enough for sparse overlay routing.
 - When several connector overlays need the same vertical corridor, widen the canvas and use `relationships[].lane_offset` for the few routes that still need deliberate separation.
-- Put usage rules, notes, and version blocks in `info_panels`; this type renders them as side panels to echo blueprint map conventions.
+- Put usage rules, notes, and version blocks in bottom `info_panels`; avoid side cards that shrink the capability map body.
 - Use the stress template to check whether the canvas should widen before shrinking text or card spacing.
 
 ### Relationship Matrix
@@ -141,8 +141,8 @@ Use for dense relationship coverage views where the primary diagram should becom
 - Use `entities[]` as the single source for both row and column headers.
 - Use `relationships[]` only for declared non-empty cells; empty cells are generated automatically.
 - Use `type: "direct"`, `"indirect"`, or `"dependency"` and `strength: 1`, `2`, or `3`.
-- Use `selected_cell` to drive the static detail panel. It may point to an empty cell if you want to explain a missing relationship, but both entities must exist.
-- Keep auxiliary information in the built-in right-side detail, summary, and top-connected panels rather than adding explanatory dashboard blocks.
+- Use `focus_cell` to drive the static detail panel. It may point to an empty pair if you want to explain a missing relationship, but both entities must exist. Do not draw selected-cell highlights; this diagram is not interactive.
+- Keep auxiliary information in the built-in bottom detail, summary, and top-connected panels rather than adding explanatory dashboard blocks.
 - Keep the primary preview panel reference-only. If users need to follow actual graph routes, use `object_relationship_diagram` or `ontology_map` as the primary diagram and link to a matrix companion view.
 - Treat the first implementation as beta: run visual QA in `templates/template-gallery.html` before using it as a final production diagram.
 

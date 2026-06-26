@@ -269,13 +269,18 @@ def main() -> int:
     relationship_bad_strength["relationships"][0]["strength"] = 4
     assert_schema_error("relationship matrix bad strength", relationship_bad_strength, "strength must be 1, 2, or 3")
 
-    relationship_empty_selected = copy.deepcopy(relationship_matrix)
-    relationship_empty_selected["selected_cell"] = {"from": "customer", "to": "inventory"}
-    assert_schema_pass("relationship matrix selected empty cell", relationship_empty_selected)
+    relationship_empty_focus = copy.deepcopy(relationship_matrix)
+    relationship_empty_focus["focus_cell"] = {"from": "customer", "to": "inventory"}
+    assert_schema_pass("relationship matrix focus empty cell", relationship_empty_focus)
 
-    relationship_bad_selected = copy.deepcopy(relationship_matrix)
-    relationship_bad_selected["selected_cell"] = {"from": "customer", "to": "missing"}
-    assert_schema_error("relationship matrix bad selected entity", relationship_bad_selected, "selected_cell.to")
+    relationship_legacy_selected = copy.deepcopy(relationship_matrix)
+    relationship_legacy_selected.pop("focus_cell", None)
+    relationship_legacy_selected["selected_cell"] = {"from": "customer", "to": "inventory"}
+    assert_schema_pass("relationship matrix legacy selected cell", relationship_legacy_selected)
+
+    relationship_bad_focus = copy.deepcopy(relationship_matrix)
+    relationship_bad_focus["focus_cell"] = {"from": "customer", "to": "missing"}
+    assert_schema_error("relationship matrix bad focus entity", relationship_bad_focus, "focus_cell.to")
 
     relationship_info_panels = copy.deepcopy(relationship_matrix)
     relationship_info_panels["info_panels"] = [{"title": "Guide", "items": ["Do not render dashboard panels."]}]

@@ -1,16 +1,15 @@
 {
   "title": "Ontology Map Stress",
-  "subtitle": "Dense ontology map with multiple concept rows, relationship diamonds, instances, and governance panels",
+  "subtitle": "Dense ontology map with multiple concept rows, relationship diamonds, instances, and bottom governance panels",
   "diagram_type": "ontology_map",
   "style": "accent-blueprint",
-  "width": 2200,
+  "width": 1850,
   "top_y": 118,
   "concept_width": 230,
   "concept_col_gap": 180,
   "concept_row_gap": 200,
   "relationship_row_gap_min": 170,
   "ontology_instance_lane_gap": 22,
-  "ontology_side_panel_width": 240,
   "concepts": [
     {"id": "customer", "label": "Customer", "kind": "ontology", "accent": "accent_cyan", "row": 0, "col": 0, "attributes": [{"name": "customerId", "type": "PK"}, {"name": "name", "type": "text"}, {"name": "segment", "type": "enum"}, {"name": "status", "type": "state"}]},
     {"id": "order", "label": "Order", "kind": "ontology", "accent": "accent_cyan", "row": 0, "col": 1, "attributes": [{"name": "orderId", "type": "PK"}, {"name": "orderDate", "type": "date"}, {"name": "status", "type": "state"}, {"name": "amount", "type": "decimal"}]},
@@ -37,14 +36,13 @@
     {"id": "order_1001", "label": "ORD-1001", "subtitle": "Order", "concept": "order", "kind": "package", "accent": "accent_green", "row": 2, "col": 1},
     {"id": "sku_a12", "label": "SKU-A12", "subtitle": "Product", "concept": "product", "kind": "package", "accent": "accent_green", "row": 2, "col": 2, "lane_offset": -26},
     {"id": "sku_b44", "label": "SKU-B44", "subtitle": "Product", "concept": "product", "kind": "package", "accent": "accent_green", "x": 1385, "y": 910, "lane_offset": 26},
-    {"id": "policy_qms", "label": "QMS Rule", "subtitle": "Policy", "concept": "policy", "kind": "package", "accent": "accent_green", "row": 2, "col": 3, "lane_offset": -18}
+    {"id": "policy_qms", "label": "QMS Rule", "subtitle": "Policy", "concept": "policy", "kind": "package", "accent": "accent_green", "row": 2, "col": 3, "concept_anchor": "left", "lane_offset": -80}
   ],
   "info_panels": [
     {
       "id": "legend",
       "title": "Legend",
       "kind": "object",
-      "placement": "left",
       "items": [
         {"label": "Concept", "value": "ontology class card", "kind": "ontology"},
         {"label": "Relationship", "value": "labeled diamond", "kind": "process"},
@@ -57,7 +55,6 @@
       "id": "qa",
       "title": "Stress QA",
       "kind": "risk",
-      "placement": "right",
       "items": [
         "Diamonds should stay between concept cards.",
         "Cardinality labels must not overlap concept cards.",
@@ -68,7 +65,6 @@
       "id": "rules",
       "title": "Rules",
       "kind": "quality",
-      "placement": "right",
       "items": [
         "Concept ids are unique.",
         "Relationships connect concepts, not instances.",
@@ -87,6 +83,6 @@
     }
   ],
   "annotations": [
-    {"text": "Stress template: ontology maps should preserve concept relationships, cardinality labels, side panels, and instance examples.", "placement": "footer"}
+    {"text": "Stress template: ontology maps should preserve concept relationships, cardinality labels, bottom panels, and instance examples.", "placement": "footer"}
   ]
 }

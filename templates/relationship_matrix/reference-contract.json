@@ -3,7 +3,7 @@
   "subtitle": "High-connectivity relationships companion view",
   "diagram_type": "relationship_matrix",
   "style": "accent-blueprint",
-  "width": 2400,
+  "width": 2200,
   "entities": [
     {"id": "customer", "label": "Customer", "subtitle": "Entity", "kind": "capability", "accent": "accent_cyan", "order": 0},
     {"id": "order", "label": "Order", "subtitle": "Entity", "kind": "source", "accent": "accent_cyan", "order": 1},
@@ -44,7 +44,7 @@
     {"from": "payment", "to": "shipment", "type": "dependency", "strength": 1, "path": "Payment status gates shipment release"},
     {"from": "supplier", "to": "order_item", "type": "dependency", "strength": 1, "path": "Supplier availability constrains order item fulfillment"}
   ],
-  "selected_cell": {"from": "order", "to": "product"},
+  "focus_cell": {"from": "order", "to": "product"},
   "annotations": [
     {"text": "Reference template: matrix view is static and contract-driven; pair it with a primary diagram for context.", "placement": "footer"}
   ]

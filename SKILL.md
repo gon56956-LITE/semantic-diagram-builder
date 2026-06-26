@@ -127,7 +127,7 @@ Useful ontology fields for `ontology_map`:
 - `instances[]`: example instance cards. Each instance needs `id`, `label`, and `concept`; optional `subtitle`, `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`, `lane_offset`, `concept_anchor`, and `instance_anchor`.
 - `instances[].lane_offset`: optional pixel offset for instance-to-concept lanes when several instances belong to the same concept or share a long corridor.
 - `instances[].concept_anchor` and `instances[].instance_anchor`: optional `left`, `right`, `top`, or `bottom` side controls when the automatic instance link would cross a predicate diamond.
-- `info_panels[]`: ontology maps may use `placement: "left"` or `placement: "right"` for side legend/about/rules/version panels; panels without placement render at the bottom.
+- `info_panels[]`: ontology maps render legend/about/rules/version panels below the concept canvas. Legacy `placement: "left"` or `"right"` values are treated as ordering guidance, not side gutters.
 - Ontology maps reuse the object relationship geometry engine but use ontology-specific concept and instance components. Use this type when the concepts/classes and examples are the message; use `object_relationship_diagram` when PK/FK table structure is the message.
 
 Useful capability map fields for `capability_domain_map`:
@@ -138,8 +138,8 @@ Useful capability map fields for `capability_domain_map`:
 - `levels[].kind/accent` and `columns[].kind/accent`: drive the prominent row and column header icons. Keep dense item cards focused on title and subtitle text instead of small per-card badges.
 - `relationships[]`: sparse parent/support overlays between item ids. Use these for the few links that add meaning; do not turn a capability map into an edge mesh.
 - `relationships[].lane_offset`: optional pixel offset for sparse overlays when several relationships share a corridor.
-- `info_panels[]`: side panels for usage, notes, version, scope, or legend text.
-- Capability maps use a dedicated dense-card specification. The renderer keeps cards tall enough for two title lines plus one subtitle, renders semantic icons in row/column headers, reserves wider row/column corridors, offsets repeated same-corridor routes, and validates that side panels and relationship overlays do not invade dense card stacks.
+- `info_panels[]`: bottom panels for usage, notes, version, scope, or legend text.
+- Capability maps use a dedicated dense-card specification. The renderer keeps cards tall enough for two title lines plus one subtitle, renders semantic icons in row/column headers, reserves wider row/column corridors, offsets repeated same-corridor routes, and validates that bottom panels and relationship overlays do not invade dense card stacks.
 
 Useful relationship matrix fields for `relationship_matrix`:
 
@@ -147,9 +147,9 @@ Useful relationship matrix fields for `relationship_matrix`:
 - `relationships[]`: declared relationships from row entity to column entity. Each relationship needs `from`, `to`, and `type`.
 - `relationships[].type`: one of `direct`, `indirect`, or `dependency`.
 - `relationships[].strength`: optional `1`, `2`, or `3`; cells render the strength number.
-- `relationships[].label`, `note`, and `path`: optional selected-cell/detail text.
-- `selected_cell`: optional `{ "from": "...", "to": "..." }`. If omitted, the renderer selects the first highest-strength relationship. A valid empty selected cell is allowed and renders an empty-state detail panel.
-- The renderer includes a reference-only primary preview, the matrix, selected-cell details, compact summary bars, and top-connected ranking. Do not add explanatory dashboard panels to normal outputs.
+- `relationships[].label`, `note`, and `path`: optional focus-pair/detail text.
+- `focus_cell`: optional `{ "from": "...", "to": "..." }` for the static detail panel. If omitted, the renderer uses the first highest-strength relationship. A valid empty focus pair is allowed and renders an empty-state detail panel. Legacy `selected_cell` is accepted only for compatibility.
+- The renderer includes a reference-only primary preview, the matrix, static focus details, compact summary bars, and top-connected ranking. Do not add explanatory dashboard panels to normal outputs, and do not render interactive-looking selected-cell highlights.
 - Relationship matrices are static SVG companion views for dense graphs. Do not use them as interactive filters; use them when a primary object diagram has too many lines to read directly.
 
 Useful annotation placements:

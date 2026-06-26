@@ -40,7 +40,7 @@ DIAGRAM_TYPES: dict[str, dict[str, str]] = {
     },
     "ontology_map": {
         "strategy": "object_relationship",
-        "description": "Ontology concept map with concept cards, relationship diamonds, instances, datatypes, and side panels.",
+        "description": "Ontology concept map with concept cards, relationship diamonds, instances, datatypes, and bottom info panels.",
     },
     "capability_domain_map": {
         "strategy": "capability_map",
@@ -796,15 +796,19 @@ def _validate_relationship_matrix(contract: dict[str, Any], diagram_type: str) -
             if key in relationship and relationship[key] not in (None, "") and not isinstance(relationship[key], str):
                 raise DiagramTypeError(f"{diagram_type} relationships[{idx}].{key} must be a string")
 
-    selected = contract.get("selected_cell")
-    if selected in (None, "", {}):
+    focus_fields = [name for name in ("focus_cell", "selected_cell") if contract.get(name) not in (None, "", {})]
+    if not focus_fields:
         return
-    if not isinstance(selected, dict):
-        raise DiagramTypeError(f"{diagram_type} selected_cell must be an object")
+    if len(focus_fields) > 1:
+        raise DiagramTypeError(f"{diagram_type} should use focus_cell; selected_cell is legacy compatibility")
+    field_name = focus_fields[0]
+    focus = contract.get(field_name)
+    if not isinstance(focus, dict):
+        raise DiagramTypeError(f"{diagram_type} {field_name} must be an object")
     for key in ("from", "to"):
-        value = _required_str(selected, key, f"{diagram_type} selected_cell")
+        value = _required_str(focus, key, f"{diagram_type} {field_name}")
         if value not in entity_ids:
-            raise DiagramTypeError(f'{diagram_type} selected_cell.{key} "{value}" is not an entity id')
+            raise DiagramTypeError(f'{diagram_type} {field_name}.{key} "{value}" is not an entity id')
 
 
 def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None = None) -> list[str]:

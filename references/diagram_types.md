@@ -140,7 +140,7 @@ Rules: every relationship endpoint must reference an entity id; self relationshi
 
 ## ontology_map
 
-Use for formal concept/class maps that need ontology concepts, relationship predicates, datatype attributes, cardinality labels, instance examples, and explanatory side panels.
+Use for formal concept/class maps that need ontology concepts, relationship predicates, datatype attributes, cardinality labels, instance examples, and explanatory bottom panels.
 
 Contract shape: `concepts`, `relationships`, optional `instances`, optional `info_panels`, optional `annotations`.
 
@@ -163,7 +163,7 @@ Optional fields:
 - `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`, `lane_offset`
 - `relationships[].from_anchor`, `to_anchor`, `from_diamond_anchor`, `to_diamond_anchor` as `left`, `right`, `top`, or `bottom`
 - `instances[].subtitle`, `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`, `lane_offset`, `concept_anchor`, `instance_anchor`
-- `info_panels[].placement: "left" | "right"` for side legend/about/rules/version panels; omitted placement renders a bottom panel
+- `info_panels[]` for legend/about/rules/version panels. Legacy `placement: "left" | "right"` values are accepted as ordering guidance, but panels render below the concept canvas so the ontology core keeps the horizontal space.
 
 Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `hub_id`, `domains`, `external_partners`, `entities`.
 
@@ -175,7 +175,7 @@ Use for strategic objectives, business domains, sub-domains, capabilities, enabl
 
 Contract shape: `levels`, `columns`, `items`, optional `relationships`, optional `info_panels`, optional `annotations`.
 
-Renderer strategy: banded capability map with dedicated left-side level labels, stable column lanes, dense but legible capability cards, sparse orthogonal connector overlays, and right-side `info_panels`.
+Renderer strategy: banded capability map with dedicated left-side level labels, stable column lanes, dense but legible capability cards, sparse orthogonal connector overlays, and bottom `info_panels`.
 
 Required fields:
 
@@ -208,9 +208,9 @@ Header icon rules: dense capability cards do not render per-card badges. Use `le
 
 Use for dense many-to-many relationships where a primary node-link/object diagram becomes unreadable. This is a static SVG companion view, not an interactive filter or graph layout.
 
-Contract shape: `entities`, `relationships`, optional `selected_cell`, optional `annotations`.
+Contract shape: `entities`, `relationships`, optional `focus_cell`, optional `annotations`.
 
-Renderer strategy: compact relationship matrix companion view with a reference-only mini network, same-entity row/column grid, selected-cell details, compact summary/distribution bars, and top-connected ranking.
+Renderer strategy: compact relationship matrix companion view with a reference-only mini network, same-entity row/column grid, static focus details, compact summary/distribution bars, and top-connected ranking.
 
 Required fields:
 
@@ -225,7 +225,7 @@ Optional fields:
 - `entities[].subtitle`, `kind`, `accent`, `order`
 - `relationships[].strength` as `1`, `2`, or `3`
 - `relationships[].label`, `note`, `path`, `accent`
-- `selected_cell.from`, `selected_cell.to`
+- `focus_cell.from`, `focus_cell.to`
 
 Supported relationship types:
 
@@ -235,7 +235,7 @@ Supported relationship types:
 
 Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `hub_id`, `domains`, `external_partners`, `concepts`, `levels`, `items`.
 
-Rules: row and column headers come from the same `entities[]` set; empty cells are generated automatically and should not be declared as `none` relationships. `selected_cell` may point to an empty relationship cell when an empty-state detail is useful, but both endpoint ids must exist. Use high strength sparingly so the matrix remains blueprint-first rather than becoming a colored heat map. Use this type as a companion to `object_relationship_diagram`, `ontology_map`, or `capability_domain_map` when dense relationships need comparison rather than path tracing.
+Rules: row and column headers come from the same `entities[]` set; empty cells are generated automatically and should not be declared as `none` relationships. `focus_cell` may point to an empty relationship pair when an empty-state detail is useful, but both endpoint ids must exist. Use high strength sparingly so the matrix remains blueprint-first rather than becoming a colored heat map. This is a static companion view, so do not draw selected-cell highlights or other interaction cues. Use this type as a companion to `object_relationship_diagram`, `ontology_map`, or `capability_domain_map` when dense relationships need comparison rather than path tracing.
 
 ## Shared info_panels
 

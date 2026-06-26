@@ -18,7 +18,7 @@
     {"from": "payment", "to": "order", "type": "direct", "strength": 2, "label": "settles"},
     {"from": "customer", "to": "payment", "type": "dependency", "strength": 1, "path": "Customer -> Order -> Payment"}
   ],
-  "selected_cell": {"from": "order", "to": "product"},
+  "focus_cell": {"from": "order", "to": "product"},
   "annotations": [
     {"text": "Minimal template: same entity set is used for rows and columns.", "placement": "footer"}
   ]

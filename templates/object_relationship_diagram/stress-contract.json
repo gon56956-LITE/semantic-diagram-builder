@@ -3,7 +3,7 @@
   "subtitle": "Dense ER-style map with many entities, weak entities, keys, optional relations, and metadata panels",
   "diagram_type": "object_relationship_diagram",
   "style": "accent-blueprint",
-  "width": 2200,
+  "width": 1700,
   "entity_width": 240,
   "entity_col_gap": 150,
   "entity_row_gap": 190,

@@ -653,7 +653,7 @@ def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:
                 fail(f'capability map item {item_id} is too close vertically to item {other_id}; increase item_gap or level_gap', issues)
     for idx, panel in enumerate(_info_panel_rects(svg), start=1):
         if any(_rects_overlap(panel, rect, 8.0) for rect in item_rects.values()):
-            fail(f'capability side panel {idx} overlaps map items', issues)
+            fail(f'capability info panel {idx} overlaps map items', issues)
     if 'capability-level-label' not in svg:
         fail('capability_domain_map should render level labels', issues)
     if 'capability-column-label' not in svg:
@@ -704,7 +704,7 @@ def _check_relationship_matrix_geometry(svg: str, issues: list[str]) -> None:
         'relationship-matrix-grid',
         'matrix-primary-preview',
         'matrix-summary-panel',
-        'matrix-selected-detail-panel',
+        'matrix-focus-detail-panel',
         'matrix-top-connected-panel',
     )
     for class_name in required_classes:
@@ -717,8 +717,8 @@ def _check_relationship_matrix_geometry(svg: str, issues: list[str]) -> None:
         if w < 52 or h < 52:
             fail(f'relationship_matrix cell {idx} is below readable size: {w:.0f}x{h:.0f}', issues)
             break
-    if 'class="matrix-selected-cell"' not in svg:
-        fail('relationship_matrix should render a selected cell marker', issues)
+    if 'matrix-selected-cell' in svg:
+        fail('relationship_matrix is static and should not render an interactive-looking selected cell', issues)
     if 'class="matrix-distribution-bar"' not in svg:
         fail('relationship_matrix should render compact distribution bars', issues)
     if 'class="matrix-cell-value"' not in svg:

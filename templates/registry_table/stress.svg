@@ -213,7 +213,7 @@
 <text x="106.0" y="1343.3599999999997" class="info-panel-item" style="font-size:15.1px">Purple: external systems, optional links, out-of-bound references</text>
 </g>
 <g class="info-panel" data-panel-id="rules">
-<rect x="829.3333333333334" y="1212" width="741.3333333333334" height="160.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="829.3333333333334" y="1212" width="741.3333333333334" height="154.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>
 <text x="847.3333333333334" y="1240" class="info-panel-title">Registry Rules</text>
 <rect x="847.3333333333334" y="1258" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
 <text x="865.3333333333334" y="1268.0" class="info-panel-item" style="font-size:15.1px">Every term must resolve to one accountable owner and one evidence requirement.</text>
@@ -224,7 +224,7 @@
 <text x="865.3333333333334" y="1337.3599999999997" class="info-panel-item" style="font-size:15.1px">type.</text>
 </g>
 <g class="info-panel" data-panel-id="metadata">
-<rect x="1588.6666666666667" y="1212" width="741.3333333333334" height="160.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="1588.6666666666667" y="1212" width="741.3333333333334" height="135.36" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
 <text x="1606.6666666666667" y="1240" class="info-panel-title">Review Metadata</text>
 <rect x="1606.6666666666667" y="1258" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
 <text x="1624.6666666666667" y="1268.0" class="info-panel-item" style="font-size:15.1px">Cadence: monthly semantic review; immediate review on controlled-source change</text>

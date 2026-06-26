@@ -103,6 +103,49 @@ def node_rects(svg: str) -> dict[str, tuple[float, float, float, float]]:
     return rects
 
 
+def info_panel_rects(svg: str) -> dict[str, tuple[float, float, float, float]]:
+    rects = {}
+    pattern = re.compile(
+        r'<g class="[^"]*\binfo-panel\b[^"]*" data-panel-id="([^"]+)"[^>]*>\s*'
+        r'<rect x="([-0-9.]+)" y="([-0-9.]+)" width="([-0-9.]+)" height="([-0-9.]+)"',
+        re.S,
+    )
+    for panel_id, x, y, w, h in pattern.findall(svg):
+        rects[panel_id] = (float(x), float(y), float(w), float(h))
+    return rects
+
+
+def assert_bottom_panels_pack_like_masonry(svg: str, lower_panel_id: str) -> None:
+    rects = info_panel_rects(svg)
+    if lower_panel_id not in rects:
+        raise AssertionError(f"expected packed bottom panel {lower_panel_id}")
+    top_y = min(y for _x, y, _w, _h in rects.values())
+    top_row = [rect for rect in rects.values() if abs(rect[1] - top_y) < 1]
+    tallest_top_bottom = max(y + h for _x, y, _w, h in top_row)
+    lower_y = rects[lower_panel_id][1]
+    if lower_y >= tallest_top_bottom:
+        raise AssertionError("bottom info panels should pack into the shortest column instead of opening a full new row")
+
+
+def assert_three_bottom_panels_use_side_stack(svg: str) -> None:
+    rects = info_panel_rects(svg)
+    for panel_id in ("legend", "qa", "metadata"):
+        if panel_id not in rects:
+            raise AssertionError(f"expected compact bottom panel {panel_id}")
+    legend_x, legend_y, legend_w, legend_h = rects["legend"]
+    qa_x, qa_y, qa_w, qa_h = rects["qa"]
+    metadata_x, metadata_y, metadata_w, metadata_h = rects["metadata"]
+    if not legend_x < qa_x:
+        raise AssertionError("three bottom panels should place the first panel on the left")
+    if abs(qa_x - metadata_x) > 1 or abs(qa_w - metadata_w) > 1:
+        raise AssertionError("three bottom panels should stack the second and third panels in the right column")
+    if not metadata_y > qa_y + qa_h:
+        raise AssertionError("three bottom panels should put the third panel below the second")
+    right_stack_h = metadata_y + metadata_h - qa_y
+    if abs(legend_y - qa_y) > 1 or legend_h + 1 < right_stack_h:
+        raise AssertionError("left bottom panel should span the right-side stack height")
+
+
 def first_q_lanes_from(svg: str, source_bottoms: set[float]) -> set[float]:
     lanes = set()
     start_pattern = re.compile(r'^M ([-0-9.]+) ([-0-9.]+)\b')
@@ -237,8 +280,11 @@ def assert_ontology_map_design(svg: str) -> None:
     instance_paths = path_ds(svg, {"ontology-instance-link"})
     if any(path.startswith(("M 537.5 302.0", "M 962.5 302.0")) for path in instance_paths):
         raise AssertionError("ontology_map instance links should use offset anchors, not relationship center anchors")
-    if 'class="info-panel ontology-side-panel"' not in svg:
-        raise AssertionError("ontology_map should render side legend/about/rules panels")
+    if 'ontology-side-panel' in svg:
+        raise AssertionError("ontology_map should render info panels below the concept canvas, not as side panels")
+    if svg.count('class="info-panel"') < 3:
+        raise AssertionError("ontology_map should render legend/about/rules panels below the map")
+    assert_bottom_panels_pack_like_masonry(svg, "version")
     if "PK" not in svg or "1..*" not in svg:
         raise AssertionError("ontology_map should render datatype rows and cardinality labels")
     if 'entity-key-badge' in svg:
@@ -281,6 +327,9 @@ def assert_capability_map_design(svg: str) -> None:
     item_heights = [float(value) for value in re.findall(r'class="capability-map-item card"[^>]*>.*?<rect [^>]*height="([0-9.]+)"', svg, re.S)]
     if not item_heights or min(item_heights) < 94:
         raise AssertionError("capability_domain_map item cards should be tall enough for dense title/subtitle content")
+    level_label_rect = re.search(r'<rect x="[^"]+" y="[^"]+" width="([0-9.]+)" height="[^"]+" rx="5"[^>]*stroke="#16D9FF"', svg)
+    if not level_label_rect or float(level_label_rect.group(1)) < 175:
+        raise AssertionError("capability_domain_map level label lane should be content-driven wide enough for long row labels")
 
 
 def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
@@ -290,7 +339,7 @@ def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
         "relationship-matrix-grid",
         "matrix-primary-preview",
         "matrix-summary-panel",
-        "matrix-selected-detail-panel",
+        "matrix-focus-detail-panel",
         "matrix-top-connected-panel",
     ):
         if class_name not in svg:
@@ -310,8 +359,8 @@ def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
         raise AssertionError("relationship_matrix row labels should stay on one line")
     if svg.count('class="matrix-col-label"') != entity_count:
         raise AssertionError("relationship_matrix column labels should stay on one line")
-    if 'class="matrix-selected-cell"' not in svg:
-        raise AssertionError("relationship_matrix should render selected cell marker")
+    if 'matrix-selected-cell' in svg:
+        raise AssertionError("relationship_matrix is static and should not render an interactive-looking selected cell")
     if svg.count('class="matrix-distribution-bar"') < 3:
         raise AssertionError("relationship_matrix should render compact distribution bars")
     if not re.search(rf'class="matrix-summary-value"[^>]*>{expected_total}</text>', svg):
@@ -321,6 +370,7 @@ def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
     cell_sizes = text_font_sizes(svg, "matrix-cell-value")
     panel_item_sizes = text_font_sizes(svg, "info-panel-item")
     preview_title_sizes = text_font_sizes(svg, "matrix-preview-title")
+    preview_sub_sizes = text_font_sizes(svg, "matrix-preview-sub")
     rank_label_sizes = text_font_sizes(svg, "matrix-rank-label")
     preview_rects = [
         tuple(map(float, values))
@@ -331,6 +381,8 @@ def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
     ]
     if len(preview_rects) != entity_count:
         raise AssertionError("relationship_matrix preview should render one non-overlapping card per entity")
+    if entity_count >= 8 and min((w for _x, _y, w, _h in preview_rects), default=0) < 170:
+        raise AssertionError("relationship_matrix preview cards should be wide enough for title and subtitle text")
     for idx, (x, y, w, h) in enumerate(preview_rects):
         for ox, oy, ow, oh in preview_rects[idx + 1:]:
             overlap_x = min(x + w, ox + ow) - max(x, ox)
@@ -347,6 +399,8 @@ def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
         raise AssertionError("relationship_matrix panel body text should remain readable")
     if not preview_title_sizes or min(preview_title_sizes) < 16:
         raise AssertionError("relationship_matrix preview titles should remain readable")
+    if not preview_sub_sizes or min(preview_sub_sizes) < 15:
+        raise AssertionError("relationship_matrix preview subtitles should remain readable")
     if not rank_label_sizes or min(rank_label_sizes) < 16:
         raise AssertionError("relationship_matrix ranking labels should remain readable")
     grid = re.search(r'<g class="relationship-matrix-grid">(.*?)</g>', svg, re.S)
@@ -363,6 +417,19 @@ def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
     matrix_x, matrix_w = float(matrix.group(1)), float(matrix.group(2))
     if matrix_w < panel_w * 0.95 or matrix_x - panel_x > 24:
         raise AssertionError("relationship_matrix table should fill the central container width")
+    panel_rect = re.search(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"', grid.group(1))
+    detail_rect = re.search(
+        r'class="info-panel relationship-matrix-panel matrix-focus-detail-panel"[^>]*>.*?'
+        r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"',
+        svg,
+        re.S,
+    )
+    if not panel_rect or not detail_rect:
+        raise AssertionError("relationship_matrix should expose measurable main and detail panels")
+    main_y, main_h = float(panel_rect.group(2)), float(panel_rect.group(4))
+    detail_y = float(detail_rect.group(2))
+    if detail_y < main_y + main_h:
+        raise AssertionError("relationship_matrix support panels should sit below the main diagram and matrix")
 
 
 def assert_no_direct_diagonal_object_links(svg: str) -> None:
@@ -633,6 +700,7 @@ def main() -> int:
         raise AssertionError("object_relationship_diagram self relationships should render as one connector")
     if not re.search(r'data-link-end="self"[^>]*data-card-anchor="top"[^>]*data-diamond-anchor="bottom"[^>]*data-relationship="category_parent"', object_stress_svg):
         raise AssertionError("object_relationship_diagram should honor explicit self-relationship anchors")
+    assert_three_bottom_panels_use_side_stack(object_stress_svg)
     assert_no_direct_diagonal_object_links(object_stress_svg)
 
     ontology_map = load_json("templates/ontology_map/reference-contract.json")
@@ -651,8 +719,11 @@ def main() -> int:
         raise AssertionError("ontology_map stress template should exercise multiple instances per concept")
     if ontology_stress_svg.count('class="edge ontology-instance-link"') < 6:
         raise AssertionError("ontology_map stress template should exercise instance-to-concept link lanes")
-    if ontology_stress_svg.count('class="info-panel ontology-side-panel"') < 2:
-        raise AssertionError("ontology_map stress template should exercise side panels")
+    if 'ontology-side-panel' in ontology_stress_svg:
+        raise AssertionError("ontology_map stress template should keep explanatory panels below the map")
+    if ontology_stress_svg.count('class="info-panel"') < 3:
+        raise AssertionError("ontology_map stress template should exercise bottom info panels")
+    assert_bottom_panels_pack_like_masonry(ontology_stress_svg, "metadata")
     assert_no_direct_diagonal_object_links(ontology_stress_svg)
     reviewed_links = re.findall(r'<path\b[^>]*\bdata-relationship="reviewed_by"[^>]*/>', ontology_stress_svg)
     if len(reviewed_links) < 2 or any('data-route="axis"' not in link for link in reviewed_links[:2]):
@@ -666,8 +737,10 @@ def main() -> int:
     _dtype, capability_strategy, _warnings = renderer.diagram_for_contract(capability_map)
     if capability_strategy != "capability_map":
         raise AssertionError("capability_domain_map should select capability_map strategy")
-    if capability_svg.count('class="info-panel capability-side-panel"') < 3:
-        raise AssertionError("capability_domain_map should render side info panels")
+    if 'capability-side-panel' in capability_svg:
+        raise AssertionError("capability_domain_map should render info panels below the map, not as side panels")
+    if capability_svg.count('class="info-panel"') < 3:
+        raise AssertionError("capability_domain_map should render bottom info panels")
     capability_stress = load_json("templates/capability_domain_map/stress-contract.json")
     capability_stress_svg = assert_valid("capability domain map stress template", capability_stress)
     if capability_stress_svg.count('class="capability-map-item card"') < 40:
@@ -685,10 +758,16 @@ def main() -> int:
     repeated_corridors = re.findall(r'data-relation="supports"[^>]*data-corridor-x="([-0-9.]+)"', capability_stress_svg)
     if len(repeated_corridors) < 3:
         raise AssertionError("capability_domain_map stress template should exercise detour corridors")
-    if capability_stress_svg.count('class="info-panel capability-side-panel"') < 3:
-        raise AssertionError("capability_domain_map stress template should render side panels")
+    if 'capability-side-panel' in capability_stress_svg:
+        raise AssertionError("capability_domain_map stress template should keep info panels below the map")
+    if capability_stress_svg.count('class="info-panel"') < 3:
+        raise AssertionError("capability_domain_map stress template should render bottom info panels")
     if capability_stress_svg.count('capability-column-icon') < 8:
         raise AssertionError("capability_domain_map stress template should exercise column header icons")
+    short_lane = renderer._capability_level_label_width({}, [{"id": "a", "label": "A"}, {"id": "b", "label": "Ops"}])
+    long_lane = renderer._capability_level_label_width({}, [{"id": "sub", "label": "Sub-Domains"}])
+    if not short_lane < long_lane:
+        raise AssertionError("capability level label lane should grow from label content instead of using one fixed width")
 
     relationship_matrix = load_json("templates/relationship_matrix/reference-contract.json")
     relationship_svg = assert_valid("relationship matrix reference template", relationship_matrix)
@@ -706,10 +785,10 @@ def main() -> int:
     if relationship_stress_svg.count('class="matrix-cell"') < expected_cells:
         raise AssertionError("relationship_matrix stress template should render one cell per entity pair")
     stress_width = float(re.search(r'<svg[^>]*width="([0-9.]+)"', relationship_stress_svg).group(1))
-    if stress_width <= float(relationship_stress["width"]):
-        raise AssertionError("relationship_matrix stress template should widen the canvas for dense headers")
+    if stress_width > float(relationship_stress["width"]):
+        raise AssertionError("relationship_matrix stress template should not widen solely to reserve an auxiliary panel rail")
     if "Payment approval gates shipment release" not in relationship_stress_svg:
-        raise AssertionError("relationship_matrix stress template should render selected relationship details")
+        raise AssertionError("relationship_matrix stress template should render static focus relationship details")
 
     print("render_semantic_diagram selftest: PASS")
     return 0

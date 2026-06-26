@@ -59,7 +59,7 @@
 <g id="node-monitoring" class="hub-spoke-node spoke-block card"><rect x="1305.0" y="727.0" width="330.0" height="112.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-width="1.4"/><circle cx="1333.0" cy="784.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1347.0" cy="777.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="1347.0" cy="791.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M1337.0,784.0 H1341.0 M1343.0,780.0 L1341.0,784.0 L1343.0,788.0" class="icon-line" stroke="#FF9F2E"/><text x="1371.0" y="770.75" text-anchor="start" class="card-title" style="font-size:20.5px">Monitoring and Audit</text><text x="1371.0" y="793.25" text-anchor="start" class="card-title" style="font-size:20.5px">Trail</text><text x="1371.0" y="815.75" text-anchor="start" class="card-sub" style="font-size:15.5px">health signals + trace logs</text></g>
 <g id="node-automation" class="hub-spoke-node spoke-block card"><rect x="1305.0" y="873.0" width="330.0" height="112.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-width="1.4"/><circle cx="1337.0" cy="927.0" r="7" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M1343.0,933.0 L1349.0,939.0" class="icon-line" stroke="#16D9FF"/><text x="1371.0" y="928.0" text-anchor="start" class="card-title" style="font-size:20.5px">Automation Services</text><text x="1371.0" y="950.5" text-anchor="start" class="card-sub" style="font-size:15.5px">refresh jobs + validators</text></g>
 <g class="info-panel" data-panel-id="flow-key">
-<rect x="70.0" y="1013.0" width="541.3333333333334" height="192.72000000000003" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="70.0" y="1013.0" width="541.3333333333334" height="173.60000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.62" stroke-width="1"/>
 <text x="88.0" y="1041.0" class="info-panel-title">Relationship / Flow Key</text>
 <rect x="88.0" y="1059.0" width="9" height="9" rx="2" fill="#16D9FF" opacity="0.95"/>
 <text x="106.0" y="1069.0" class="info-panel-item" style="font-size:15.1px">Solid spokes: primary managed relationship through the hub</text>
@@ -84,7 +84,7 @@
 <text x="665.3333333333334" y="1176.6" class="info-panel-item" style="font-size:15.1px">another product line.</text>
 </g>
 <g class="info-panel" data-panel-id="operating-rules">
-<rect x="1188.6666666666667" y="1013.0" width="541.3333333333334" height="192.72000000000003" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="1188.6666666666667" y="1013.0" width="541.3333333333334" height="154.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>
 <text x="1206.6666666666667" y="1041.0" class="info-panel-title">Operating Rules</text>
 <rect x="1206.6666666666667" y="1059.0" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
 <text x="1224.6666666666667" y="1069.0" class="info-panel-item" style="font-size:15.1px">Owner: hub owner maintains routing rules and stale-link</text>

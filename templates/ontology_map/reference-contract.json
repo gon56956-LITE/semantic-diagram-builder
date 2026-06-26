@@ -1,6 +1,6 @@
 {
   "title": "Ontology Map Reference",
-  "subtitle": "Reference ontology map with concepts, relationship diamonds, attributes, instances, and side panels",
+  "subtitle": "Reference ontology map with concepts, relationship diamonds, attributes, instances, and bottom panels",
   "diagram_type": "ontology_map",
   "style": "accent-blueprint",
   "width": 1500,
@@ -9,7 +9,6 @@
   "concept_width": 215,
   "concept_col_gap": 300,
   "concept_row_gap": 150,
-  "ontology_side_panel_width": 220,
   "concepts": [
     {
       "id": "person",
@@ -172,7 +171,6 @@
       "id": "legend",
       "title": "Legend",
       "kind": "object",
-      "placement": "left",
       "items": [
         {"label": "Concept / Class", "value": "blue concept card", "kind": "ontology"},
         {"label": "Relationship", "value": "amber diamond", "kind": "process"},
@@ -188,7 +186,6 @@
       "id": "about",
       "title": "About",
       "kind": "source",
-      "placement": "right",
       "items": [
         "Defines key concepts in the domain and their relationships.",
         "Attributes describe properties of concepts."
@@ -198,7 +195,6 @@
       "id": "rules",
       "title": "Rules",
       "kind": "risk",
-      "placement": "right",
       "items": [
         "Each concept has a unique identity.",
         "Relationships have cardinality.",
@@ -209,7 +205,6 @@
       "id": "version",
       "title": "Version",
       "kind": "quality",
-      "placement": "right",
       "items": [
         {"label": "Version", "value": "1.0"},
         {"label": "Updated", "value": "2026-06-25"}
