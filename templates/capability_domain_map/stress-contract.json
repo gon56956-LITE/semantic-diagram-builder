@@ -100,10 +100,14 @@
     {"from": "integration_ops", "to": "api_mgmt", "relation": "contains"},
     {"from": "data_governance", "to": "semantic_layer", "relation": "contains"},
     {"from": "analytics_ops", "to": "decision_intel", "relation": "contains"},
-    {"from": "data_platform", "to": "pipeline", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
-    {"from": "process_excellence", "to": "production_flow", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
+    {"from": "data_platform", "to": "pipeline", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": -10},
+    {"from": "data_platform", "to": "renewal", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": 10},
+    {"from": "data_platform", "to": "semantic_layer", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": -16},
+    {"from": "process_excellence", "to": "production_flow", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": -8},
+    {"from": "process_excellence", "to": "materials", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": 8},
     {"from": "risk_controls", "to": "exception_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
-    {"from": "integration_layer", "to": "api_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange"}
+    {"from": "integration_layer", "to": "service_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": -10},
+    {"from": "integration_layer", "to": "api_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": 10}
   ],
   "info_panels": [
     {
@@ -122,7 +126,8 @@
       "items": [
         "Level labels must remain readable.",
         "Stacked cards must not overlap.",
-        "Connector lines should stay in row gaps."
+        "Connector lines should stay in row gaps.",
+        "Shared enabler links use lane offsets when a corridor repeats."
       ]
     },
     {

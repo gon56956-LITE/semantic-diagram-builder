@@ -9,6 +9,7 @@
   "concept_col_gap": 180,
   "concept_row_gap": 200,
   "relationship_row_gap_min": 170,
+  "ontology_instance_lane_gap": 22,
   "ontology_side_panel_width": 240,
   "concepts": [
     {"id": "customer", "label": "Customer", "kind": "ontology", "accent": "accent_cyan", "row": 0, "col": 0, "attributes": [{"name": "customerId", "type": "PK"}, {"name": "name", "type": "text"}, {"name": "segment", "type": "enum"}, {"name": "status", "type": "state"}]},
@@ -31,10 +32,12 @@
     {"id": "reviewed_by", "label": "reviewed by", "from": "evidence", "to": "policy", "from_cardinality": "0..*", "to_cardinality": "1", "style": "dashed", "row": 1, "col": 2.5}
   ],
   "instances": [
-    {"id": "customer_acme", "label": "Acme Corp", "subtitle": "Customer", "concept": "customer", "kind": "package", "accent": "accent_green", "row": 2, "col": 0},
+    {"id": "customer_acme", "label": "Acme Corp", "subtitle": "Customer", "concept": "customer", "kind": "package", "accent": "accent_green", "row": 2, "col": 0, "lane_offset": -28},
+    {"id": "customer_beta", "label": "Beta LLC", "subtitle": "Customer", "concept": "customer", "kind": "package", "accent": "accent_green", "x": 575, "y": 910, "lane_offset": 28},
     {"id": "order_1001", "label": "ORD-1001", "subtitle": "Order", "concept": "order", "kind": "package", "accent": "accent_green", "row": 2, "col": 1},
-    {"id": "sku_a12", "label": "SKU-A12", "subtitle": "Product", "concept": "product", "kind": "package", "accent": "accent_green", "row": 2, "col": 2},
-    {"id": "policy_qms", "label": "QMS Rule", "subtitle": "Policy", "concept": "policy", "kind": "package", "accent": "accent_green", "row": 2, "col": 3}
+    {"id": "sku_a12", "label": "SKU-A12", "subtitle": "Product", "concept": "product", "kind": "package", "accent": "accent_green", "row": 2, "col": 2, "lane_offset": -26},
+    {"id": "sku_b44", "label": "SKU-B44", "subtitle": "Product", "concept": "product", "kind": "package", "accent": "accent_green", "x": 1385, "y": 910, "lane_offset": 26},
+    {"id": "policy_qms", "label": "QMS Rule", "subtitle": "Policy", "concept": "policy", "kind": "package", "accent": "accent_green", "row": 2, "col": 3, "lane_offset": -18}
   ],
   "info_panels": [
     {

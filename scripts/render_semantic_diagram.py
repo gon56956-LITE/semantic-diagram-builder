@@ -2093,8 +2093,10 @@ def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str
         if corridor_key is not None:
             corridor_counts[corridor_key] = corridor_index + 1
         lane_shift = _capability_lane_shift(corridor_index, corridor_offset) if corridor_key is not None else 0.0
+        lane_shift += float(rel.get("lane_offset", 0.0))
         path = _capability_link_path(positions[source], positions[target], obstacles, corridor_offset, lane_shift)
-        parts.append(f'<path d="{path}" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:{color};opacity:0.86"{dash} data-from="{e(source)}" data-to="{e(target)}" data-relation="{e(rel.get("relation", ""))}"/>')
+        corridor_attr = f' data-corridor-x="{round(corridor_key, 1):g}"' if corridor_key is not None else ""
+        parts.append(f'<path d="{path}" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:{color};opacity:0.86"{dash} data-from="{e(source)}" data-to="{e(target)}" data-relation="{e(rel.get("relation", ""))}" data-lane-shift="{round(lane_shift, 1):g}"{corridor_attr}/>')
 
     for item_id in sorted(positions, key=lambda iid: (positions[iid][1], positions[iid][0])):
         item = next(item for item in items if str(item.get("id")) == item_id)

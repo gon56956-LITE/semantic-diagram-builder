@@ -508,6 +508,49 @@ def _axis_segment_overlap_length(
     return 0.0
 
 
+def _check_ontology_geometry(
+    svg: str,
+    cards: list[tuple[float, float, float, float]],
+    diamonds_by_id: list[tuple[str, tuple[float, float, float, float]]],
+    issues: list[str],
+) -> None:
+    if 'class="ontology-concept-card card"' not in svg:
+        fail('ontology_map should render ontology concept cards', issues)
+    if 'class="ontology-instance-card card"' in svg and 'class="edge ontology-instance-link"' not in svg:
+        fail('ontology_map should render instance-to-concept links', issues)
+    if 'entity-key-badge' in svg:
+        fail('ontology_map should not render ER-style PK/FK badges', issues)
+
+    protected = cards + [diamond for _diamond_id, diamond in diamonds_by_id]
+    for idx, panel in enumerate(_info_panel_rects(svg), start=1):
+        if any(_rects_overlap(panel, rect, 8.0) for rect in protected):
+            fail(f'ontology info panel {idx} overlaps concept, instance, or predicate geometry', issues)
+
+    instance_segments: list[tuple[str, str, tuple[str, tuple[float, float], tuple[float, float]]]] = []
+    for attrs, d, _classes in _path_attrs_with_classes(svg, {'ontology-instance-link'}):
+        source_match = DATA_FROM_RE.search(attrs)
+        target_match = DATA_TO_RE.search(attrs)
+        source = source_match.group(1) if source_match else ''
+        target = target_match.group(1) if target_match else ''
+        geom = _parse_path_geometry(d)
+        for seg in geom['segments']:
+            instance_segments.append((source, target, seg))
+            for diamond_id, diamond in diamonds_by_id:
+                if _segment_crosses_expanded_card(seg, diamond, 1.0):
+                    fail(f'ontology instance link {source or "unknown"}->{target or "unknown"} crosses predicate diamond {diamond_id}', issues)
+
+    for idx, (source, target, seg) in enumerate(instance_segments):
+        for other_source, other_target, other_seg in instance_segments[idx + 1:]:
+            if (source, target) == (other_source, other_target):
+                continue
+            if _axis_segment_overlap_length(seg, other_seg) >= 36.0:
+                fail(
+                    f'ontology instance links {source or "unknown"}->{target or "unknown"} and '
+                    f'{other_source or "unknown"}->{other_target or "unknown"} share the same corridor; offset one lane',
+                    issues,
+                )
+
+
 def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
     diagram_type = _diagram_type(svg)
     if diagram_type not in {'object_relationship_diagram', 'ontology_map'}:
@@ -516,12 +559,7 @@ def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
     diamonds_by_id = _relationship_diamond_rects_by_id(svg)
     diamonds = [rect for _rel_id, rect in diamonds_by_id]
     if diagram_type == 'ontology_map':
-        if 'class="ontology-concept-card card"' not in svg:
-            fail('ontology_map should render ontology concept cards', issues)
-        if 'class="ontology-instance-card card"' in svg and 'class="edge ontology-instance-link"' not in svg:
-            fail('ontology_map should render instance-to-concept links', issues)
-        if 'entity-key-badge' in svg:
-            fail('ontology_map should not render ER-style PK/FK badges', issues)
+        _check_ontology_geometry(svg, cards, diamonds_by_id, issues)
     if not diamonds:
         fail(f'{diagram_type} should render relationship diamonds', issues)
         return
@@ -587,6 +625,22 @@ def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:
     for item_id, (_x, _y, _w, h) in item_rects.items():
         if h < 94:
             fail(f'capability map item {item_id} is too short for dense title/subtitle content', issues)
+    item_list = list(item_rects.items())
+    for idx, (item_id, rect) in enumerate(item_list):
+        x, y, w, h = rect
+        for other_id, other in item_list[idx + 1:]:
+            ox, oy, ow, oh = other
+            if _rects_overlap(rect, other, 2.0):
+                fail(f'capability map item {item_id} overlaps item {other_id}', issues)
+            horizontal_overlap = min(x + w, ox + ow) - max(x, ox)
+            if horizontal_overlap < min(w, ow) * 0.5:
+                continue
+            vertical_gap = max(y, oy) - min(y + h, oy + oh)
+            if 0 <= vertical_gap < 24:
+                fail(f'capability map item {item_id} is too close vertically to item {other_id}; increase item_gap or level_gap', issues)
+    for idx, panel in enumerate(_info_panel_rects(svg), start=1):
+        if any(_rects_overlap(panel, rect, 8.0) for rect in item_rects.values()):
+            fail(f'capability side panel {idx} overlaps map items', issues)
     if 'capability-level-label' not in svg:
         fail('capability_domain_map should render level labels', issues)
     if 'capability-column-label' not in svg:
@@ -796,7 +850,12 @@ def check_svg(svg: str) -> list[str]:
     _check_object_relationship_geometry(svg, issues)
     _check_capability_map_geometry(svg, issues)
 
-    dashed_count = svg.count('edge-dashed') + svg.count('stroke-dasharray')
+    dashed_count = 0
+    for attrs, _d, classes in _path_attrs_with_classes(svg, {'edge', 'edge-dashed', 'line'}):
+        if 'ontology-instance-link' in classes:
+            continue
+        if 'edge-dashed' in classes or 'stroke-dasharray' in attrs:
+            dashed_count += 1
     if dashed_count > 8:
         fail(f'too many dashed relations ({dashed_count}); consider legend/containment instead', issues)
 

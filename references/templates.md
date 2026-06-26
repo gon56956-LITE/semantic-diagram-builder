@@ -113,6 +113,8 @@ Use for concept/class maps, glossary ontologies, semantic model sketches, and li
 - Use `concepts[]` rather than `entities[]`; concept cards show attributes and datatypes without PK/FK badges.
 - Use `relationships[]` for ontology predicates. Keep predicate labels short enough to fit inside relationship diamonds.
 - Use `instances[]` for example objects. Instances reference concepts and render as subordinate green cards, not relationship endpoints.
+- Use `instances[].lane_offset` when several instance examples point to the same concept or would otherwise reuse the same long dashed corridor.
+- Use `concept_anchor` and `instance_anchor` on an instance only when the automatic concept-to-instance link would cross a predicate diamond.
 - Place relationship diamonds with `row`/`col` or polished `x`/`y` coordinates before judging connector paths; ontology maps reuse the object relationship geometry engine.
 - Use side `info_panels` with `placement: "left"` or `placement: "right"` for legends, about/rules, and version cards when matching the blueprint reference style.
 - Split the ontology if every concept needs many predicates; this type is for structured ontology maps, not arbitrary graph layout.
@@ -127,7 +129,7 @@ Use for enterprise capability maps, domain maps, operating-model decomposition, 
 - Use `span` sparingly for strategic objectives or shared enablers that truly cover adjacent lanes.
 - Keep connector overlays sparse. The map should remain readable from row/column alignment alone.
 - Capability map cards use a dedicated dense-card spec: size them for two title lines plus one subtitle, and keep row/column gaps wide enough for side-corridor routing.
-- When several connector overlays need the same vertical corridor, widen the canvas and let the renderer offset them into route lanes rather than stacking them on a single line.
+- When several connector overlays need the same vertical corridor, widen the canvas and use `relationships[].lane_offset` for the few routes that still need deliberate separation.
 - Put usage rules, notes, and version blocks in `info_panels`; this type renders them as side panels to echo blueprint map conventions.
 - Use the stress template to check whether the canvas should widen before shrinking text or card spacing.
 

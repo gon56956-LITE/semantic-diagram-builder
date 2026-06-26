@@ -645,9 +645,16 @@ def _validate_ontology_map(contract: dict[str, Any], diagram_type: str) -> None:
         for coord in ("x", "y", "width", "height"):
             if coord in instance:
                 _validate_number(instance[coord], f"{diagram_type} instances[{instance_idx}].{coord}", minimum=0)
+        if "lane_offset" in instance:
+            _validate_number(instance["lane_offset"], f"{diagram_type} instances[{instance_idx}].lane_offset")
         for key in ("kind", "accent", "subtitle"):
             if key in instance and instance[key] not in (None, "") and not isinstance(instance[key], str):
                 raise DiagramTypeError(f"{diagram_type} instances[{instance_idx}].{key} must be a string")
+        for key in ("concept_anchor", "instance_anchor"):
+            value = instance.get(key)
+            if value is not None and value not in ANCHOR_SIDES:
+                supported = ", ".join(sorted(ANCHOR_SIDES))
+                raise DiagramTypeError(f'{diagram_type} instances[{instance_idx}].{key} must be one of: {supported}')
 
     relationship_ids = _optional_ids(relationships, "relationship", diagram_type)
     for rel_idx, relationship in enumerate(relationships):
@@ -743,6 +750,8 @@ def _validate_capability_domain_map(contract: dict[str, Any], diagram_type: str)
             raise DiagramTypeError(f'{diagram_type} relationships[{idx}].style "{style}" is not supported')
         if "accent" in relationship and relationship["accent"] not in (None, "") and not isinstance(relationship["accent"], str):
             raise DiagramTypeError(f"{diagram_type} relationships[{idx}].accent must be a string")
+        if "lane_offset" in relationship:
+            _validate_number(relationship["lane_offset"], f"{diagram_type} relationships[{idx}].lane_offset")
 
 
 def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None = None) -> list[str]:

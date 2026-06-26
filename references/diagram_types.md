@@ -162,12 +162,12 @@ Optional fields:
 - `concepts[].attributes[].name`, optional `type`, `kind`, `accent`
 - `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`, `lane_offset`
 - `relationships[].from_anchor`, `to_anchor`, `from_diamond_anchor`, `to_diamond_anchor` as `left`, `right`, `top`, or `bottom`
-- `instances[].subtitle`, `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`
+- `instances[].subtitle`, `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`, `lane_offset`, `concept_anchor`, `instance_anchor`
 - `info_panels[].placement: "left" | "right"` for side legend/about/rules/version panels; omitted placement renders a bottom panel
 
 Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `hub_id`, `domains`, `external_partners`, `entities`.
 
-Rules: every relationship endpoint must reference a concept id; instances reference concepts but are not relationship endpoints. Relationship labels render inside diamonds, so keep predicate names short. Use concept `row`/`col` plus relationship `row`/`col` for stable placement; use explicit `x`/`y` only for polished reference layouts. Use `ontology_map` when class/instance semantics matter; use `object_relationship_diagram` when table keys and object attributes are the primary message.
+Rules: every relationship endpoint must reference a concept id; instances reference concepts but are not relationship endpoints. Relationship labels render inside diamonds, so keep predicate names short. Use concept `row`/`col` plus relationship `row`/`col` for stable placement; use `instances[].lane_offset` when multiple instance examples share a concept or corridor. Use `concept_anchor` and `instance_anchor` when an instance link needs a fixed side to avoid predicate diamonds. Use explicit `x`/`y` only for polished reference layouts. Use `ontology_map` when class/instance semantics matter; use `object_relationship_diagram` when table keys and object attributes are the primary message.
 
 ## capability_domain_map
 
@@ -193,12 +193,12 @@ Optional fields:
 - `levels[].kind`, `accent`
 - `columns[].width`, `kind`, `accent`
 - `items[].subtitle`, `kind`, `accent`, `order`, `span`
-- `relationships[].from`, `to`, `relation`, optional `style`, optional `accent`
+- `relationships[].from`, `to`, `relation`, optional `style`, optional `accent`, optional `lane_offset`
 - `info_panels[]` for usage, notes, version, legend, or scope panels
 
 Unsupported structural fields: `groups`, `nodes`, `edges`, `rows`, `hub_id`, `domains`, `external_partners`, `entities`.
 
-Rules: every item must reference a declared level and column. `items[].span` is a positive integer and should be used sparingly for objectives or shared enablers. Relationship endpoints must reference item ids and should remain sparse; the primary reading path is the grid alignment, not the connector mesh. Use this type when row/column alignment is the message; use `boundary_ownership_map` when ownership and external boundaries are the message.
+Rules: every item must reference a declared level and column. `items[].span` is a positive integer and should be used sparingly for objectives or shared enablers. Relationship endpoints must reference item ids and should remain sparse; the primary reading path is the grid alignment, not the connector mesh. Use `relationships[].lane_offset` when a few sparse overlays intentionally reuse a corridor. Use this type when row/column alignment is the message; use `boundary_ownership_map` when ownership and external boundaries are the message.
 
 Spacing rules: capability cards are not the same component as layered topology cards. They reserve enough height for two title lines plus one short subtitle, and the renderer enforces wider row/column corridors so same-column stacked cards can route around each other without touching neighboring cards. Repeated same-corridor routes are offset into lanes; if many same-color overlays still compete for attention, widen the canvas or split the dependencies into a separate view.
 

@@ -149,7 +149,10 @@
       "row": 2,
       "col": 1,
       "x": 640,
-      "y": 690
+      "y": 690,
+      "concept_anchor": "left",
+      "instance_anchor": "top",
+      "lane_offset": 28
     },
     {
       "id": "apollo_project",

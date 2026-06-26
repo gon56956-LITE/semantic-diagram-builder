@@ -565,8 +565,10 @@ def main() -> int:
         raise AssertionError("ontology_map stress template should exercise many concept cards")
     if ontology_stress_svg.count('class="relationship-diamond"') < 8:
         raise AssertionError("ontology_map stress template should exercise many predicate diamonds")
-    if ontology_stress_svg.count('class="ontology-instance-card card"') < 4:
-        raise AssertionError("ontology_map stress template should exercise instance cards")
+    if ontology_stress_svg.count('class="ontology-instance-card card"') < 6:
+        raise AssertionError("ontology_map stress template should exercise multiple instances per concept")
+    if ontology_stress_svg.count('class="edge ontology-instance-link"') < 6:
+        raise AssertionError("ontology_map stress template should exercise instance-to-concept link lanes")
     if ontology_stress_svg.count('class="info-panel ontology-side-panel"') < 2:
         raise AssertionError("ontology_map stress template should exercise side panels")
     assert_no_direct_diagonal_object_links(ontology_stress_svg)
@@ -590,6 +592,17 @@ def main() -> int:
         raise AssertionError("capability_domain_map stress template should exercise dense capability cards")
     if capability_stress_svg.count('class="edge capability-map-link"') < 20:
         raise AssertionError("capability_domain_map stress template should exercise sparse but meaningful overlays")
+    if capability_stress_svg.count('data-relation="supports"') < 8:
+        raise AssertionError("capability_domain_map stress template should exercise shared enabler support overlays")
+    support_lane_shifts = [
+        float(value)
+        for value in re.findall(r'data-relation="supports"[^>]*data-lane-shift="([-0-9.]+)"', capability_stress_svg)
+    ]
+    if len({round(value, 1) for value in support_lane_shifts if abs(value) > 0.1}) < 4:
+        raise AssertionError("capability_domain_map support overlays should use staggered lane shifts")
+    repeated_corridors = re.findall(r'data-relation="supports"[^>]*data-corridor-x="([-0-9.]+)"', capability_stress_svg)
+    if len(repeated_corridors) < 3:
+        raise AssertionError("capability_domain_map stress template should exercise detour corridors")
     if capability_stress_svg.count('class="info-panel capability-side-panel"') < 3:
         raise AssertionError("capability_domain_map stress template should render side panels")
     if capability_stress_svg.count('capability-column-icon') < 8:

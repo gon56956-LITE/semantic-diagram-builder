@@ -213,6 +213,14 @@ def main() -> int:
     ontology_bad_lane_offset["relationships"][0]["lane_offset"] = "wide"
     assert_schema_error("ontology bad lane offset", ontology_bad_lane_offset, "lane_offset must be a number")
 
+    ontology_bad_instance_lane_offset = copy.deepcopy(ontology)
+    ontology_bad_instance_lane_offset["instances"][0]["lane_offset"] = "wide"
+    assert_schema_error("ontology bad instance lane offset", ontology_bad_instance_lane_offset, "lane_offset must be a number")
+
+    ontology_bad_instance_anchor = copy.deepcopy(ontology)
+    ontology_bad_instance_anchor["instances"][0]["concept_anchor"] = "middle"
+    assert_schema_error("ontology bad instance anchor", ontology_bad_instance_anchor, "must be one of")
+
     capability_map = load_json("templates/capability_domain_map/reference-contract.json")
     assert_schema_pass("capability domain map reference", capability_map)
 
@@ -227,6 +235,10 @@ def main() -> int:
     capability_bad_relationship = copy.deepcopy(capability_map)
     capability_bad_relationship["relationships"][0]["to"] = "missing"
     assert_schema_error("capability missing relationship target", capability_bad_relationship, "is not an item id")
+
+    capability_bad_lane_offset = copy.deepcopy(capability_map)
+    capability_bad_lane_offset["relationships"][0]["lane_offset"] = "wide"
+    assert_schema_error("capability bad lane offset", capability_bad_lane_offset, "lane_offset must be a number")
 
     capability_bad_badge = copy.deepcopy(capability_map)
     capability_bad_badge["items"][0]["badge"] = "CAP"

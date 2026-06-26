@@ -124,7 +124,9 @@ Useful ontology fields for `ontology_map`:
 - `concepts[].attributes[]`: datatype or property rows. Each attribute needs `name`; optional `type`, `kind`, and `accent`.
 - `relationships[]`: labeled predicate diamonds between concepts. Each relationship needs `from`, `to`, and `label`; optional `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `style`, `accent`, and anchor controls.
 - `relationships[].lane_offset`: optional pixel offset for the middle route corridor when several predicates share a slot band.
-- `instances[]`: example instance cards. Each instance needs `id`, `label`, and `concept`; optional `subtitle`, `row`, `col`, `x`, `y`, `kind`, and `accent`.
+- `instances[]`: example instance cards. Each instance needs `id`, `label`, and `concept`; optional `subtitle`, `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`, `lane_offset`, `concept_anchor`, and `instance_anchor`.
+- `instances[].lane_offset`: optional pixel offset for instance-to-concept lanes when several instances belong to the same concept or share a long corridor.
+- `instances[].concept_anchor` and `instances[].instance_anchor`: optional `left`, `right`, `top`, or `bottom` side controls when the automatic instance link would cross a predicate diamond.
 - `info_panels[]`: ontology maps may use `placement: "left"` or `placement: "right"` for side legend/about/rules/version panels; panels without placement render at the bottom.
 - Ontology maps reuse the object relationship geometry engine but use ontology-specific concept and instance components. Use this type when the concepts/classes and examples are the message; use `object_relationship_diagram` when PK/FK table structure is the message.
 
@@ -135,8 +137,9 @@ Useful capability map fields for `capability_domain_map`:
 - `items[]`: capability/domain cards. Each item needs `id`, `label`, `level`, and `column`; optional `subtitle`, `kind`, `accent`, `order`, and `span`.
 - `levels[].kind/accent` and `columns[].kind/accent`: drive the prominent row and column header icons. Keep dense item cards focused on title and subtitle text instead of small per-card badges.
 - `relationships[]`: sparse parent/support overlays between item ids. Use these for the few links that add meaning; do not turn a capability map into an edge mesh.
+- `relationships[].lane_offset`: optional pixel offset for sparse overlays when several relationships share a corridor.
 - `info_panels[]`: side panels for usage, notes, version, scope, or legend text.
-- Capability maps use a dedicated dense-card specification. The renderer keeps cards tall enough for two title lines plus one subtitle, renders semantic icons in row/column headers, reserves wider row/column corridors, and offsets repeated same-corridor routes so dense overlays remain distinguishable.
+- Capability maps use a dedicated dense-card specification. The renderer keeps cards tall enough for two title lines plus one subtitle, renders semantic icons in row/column headers, reserves wider row/column corridors, offsets repeated same-corridor routes, and validates that side panels and relationship overlays do not invade dense card stacks.
 
 Useful annotation placements:
 
