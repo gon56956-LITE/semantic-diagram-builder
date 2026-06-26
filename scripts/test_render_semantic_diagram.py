@@ -283,6 +283,88 @@ def assert_capability_map_design(svg: str) -> None:
         raise AssertionError("capability_domain_map item cards should be tall enough for dense title/subtitle content")
 
 
+def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
+    if 'data-diagram-type="relationship_matrix"' not in svg:
+        raise AssertionError("relationship_matrix should declare its diagram type")
+    for class_name in (
+        "relationship-matrix-grid",
+        "matrix-primary-preview",
+        "matrix-summary-panel",
+        "matrix-selected-detail-panel",
+        "matrix-top-connected-panel",
+    ):
+        if class_name not in svg:
+            raise AssertionError(f"relationship_matrix should render {class_name}")
+    for removed_text in ("When To Use", "How To Read", "Metadata", "Companion Views Guide"):
+        if removed_text in svg:
+            raise AssertionError(f"relationship_matrix should not render explanatory dashboard panel: {removed_text}")
+    if 'class="matrix-cell"' not in svg or 'class="matrix-cell-value"' not in svg:
+        raise AssertionError("relationship_matrix should render matrix cells and values")
+    if 'class="matrix-row-label"' not in svg or 'class="matrix-col-label"' not in svg:
+        raise AssertionError("relationship_matrix should render row and column labels")
+    cell_count = svg.count('class="matrix-cell"')
+    entity_count = int(cell_count ** 0.5)
+    if entity_count * entity_count != cell_count:
+        raise AssertionError("relationship_matrix should render a square entity matrix")
+    if svg.count('class="matrix-row-label"') != entity_count:
+        raise AssertionError("relationship_matrix row labels should stay on one line")
+    if svg.count('class="matrix-col-label"') != entity_count:
+        raise AssertionError("relationship_matrix column labels should stay on one line")
+    if 'class="matrix-selected-cell"' not in svg:
+        raise AssertionError("relationship_matrix should render selected cell marker")
+    if svg.count('class="matrix-distribution-bar"') < 3:
+        raise AssertionError("relationship_matrix should render compact distribution bars")
+    if not re.search(rf'class="matrix-summary-value"[^>]*>{expected_total}</text>', svg):
+        raise AssertionError("relationship_matrix summary should match the contract relationship count")
+    row_label_sizes = text_font_sizes(svg, "matrix-row-label")
+    col_label_sizes = text_font_sizes(svg, "matrix-col-label")
+    cell_sizes = text_font_sizes(svg, "matrix-cell-value")
+    panel_item_sizes = text_font_sizes(svg, "info-panel-item")
+    preview_title_sizes = text_font_sizes(svg, "matrix-preview-title")
+    rank_label_sizes = text_font_sizes(svg, "matrix-rank-label")
+    preview_rects = [
+        tuple(map(float, values))
+        for values in re.findall(
+            r'<g class="matrix-preview-node"[^>]*>\s*<rect x="([-0-9.]+)" y="([-0-9.]+)" width="([-0-9.]+)" height="([-0-9.]+)"',
+            svg,
+        )
+    ]
+    if len(preview_rects) != entity_count:
+        raise AssertionError("relationship_matrix preview should render one non-overlapping card per entity")
+    for idx, (x, y, w, h) in enumerate(preview_rects):
+        for ox, oy, ow, oh in preview_rects[idx + 1:]:
+            overlap_x = min(x + w, ox + ow) - max(x, ox)
+            overlap_y = min(y + h, oy + oh) - max(y, oy)
+            if overlap_x > 1 and overlap_y > 1:
+                raise AssertionError("relationship_matrix preview cards should not overlap")
+    if not row_label_sizes or min(row_label_sizes) < 18:
+        raise AssertionError("relationship_matrix row labels should remain readable")
+    if not col_label_sizes or min(col_label_sizes) < 18:
+        raise AssertionError("relationship_matrix column labels should remain readable")
+    if not cell_sizes or min(cell_sizes) < 28:
+        raise AssertionError("relationship_matrix cell values should remain readable")
+    if not panel_item_sizes or min(panel_item_sizes) < 16:
+        raise AssertionError("relationship_matrix panel body text should remain readable")
+    if not preview_title_sizes or min(preview_title_sizes) < 16:
+        raise AssertionError("relationship_matrix preview titles should remain readable")
+    if not rank_label_sizes or min(rank_label_sizes) < 16:
+        raise AssertionError("relationship_matrix ranking labels should remain readable")
+    grid = re.search(r'<g class="relationship-matrix-grid">(.*?)</g>', svg, re.S)
+    if not grid:
+        raise AssertionError("relationship_matrix grid group should be present")
+    panel = re.search(r'<rect x="([0-9.]+)" y="[^"]+" width="([0-9.]+)" height="[^"]+"', grid.group(1))
+    matrix = re.search(
+        r'<rect x="([0-9.]+)" y="[^"]+" width="([0-9.]+)" height="[^"]+" rx="6" fill="none" stroke="[^"]+" stroke-opacity="0.58"',
+        grid.group(1),
+    )
+    if not panel or not matrix:
+        raise AssertionError("relationship_matrix should render a measurable center panel and matrix")
+    panel_x, panel_w = float(panel.group(1)), float(panel.group(2))
+    matrix_x, matrix_w = float(matrix.group(1)), float(matrix.group(2))
+    if matrix_w < panel_w * 0.95 or matrix_x - panel_x > 24:
+        raise AssertionError("relationship_matrix table should fill the central container width")
+
+
 def assert_no_direct_diagonal_object_links(svg: str) -> None:
     direct_line = re.compile(r'^M ([-0-9.]+) ([-0-9.]+) L ([-0-9.]+) ([-0-9.]+)$')
     for d in path_ds(svg, {"object-relationship-link"}):
@@ -607,6 +689,27 @@ def main() -> int:
         raise AssertionError("capability_domain_map stress template should render side panels")
     if capability_stress_svg.count('capability-column-icon') < 8:
         raise AssertionError("capability_domain_map stress template should exercise column header icons")
+
+    relationship_matrix = load_json("templates/relationship_matrix/reference-contract.json")
+    relationship_svg = assert_valid("relationship matrix reference template", relationship_matrix)
+    assert_relationship_matrix_design(relationship_svg, len(relationship_matrix["relationships"]))
+    _dtype, relationship_strategy, _warnings = renderer.diagram_for_contract(relationship_matrix)
+    if relationship_strategy != "relationship_matrix":
+        raise AssertionError("relationship_matrix should select relationship_matrix strategy")
+    relationship_minimal = load_json("templates/relationship_matrix/minimal-contract.json")
+    relationship_minimal_svg = assert_valid("relationship matrix minimal template", relationship_minimal)
+    assert_relationship_matrix_design(relationship_minimal_svg, len(relationship_minimal["relationships"]))
+    relationship_stress = load_json("templates/relationship_matrix/stress-contract.json")
+    relationship_stress_svg = assert_valid("relationship matrix stress template", relationship_stress)
+    assert_relationship_matrix_design(relationship_stress_svg, len(relationship_stress["relationships"]))
+    expected_cells = len(relationship_stress["entities"]) ** 2
+    if relationship_stress_svg.count('class="matrix-cell"') < expected_cells:
+        raise AssertionError("relationship_matrix stress template should render one cell per entity pair")
+    stress_width = float(re.search(r'<svg[^>]*width="([0-9.]+)"', relationship_stress_svg).group(1))
+    if stress_width <= float(relationship_stress["width"]):
+        raise AssertionError("relationship_matrix stress template should widen the canvas for dense headers")
+    if "Payment approval gates shipment release" not in relationship_stress_svg:
+        raise AssertionError("relationship_matrix stress template should render selected relationship details")
 
     print("render_semantic_diagram selftest: PASS")
     return 0

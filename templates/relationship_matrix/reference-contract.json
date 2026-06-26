@@ -1,0 +1,51 @@
+{
+  "title": "Relationship Matrix Reference",
+  "subtitle": "High-connectivity relationships companion view",
+  "diagram_type": "relationship_matrix",
+  "style": "accent-blueprint",
+  "width": 2400,
+  "entities": [
+    {"id": "customer", "label": "Customer", "subtitle": "Entity", "kind": "capability", "accent": "accent_cyan", "order": 0},
+    {"id": "order", "label": "Order", "subtitle": "Entity", "kind": "source", "accent": "accent_cyan", "order": 1},
+    {"id": "order_item", "label": "Order Item", "subtitle": "Entity", "kind": "source", "accent": "accent_cyan", "order": 2},
+    {"id": "product", "label": "Product", "subtitle": "Entity", "kind": "package", "accent": "accent_green", "order": 3},
+    {"id": "inventory", "label": "Inventory", "subtitle": "Entity", "kind": "asset", "accent": "accent_green", "order": 4},
+    {"id": "payment", "label": "Payment", "subtitle": "Entity", "kind": "quality", "accent": "accent_yellow", "order": 5},
+    {"id": "shipment", "label": "Shipment", "subtitle": "Entity", "kind": "process", "accent": "accent_orange", "order": 6},
+    {"id": "supplier", "label": "Supplier", "subtitle": "Entity", "kind": "external", "accent": "accent_purple", "order": 7}
+  ],
+  "relationships": [
+    {"from": "customer", "to": "order", "type": "direct", "strength": 3, "label": "places"},
+    {"from": "order", "to": "customer", "type": "direct", "strength": 3, "label": "owned by"},
+    {"from": "order", "to": "order_item", "type": "direct", "strength": 3, "label": "contains"},
+    {"from": "order_item", "to": "order", "type": "direct", "strength": 2, "label": "belongs to"},
+    {"from": "order_item", "to": "product", "type": "direct", "strength": 3, "label": "refers to"},
+    {"from": "product", "to": "order_item", "type": "direct", "strength": 2, "label": "referenced by"},
+    {"from": "product", "to": "inventory", "type": "direct", "strength": 3, "label": "stocked as"},
+    {"from": "inventory", "to": "product", "type": "direct", "strength": 2, "label": "tracks"},
+    {"from": "order", "to": "payment", "type": "direct", "strength": 2, "label": "settled by"},
+    {"from": "payment", "to": "order", "type": "direct", "strength": 2, "label": "settles"},
+    {"from": "order", "to": "shipment", "type": "direct", "strength": 2, "label": "fulfilled by"},
+    {"from": "shipment", "to": "order", "type": "direct", "strength": 2, "label": "fulfills"},
+    {"from": "supplier", "to": "inventory", "type": "direct", "strength": 3, "label": "supplies"},
+    {"from": "inventory", "to": "supplier", "type": "direct", "strength": 1, "label": "sourced from"},
+    {"from": "product", "to": "supplier", "type": "direct", "strength": 2, "label": "sourced from"},
+    {"from": "supplier", "to": "product", "type": "direct", "strength": 1, "label": "provides"},
+    {"from": "customer", "to": "shipment", "type": "direct", "strength": 1, "label": "receives"},
+    {"from": "shipment", "to": "customer", "type": "direct", "strength": 1, "label": "delivers to"},
+    {"from": "order", "to": "product", "type": "indirect", "strength": 2, "path": "Order -> Order Item -> Product", "note": "Order is related to Product indirectly through Order Item."},
+    {"from": "product", "to": "order", "type": "indirect", "strength": 1, "path": "Product -> Order Item -> Order"},
+    {"from": "customer", "to": "product", "type": "indirect", "strength": 1, "path": "Customer -> Order -> Order Item -> Product"},
+    {"from": "product", "to": "customer", "type": "indirect", "strength": 1, "path": "Product -> Order Item -> Order -> Customer"},
+    {"from": "order_item", "to": "inventory", "type": "indirect", "strength": 1, "path": "Order Item -> Product -> Inventory"},
+    {"from": "inventory", "to": "shipment", "type": "indirect", "strength": 2, "path": "Inventory -> Product -> Order Item -> Order -> Shipment"},
+    {"from": "supplier", "to": "shipment", "type": "indirect", "strength": 1, "path": "Supplier -> Inventory -> Shipment"},
+    {"from": "shipment", "to": "inventory", "type": "indirect", "strength": 2, "path": "Shipment -> Order -> Order Item -> Product -> Inventory"},
+    {"from": "payment", "to": "shipment", "type": "dependency", "strength": 1, "path": "Payment status gates shipment release"},
+    {"from": "supplier", "to": "order_item", "type": "dependency", "strength": 1, "path": "Supplier availability constrains order item fulfillment"}
+  ],
+  "selected_cell": {"from": "order", "to": "product"},
+  "annotations": [
+    {"text": "Reference template: matrix view is static and contract-driven; pair it with a primary diagram for context.", "placement": "footer"}
+  ]
+}

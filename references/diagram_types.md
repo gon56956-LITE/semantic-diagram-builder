@@ -204,6 +204,39 @@ Spacing rules: capability cards are not the same component as layered topology c
 
 Header icon rules: dense capability cards do not render per-card badges. Use `levels[].kind/accent` and `columns[].kind/accent` to render prominent semantic icons in the row and column headers; the cards themselves stay focused on title and subtitle text.
 
+## relationship_matrix
+
+Use for dense many-to-many relationships where a primary node-link/object diagram becomes unreadable. This is a static SVG companion view, not an interactive filter or graph layout.
+
+Contract shape: `entities`, `relationships`, optional `selected_cell`, optional `annotations`.
+
+Renderer strategy: compact relationship matrix companion view with a reference-only mini network, same-entity row/column grid, selected-cell details, compact summary/distribution bars, and top-connected ranking.
+
+Required fields:
+
+- `entities[].id`
+- `entities[].label`
+- `relationships[].from`
+- `relationships[].to`
+- `relationships[].type`
+
+Optional fields:
+
+- `entities[].subtitle`, `kind`, `accent`, `order`
+- `relationships[].strength` as `1`, `2`, or `3`
+- `relationships[].label`, `note`, `path`, `accent`
+- `selected_cell.from`, `selected_cell.to`
+
+Supported relationship types:
+
+- `direct`
+- `indirect`
+- `dependency`
+
+Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `hub_id`, `domains`, `external_partners`, `concepts`, `levels`, `items`.
+
+Rules: row and column headers come from the same `entities[]` set; empty cells are generated automatically and should not be declared as `none` relationships. `selected_cell` may point to an empty relationship cell when an empty-state detail is useful, but both endpoint ids must exist. Use high strength sparingly so the matrix remains blueprint-first rather than becoming a colored heat map. Use this type as a companion to `object_relationship_diagram`, `ontology_map`, or `capability_domain_map` when dense relationships need comparison rather than path tracing.
+
 ## Shared info_panels
 
 `registry_table`, `hub_spoke`, `object_relationship_diagram`, `ontology_map`, and `capability_domain_map` support information panels for dense legends, rules, use cases, metadata, cardinality keys, relationship keys, or usage notes.

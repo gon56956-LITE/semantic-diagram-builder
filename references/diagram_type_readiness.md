@@ -26,6 +26,7 @@ Use this guide when choosing a `diagram_type` for real work. It answers a differ
 | `object_relationship_diagram` | `stable` | ER-style object maps, MOC objects, table-like entities with attributes, relationship diamonds, cardinality. | Plan entity rows/columns and relationship diamond slots before rendering. Use `lane_offset` or explicit anchors when two relationships share a corridor or sit close together. | Arbitrary graph placement is still out of scope; production diagrams should stay on the entity/relationship grid. | Add more domain-specific examples, such as MOC object maps and revision-controlled object models. |
 | `ontology_map` | `stable` | Concept/class maps with predicates, datatype attributes, cardinality, instances, and side panels. | Use concepts for class semantics, instances only as examples, and side panels for legend/rules/version. Keep predicates short and use `lane_offset` when several instance links or predicates share a corridor. | It can drift into either ER-table style or a generic graph if concepts, instances, and predicates are not clearly separated. | Add domain-specific ontology templates such as MOC glossary ontology and WI-derived knowledge ontology. |
 | `capability_domain_map` | `stable` | Strategic objectives, domains, sub-domains, capabilities, enablers, and sparse dependencies. | Let row/column alignment carry the meaning; keep relationship overlays sparse; use row/column header icons instead of per-card badges, and use `lane_offset` only for deliberate shared-corridor overlays. | Dense dependencies can quickly become a mesh even when cards are readable. | Add a dependency-focused companion view or relationship matrix for high-link cases. |
+| `relationship_matrix` | `beta` | Companion view for high-connectivity same-entity relationships. | Use the same entity set for rows/columns; keep relationship types to `direct`, `indirect`, and `dependency`; use strengths sparingly; keep primary preview reference-only. | It can become a generic dark dashboard if support panels, numbers, and accents dominate the matrix. | Visual QA the reference/stress gallery, then decide whether the side-rail proportions and matrix density are stable enough to promote. |
 
 ## Selection Rules
 
@@ -41,6 +42,7 @@ Choose the type whose primary structure matches the message:
 | Entity/object attributes, keys, relationships, and cardinality | `object_relationship_diagram` | `ontology_map` unless class/instance semantics are important. |
 | Concepts/classes, predicates, datatype properties, example instances | `ontology_map` | `object_relationship_diagram` when PK/FK table structure is the real message. |
 | Capabilities organized by bands and domains | `capability_domain_map` | `taxonomy_tree` when there is no stable column/domain axis. |
+| Relationship coverage, strength, and type comparison across the same entity set | `relationship_matrix` | Primary node-link diagrams when the relationship mesh is already too dense to read. |
 
 ## Production Checklist
 
@@ -64,5 +66,6 @@ Split the diagram instead of forcing one canvas when:
 - An `object_relationship_diagram` or `ontology_map` needs more than 10 relationship diamonds with overlapping lanes.
 - A `capability_domain_map` needs dependency overlays between most columns.
 - A `registry_table` needs both many columns and long paragraph definitions.
+- A `relationship_matrix` needs more than about 12-14 entities or requires different row and column entity sets.
 
 The renderer should preserve clarity, not prove that every relation can fit into one SVG.

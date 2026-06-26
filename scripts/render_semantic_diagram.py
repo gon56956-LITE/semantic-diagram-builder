@@ -1334,6 +1334,397 @@ def _render_info_panels(parts: list[str], panels: list[dict], style: dict, x: fl
     return total_h
 
 
+MATRIX_TYPE_LABELS = {
+    "direct": "Direct",
+    "indirect": "Indirect",
+    "dependency": "Dependency",
+}
+
+
+def _matrix_entities(contract: dict) -> list[tuple[int, dict]]:
+    entities = [entity for entity in contract.get("entities", []) if isinstance(entity, dict) and entity.get("id")]
+    return sorted(enumerate(entities), key=lambda pair: (pair[1].get("order", pair[0]), pair[0]))
+
+
+def _matrix_relationships(contract: dict) -> list[dict]:
+    return [rel for rel in contract.get("relationships", []) if isinstance(rel, dict)]
+
+
+def _matrix_type_color(style: dict, rel_type: str, strength: int = 1, accent: object = None) -> str:
+    if accent:
+        color = style_color(style, accent, "")
+        if VALID_HEX.match(color):
+            return color
+    if strength >= 3:
+        return style_color(style, "accent_yellow", "#FFD84D")
+    if rel_type == "indirect":
+        return style_color(style, "accent_cyan", "#16D9FF")
+    if rel_type == "dependency":
+        return style_color(style, "accent_purple", "#B56CFF")
+    return style_color(style, "line_primary", "#F4F8FF")
+
+
+def _matrix_rel_index(relationships: list[dict]) -> dict[tuple[str, str], dict]:
+    rels: dict[tuple[str, str], dict] = {}
+    for rel in relationships:
+        key = (str(rel.get("from", "")), str(rel.get("to", "")))
+        current = rels.get(key)
+        if current is None or int(rel.get("strength", 1)) > int(current.get("strength", 1)):
+            rels[key] = rel
+    return rels
+
+
+def _matrix_selected(contract: dict, relationships: list[dict]) -> tuple[str, str]:
+    selected = contract.get("selected_cell")
+    if isinstance(selected, dict) and selected.get("from") and selected.get("to"):
+        return str(selected["from"]), str(selected["to"])
+    best = max(enumerate(relationships), key=lambda pair: (int(pair[1].get("strength", 1)), -pair[0]))[1]
+    return str(best.get("from", "")), str(best.get("to", ""))
+
+
+def _matrix_stats(entity_ids: list[str], relationships: list[dict]) -> dict:
+    counts = {rel_type: 0 for rel_type in MATRIX_TYPE_LABELS}
+    connected = {entity_id: {"count": 0, "strong": 0} for entity_id in entity_ids}
+    for rel in relationships:
+        rel_type = str(rel.get("type", "direct"))
+        if rel_type in counts:
+            counts[rel_type] += 1
+        strength = int(rel.get("strength", 1))
+        for endpoint in (str(rel.get("from", "")), str(rel.get("to", ""))):
+            if endpoint not in connected:
+                continue
+            connected[endpoint]["count"] += 1
+            if strength >= 3:
+                connected[endpoint]["strong"] += 1
+    return {
+        "counts": counts,
+        "total": len(relationships),
+        "strong": sum(1 for rel in relationships if int(rel.get("strength", 1)) >= 3),
+        "possible": max(0, len(entity_ids) * (len(entity_ids) - 1)),
+        "connected": connected,
+    }
+
+
+def _render_matrix_panel(
+    parts: list[str],
+    panel: dict,
+    style: dict,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    canvas_w: float,
+    *,
+    class_name: str = "",
+) -> None:
+    panel_id = str(panel.get("id", panel.get("title", "panel"))).lower().replace(" ", "-")
+    color = _accent_color(style, panel, "object")
+    scale = _clamp(canvas_w / 2200.0, 0.98, 1.1)
+    title_size = _clamp(17.5 * scale, 17.5, 19.2)
+    body_size = _clamp(16.0 * scale, 16.0, 17.4)
+    line_h = body_size + 5
+    parts.append(f'<g class="info-panel relationship-matrix-panel {class_name}" data-panel-id="{e(panel_id)}">')
+    parts.append(_panel_rect_svg(style, x, y, w, h, fill="panel_fill", stroke=color, stroke_opacity=0.62, radius=6))
+    parts.append(f'<text x="{x + 18}" y="{y + 32}" class="info-panel-title" style="font-size:{_fmt_px(title_size)}">{e(panel.get("title", "Info"))}</text>')
+    items = panel.get("items", [])
+    if not isinstance(items, list):
+        items = []
+    max_chars = max(18, int((w - 48) / (body_size * 0.52)))
+    cur_y = y + 64
+    for item in items:
+        text, kind, accent = _info_panel_item_text(item)
+        if not text:
+            continue
+        item_color = style_color(style, accent, "") if accent else kind_accent(style, kind or panel.get("kind", "object"))
+        if not VALID_HEX.match(item_color):
+            item_color = color
+        lines = wrap_text(text, max_chars=max_chars, max_lines=3)
+        parts.append(f'<rect x="{x + 18}" y="{cur_y - 10}" width="8" height="8" rx="2" fill="{item_color}"/>')
+        for idx, line in enumerate(lines):
+            parts.append(f'<text x="{x + 34}" y="{cur_y + idx * line_h}" class="info-panel-item" style="font-size:{_fmt_px(body_size)}">{e(line)}</text>')
+        cur_y += len(lines) * line_h + 8
+    parts.append('</g>')
+
+
+def _render_matrix_primary_preview(
+    parts: list[str],
+    entities: list[dict],
+    relationships: list[dict],
+    style: dict,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    canvas_w: float,
+) -> None:
+    line = style_color(style, "line_primary", "#F4F8FF")
+    secondary = style_color(style, "text_secondary", "#C9DAF5")
+    parts.append('<g class="matrix-primary-preview">')
+    parts.append(_panel_rect_svg(style, x, y, w, h, fill="panel_fill", stroke=line, stroke_opacity=0.54, radius=6))
+    title_size = _clamp(17.5 * _clamp(canvas_w / 2200.0, 0.98, 1.1), 17.5, 19.2)
+    note_size = _clamp(16.0 * _clamp(canvas_w / 2200.0, 0.98, 1.1), 16.0, 17.4)
+    parts.append(f'<text x="{x + 18}" y="{y + 32}" class="info-panel-title" style="font-size:{_fmt_px(title_size)}">PRIMARY DIAGRAM (REFERENCE ONLY)</text>')
+    parts.append(f'<text x="{x + 18}" y="{y + 62}" class="note" style="font-size:{_fmt_px(note_size)}">Dense reference view: too many lines to read directly.</text>')
+    cx = x + w / 2
+    cy = y + h / 2 + 10
+    rx = max(120, w * 0.33)
+    ry = max(92, h * 0.27)
+    card_w = min(174, max(140, w / 3.9))
+    card_h = 66
+    positions: dict[str, tuple[float, float, float, float]] = {}
+    count = max(1, len(entities))
+    if count >= 8:
+        dense_card_w = min(card_w, max(142, w * 0.25))
+        top = y + 118
+        bottom = y + h - 96
+        lane_counts = [math.ceil(count / 2), count // 2]
+        lane_x = [x + 34, x + w - dense_card_w - 34]
+        lane_step = [
+            (bottom - top) / max(1, lane_counts[0] - 1),
+            (bottom - top) / max(1, lane_counts[1] - 1),
+        ]
+        lane_seen = [0, 0]
+        for idx, entity in enumerate(entities):
+            lane = idx % 2
+            lane_idx = lane_seen[lane]
+            lane_seen[lane] += 1
+            center_y = top + lane_idx * lane_step[lane]
+            positions[str(entity["id"])] = (lane_x[lane], center_y - card_h / 2, dense_card_w, card_h)
+    else:
+        for idx, entity in enumerate(entities):
+            angle = -math.pi / 2 + 2 * math.pi * idx / count
+            ex = cx + rx * math.cos(angle) - card_w / 2
+            ey = cy + ry * math.sin(angle) - card_h / 2
+            positions[str(entity["id"])] = (ex, ey, card_w, card_h)
+    for rel in relationships[: min(26, len(relationships))]:
+        source = str(rel.get("from", ""))
+        target = str(rel.get("to", ""))
+        if source not in positions or target not in positions:
+            continue
+        sx, sy, sw, sh = positions[source]
+        tx, ty, tw, th = positions[target]
+        color = _matrix_type_color(style, str(rel.get("type", "direct")), int(rel.get("strength", 1)), rel.get("accent"))
+        dash = ' stroke-dasharray="5 5"' if rel.get("type") != "direct" else ""
+        parts.append(
+            f'<line x1="{sx + sw/2}" y1="{sy + sh/2}" x2="{tx + tw/2}" y2="{ty + th/2}" '
+            f'class="matrix-preview-link" stroke="{color}" stroke-opacity="0.42" stroke-width="{1.0 + int(rel.get("strength", 1)) * 0.35}"{dash}/>'
+        )
+    for entity in entities:
+        ex, ey, ew, eh = positions[str(entity["id"])]
+        color = _accent_color(style, entity, "object")
+        parts.append(f'<g class="matrix-preview-node" data-entity="{e(entity["id"])}">')
+        parts.append(_panel_rect_svg(style, ex, ey, ew, eh, fill="panel_fill", stroke=color, stroke_opacity=0.9, radius=6))
+        parts.append(icon_svg(str(entity.get("kind", "object")), ex + 12, ey + eh / 2 - 10, color, style))
+        label = wrap_text(str(entity.get("label", entity["id"])), max_chars=max(8, int((ew - 48) / 7.8)), max_lines=1)[0]
+        sub = str(entity.get("subtitle", "Entity"))
+        parts.append(f'<text x="{ex + 44}" y="{ey + 28}" class="matrix-preview-title" style="font-size:{_fmt_px(note_size)};font-weight:700;fill:{line}">{e(label)}</text>')
+        parts.append(f'<text x="{ex + 44}" y="{ey + 49}" class="matrix-preview-sub" style="font-size:{_fmt_px(note_size - 1.4)};fill:{secondary}">{e(sub)}</text>')
+        parts.append('</g>')
+    parts.append(f'<text x="{x + 34}" y="{y + h - 28}" class="note" style="font-size:{_fmt_px(note_size)};fill:{secondary}">Too many edges here. Read the matrix for type, strength, and coverage.</text>')
+    parts.append('</g>')
+
+
+def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) -> str:
+    entity_pairs = _matrix_entities(contract)
+    entities = [entity for _idx, entity in entity_pairs]
+    entity_ids = [str(entity["id"]) for entity in entities]
+    relationships = _matrix_relationships(contract)
+    rel_index = _matrix_rel_index(relationships)
+    selected_from, selected_to = _matrix_selected(contract, relationships)
+    selected_rel = rel_index.get((selected_from, selected_to))
+    stats = _matrix_stats(entity_ids, relationships)
+    entity_by_id = {str(entity["id"]): entity for entity in entities}
+
+    n = len(entities)
+    labels = [str(entity.get("label", entity["id"])) for entity in entities]
+    margin = float(contract.get("canvas_margin_x", 48))
+    top_y = float(contract.get("top_y", 118))
+    gap = 20.0
+    main_y = top_y
+    left_w = 660.0
+    right_w = 460.0
+    matrix_pad_x = 20.0
+
+    def matrix_label_size_for(canvas_w: float) -> float:
+        scale = _clamp(canvas_w / 2200.0, 0.98, 1.1)
+        return _clamp(18.5 * scale, 18.2, 20.2)
+
+    base_width = int(max(float(contract.get("width", 0) or 0), 2280, 1180 + n * 88))
+    label_size = matrix_label_size_for(base_width)
+    longest_label_w = max((len(label) * label_size * 0.54 for label in labels), default=0.0)
+    row_label_w = max(220.0, longest_label_w + 78.0)
+    min_cell_w = max(92.0, longest_label_w + 22.0)
+    min_center_w = row_label_w + n * min_cell_w + 2 * matrix_pad_x
+    min_width = 2 * margin + left_w + right_w + 2 * gap + min_center_w
+    width = int(max(base_width, math.ceil(min_width)))
+
+    label_size = matrix_label_size_for(width)
+    longest_label_w = max((len(label) * label_size * 0.54 for label in labels), default=0.0)
+    row_label_w = max(220.0, longest_label_w + 78.0)
+    min_cell_w = max(92.0, longest_label_w + 22.0)
+    min_center_w = row_label_w + n * min_cell_w + 2 * matrix_pad_x
+    min_width = 2 * margin + left_w + right_w + 2 * gap + min_center_w
+    width = int(max(width, math.ceil(min_width)))
+
+    center_w = width - 2 * margin - left_w - right_w - 2 * gap
+    cell_w = max(min_cell_w, (center_w - 2 * matrix_pad_x - row_label_w) / max(1, n))
+    cell_h = _clamp(cell_w * 0.82, 82.0, 96.0)
+    matrix_w = row_label_w + n * cell_w
+    header_h = 94.0
+    matrix_h = header_h + n * cell_h
+    main_h = max(650.0, matrix_h + 112.0)
+    height = int(max(float(contract.get("height", 0) or 0), main_y + main_h + 72))
+
+    left_x = margin
+    center_x = left_x + left_w + gap
+    right_x = center_x + center_w + gap
+    line = style_color(style, "line_primary", "#F4F8FF")
+    secondary = style_color(style, "text_secondary", "#C9DAF5")
+    grid_color = style_color(style, "line_primary", "#F4F8FF")
+    panel_fill = "panel_fill"
+
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+
+    _render_matrix_primary_preview(parts, entities, relationships, style, left_x, main_y, left_w, main_h, width)
+
+    parts.append('<g class="relationship-matrix-grid">')
+    parts.append(_panel_rect_svg(style, center_x, main_y, center_w, main_h, fill=panel_fill, stroke=line, stroke_opacity=0.56, radius=6))
+    matrix_scale = _clamp(width / 2200.0, 0.98, 1.1)
+    panel_title_size = _clamp(17.5 * matrix_scale, 17.5, 19.2)
+    note_size = _clamp(16.0 * matrix_scale, 16.0, 17.4)
+    index_size = _clamp(14.5 * matrix_scale, 14.5, 15.8)
+    label_size = matrix_label_size_for(width)
+    cell_size = _clamp(30.0 * matrix_scale, 28.5, 33.0)
+    parts.append(f'<text x="{center_x + 20}" y="{main_y + 34}" class="info-panel-title" style="font-size:{_fmt_px(panel_title_size)}">RELATIONSHIP MATRIX</text>')
+    parts.append(f'<text x="{center_x + 20}" y="{main_y + 64}" class="note" style="font-size:{_fmt_px(note_size)}">Entities x Entities</text>')
+    filter_x = center_x + center_w - 500
+    filter_y = main_y + 18
+    for idx, rel_type in enumerate(("direct", "indirect", "dependency")):
+        color = _matrix_type_color(style, rel_type, 1)
+        fx = filter_x + idx * 158
+        parts.append(f'<rect x="{fx}" y="{filter_y}" width="16" height="16" rx="3" fill="{color}" opacity="0.9"/>')
+        parts.append(f'<text x="{fx + 24}" y="{filter_y + 14}" class="note" style="font-size:{_fmt_px(note_size)};fill:{line}">{MATRIX_TYPE_LABELS[rel_type]}</text>')
+    matrix_x = center_x + matrix_pad_x
+    matrix_y = main_y + 96
+    parts.append(f'<rect x="{matrix_x}" y="{matrix_y}" width="{matrix_w}" height="{matrix_h}" rx="6" fill="none" stroke="{grid_color}" stroke-opacity="0.58" stroke-width="1"/>')
+    for idx in range(n + 1):
+        x = matrix_x + row_label_w + idx * cell_w
+        parts.append(f'<line x1="{x}" y1="{matrix_y}" x2="{x}" y2="{matrix_y + matrix_h}" stroke="{grid_color}" stroke-opacity="0.48" stroke-width="1"/>')
+        y = matrix_y + header_h + idx * cell_h
+        parts.append(f'<line x1="{matrix_x}" y1="{y}" x2="{matrix_x + matrix_w}" y2="{y}" stroke="{grid_color}" stroke-opacity="0.48" stroke-width="1"/>')
+    parts.append(f'<line x1="{matrix_x}" y1="{matrix_y + header_h}" x2="{matrix_x + matrix_w}" y2="{matrix_y + header_h}" stroke="{grid_color}" stroke-opacity="0.68" stroke-width="1.2"/>')
+    for idx, entity in enumerate(entities):
+        label = labels[idx]
+        col_x = matrix_x + row_label_w + idx * cell_w + cell_w / 2
+        row_y = matrix_y + header_h + idx * cell_h + cell_h / 2
+        parts.append(f'<text x="{col_x}" y="{matrix_y + 34}" text-anchor="middle" class="matrix-col-index" style="font-size:{_fmt_px(index_size)};fill:{secondary}">{idx + 1:02d}</text>')
+        parts.append(f'<text x="{col_x}" y="{matrix_y + 64}" text-anchor="middle" class="matrix-col-label" style="font-size:{_fmt_px(label_size)};font-weight:700;fill:{line}">{e(label)}</text>')
+        parts.append(f'<text x="{matrix_x + 20}" y="{row_y + index_size * 0.35}" class="matrix-row-index" style="font-size:{_fmt_px(index_size)};fill:{secondary}">{idx + 1:02d}</text>')
+        parts.append(f'<text x="{matrix_x + 62}" y="{row_y + label_size * 0.35}" class="matrix-row-label" style="font-size:{_fmt_px(label_size)};font-weight:700;fill:{line}">{e(label)}</text>')
+
+    for row_idx, source in enumerate(entities):
+        for col_idx, target in enumerate(entities):
+            source_id = str(source["id"])
+            target_id = str(target["id"])
+            x = matrix_x + row_label_w + col_idx * cell_w
+            y = matrix_y + header_h + row_idx * cell_h
+            rel = rel_index.get((source_id, target_id))
+            selected = source_id == selected_from and target_id == selected_to
+            state = "empty" if rel is None else str(rel.get("type", "direct"))
+            parts.append(f'<rect x="{x}" y="{y}" width="{cell_w}" height="{cell_h}" class="matrix-cell" data-from="{e(source_id)}" data-to="{e(target_id)}" data-state="{e(state)}" fill="none"/>')
+            if selected:
+                sel_color = style_color(style, "accent_cyan", "#16D9FF")
+                parts.append(f'<rect x="{x + 6}" y="{y + 6}" width="{cell_w - 12}" height="{cell_h - 12}" rx="6" fill="none" stroke="{sel_color}" stroke-width="2.3" class="matrix-selected-cell"/>')
+            cell_text_y = y + cell_h / 2 + cell_size * 0.32
+            if source_id == target_id:
+                parts.append(f'<text x="{x + cell_w/2}" y="{cell_text_y}" text-anchor="middle" class="matrix-cell-value" style="font-size:{_fmt_px(cell_size)};fill:{secondary}">-</text>')
+                continue
+            if rel is None:
+                parts.append(f'<text x="{x + cell_w/2}" y="{cell_text_y}" text-anchor="middle" class="matrix-cell-value" style="font-size:{_fmt_px(cell_size)};fill:{secondary};opacity:0.72">-</text>')
+                continue
+            strength = int(rel.get("strength", 1))
+            color = _matrix_type_color(style, str(rel.get("type", "direct")), strength, rel.get("accent"))
+            marker_r = max(14.0, min(24.0, 9.0 + strength * 4.0, min(cell_w, cell_h) * 0.28))
+            parts.append(f'<circle cx="{x + cell_w/2}" cy="{y + cell_h/2}" r="{marker_r}" fill="{color}" fill-opacity="0.13" stroke="{color}" stroke-opacity="0.55" stroke-width="1"/>')
+            parts.append(f'<text x="{x + cell_w/2}" y="{cell_text_y}" text-anchor="middle" class="matrix-cell-value" style="font-size:{_fmt_px(cell_size)};font-weight:700;fill:{color}">{strength}</text>')
+    parts.append('</g>')
+
+    detail_h = _clamp(main_h * 0.32, 300.0, 340.0)
+    summary_h = 250.0
+    top_conn_h = main_h - detail_h - summary_h - 2 * gap
+    selected_label_from = entity_by_id.get(selected_from, {}).get("label", selected_from)
+    selected_label_to = entity_by_id.get(selected_to, {}).get("label", selected_to)
+    detail_items = [
+        {"label": "From", "value": selected_label_from},
+        {"label": "To", "value": selected_label_to},
+    ]
+    if selected_rel:
+        detail_items.extend([
+            {"label": "Type", "value": MATRIX_TYPE_LABELS.get(str(selected_rel.get("type")), str(selected_rel.get("type"))), "kind": str(selected_rel.get("type"))},
+            {"label": "Strength", "value": f'{selected_rel.get("strength", 1)}'},
+            {"label": "Path", "value": selected_rel.get("path", f"{selected_label_from} -> {selected_label_to}")},
+            selected_rel.get("note", selected_rel.get("label", "Selected relationship is present.")),
+        ])
+    else:
+        detail_items.append("No relationship is declared for this selected cell.")
+    detail_y = main_y
+    _render_matrix_panel(parts, {"id": "selected_cell", "title": "Relationship Details", "kind": "query", "items": detail_items}, style, right_x, detail_y, right_w, detail_h, width, class_name="matrix-selected-detail-panel")
+
+    summary_y = detail_y + detail_h + gap
+    total = max(1, stats["total"])
+    parts.append('<g class="matrix-summary-panel info-panel">')
+    parts.append(_panel_rect_svg(style, right_x, summary_y, right_w, summary_h, fill="panel_fill", stroke=line, stroke_opacity=0.62, radius=6))
+    parts.append(f'<text x="{right_x + 18}" y="{summary_y + 32}" class="info-panel-title" style="font-size:{_fmt_px(panel_title_size)}">SUMMARY</text>')
+    metric_w = (right_w - 56) / 3
+    metric_y = summary_y + 80
+    for idx, (value, label) in enumerate(((n, "Entities"), (stats["total"], "Relationships"), (stats["strong"], "Strong"))):
+        mx = right_x + 18 + idx * metric_w
+        parts.append(f'<text x="{mx}" y="{metric_y}" class="matrix-summary-value" style="font-size:30px;font-weight:700;fill:{line}">{value}</text>')
+        parts.append(f'<text x="{mx}" y="{metric_y + 24}" class="note" style="font-size:{_fmt_px(note_size - 1)}">{label}</text>')
+    dist_y = summary_y + 132
+    bar_x = right_x + 154
+    bar_w = right_w - 230
+    for idx, rel_type in enumerate(("direct", "indirect", "dependency")):
+        color = _matrix_type_color(style, rel_type, 1)
+        count = stats["counts"][rel_type]
+        pct = round(count / total * 100)
+        y = dist_y + idx * 34
+        fill_w = bar_w * count / total
+        parts.append(f'<text x="{right_x + 24}" y="{y}" class="matrix-summary-label" style="font-size:{_fmt_px(note_size)};font-weight:700;fill:{line}">{MATRIX_TYPE_LABELS[rel_type]}</text>')
+        parts.append(f'<rect x="{bar_x}" y="{y - 13}" width="{bar_w}" height="14" rx="2" fill="{style_color(style, "background_dark", "#031E42")}" stroke="{line}" stroke-opacity="0.18"/>')
+        parts.append(f'<rect x="{bar_x}" y="{y - 13}" width="{fill_w}" height="14" rx="2" fill="{color}" opacity="0.86" class="matrix-distribution-bar"/>')
+        parts.append(f'<text x="{right_x + right_w - 24}" y="{y}" text-anchor="end" class="note" style="font-size:{_fmt_px(note_size)}">{count} ({pct}%)</text>')
+    parts.append('</g>')
+
+    connected_rows = sorted(
+        ((entity_id, values["count"], values["strong"]) for entity_id, values in stats["connected"].items()),
+        key=lambda row: (-row[1], -row[2], entity_by_id[row[0]].get("label", row[0])),
+    )
+    top_conn_y = summary_y + summary_h + gap
+    max_rows = max(3, int((top_conn_h - 72) // 38))
+    connected_rows = connected_rows[:max_rows]
+    parts.append('<g class="matrix-top-connected-panel info-panel">')
+    parts.append(_panel_rect_svg(style, right_x, top_conn_y, right_w, top_conn_h, fill="panel_fill", stroke=line, stroke_opacity=0.62, radius=6))
+    parts.append(f'<text x="{right_x + 18}" y="{top_conn_y + 32}" class="info-panel-title" style="font-size:{_fmt_px(panel_title_size)}">TOP CONNECTED ENTITIES</text>')
+    max_count = max((row[1] for row in connected_rows), default=1)
+    for idx, (entity_id, count_value, strong_value) in enumerate(connected_rows):
+        y = top_conn_y + 78 + idx * 38
+        label = entity_by_id[entity_id].get("label", entity_id)
+        rank_bar_x = right_x + right_w - 206
+        rank_bar_w = 112 * count_value / max_count
+        parts.append(f'<text x="{right_x + 28}" y="{y}" class="matrix-rank" style="font-size:{_fmt_px(note_size)};fill:{secondary}">{idx + 1}</text>')
+        parts.append(f'<text x="{right_x + 58}" y="{y}" class="matrix-rank-label" style="font-size:{_fmt_px(note_size + 0.6)};font-weight:700;fill:{line}">{e(label)}</text>')
+        parts.append(f'<rect x="{rank_bar_x}" y="{y - 13}" width="112" height="14" rx="2" fill="{style_color(style, "background_dark", "#031E42")}" stroke="{line}" stroke-opacity="0.18"/>')
+        parts.append(f'<rect x="{rank_bar_x}" y="{y - 13}" width="{rank_bar_w}" height="14" rx="2" fill="{style_color(style, "accent_cyan", "#16D9FF")}" opacity="0.82"/>')
+        parts.append(f'<text x="{right_x + right_w - 78}" y="{y}" class="matrix-rank-value" style="font-size:{_fmt_px(note_size)};fill:{line}">{count_value}</text>')
+        parts.append(f'<text x="{right_x + right_w - 34}" y="{y}" class="matrix-rank-strong" style="font-size:{_fmt_px(note_size)};fill:{style_color(style, "accent_yellow", "#FFD84D")}">{strong_value}</text>')
+    parts.append('</g>')
+
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
 def _ontology_panel_groups(panels: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
     left = [panel for panel in panels if panel.get("placement") == "left"]
     right = [panel for panel in panels if panel.get("placement") == "right"]
@@ -3565,6 +3956,8 @@ def render(contract: dict, contract_path: Path | None = None, style: dict | None
         return _render_capability_domain_map(contract, style, diagram_type)
     if strategy == "boundary_matrix":
         return _render_boundary_ownership_matrix(contract, style, diagram_type)
+    if strategy == "relationship_matrix":
+        return _render_relationship_matrix(contract, style, diagram_type)
     if strategy == "grouped_layered":
         return _render_grouped_layered(contract, style, contract_path, diagram_type)
     raise DiagramTypeError(f"unsupported render strategy: {strategy}")

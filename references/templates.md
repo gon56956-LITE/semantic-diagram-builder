@@ -36,6 +36,7 @@ Use `references/diagram_type_maturity.md` as the checklist for deciding whether 
 | `object_relationship_diagram` | `templates/object_relationship_diagram/minimal-contract.json` | `templates/object_relationship_diagram/reference-contract.json` | `templates/object_relationship_diagram/stress-contract.json` |
 | `ontology_map` | `templates/ontology_map/minimal-contract.json` | `templates/ontology_map/reference-contract.json` | `templates/ontology_map/stress-contract.json` |
 | `capability_domain_map` | `templates/capability_domain_map/minimal-contract.json` | `templates/capability_domain_map/reference-contract.json` | `templates/capability_domain_map/stress-contract.json` |
+| `relationship_matrix` | `templates/relationship_matrix/minimal-contract.json` | `templates/relationship_matrix/reference-contract.json` | `templates/relationship_matrix/stress-contract.json` |
 
 ## Type Notes
 
@@ -132,6 +133,18 @@ Use for enterprise capability maps, domain maps, operating-model decomposition, 
 - When several connector overlays need the same vertical corridor, widen the canvas and use `relationships[].lane_offset` for the few routes that still need deliberate separation.
 - Put usage rules, notes, and version blocks in `info_panels`; this type renders them as side panels to echo blueprint map conventions.
 - Use the stress template to check whether the canvas should widen before shrinking text or card spacing.
+
+### Relationship Matrix
+
+Use for dense relationship coverage views where the primary diagram should become a small reference, not the main reading surface.
+
+- Use `entities[]` as the single source for both row and column headers.
+- Use `relationships[]` only for declared non-empty cells; empty cells are generated automatically.
+- Use `type: "direct"`, `"indirect"`, or `"dependency"` and `strength: 1`, `2`, or `3`.
+- Use `selected_cell` to drive the static detail panel. It may point to an empty cell if you want to explain a missing relationship, but both entities must exist.
+- Keep auxiliary information in the built-in right-side detail, summary, and top-connected panels rather than adding explanatory dashboard blocks.
+- Keep the primary preview panel reference-only. If users need to follow actual graph routes, use `object_relationship_diagram` or `ontology_map` as the primary diagram and link to a matrix companion view.
+- Treat the first implementation as beta: run visual QA in `templates/template-gallery.html` before using it as a final production diagram.
 
 ## QA
 

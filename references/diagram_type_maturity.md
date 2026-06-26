@@ -26,6 +26,7 @@ For production selection, use `references/diagram_type_readiness.md`. Maturity t
 | `object_relationship_diagram` | Mature for structured ER-style object maps | Two entities with attributes, a relationship diamond, and cardinality labels. | Multi-entity object relationship map with PK/FK badges, weak entity, relationship diamonds, and cardinality key. | Dense object model with many entities, mixed relationship styles, fixed relationship slots, orthogonal routes, dashed optional/self relation, and info panels. | Entity cards use table-like sizing; relationship endpoints reference entities; diamonds use row/col slots; non-axis links route orthogonally; same-corridor relationship lanes are offset; dashed relations are explained; cardinality labels stay readable. |
 | `ontology_map` | Mature for ontology-style concept maps | Two concepts, a predicate diamond, cardinality labels, and an instance example. | Blueprint ontology map with concepts, attributes, relationship diamonds, instances, side legend/about/rules/version panels. | Dense concept map with multiple concept rows, many predicate diamonds, multiple instances per concept, side panels, and bottom metadata panel. | Concept cards are not ER table cards; instances remain subordinate; relationship diamonds reuse fixed-slot routing; instance links use staggered lanes when corridors repeat; side panels do not overlap concept geometry. |
 | `capability_domain_map` | Mature for banded capability maps | Two levels, two columns, domain/capability items, and side usage panel. | Blueprint capability/domain map with objectives, domains, sub-domains, capabilities, enablers, and side panels. | Wide dense map with many columns, stacked sub-domains/capabilities, shared enablers, sparse dependency overlays, and explicit lane offsets. | Level labels and column labels remain readable; stacked cards do not overlap or crowd; sparse connectors stay in row gaps or offset side corridors; side panels render as readable blueprint blocks without invading map items. |
+| `relationship_matrix` | Beta reference implementation | Four same-entity rows/columns with direct, indirect, dependency, selected cell, and empty cells. | Blueprint companion view with reference-only primary preview, same-entity matrix, selected details, compact summary/distribution bars, and top-connected ranking. | 11-entity high-connectivity matrix with sparse dependencies, selected dependency detail, and compact right-side support panels. | Matrix cells stay readable; row/column labels do not overflow; selected marker does not obscure values; support panels do not dominate the matrix; accents remain sparse and blueprint-first. |
 
 ## Shared Maturity Rules
 
@@ -58,6 +59,8 @@ For production selection, use `references/diagram_type_readiness.md`. Maturity t
 | Capability maps become unreadable spiderwebs. | `capability_domain_map` | Keep relationships sparse; alignment and banding must carry the primary structure. |
 | Capability cards stack or span into adjacent lanes. | `capability_domain_map` | Use row/column slots, stack ordering, and canvas widening before shrinking text. |
 | Capability overlays reuse one same-color corridor. | `capability_domain_map` | Use automatic lane staggering plus `relationships[].lane_offset` for deliberate shared-enabler routes. |
+| Dense graph becomes unreadable but the matrix turns into a dashboard. | `relationship_matrix` | Keep the primary network as reference-only, emphasize the row/column matrix, and keep auxiliary details in a compact side rail. |
+| Matrix labels or selected marker obscure cell values. | `relationship_matrix` | Enforce minimum cell sizes, readable row/column labels, and selected-cell marker clearance. |
 | Accent Blueprint becomes generic dark dashboard. | All Accent Blueprint outputs | Keep deep blue grid/white linework as the base; use accents sparingly for semantic differentiation. |
 
 ## Promotion Checklist
@@ -81,4 +84,4 @@ These are good next candidates because they are common semantic diagrams but nee
 
 | Candidate Type | Why Add It | Likely Strategy | First Stress Focus |
 | --- | --- | --- | --- |
-| `relationship_matrix` | Dense many-to-many semantic relationships where a graph would be unreadable. | Matrix/table hybrid. | Row/column label readability, sparse cell semantics, and legend clarity. |
+| `path_explorer` | Explain selected indirect relationship paths without drawing every possible edge in the primary map. | Step-chain plus alternatives panel. | Multi-hop path readability and branch comparison. |

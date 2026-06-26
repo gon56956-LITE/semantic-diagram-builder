@@ -244,6 +244,43 @@ def main() -> int:
     capability_bad_badge["items"][0]["badge"] = "CAP"
     assert_schema_error("capability item badge", capability_bad_badge, "items[0].badge is not supported")
 
+    relationship_matrix = load_json("templates/relationship_matrix/reference-contract.json")
+    assert_schema_pass("relationship matrix reference", relationship_matrix)
+    relationship_stress = load_json("templates/relationship_matrix/stress-contract.json")
+    assert_schema_pass("relationship matrix stress", relationship_stress)
+
+    relationship_missing_entities = copy.deepcopy(relationship_matrix)
+    del relationship_missing_entities["entities"]
+    assert_schema_error("relationship matrix missing entities", relationship_missing_entities, 'requires "entities"')
+
+    relationship_missing_relationships = copy.deepcopy(relationship_matrix)
+    del relationship_missing_relationships["relationships"]
+    assert_schema_error("relationship matrix missing relationships", relationship_missing_relationships, 'requires "relationships"')
+
+    relationship_bad_endpoint = copy.deepcopy(relationship_matrix)
+    relationship_bad_endpoint["relationships"][0]["from"] = "missing"
+    assert_schema_error("relationship matrix bad endpoint", relationship_bad_endpoint, "is not an entity id")
+
+    relationship_bad_type = copy.deepcopy(relationship_matrix)
+    relationship_bad_type["relationships"][0]["type"] = "optional"
+    assert_schema_error("relationship matrix bad type", relationship_bad_type, "must be one of")
+
+    relationship_bad_strength = copy.deepcopy(relationship_matrix)
+    relationship_bad_strength["relationships"][0]["strength"] = 4
+    assert_schema_error("relationship matrix bad strength", relationship_bad_strength, "strength must be 1, 2, or 3")
+
+    relationship_empty_selected = copy.deepcopy(relationship_matrix)
+    relationship_empty_selected["selected_cell"] = {"from": "customer", "to": "inventory"}
+    assert_schema_pass("relationship matrix selected empty cell", relationship_empty_selected)
+
+    relationship_bad_selected = copy.deepcopy(relationship_matrix)
+    relationship_bad_selected["selected_cell"] = {"from": "customer", "to": "missing"}
+    assert_schema_error("relationship matrix bad selected entity", relationship_bad_selected, "selected_cell.to")
+
+    relationship_info_panels = copy.deepcopy(relationship_matrix)
+    relationship_info_panels["info_panels"] = [{"title": "Guide", "items": ["Do not render dashboard panels."]}]
+    assert_schema_error("relationship matrix info panels", relationship_info_panels, 'does not support top-level "info_panels"')
+
     print("contract schema selftest: PASS")
     return 0
 

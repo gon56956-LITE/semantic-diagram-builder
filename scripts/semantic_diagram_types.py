@@ -46,6 +46,10 @@ DIAGRAM_TYPES: dict[str, dict[str, str]] = {
         "strategy": "capability_map",
         "description": "Banded capability/domain map with level labels, aligned columns, and capability dependency overlays.",
     },
+    "relationship_matrix": {
+        "strategy": "relationship_matrix",
+        "description": "Static companion view for dense same-entity relationship matrices.",
+    },
 }
 
 BOUNDARY_OWNERSHIP_VARIANTS = {
@@ -62,6 +66,7 @@ LEGACY_LAYOUT_TYPES = {
     "object_relationship": "object_relationship_diagram",
     "ontology": "ontology_map",
     "capability_map": "capability_domain_map",
+    "relationship_matrix": "relationship_matrix",
 }
 
 GROUPED_LAYERED_TYPES = {
@@ -79,6 +84,7 @@ INFO_PANEL_ITEM_KEYS = {"label", "value", "text", "kind", "accent"}
 ENTITY_ATTRIBUTE_ROLES = {"pk", "fk", "attribute", "derived"}
 RELATIONSHIP_STYLES = {"solid", "dashed", "primary", "secondary"}
 ANCHOR_SIDES = {"left", "right", "top", "bottom"}
+RELATIONSHIP_MATRIX_TYPES = {"direct", "indirect", "dependency"}
 
 
 def _infer_type(contract: dict[str, Any]) -> str:
@@ -754,6 +760,53 @@ def _validate_capability_domain_map(contract: dict[str, Any], diagram_type: str)
             _validate_number(relationship["lane_offset"], f"{diagram_type} relationships[{idx}].lane_offset")
 
 
+def _validate_relationship_matrix(contract: dict[str, Any], diagram_type: str) -> None:
+    _forbid_fields(
+        contract,
+        diagram_type,
+        {"groups", "nodes", "edges", "columns", "rows", "hub_id", "domains", "external_partners", "concepts", "levels", "items", "info_panels"},
+    )
+    entities = _object_items(_list_field(contract, "entities", diagram_type, required=True), "entities", diagram_type)
+    relationships = _object_items(_list_field(contract, "relationships", diagram_type, required=True), "relationships", diagram_type)
+
+    entity_ids = set(_unique_required_ids(entities, "entity", diagram_type))
+    for idx, entity in enumerate(entities):
+        _required_str(entity, "label", f"{diagram_type} entities[{idx}]")
+        for key in ("subtitle", "kind", "accent"):
+            if key in entity and entity[key] not in (None, "") and not isinstance(entity[key], str):
+                raise DiagramTypeError(f"{diagram_type} entities[{idx}].{key} must be a string")
+        if "order" in entity:
+            _validate_number(entity["order"], f"{diagram_type} entities[{idx}].order")
+
+    for idx, relationship in enumerate(relationships):
+        source = _required_str(relationship, "from", f"{diagram_type} relationships[{idx}]")
+        target = _required_str(relationship, "to", f"{diagram_type} relationships[{idx}]")
+        rel_type = _required_str(relationship, "type", f"{diagram_type} relationships[{idx}]")
+        if source not in entity_ids:
+            raise DiagramTypeError(f'{diagram_type} relationships[{idx}].from "{source}" is not an entity id')
+        if target not in entity_ids:
+            raise DiagramTypeError(f'{diagram_type} relationships[{idx}].to "{target}" is not an entity id')
+        if rel_type not in RELATIONSHIP_MATRIX_TYPES:
+            supported = ", ".join(sorted(RELATIONSHIP_MATRIX_TYPES))
+            raise DiagramTypeError(f'{diagram_type} relationships[{idx}].type must be one of: {supported}')
+        strength = relationship.get("strength", 1)
+        if isinstance(strength, bool) or not isinstance(strength, int) or strength not in {1, 2, 3}:
+            raise DiagramTypeError(f"{diagram_type} relationships[{idx}].strength must be 1, 2, or 3")
+        for key in ("label", "note", "path", "accent"):
+            if key in relationship and relationship[key] not in (None, "") and not isinstance(relationship[key], str):
+                raise DiagramTypeError(f"{diagram_type} relationships[{idx}].{key} must be a string")
+
+    selected = contract.get("selected_cell")
+    if selected in (None, "", {}):
+        return
+    if not isinstance(selected, dict):
+        raise DiagramTypeError(f"{diagram_type} selected_cell must be an object")
+    for key in ("from", "to"):
+        value = _required_str(selected, key, f"{diagram_type} selected_cell")
+        if value not in entity_ids:
+            raise DiagramTypeError(f'{diagram_type} selected_cell.{key} "{value}" is not an entity id')
+
+
 def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None = None) -> list[str]:
     """Validate structural fields for a standard semantic diagram contract."""
     contract = _require_contract_dict(contract)
@@ -784,6 +837,8 @@ def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None 
         _validate_ontology_map(contract, diagram_type)
     elif diagram_type == "capability_domain_map":
         _validate_capability_domain_map(contract, diagram_type)
+    elif diagram_type == "relationship_matrix":
+        _validate_relationship_matrix(contract, diagram_type)
     else:
         raise DiagramTypeError(f"unsupported diagram_type: {diagram_type}")
     return warnings

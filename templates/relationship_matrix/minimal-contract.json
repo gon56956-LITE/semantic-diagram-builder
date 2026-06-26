@@ -1,0 +1,25 @@
+{
+  "title": "Relationship Matrix Minimal",
+  "subtitle": "Minimal same-entity relationship matrix companion view",
+  "diagram_type": "relationship_matrix",
+  "style": "modern-tech",
+  "width": 1800,
+  "entities": [
+    {"id": "customer", "label": "Customer", "subtitle": "entity", "kind": "capability", "order": 0},
+    {"id": "order", "label": "Order", "subtitle": "transaction", "kind": "source", "order": 1},
+    {"id": "product", "label": "Product", "subtitle": "catalog item", "kind": "package", "order": 2},
+    {"id": "payment", "label": "Payment", "subtitle": "settlement", "kind": "quality", "order": 3}
+  ],
+  "relationships": [
+    {"from": "customer", "to": "order", "type": "direct", "strength": 3, "label": "places"},
+    {"from": "order", "to": "customer", "type": "direct", "strength": 2, "label": "belongs to"},
+    {"from": "order", "to": "product", "type": "indirect", "strength": 2, "path": "Order -> Order Item -> Product"},
+    {"from": "order", "to": "payment", "type": "direct", "strength": 3, "label": "settled by"},
+    {"from": "payment", "to": "order", "type": "direct", "strength": 2, "label": "settles"},
+    {"from": "customer", "to": "payment", "type": "dependency", "strength": 1, "path": "Customer -> Order -> Payment"}
+  ],
+  "selected_cell": {"from": "order", "to": "product"},
+  "annotations": [
+    {"text": "Minimal template: same entity set is used for rows and columns.", "placement": "footer"}
+  ]
+}

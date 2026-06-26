@@ -145,6 +145,22 @@
       "title": "Capability / Domain Map Reference",
       "contract": "templates/capability_domain_map/reference-contract.json",
       "svg": "templates/capability_domain_map/reference.svg"
+    },
+    {
+      "diagram_type": "relationship_matrix",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Relationship Matrix Minimal",
+      "contract": "templates/relationship_matrix/minimal-contract.json",
+      "svg": "templates/relationship_matrix/minimal.svg"
+    },
+    {
+      "diagram_type": "relationship_matrix",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Relationship Matrix Reference",
+      "contract": "templates/relationship_matrix/reference-contract.json",
+      "svg": "templates/relationship_matrix/reference.svg"
     }
   ],
   "gallery_templates": [
@@ -296,6 +312,24 @@
       "contract": "templates/capability_domain_map/stress-contract.json",
       "svg": "templates/capability_domain_map/stress.svg",
       "max_height": 1300
+    },
+    {
+      "diagram_type": "relationship_matrix",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Relationship Matrix Reference",
+      "contract": "templates/relationship_matrix/reference-contract.json",
+      "svg": "templates/relationship_matrix/reference.svg",
+      "max_height": 1600
+    },
+    {
+      "diagram_type": "relationship_matrix",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Relationship Matrix Stress",
+      "contract": "templates/relationship_matrix/stress-contract.json",
+      "svg": "templates/relationship_matrix/stress.svg",
+      "max_height": 1700
     }
   ]
 }

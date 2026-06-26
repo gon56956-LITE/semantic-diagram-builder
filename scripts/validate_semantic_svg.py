@@ -39,6 +39,16 @@ CARDINALITY_LABEL_RE = re.compile(
     r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"',
     re.S,
 )
+MATRIX_CELL_RE = re.compile(
+    r'<rect\b(?=[^>]*\bclass="[^"]*\bmatrix-cell\b[^"]*")[^>]*'
+    r'\bx="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"',
+    re.S,
+)
+MATRIX_PREVIEW_NODE_RE = re.compile(
+    r'<g\b(?=[^>]*\bclass="[^"]*\bmatrix-preview-node\b[^"]*")[^>]*>.*?'
+    r'<rect x="([-0-9.]+)" y="([-0-9.]+)" width="([-0-9.]+)" height="([-0-9.]+)"',
+    re.S,
+)
 RECT_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"')
 TEXT_RE = re.compile(r'<text[^>]*class="card-(title|sub)"[^>]*>(.*?)</text>')
 TEXT_TAG_RE = re.compile(r'<text\b([^>]*)>', re.S)
@@ -94,6 +104,9 @@ INLINE_TEXT_MIN_SIZES = {
     'card-sub': 13.5,
     'capability-title': 16.0,
     'capability-sub': 13.0,
+    'matrix-row-label': 14.0,
+    'matrix-col-label': 14.0,
+    'matrix-cell-value': 20.0,
     'ontology-attr': 13.0,
     'ontology-datatype': 13.0,
     'ontology-instance-title': 15.0,
@@ -684,6 +697,53 @@ def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:
                 return
 
 
+def _check_relationship_matrix_geometry(svg: str, issues: list[str]) -> None:
+    if _diagram_type(svg) != 'relationship_matrix':
+        return
+    required_classes = (
+        'relationship-matrix-grid',
+        'matrix-primary-preview',
+        'matrix-summary-panel',
+        'matrix-selected-detail-panel',
+        'matrix-top-connected-panel',
+    )
+    for class_name in required_classes:
+        if class_name not in svg:
+            fail(f'relationship_matrix should render {class_name}', issues)
+    cells = [tuple(map(float, match.groups())) for match in MATRIX_CELL_RE.finditer(svg)]
+    if not cells:
+        fail('relationship_matrix should render matrix cells', issues)
+    for idx, (_x, _y, w, h) in enumerate(cells, start=1):
+        if w < 52 or h < 52:
+            fail(f'relationship_matrix cell {idx} is below readable size: {w:.0f}x{h:.0f}', issues)
+            break
+    if 'class="matrix-selected-cell"' not in svg:
+        fail('relationship_matrix should render a selected cell marker', issues)
+    if 'class="matrix-distribution-bar"' not in svg:
+        fail('relationship_matrix should render compact distribution bars', issues)
+    if 'class="matrix-cell-value"' not in svg:
+        fail('relationship_matrix should render readable cell values', issues)
+    preview_rects = [tuple(map(float, match.groups())) for match in MATRIX_PREVIEW_NODE_RE.finditer(svg)]
+    for idx, (x, y, w, h) in enumerate(preview_rects):
+        for ox, oy, ow, oh in preview_rects[idx + 1:]:
+            overlap_x = min(x + w, ox + ow) - max(x, ox)
+            overlap_y = min(y + h, oy + oh) - max(y, oy)
+            if overlap_x > 1 and overlap_y > 1:
+                fail('relationship_matrix preview cards should not overlap', issues)
+                return
+    panels = _info_panel_rects(svg)
+    for idx, panel in enumerate(panels):
+        for other in panels[idx + 1:]:
+            if _rects_overlap(panel, other, 4.0):
+                fail('relationship_matrix dashboard panels should not overlap', issues)
+                return
+    if 'data-style="accent-blueprint"' in svg:
+        if 'blueprint-grid' not in svg:
+            fail('accent-blueprint relationship_matrix should render the blueprint grid', issues)
+        if '#F4F8FF' not in svg and '#f4f8ff' not in svg.lower():
+            fail('accent-blueprint relationship_matrix should use white/near-white primary linework', issues)
+
+
 def _check_connector_clearance(svg: str, issues: list[str]) -> None:
     layers = _layer_rects(svg)
     cards = _card_rects(svg)
@@ -849,6 +909,7 @@ def check_svg(svg: str) -> list[str]:
     _check_canvas_density(svg, issues)
     _check_object_relationship_geometry(svg, issues)
     _check_capability_map_geometry(svg, issues)
+    _check_relationship_matrix_geometry(svg, issues)
 
     dashed_count = 0
     for attrs, _d, classes in _path_attrs_with_classes(svg, {'edge', 'edge-dashed', 'line'}):
