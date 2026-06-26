@@ -115,6 +115,22 @@
       "svg": "templates/object_relationship_diagram/reference.svg"
     },
     {
+      "diagram_type": "ontology_map",
+      "variant": "minimal",
+      "style": "modern-tech",
+      "title": "Ontology Map Minimal",
+      "contract": "templates/ontology_map/minimal-contract.json",
+      "svg": "templates/ontology_map/minimal.svg"
+    },
+    {
+      "diagram_type": "ontology_map",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Ontology Map Reference",
+      "contract": "templates/ontology_map/reference-contract.json",
+      "svg": "templates/ontology_map/reference.svg"
+    },
+    {
       "diagram_type": "capability_domain_map",
       "variant": "minimal",
       "style": "modern-tech",
@@ -246,6 +262,23 @@
       "contract": "templates/object_relationship_diagram/stress-contract.json",
       "svg": "templates/object_relationship_diagram/stress.svg",
       "max_height": 1450
+    },
+    {
+      "diagram_type": "ontology_map",
+      "variant": "reference",
+      "style": "accent-blueprint",
+      "title": "Ontology Map Reference",
+      "contract": "templates/ontology_map/reference-contract.json",
+      "svg": "templates/ontology_map/reference.svg"
+    },
+    {
+      "diagram_type": "ontology_map",
+      "variant": "stress",
+      "style": "accent-blueprint",
+      "title": "Ontology Map Stress",
+      "contract": "templates/ontology_map/stress-contract.json",
+      "svg": "templates/ontology_map/stress.svg",
+      "max_height": 1350
     },
     {
       "diagram_type": "capability_domain_map",

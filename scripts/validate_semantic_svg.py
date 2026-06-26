@@ -29,6 +29,11 @@ RELATIONSHIP_DIAMOND_RE = re.compile(
     r'<path\b[^>]*\bd="M ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) Z"',
     re.S,
 )
+RELATIONSHIP_DIAMOND_ID_RE = re.compile(
+    r'<g\b(?=[^>]*\bclass="[^"]*\brelationship-diamond\b[^"]*")(?=[^>]*\bid="relationship-([^"]+)")[^>]*>.*?'
+    r'<path\b[^>]*\bd="M ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) L ([0-9.]+) ([0-9.]+) Z"',
+    re.S,
+)
 CARDINALITY_LABEL_RE = re.compile(
     r'<g\b(?=[^>]*\bclass="[^"]*\bcardinality-label-wrap\b[^"]*")[^>]*>.*?'
     r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"',
@@ -44,6 +49,7 @@ CLASS_RE = re.compile(r'class="([^"]+)"')
 D_RE = re.compile(r'\bd="([^"]+)"')
 DATA_FROM_RE = re.compile(r'\bdata-from="([^"]*)"')
 DATA_TO_RE = re.compile(r'\bdata-to="([^"]*)"')
+DATA_RELATIONSHIP_RE = re.compile(r'\bdata-relationship="([^"]*)"')
 STROKE_STYLE_RE = re.compile(r'stroke\s*:\s*(#[0-9A-Fa-f]{6})')
 STROKE_ATTR_RE = re.compile(r'\bstroke="([^"]+)"')
 DIRECT_LINE_RE = re.compile(r'^M ([-0-9.]+) ([-0-9.]+) L ([-0-9.]+) ([-0-9.]+)$')
@@ -88,6 +94,10 @@ INLINE_TEXT_MIN_SIZES = {
     'card-sub': 13.5,
     'capability-title': 16.0,
     'capability-sub': 13.0,
+    'ontology-attr': 13.0,
+    'ontology-datatype': 13.0,
+    'ontology-instance-title': 15.0,
+    'ontology-instance-sub': 12.5,
 }
 
 
@@ -332,6 +342,17 @@ def _relationship_diamond_rects(svg: str) -> list[tuple[float, float, float, flo
     return diamonds
 
 
+def _relationship_diamond_rects_by_id(svg: str) -> list[tuple[str, tuple[float, float, float, float]]]:
+    diamonds = []
+    for match in RELATIONSHIP_DIAMOND_ID_RE.finditer(svg):
+        rel_id = match.group(1)
+        coords = list(map(float, match.groups()[1:]))
+        xs = coords[0::2]
+        ys = coords[1::2]
+        diamonds.append((rel_id, (min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys))))
+    return diamonds
+
+
 def _cardinality_label_rects(svg: str) -> list[tuple[float, float, float, float]]:
     return [tuple(map(float, match.groups())) for match in CARDINALITY_LABEL_RE.finditer(svg)]
 
@@ -468,16 +489,29 @@ def _rects_overlap(a: tuple[float, float, float, float], b: tuple[float, float, 
 
 
 def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
-    if _diagram_type(svg) != 'object_relationship_diagram':
+    diagram_type = _diagram_type(svg)
+    if diagram_type not in {'object_relationship_diagram', 'ontology_map'}:
         return
     cards = _card_rects(svg)
-    diamonds = _relationship_diamond_rects(svg)
+    diamonds_by_id = _relationship_diamond_rects_by_id(svg)
+    diamonds = [rect for _rel_id, rect in diamonds_by_id]
+    if diagram_type == 'ontology_map':
+        if 'class="ontology-concept-card card"' not in svg:
+            fail('ontology_map should render ontology concept cards', issues)
+        if 'class="ontology-instance-card card"' in svg and 'class="edge ontology-instance-link"' not in svg:
+            fail('ontology_map should render instance-to-concept links', issues)
+        if 'entity-key-badge' in svg:
+            fail('ontology_map should not render ER-style PK/FK badges', issues)
     if not diamonds:
-        fail('object_relationship_diagram should render relationship diamonds', issues)
+        fail(f'{diagram_type} should render relationship diamonds', issues)
         return
     for idx, diamond in enumerate(diamonds, start=1):
         if any(_rects_overlap(diamond, card, 8.0) for card in cards):
             fail(f'relationship diamond {idx} overlaps an entity card', issues)
+    for idx, (_diamond_id, diamond) in enumerate(diamonds_by_id, start=1):
+        for other_id, other in diamonds_by_id[idx:]:
+            if _rects_overlap(diamond, other, 6.0):
+                fail(f'relationship diamond {_diamond_id} is too close to relationship diamond {other_id}', issues)
     label_rects = _cardinality_label_rects(svg)
     label_text_count = 0
     for match in TEXT_TAG_RE.finditer(svg):
@@ -490,7 +524,16 @@ def _check_object_relationship_geometry(svg: str, issues: list[str]) -> None:
     for idx, label in enumerate(label_rects, start=1):
         if any(_rects_overlap(label, obstacle, 1.0) for obstacle in obstacles):
             fail(f'cardinality label {idx} overlaps an entity card or relationship diamond', issues)
-    for _attrs, d, _classes in _path_attrs_with_classes(svg, {'object-relationship-link'}):
+    for attrs, d, _classes in _path_attrs_with_classes(svg, {'object-relationship-link'}):
+        rel_match = DATA_RELATIONSHIP_RE.search(attrs)
+        rel_id = rel_match.group(1) if rel_match else ''
+        geom = _parse_path_geometry(d)
+        for seg in geom['segments']:
+            for diamond_id, diamond in diamonds_by_id:
+                if diamond_id == rel_id:
+                    continue
+                if _segment_crosses_expanded_card(seg, diamond, 1.0):
+                    fail(f'object relationship link for {rel_id or "unknown"} crosses relationship diamond {diamond_id}', issues)
         match = DIRECT_LINE_RE.match(d)
         if not match:
             continue

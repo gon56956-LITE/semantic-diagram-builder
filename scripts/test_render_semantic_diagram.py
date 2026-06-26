@@ -221,6 +221,42 @@ def assert_object_relationship_design(svg: str) -> None:
         raise AssertionError("object_relationship_diagram attribute rows should remain readable")
 
 
+def assert_ontology_map_design(svg: str) -> None:
+    if 'data-diagram-type="ontology_map"' not in svg:
+        raise AssertionError("ontology_map should declare its diagram type")
+    if svg.count('class="ontology-concept-card card"') < 4:
+        raise AssertionError("ontology_map should render ontology concept cards")
+    if svg.count('class="relationship-diamond"') < 4:
+        raise AssertionError("ontology_map should render relationship diamonds")
+    if 'class="edge object-relationship-link ontology-relationship-link"' not in svg:
+        raise AssertionError("ontology_map should reuse relationship-map connector geometry")
+    if 'class="ontology-instance-card card"' not in svg:
+        raise AssertionError("ontology_map should render instance cards")
+    if 'class="edge ontology-instance-link"' not in svg:
+        raise AssertionError("ontology_map should render instance-to-concept links")
+    instance_paths = path_ds(svg, {"ontology-instance-link"})
+    if any(path.startswith(("M 537.5 302.0", "M 962.5 302.0")) for path in instance_paths):
+        raise AssertionError("ontology_map instance links should use offset anchors, not relationship center anchors")
+    if 'class="info-panel ontology-side-panel"' not in svg:
+        raise AssertionError("ontology_map should render side legend/about/rules panels")
+    if "PK" not in svg or "1..*" not in svg:
+        raise AssertionError("ontology_map should render datatype rows and cardinality labels")
+    if 'entity-key-badge' in svg:
+        raise AssertionError("ontology_map should not render ER-style PK/FK badges")
+    concept_titles = text_font_sizes(svg, "ontology-concept-title")
+    attrs = text_font_sizes(svg, "ontology-attr")
+    if not concept_titles or min(concept_titles) < 18:
+        raise AssertionError("ontology_map concept titles should remain readable")
+    if not attrs or min(attrs) < 13:
+        raise AssertionError("ontology_map attribute rows should remain readable")
+    for relationship in ("works_for", "assigned_to"):
+        links = re.findall(rf'<path\b[^>]*\bdata-relationship="{relationship}"[^>]*/>', svg)
+        if len(links) < 2:
+            raise AssertionError(f"ontology_map should render both endpoints for {relationship}")
+        if any('data-route="axis"' not in link for link in links[:2]):
+            raise AssertionError(f"ontology_map horizontal relationship {relationship} should stay on a direct axis")
+
+
 def assert_capability_map_design(svg: str) -> None:
     if 'data-diagram-type="capability_domain_map"' not in svg:
         raise AssertionError("capability_domain_map should declare its diagram type")
@@ -514,6 +550,29 @@ def main() -> int:
     if not re.search(r'data-link-end="self"[^>]*data-card-anchor="top"[^>]*data-diamond-anchor="bottom"[^>]*data-relationship="category_parent"', object_stress_svg):
         raise AssertionError("object_relationship_diagram should honor explicit self-relationship anchors")
     assert_no_direct_diagonal_object_links(object_stress_svg)
+
+    ontology_map = load_json("templates/ontology_map/reference-contract.json")
+    ontology_svg = assert_valid("ontology map reference template", ontology_map)
+    assert_ontology_map_design(ontology_svg)
+    _dtype, ontology_strategy, _warnings = renderer.diagram_for_contract(ontology_map)
+    if ontology_strategy != "object_relationship":
+        raise AssertionError("ontology_map should reuse the object_relationship strategy")
+    ontology_stress = load_json("templates/ontology_map/stress-contract.json")
+    ontology_stress_svg = assert_valid("ontology map stress template", ontology_stress)
+    if ontology_stress_svg.count('class="ontology-concept-card card"') < 8:
+        raise AssertionError("ontology_map stress template should exercise many concept cards")
+    if ontology_stress_svg.count('class="relationship-diamond"') < 8:
+        raise AssertionError("ontology_map stress template should exercise many predicate diamonds")
+    if ontology_stress_svg.count('class="ontology-instance-card card"') < 4:
+        raise AssertionError("ontology_map stress template should exercise instance cards")
+    if ontology_stress_svg.count('class="info-panel ontology-side-panel"') < 2:
+        raise AssertionError("ontology_map stress template should exercise side panels")
+    assert_no_direct_diagonal_object_links(ontology_stress_svg)
+    reviewed_links = re.findall(r'<path\b[^>]*\bdata-relationship="reviewed_by"[^>]*/>', ontology_stress_svg)
+    if len(reviewed_links) < 2 or any('data-route="axis"' not in link for link in reviewed_links[:2]):
+        raise AssertionError("ontology_map reviewed_by relation should stay on the direct Evidence-Policy axis")
+    if 'L 1510.0 745.0' in ontology_stress_svg:
+        raise AssertionError("ontology_map governed_by diamond should not be pushed into the low instance corridor")
 
     capability_map = load_json("templates/capability_domain_map/reference-contract.json")
     capability_svg = assert_valid("capability domain map reference template", capability_map)

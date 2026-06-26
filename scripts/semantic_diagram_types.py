@@ -38,6 +38,10 @@ DIAGRAM_TYPES: dict[str, dict[str, str]] = {
         "strategy": "object_relationship",
         "description": "ER-style object relationship diagram with entity tables, relationships, attributes, and cardinality labels.",
     },
+    "ontology_map": {
+        "strategy": "object_relationship",
+        "description": "Ontology concept map with concept cards, relationship diamonds, instances, datatypes, and side panels.",
+    },
     "capability_domain_map": {
         "strategy": "capability_map",
         "description": "Banded capability/domain map with level labels, aligned columns, and capability dependency overlays.",
@@ -56,6 +60,7 @@ LEGACY_LAYOUT_TYPES = {
     "hub_spoke": "hub_spoke",
     "registry_table": "registry_table",
     "object_relationship": "object_relationship_diagram",
+    "ontology": "ontology_map",
     "capability_map": "capability_domain_map",
 }
 
@@ -85,6 +90,8 @@ def _infer_type(contract: dict[str, Any]) -> str:
         return "hub_spoke"
     if isinstance(contract.get("entities"), list):
         return "object_relationship_diagram"
+    if isinstance(contract.get("concepts"), list):
+        return "ontology_map"
     if isinstance(contract.get("levels"), list) and isinstance(contract.get("items"), list):
         return "capability_domain_map"
     nodes = contract.get("nodes", [])
@@ -580,6 +587,100 @@ def _validate_object_relationship_diagram(contract: dict[str, Any], diagram_type
         raise DiagramTypeError(f"{diagram_type} duplicate relationship ids")
 
 
+def _validate_ontology_attributes(owner: dict[str, Any], context: str, diagram_type: str) -> None:
+    attributes = owner.get("attributes", [])
+    if attributes in (None, ""):
+        return
+    if not isinstance(attributes, list):
+        raise DiagramTypeError(f"{context}.attributes must be a list")
+    for attr_idx, attr in enumerate(attributes):
+        if not isinstance(attr, dict):
+            raise DiagramTypeError(f"{context}.attributes[{attr_idx}] must be an object")
+        _required_str(attr, "name", f"{context}.attributes[{attr_idx}]")
+        for key in ("type", "kind", "accent"):
+            if key in attr and attr[key] not in (None, "") and not isinstance(attr[key], str):
+                raise DiagramTypeError(f"{context}.attributes[{attr_idx}].{key} must be a string")
+
+
+def _validate_ontology_map(contract: dict[str, Any], diagram_type: str) -> None:
+    _forbid_fields(contract, diagram_type, {"groups", "nodes", "edges", "columns", "rows", "hub_id", "domains", "external_partners", "entities"})
+    concepts = _object_items(_list_field(contract, "concepts", diagram_type, required=True), "concepts", diagram_type)
+    relationships = _object_items(_list_field(contract, "relationships", diagram_type, required=False, allow_empty=True), "relationships", diagram_type)
+    instances = _object_items(_list_field(contract, "instances", diagram_type, required=False, allow_empty=True), "instances", diagram_type)
+
+    concept_ids = set(_unique_required_ids(concepts, "concept", diagram_type))
+    instance_ids = set(_unique_required_ids(instances, "instance", diagram_type)) if instances else set()
+    overlap = concept_ids & instance_ids
+    if overlap:
+        joined = ", ".join(sorted(overlap))
+        raise DiagramTypeError(f"{diagram_type} duplicate concept/instance ids: {joined}")
+
+    for concept_idx, concept in enumerate(concepts):
+        _required_str(concept, "label", f"{diagram_type} concepts[{concept_idx}]")
+        for coord in ("row", "col"):
+            if coord in concept:
+                value = concept[coord]
+                if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                    raise DiagramTypeError(f"{diagram_type} concepts[{concept_idx}].{coord} must be a non-negative integer")
+        for coord in ("x", "y", "width", "height"):
+            if coord in concept:
+                _validate_number(concept[coord], f"{diagram_type} concepts[{concept_idx}].{coord}", minimum=0)
+        for key in ("kind", "accent", "subtitle"):
+            if key in concept and concept[key] not in (None, "") and not isinstance(concept[key], str):
+                raise DiagramTypeError(f"{diagram_type} concepts[{concept_idx}].{key} must be a string")
+        _validate_ontology_attributes(concept, f"{diagram_type} concepts[{concept_idx}]", diagram_type)
+
+    for instance_idx, instance in enumerate(instances):
+        _required_str(instance, "label", f"{diagram_type} instances[{instance_idx}]")
+        concept = _required_str(instance, "concept", f"{diagram_type} instances[{instance_idx}]")
+        if concept not in concept_ids:
+            raise DiagramTypeError(f'{diagram_type} instances[{instance_idx}].concept "{concept}" is not a concept id')
+        for coord in ("row", "col"):
+            if coord in instance:
+                value = instance[coord]
+                if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                    raise DiagramTypeError(f"{diagram_type} instances[{instance_idx}].{coord} must be a non-negative integer")
+        for coord in ("x", "y", "width", "height"):
+            if coord in instance:
+                _validate_number(instance[coord], f"{diagram_type} instances[{instance_idx}].{coord}", minimum=0)
+        for key in ("kind", "accent", "subtitle"):
+            if key in instance and instance[key] not in (None, "") and not isinstance(instance[key], str):
+                raise DiagramTypeError(f"{diagram_type} instances[{instance_idx}].{key} must be a string")
+
+    relationship_ids = _optional_ids(relationships, "relationship", diagram_type)
+    for rel_idx, relationship in enumerate(relationships):
+        source = _required_str(relationship, "from", f"{diagram_type} relationships[{rel_idx}]")
+        target = _required_str(relationship, "to", f"{diagram_type} relationships[{rel_idx}]")
+        _required_str(relationship, "label", f"{diagram_type} relationships[{rel_idx}]")
+        if source not in concept_ids:
+            raise DiagramTypeError(f'{diagram_type} relationships[{rel_idx}].from "{source}" is not a concept id')
+        if target not in concept_ids:
+            raise DiagramTypeError(f'{diagram_type} relationships[{rel_idx}].to "{target}" is not a concept id')
+        if source == target and not (
+            isinstance(relationship.get("row"), (int, float))
+            or isinstance(relationship.get("col"), (int, float))
+            or (isinstance(relationship.get("x"), (int, float)) and isinstance(relationship.get("y"), (int, float)))
+        ):
+            raise DiagramTypeError(f'{diagram_type} relationship "{source}->{target}" self relationships need row/col or x/y placement')
+        style = relationship.get("style")
+        if style is not None and style not in RELATIONSHIP_STYLES:
+            raise DiagramTypeError(f'{diagram_type} relationships[{rel_idx}].style "{style}" is not supported')
+        for coord in ("row", "col", "x", "y", "diamond_width", "diamond_height"):
+            if coord in relationship:
+                _validate_number(relationship[coord], f"{diagram_type} relationships[{rel_idx}].{coord}", minimum=0)
+        for key in ("from_cardinality", "to_cardinality"):
+            value = relationship.get(key)
+            if value is not None and not isinstance(value, str):
+                raise DiagramTypeError(f"{diagram_type} relationships[{rel_idx}].{key} must be a string")
+        for key in ("from_anchor", "to_anchor", "from_diamond_anchor", "to_diamond_anchor"):
+            value = relationship.get(key)
+            if value is not None and value not in ANCHOR_SIDES:
+                supported = ", ".join(sorted(ANCHOR_SIDES))
+                raise DiagramTypeError(f'{diagram_type} relationships[{rel_idx}].{key} must be one of: {supported}')
+    if len(relationship_ids) != len(set(relationship_ids)):
+        raise DiagramTypeError(f"{diagram_type} duplicate relationship ids")
+
+
 def _validate_capability_domain_map(contract: dict[str, Any], diagram_type: str) -> None:
     _forbid_fields(contract, diagram_type, {"groups", "nodes", "edges", "rows", "hub_id", "domains", "external_partners", "entities"})
     levels = _object_items(_list_field(contract, "levels", diagram_type, required=True), "levels", diagram_type)
@@ -666,6 +767,8 @@ def validate_contract_schema(contract: dict[str, Any], diagram_type: str | None 
         _validate_hub_spoke(contract, diagram_type)
     elif diagram_type == "object_relationship_diagram":
         _validate_object_relationship_diagram(contract, diagram_type)
+    elif diagram_type == "ontology_map":
+        _validate_ontology_map(contract, diagram_type)
     elif diagram_type == "capability_domain_map":
         _validate_capability_domain_map(contract, diagram_type)
     else:

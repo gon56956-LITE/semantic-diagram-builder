@@ -186,6 +186,25 @@ def main() -> int:
     object_relationship_self_missing_slot["relationships"][0].pop("col", None)
     assert_schema_error("object relationship self missing placement", object_relationship_self_missing_slot, "self relationships need row/col or x/y placement")
 
+    ontology = load_json("templates/ontology_map/reference-contract.json")
+    assert_schema_pass("ontology map reference", ontology)
+
+    ontology_with_entities = copy.deepcopy(ontology)
+    ontology_with_entities["entities"] = [{"id": "n", "label": "N"}]
+    assert_schema_error("ontology mixed entities", ontology_with_entities, 'does not support top-level "entities"')
+
+    ontology_bad_relationship = copy.deepcopy(ontology)
+    ontology_bad_relationship["relationships"][0]["to"] = "missing"
+    assert_schema_error("ontology missing relationship endpoint", ontology_bad_relationship, "is not a concept id")
+
+    ontology_bad_instance = copy.deepcopy(ontology)
+    ontology_bad_instance["instances"][0]["concept"] = "missing"
+    assert_schema_error("ontology missing instance concept", ontology_bad_instance, "is not a concept id")
+
+    ontology_bad_attr = copy.deepcopy(ontology)
+    ontology_bad_attr["concepts"][0]["attributes"][0].pop("name", None)
+    assert_schema_error("ontology bad attribute", ontology_bad_attr, 'requires non-empty "name"')
+
     capability_map = load_json("templates/capability_domain_map/reference-contract.json")
     assert_schema_pass("capability domain map reference", capability_map)
 

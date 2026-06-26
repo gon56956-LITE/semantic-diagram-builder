@@ -34,6 +34,7 @@ Use `references/diagram_type_maturity.md` as the checklist for deciding whether 
 | `taxonomy_tree` | `templates/taxonomy_tree/minimal-contract.json` | `templates/taxonomy_tree/reference-contract.json` | `templates/taxonomy_tree/stress-contract.json` |
 | `hub_spoke` | `templates/hub_spoke/minimal-contract.json` | `templates/hub_spoke/reference-contract.json` | `templates/hub_spoke/stress-contract.json` |
 | `object_relationship_diagram` | `templates/object_relationship_diagram/minimal-contract.json` | `templates/object_relationship_diagram/reference-contract.json` | `templates/object_relationship_diagram/stress-contract.json` |
+| `ontology_map` | `templates/ontology_map/minimal-contract.json` | `templates/ontology_map/reference-contract.json` | `templates/ontology_map/stress-contract.json` |
 | `capability_domain_map` | `templates/capability_domain_map/minimal-contract.json` | `templates/capability_domain_map/reference-contract.json` | `templates/capability_domain_map/stress-contract.json` |
 
 ## Type Notes
@@ -104,6 +105,17 @@ Use for ER-style object models, entity relationship diagrams, MOC object links, 
 - Let non-axis links route as orthogonal polylines. Direct diagonal lines are a readability smell in dense ER diagrams.
 - Keep enough horizontal and row corridor space for relationship diamonds; dense templates should widen the canvas and increase `entity_col_gap` / `entity_row_gap` rather than letting diamonds sit on entity cards.
 - Do not use this type as a general graph renderer; when links become hard to read, split the model or move secondary relationships into an info panel.
+
+### Ontology Map
+
+Use for concept/class maps, glossary ontologies, semantic model sketches, and lightweight domain ontologies with examples.
+
+- Use `concepts[]` rather than `entities[]`; concept cards show attributes and datatypes without PK/FK badges.
+- Use `relationships[]` for ontology predicates. Keep predicate labels short enough to fit inside relationship diamonds.
+- Use `instances[]` for example objects. Instances reference concepts and render as subordinate green cards, not relationship endpoints.
+- Place relationship diamonds with `row`/`col` or polished `x`/`y` coordinates before judging connector paths; ontology maps reuse the object relationship geometry engine.
+- Use side `info_panels` with `placement: "left"` or `placement: "right"` for legends, about/rules, and version cards when matching the blueprint reference style.
+- Split the ontology if every concept needs many predicates; this type is for structured ontology maps, not arbitrary graph layout.
 
 ### Capability Domain Map
 

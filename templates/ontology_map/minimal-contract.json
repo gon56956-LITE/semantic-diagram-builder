@@ -1,0 +1,72 @@
+{
+  "title": "Ontology Map Minimal",
+  "subtitle": "Small ontology contract with concepts, a relationship, and an instance",
+  "diagram_type": "ontology_map",
+  "style": "modern-tech",
+  "width": 980,
+  "concept_width": 220,
+  "concept_col_gap": 150,
+  "concept_row_gap": 120,
+  "concepts": [
+    {
+      "id": "person",
+      "label": "Person",
+      "kind": "ontology",
+      "row": 0,
+      "col": 0,
+      "attributes": [
+        {"name": "name", "type": "text"},
+        {"name": "email", "type": "text"}
+      ]
+    },
+    {
+      "id": "organization",
+      "label": "Organization",
+      "kind": "capability",
+      "row": 0,
+      "col": 1,
+      "attributes": [
+        {"name": "orgId", "type": "id"},
+        {"name": "name", "type": "text"}
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "works_for",
+      "label": "works for",
+      "from": "person",
+      "to": "organization",
+      "from_cardinality": "0..*",
+      "to_cardinality": "1",
+      "row": 0,
+      "col": 0.5
+    }
+  ],
+  "instances": [
+    {
+      "id": "alice",
+      "label": "Alice",
+      "subtitle": "Person",
+      "concept": "person",
+      "kind": "package",
+      "row": 1,
+      "col": 0
+    }
+  ],
+  "info_panels": [
+    {
+      "id": "legend",
+      "title": "Legend",
+      "kind": "object",
+      "items": [
+        {"label": "Concept", "value": "class card", "kind": "ontology"},
+        {"label": "Relationship", "value": "diamond", "kind": "process"},
+        {"label": "Instance", "value": "example object", "kind": "package"}
+      ]
+    }
+  ],
+  "annotations": [
+    {"text": "Minimal template: concepts use relationship-map geometry; instances link back to their concept.", "placement": "footer"}
+  ]
+}

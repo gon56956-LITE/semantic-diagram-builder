@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="643" viewBox="0 0 980 643" role="img" aria-label="Ontology Map Minimal" data-style="modern-tech" data-diagram-type="ontology_map">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .info-panel-title{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .info-panel-item{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="980" height="643" rx="28" fill="#F8FBFF"/>
+<text x="490.0" y="54" text-anchor="middle" class="title">Ontology Map Minimal</text>
+<text x="490.0" y="80" text-anchor="middle" class="subtitle">Small ontology contract with concepts, a relationship, and an instance</text>
+<path d="M 415.0 166.0 L 442.0 166.0" class="edge object-relationship-link ontology-relationship-link" style="stroke:#334155;opacity:0.9" data-route="axis" data-link-end="from" data-card-anchor="right" data-diamond-anchor="left" data-relationship="works_for" data-from="person" data-to="organization"/>
+<path d="M 538.0 166.0 L 565.0 166.0" class="edge object-relationship-link ontology-relationship-link" style="stroke:#334155;opacity:0.9" data-route="axis" data-link-end="to" data-card-anchor="left" data-diamond-anchor="right" data-relationship="works_for" data-from="person" data-to="organization"/>
+<path d="M 393.0 217.0 L 393.0 278.5 Q 393.0 283.0 397.5 283.0 L 397.5 283.0 Q 402.0 283.0 402.0 287.5 L 402.0 349.0" class="edge ontology-instance-link" style="stroke:#22C55E;opacity:0.78" stroke-dasharray="6 5" data-from="person" data-to="alice"/>
+<g id="concept-person" class="ontology-concept-card card" data-kind="ontology"><rect x="195.0" y="115.0" width="220.0" height="102.0" rx="7" fill="#FFFFFF" stroke="#7C3AED" stroke-width="1.3"/><rect x="195.0" y="115.0" width="220.0" height="40.0" rx="7" fill="#FFFFFF" fill-opacity="0.06"/><text x="305.0" y="141.0" text-anchor="middle" class="card-title ontology-concept-title" style="font-size:18px">Person</text><line x1="195.0" y1="155.0" x2="415.0" y2="155.0" stroke="#7C3AED" stroke-opacity="0.62" stroke-width="1"/><text x="211.0" y="171.9" class="ontology-attr" style="font-size:13.2px;fill:#0F172A">name</text><text x="401.0" y="171.9" text-anchor="end" class="ontology-datatype" style="font-size:13.2px;fill:#64748B">text</text><line x1="195.0" y1="180.0" x2="415.0" y2="180.0" stroke="#7C3AED" stroke-opacity="0.25" stroke-width="1"/><text x="211.0" y="196.9" class="ontology-attr" style="font-size:13.2px;fill:#0F172A">email</text><text x="401.0" y="196.9" text-anchor="end" class="ontology-datatype" style="font-size:13.2px;fill:#64748B">text</text></g>
+<g id="concept-organization" class="ontology-concept-card card" data-kind="capability"><rect x="565.0" y="115.0" width="220.0" height="102.0" rx="7" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.3"/><rect x="565.0" y="115.0" width="220.0" height="40.0" rx="7" fill="#FFFFFF" fill-opacity="0.06"/><text x="675.0" y="141.0" text-anchor="middle" class="card-title ontology-concept-title" style="font-size:18px">Organization</text><line x1="565.0" y1="155.0" x2="785.0" y2="155.0" stroke="#0EA5E9" stroke-opacity="0.62" stroke-width="1"/><text x="581.0" y="171.9" class="ontology-attr" style="font-size:13.2px;fill:#0F172A">orgId</text><text x="771.0" y="171.9" text-anchor="end" class="ontology-datatype" style="font-size:13.2px;fill:#64748B">id</text><line x1="565.0" y1="180.0" x2="785.0" y2="180.0" stroke="#0EA5E9" stroke-opacity="0.25" stroke-width="1"/><text x="581.0" y="196.9" class="ontology-attr" style="font-size:13.2px;fill:#0F172A">name</text><text x="771.0" y="196.9" text-anchor="end" class="ontology-datatype" style="font-size:13.2px;fill:#64748B">text</text></g>
+<g id="instance-alice" class="ontology-instance-card card" data-concept="person"><rect x="380.0" y="349.0" width="180.0" height="62.0" rx="7" fill="#FFFFFF" stroke="#22C55E" stroke-width="1.3"/><text x="470.0" y="379.0" text-anchor="middle" class="ontology-instance-title" style="font-size:15.5px;font-weight:700;fill:#0F172A">Alice</text><text x="470.0" y="396.5" text-anchor="middle" class="ontology-instance-sub" style="font-size:12.5px;font-weight:500;fill:#64748B">Person</text></g>
+<g id="relationship-works_for" class="relationship-diamond" data-relation="works for" data-slot-row="0" data-slot-col="0.5"><path d="M 490.0 143.0 L 538.0 166.0 L 490.0 189.0 L 442.0 166.0 Z" fill="#FFF7ED" stroke="#F97316" stroke-width="1.4"/><text x="490.0" y="170.5" text-anchor="middle" class="note" style="font-size:13.5px;fill:#0F172A">works for</text></g>
+<g class="cardinality-label-wrap" data-relationship="works_for" data-endpoint="from"><rect x="427.0" y="117.25" width="43.48" height="21.5" rx="3" fill="#031E42" fill-opacity="0.72" stroke="#334155" stroke-opacity="0.28" stroke-width="0.7"/><text x="427.0" y="128.0" dominant-baseline="middle" text-anchor="start" class="note cardinality-label" style="font-size:13.5px;fill:#0F172A">0..*</text></g>
+<g class="cardinality-label-wrap" data-relationship="works_for" data-endpoint="to"><rect x="531.0" y="117.25" width="22.0" height="21.5" rx="3" fill="#031E42" fill-opacity="0.72" stroke="#334155" stroke-opacity="0.28" stroke-width="0.7"/><text x="553.0" y="128.0" dominant-baseline="middle" text-anchor="end" class="note cardinality-label" style="font-size:13.5px;fill:#0F172A">1</text></g>
+<g class="info-panel" data-panel-id="legend">
+<rect x="70.0" y="447.0" width="840.0" height="132.0" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#64748B" stroke-opacity="0.62" stroke-width="1"/>
+<text x="88.0" y="475.0" class="info-panel-title">Legend</text>
+<rect x="88.0" y="493.0" width="9" height="9" rx="2" fill="#7C3AED" opacity="0.95"/>
+<text x="106.0" y="503.0" class="info-panel-item" style="font-size:14px">Concept: class card</text>
+<rect x="88.0" y="517.0" width="9" height="9" rx="2" fill="#2F7DFF" opacity="0.95"/>
+<text x="106.0" y="527.0" class="info-panel-item" style="font-size:14px">Relationship: diamond</text>
+<rect x="88.0" y="541.0" width="9" height="9" rx="2" fill="#22C55E" opacity="0.95"/>
+<text x="106.0" y="551.0" class="info-panel-item" style="font-size:14px">Instance: example object</text>
+</g>
+<text x="490.0" y="615" text-anchor="middle" class="note">Minimal template: concepts use relationship-map geometry; instances link back to their concept.</text>
+</svg>

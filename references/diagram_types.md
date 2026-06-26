@@ -138,6 +138,37 @@ Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `h
 
 Rules: every relationship endpoint must reference an entity id; self relationships are supported for hierarchy or recursive ownership relations when the relationship has explicit `row`/`col` or `x`/`y` placement. Relationship labels render inside diamonds, so keep them short. Use `weak: true` for dashed weak-entity cards. Use PK/FK roles instead of embedding key semantics only in the attribute name. Plan relationship diamonds as fixed slots before evaluating connector paths; non-axis relationship links should route as orthogonal polylines rather than direct diagonals. Use explicit card or diamond anchors when a relationship sits near another diamond and the automatic side would make the connector appear to start or end on the wrong corner.
 
+## ontology_map
+
+Use for formal concept/class maps that need ontology concepts, relationship predicates, datatype attributes, cardinality labels, instance examples, and explanatory side panels.
+
+Contract shape: `concepts`, `relationships`, optional `instances`, optional `info_panels`, optional `annotations`.
+
+Renderer strategy: ontology profile on the relationship-map geometry engine. Concept cards use ontology-specific class boxes; relationship predicates use the same fixed-slot diamond routing as object relationship diagrams; instances render as subordinate example cards linked back to their concept.
+
+Required fields:
+
+- `concepts[].id`
+- `concepts[].label`
+- `relationships[].from`
+- `relationships[].to`
+- `relationships[].label`
+- If `instances[]` is present: `instances[].id`, `instances[].label`, `instances[].concept`
+
+Optional fields:
+
+- `concepts[].row`, `col`, `x`, `y`, `width`, `height`
+- `concepts[].kind`, `accent`, `subtitle`
+- `concepts[].attributes[].name`, optional `type`, `kind`, `accent`
+- `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`
+- `relationships[].from_anchor`, `to_anchor`, `from_diamond_anchor`, `to_diamond_anchor` as `left`, `right`, `top`, or `bottom`
+- `instances[].subtitle`, `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`
+- `info_panels[].placement: "left" | "right"` for side legend/about/rules/version panels; omitted placement renders a bottom panel
+
+Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `hub_id`, `domains`, `external_partners`, `entities`.
+
+Rules: every relationship endpoint must reference a concept id; instances reference concepts but are not relationship endpoints. Relationship labels render inside diamonds, so keep predicate names short. Use concept `row`/`col` plus relationship `row`/`col` for stable placement; use explicit `x`/`y` only for polished reference layouts. Use `ontology_map` when class/instance semantics matter; use `object_relationship_diagram` when table keys and object attributes are the primary message.
+
 ## capability_domain_map
 
 Use for strategic objectives, business domains, sub-domains, capabilities, enabling capabilities, and sparse support/dependency overlays.
@@ -173,23 +204,9 @@ Spacing rules: capability cards are not the same component as layered topology c
 
 Header icon rules: dense capability cards do not render per-card badges. Use `levels[].kind/accent` and `columns[].kind/accent` to render prominent semantic icons in the row and column headers; the cards themselves stay focused on title and subtitle text.
 
-## Planned Candidate Types
-
-The following types have design intent but are not mature renderer strategies yet. Do not declare them as `diagram_type` until they are promoted into the registry.
-
-### ontology_map
-
-Use for formal concept/class maps that need class boxes, relationship diamonds or labeled predicates, datatype attributes, and instance examples.
-
-Likely contract shape: `concepts`, `relationships`, optional `instances`, `datatypes`, `legend`, and `info_panels`.
-
-First strategy goal: constrained ontology layout with class lanes or clusters, explicit relationship labels, and separate instance/datatype styling so it does not collapse into a generic graph.
-
-First stress focus: class/instance differentiation, relationship-label readability, one-to-many cardinality labels, and avoiding graph spaghetti.
-
 ## Shared info_panels
 
-`registry_table`, `hub_spoke`, `object_relationship_diagram`, and `capability_domain_map` support information panels for dense legends, rules, use cases, metadata, cardinality keys, relationship keys, or usage notes.
+`registry_table`, `hub_spoke`, `object_relationship_diagram`, `ontology_map`, and `capability_domain_map` support information panels for dense legends, rules, use cases, metadata, cardinality keys, relationship keys, or usage notes.
 
 Fields:
 

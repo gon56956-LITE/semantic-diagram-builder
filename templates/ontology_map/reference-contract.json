@@ -1,0 +1,219 @@
+{
+  "title": "Ontology Map Reference",
+  "subtitle": "Reference ontology map with concepts, relationship diamonds, attributes, instances, and side panels",
+  "diagram_type": "ontology_map",
+  "style": "accent-blueprint",
+  "width": 1500,
+  "height": 900,
+  "top_y": 118,
+  "concept_width": 215,
+  "concept_col_gap": 300,
+  "concept_row_gap": 150,
+  "ontology_side_panel_width": 220,
+  "concepts": [
+    {
+      "id": "person",
+      "label": "Person",
+      "kind": "ontology",
+      "accent": "accent_cyan",
+      "row": 0,
+      "col": 0,
+      "x": 430,
+      "y": 150,
+      "attributes": [
+        {"name": "personId", "type": "PK"},
+        {"name": "name", "type": "text"},
+        {"name": "email", "type": "text"},
+        {"name": "phone", "type": "text"}
+      ]
+    },
+    {
+      "id": "organization",
+      "label": "Organization",
+      "kind": "ontology",
+      "accent": "accent_cyan",
+      "row": 0,
+      "col": 2,
+      "x": 855,
+      "y": 150,
+      "attributes": [
+        {"name": "orgId", "type": "PK"},
+        {"name": "name", "type": "text"},
+        {"name": "type", "type": "enum"},
+        {"name": "status", "type": "state"}
+      ]
+    },
+    {
+      "id": "address",
+      "label": "Address",
+      "kind": "source",
+      "accent": "accent_cyan",
+      "row": 1,
+      "col": 0,
+      "x": 430,
+      "y": 430,
+      "attributes": [
+        {"name": "addressId", "type": "PK"},
+        {"name": "street", "type": "text"},
+        {"name": "city", "type": "text"},
+        {"name": "country", "type": "code"}
+      ]
+    },
+    {
+      "id": "project",
+      "label": "Project",
+      "kind": "source",
+      "accent": "accent_cyan",
+      "row": 1,
+      "col": 2,
+      "x": 855,
+      "y": 430,
+      "attributes": [
+        {"name": "projectId", "type": "PK"},
+        {"name": "name", "type": "text"},
+        {"name": "startDate", "type": "date"},
+        {"name": "status", "type": "state"}
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "works_for",
+      "label": "works for",
+      "from": "person",
+      "to": "organization",
+      "from_cardinality": "1",
+      "to_cardinality": "1..*",
+      "x": 750,
+      "y": 210,
+      "diamond_width": 100,
+      "diamond_height": 48
+    },
+    {
+      "id": "has_address",
+      "label": "has",
+      "from": "person",
+      "to": "address",
+      "from_cardinality": "1",
+      "to_cardinality": "0..*",
+      "x": 537.5,
+      "y": 355,
+      "diamond_width": 82,
+      "diamond_height": 44
+    },
+    {
+      "id": "owns_project",
+      "label": "owns",
+      "from": "organization",
+      "to": "project",
+      "from_cardinality": "1",
+      "to_cardinality": "0..*",
+      "x": 962.5,
+      "y": 355,
+      "diamond_width": 82,
+      "diamond_height": 44
+    },
+    {
+      "id": "assigned_to",
+      "label": "assigned to",
+      "from": "address",
+      "to": "project",
+      "from_cardinality": "0..*",
+      "to_cardinality": "0..*",
+      "x": 750,
+      "y": 500,
+      "diamond_width": 112,
+      "diamond_height": 50
+    }
+  ],
+  "instances": [
+    {
+      "id": "john_smith",
+      "label": "John Smith",
+      "subtitle": "Person",
+      "concept": "person",
+      "kind": "package",
+      "accent": "accent_green",
+      "row": 2,
+      "col": 0,
+      "x": 355,
+      "y": 690
+    },
+    {
+      "id": "acme_corp",
+      "label": "Acme Corp",
+      "subtitle": "Organization",
+      "concept": "organization",
+      "kind": "package",
+      "accent": "accent_green",
+      "row": 2,
+      "col": 1,
+      "x": 640,
+      "y": 690
+    },
+    {
+      "id": "apollo_project",
+      "label": "Apollo Project",
+      "subtitle": "Project",
+      "concept": "project",
+      "kind": "package",
+      "accent": "accent_green",
+      "row": 2,
+      "col": 2,
+      "x": 925,
+      "y": 690
+    }
+  ],
+  "info_panels": [
+    {
+      "id": "legend",
+      "title": "Legend",
+      "kind": "object",
+      "placement": "left",
+      "items": [
+        {"label": "Concept / Class", "value": "blue concept card", "kind": "ontology"},
+        {"label": "Relationship", "value": "amber diamond", "kind": "process"},
+        {"label": "Attribute", "value": "card row", "kind": "quality"},
+        {"label": "Instance", "value": "green example", "kind": "package"},
+        {"label": "Datatype", "value": "right-aligned type", "kind": "source"},
+        {"label": "1", "value": "one"},
+        {"label": "1..*", "value": "one to many"},
+        {"label": "0..*", "value": "zero to many"}
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About",
+      "kind": "source",
+      "placement": "right",
+      "items": [
+        "Defines key concepts in the domain and their relationships.",
+        "Attributes describe properties of concepts."
+      ]
+    },
+    {
+      "id": "rules",
+      "title": "Rules",
+      "kind": "risk",
+      "placement": "right",
+      "items": [
+        "Each concept has a unique identity.",
+        "Relationships have cardinality.",
+        "Instances must reference one concept."
+      ]
+    },
+    {
+      "id": "version",
+      "title": "Version",
+      "kind": "quality",
+      "placement": "right",
+      "items": [
+        {"label": "Version", "value": "1.0"},
+        {"label": "Updated", "value": "2026-06-25"}
+      ]
+    }
+  ],
+  "annotations": [
+    {"text": "Reference template: ontology maps reuse relationship-map geometry with ontology-specific concept and instance components.", "placement": "footer"}
+  ]
+}

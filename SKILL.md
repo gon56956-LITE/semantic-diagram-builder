@@ -21,7 +21,7 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - Which node is the entry point or source of truth?
 2. Choose a standard diagram type.
    - New contracts should declare `diagram_type`. Legacy `layout` is accepted only for compatibility and will produce a warning.
-   - Supported standard types: `layered_knowledge_topology`, `source_boundary_map`, `boundary_ownership_map`, `registry_table`, `taxonomy_tree`, `hub_spoke`, `object_relationship_diagram`, and `capability_domain_map`.
+   - Supported standard types: `layered_knowledge_topology`, `source_boundary_map`, `boundary_ownership_map`, `registry_table`, `taxonomy_tree`, `hub_spoke`, `object_relationship_diagram`, `ontology_map`, and `capability_domain_map`.
    - Some diagram types support a top-level `variant` to choose a layout strategy. `diagram_type` answers "what is this diagram for"; `variant` answers "which arrangement should present it."
    - See `references/diagram_types.md` for required fields and boundaries.
    - See `references/diagram_type_maturity.md` before adding a new type or calling a type mature.
@@ -116,6 +116,15 @@ Useful object relationship fields for `object_relationship_diagram`:
 - Self relationships such as a category parent hierarchy are allowed when the relationship has explicit `row`/`col` or `x`/`y`; they render as a single connector from the diamond to the entity card.
 - Use explicit `entities[].row`/`col` and `relationships[].row`/`col` when the diagram needs stable ER-style placement. Reserve `x`/`y` for rare manual overrides. This renderer is for structured object maps, not arbitrary graph crossing minimization.
 
+Useful ontology fields for `ontology_map`:
+
+- `concepts[]`: concept/class cards. Each concept needs `id` and `label`; optional `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`, and `attributes`.
+- `concepts[].attributes[]`: datatype or property rows. Each attribute needs `name`; optional `type`, `kind`, and `accent`.
+- `relationships[]`: labeled predicate diamonds between concepts. Each relationship needs `from`, `to`, and `label`; optional `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `style`, `accent`, and anchor controls.
+- `instances[]`: example instance cards. Each instance needs `id`, `label`, and `concept`; optional `subtitle`, `row`, `col`, `x`, `y`, `kind`, and `accent`.
+- `info_panels[]`: ontology maps may use `placement: "left"` or `placement: "right"` for side legend/about/rules/version panels; panels without placement render at the bottom.
+- Ontology maps reuse the object relationship geometry engine but use ontology-specific concept and instance components. Use this type when the concepts/classes and examples are the message; use `object_relationship_diagram` when PK/FK table structure is the message.
+
 Useful capability map fields for `capability_domain_map`:
 
 - `levels[]`: horizontal bands such as strategic objectives, business domains, sub-domains, capabilities, and enabling capabilities. Each level needs `id` and `label`.
@@ -194,12 +203,13 @@ py scripts/render_semantic_diagram.py examples/registry-table-contract.json outp
 py scripts/render_semantic_diagram.py examples/taxonomy-tree-contract.json output.svg
 py scripts/render_semantic_diagram.py examples/hub-spoke-contract.json output.svg
 py scripts/render_semantic_diagram.py templates/object_relationship_diagram/reference-contract.json output.svg
+py scripts/render_semantic_diagram.py templates/ontology_map/reference-contract.json output.svg
 py scripts/render_semantic_diagram.py templates/capability_domain_map/reference-contract.json output.svg
 py scripts/validate_semantic_contract.py examples/ocs-r300-layered-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
 py scripts/test_contract_schema.py
 py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/ocs-r300-multirrow-contract.json examples/accent-blueprint-boundary-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
 py scripts/test_style_gallery_quality.py
-py scripts/build_style_gallery.py templates/template-gallery.html templates/layered_knowledge_topology/reference-contract.json templates/layered_knowledge_topology/stress-contract.json templates/source_boundary_map/reference-contract.json templates/source_boundary_map/stress-contract.json templates/boundary_ownership_map/reference-contract.json templates/boundary_ownership_map/stress-contract.json templates/registry_table/reference-contract.json templates/registry_table/stress-contract.json templates/taxonomy_tree/reference-contract.json templates/taxonomy_tree/stress-contract.json templates/hub_spoke/reference-contract.json templates/hub_spoke/stress-contract.json templates/object_relationship_diagram/reference-contract.json templates/object_relationship_diagram/stress-contract.json templates/capability_domain_map/reference-contract.json templates/capability_domain_map/stress-contract.json
+py scripts/build_style_gallery.py templates/template-gallery.html templates/layered_knowledge_topology/reference-contract.json templates/layered_knowledge_topology/stress-contract.json templates/source_boundary_map/reference-contract.json templates/source_boundary_map/stress-contract.json templates/boundary_ownership_map/reference-contract.json templates/boundary_ownership_map/stress-contract.json templates/registry_table/reference-contract.json templates/registry_table/stress-contract.json templates/taxonomy_tree/reference-contract.json templates/taxonomy_tree/stress-contract.json templates/hub_spoke/reference-contract.json templates/hub_spoke/stress-contract.json templates/object_relationship_diagram/reference-contract.json templates/object_relationship_diagram/stress-contract.json templates/ontology_map/reference-contract.json templates/ontology_map/stress-contract.json templates/capability_domain_map/reference-contract.json templates/capability_domain_map/stress-contract.json
 py scripts/test_template_library.py
 ```
 

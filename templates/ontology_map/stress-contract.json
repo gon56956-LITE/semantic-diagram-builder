@@ -1,0 +1,89 @@
+{
+  "title": "Ontology Map Stress",
+  "subtitle": "Dense ontology map with multiple concept rows, relationship diamonds, instances, and governance panels",
+  "diagram_type": "ontology_map",
+  "style": "accent-blueprint",
+  "width": 2200,
+  "top_y": 118,
+  "concept_width": 230,
+  "concept_col_gap": 180,
+  "concept_row_gap": 200,
+  "relationship_row_gap_min": 170,
+  "ontology_side_panel_width": 240,
+  "concepts": [
+    {"id": "customer", "label": "Customer", "kind": "ontology", "accent": "accent_cyan", "row": 0, "col": 0, "attributes": [{"name": "customerId", "type": "PK"}, {"name": "name", "type": "text"}, {"name": "segment", "type": "enum"}, {"name": "status", "type": "state"}]},
+    {"id": "order", "label": "Order", "kind": "ontology", "accent": "accent_cyan", "row": 0, "col": 1, "attributes": [{"name": "orderId", "type": "PK"}, {"name": "orderDate", "type": "date"}, {"name": "status", "type": "state"}, {"name": "amount", "type": "decimal"}]},
+    {"id": "product", "label": "Product", "kind": "ontology", "accent": "accent_cyan", "row": 0, "col": 2, "attributes": [{"name": "productId", "type": "PK"}, {"name": "name", "type": "text"}, {"name": "sku", "type": "code"}, {"name": "category", "type": "term"}]},
+    {"id": "location", "label": "Location", "kind": "source", "accent": "accent_cyan", "row": 0, "col": 3, "attributes": [{"name": "locationId", "type": "PK"}, {"name": "site", "type": "text"}, {"name": "region", "type": "term"}, {"name": "timezone", "type": "code"}]},
+    {"id": "supplier", "label": "Supplier", "kind": "source", "accent": "accent_purple", "row": 1, "col": 0, "attributes": [{"name": "supplierId", "type": "PK"}, {"name": "name", "type": "text"}, {"name": "tier", "type": "enum"}, {"name": "status", "type": "state"}]},
+    {"id": "risk", "label": "Risk Constraint", "kind": "risk", "accent": "accent_yellow", "row": 1, "col": 1, "attributes": [{"name": "riskId", "type": "PK"}, {"name": "severity", "type": "enum"}, {"name": "owner", "type": "role"}, {"name": "trigger", "type": "rule"}]},
+    {"id": "evidence", "label": "Evidence Record", "kind": "evidence", "accent": "accent_green", "row": 1, "col": 2, "attributes": [{"name": "evidenceId", "type": "PK"}, {"name": "source", "type": "system"}, {"name": "timestamp", "type": "date"}, {"name": "approval", "type": "state"}]},
+    {"id": "policy", "label": "Governance Policy", "kind": "quality", "accent": "accent_yellow", "row": 1, "col": 3, "attributes": [{"name": "policyId", "type": "PK"}, {"name": "scope", "type": "term"}, {"name": "rule", "type": "text"}, {"name": "reviewCycle", "type": "period"}]}
+  ],
+  "relationships": [
+    {"id": "places", "label": "places", "from": "customer", "to": "order", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0, "col": 0.5},
+    {"id": "contains", "label": "contains", "from": "order", "to": "product", "from_cardinality": "1..*", "to_cardinality": "1..*", "row": 0, "col": 1.5},
+    {"id": "stored_at", "label": "stored at", "from": "product", "to": "location", "from_cardinality": "0..*", "to_cardinality": "1..*", "row": 0, "col": 2.5},
+    {"id": "supplied_by", "label": "supplied by", "from": "product", "to": "supplier", "from_cardinality": "0..*", "to_cardinality": "1..*", "row": 0.5, "col": 1},
+    {"id": "constrained_by", "label": "constrained by", "from": "order", "to": "risk", "from_cardinality": "0..*", "to_cardinality": "0..*", "row": 0.5, "col": 1.5},
+    {"id": "proved_by", "label": "proved by", "from": "order", "to": "evidence", "from_cardinality": "1", "to_cardinality": "0..*", "row": 0.5, "col": 2},
+    {"id": "governed_by", "label": "governed by", "from": "risk", "to": "policy", "from_cardinality": "1..*", "to_cardinality": "1", "x": 1510, "y": 660, "from_anchor": "bottom", "to_anchor": "bottom", "from_diamond_anchor": "left", "to_diamond_anchor": "right"},
+    {"id": "reviewed_by", "label": "reviewed by", "from": "evidence", "to": "policy", "from_cardinality": "0..*", "to_cardinality": "1", "style": "dashed", "row": 1, "col": 2.5}
+  ],
+  "instances": [
+    {"id": "customer_acme", "label": "Acme Corp", "subtitle": "Customer", "concept": "customer", "kind": "package", "accent": "accent_green", "row": 2, "col": 0},
+    {"id": "order_1001", "label": "ORD-1001", "subtitle": "Order", "concept": "order", "kind": "package", "accent": "accent_green", "row": 2, "col": 1},
+    {"id": "sku_a12", "label": "SKU-A12", "subtitle": "Product", "concept": "product", "kind": "package", "accent": "accent_green", "row": 2, "col": 2},
+    {"id": "policy_qms", "label": "QMS Rule", "subtitle": "Policy", "concept": "policy", "kind": "package", "accent": "accent_green", "row": 2, "col": 3}
+  ],
+  "info_panels": [
+    {
+      "id": "legend",
+      "title": "Legend",
+      "kind": "object",
+      "placement": "left",
+      "items": [
+        {"label": "Concept", "value": "ontology class card", "kind": "ontology"},
+        {"label": "Relationship", "value": "labeled diamond", "kind": "process"},
+        {"label": "Instance", "value": "green example card", "kind": "package"},
+        {"label": "Datatype", "value": "attribute type column", "kind": "source"},
+        {"label": "Dashed", "value": "optional or review relation", "kind": "risk"}
+      ]
+    },
+    {
+      "id": "qa",
+      "title": "Stress QA",
+      "kind": "risk",
+      "placement": "right",
+      "items": [
+        "Diamonds should stay between concept cards.",
+        "Cardinality labels must not overlap concept cards.",
+        "Instances should remain visually subordinate."
+      ]
+    },
+    {
+      "id": "rules",
+      "title": "Rules",
+      "kind": "quality",
+      "placement": "right",
+      "items": [
+        "Concept ids are unique.",
+        "Relationships connect concepts, not instances.",
+        "Instance links are dashed and non-directional."
+      ]
+    },
+    {
+      "id": "metadata",
+      "title": "Metadata",
+      "kind": "source",
+      "items": [
+        {"label": "Template", "value": "ontology stress v1"},
+        {"label": "Use", "value": "semantic model and glossary review"},
+        {"label": "Scope", "value": "logical ontology, not database schema"}
+      ]
+    }
+  ],
+  "annotations": [
+    {"text": "Stress template: ontology maps should preserve concept relationships, cardinality labels, side panels, and instance examples.", "placement": "footer"}
+  ]
+}

@@ -1334,6 +1334,61 @@ def _render_info_panels(parts: list[str], panels: list[dict], style: dict, x: fl
     return total_h
 
 
+def _ontology_panel_groups(panels: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
+    left = [panel for panel in panels if panel.get("placement") == "left"]
+    right = [panel for panel in panels if panel.get("placement") == "right"]
+    bottom = [panel for panel in panels if panel.get("placement") not in {"left", "right"}]
+    return left, right, bottom
+
+
+def _ontology_side_panel_height(panels: list[dict], panel_w: float, canvas_w: float) -> float:
+    if not panels:
+        return 0.0
+    gap = 18.0
+    return sum(_info_panel_height(panel, panel_w, canvas_w) for panel in panels) + (len(panels) - 1) * gap
+
+
+def _render_ontology_side_panels(parts: list[str], panels: list[dict], style: dict, x: float, y: float, w: float, canvas_w: float) -> float:
+    if not panels:
+        return 0.0
+    gap = 18.0
+    cur_y = y
+    body_size = _clamp(14.0 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 14.0, 15.2)
+    line_h = body_size + 4
+    total = 0.0
+    for panel in panels:
+        h = _info_panel_height(panel, w, canvas_w)
+        color = _accent_color(style, panel, "object")
+        panel_id = str(panel.get("id", panel.get("title", "panel"))).lower().replace(" ", "-")
+        parts.append(f'<g class="info-panel ontology-side-panel" data-panel-id="{e(panel_id)}" data-placement="{e(panel.get("placement", ""))}">')
+        parts.append(_panel_rect_svg(style, x, cur_y, w, h, fill="panel_fill", stroke=color, stroke_opacity=0.62, radius=6))
+        parts.append(f'<text x="{x + 18}" y="{cur_y + 28}" class="info-panel-title">{e(panel.get("title", "Info"))}</text>')
+        items = panel.get("items", [])
+        if not isinstance(items, list):
+            items = []
+        text_y = cur_y + 56
+        max_chars = max(16, int(max(120, w - 48) / (body_size * 0.52)))
+        for item in items:
+            text, kind, accent = _info_panel_item_text(item)
+            if not text:
+                continue
+            item_color = style_color(style, accent, "") if accent else kind_accent(style, kind or panel.get("kind", "object"))
+            if not VALID_HEX.match(item_color):
+                item_color = color
+            lines = wrap_text(text, max_chars=max_chars, max_lines=3)
+            parts.append(f'<rect x="{x + 18}" y="{text_y - 10}" width="9" height="9" rx="2" fill="{item_color}" opacity="0.95"/>')
+            for idx, line in enumerate(lines):
+                parts.append(
+                    f'<text x="{x + 36}" y="{text_y + idx * line_h}" class="info-panel-item" '
+                    f'style="font-size:{_fmt_px(body_size)}">{e(line)}</text>'
+                )
+            text_y += max(1, len(lines)) * line_h + 6
+        parts.append('</g>')
+        cur_y += h + gap
+        total += h + gap
+    return total - gap
+
+
 def _matrix_text_lines(text: object, max_chars: int, max_lines: int) -> list[str]:
     return wrap_text(str(text or ""), max_chars=max_chars, max_lines=max_lines)
 
@@ -2489,6 +2544,61 @@ def _entity_size(entity: dict, default_w: float, header_h: float, row_h: float) 
     return width, height
 
 
+def _relationship_primary_items(contract: dict, diagram_type: str) -> list[dict]:
+    key = "concepts" if diagram_type == "ontology_map" else "entities"
+    return [item for item in contract.get(key, []) if isinstance(item, dict) and item.get("id")]
+
+
+def _ontology_instances(contract: dict) -> list[dict]:
+    return [item for item in contract.get("instances", []) if isinstance(item, dict) and item.get("id")]
+
+
+def _relationship_layout_items(contract: dict, diagram_type: str) -> list[dict]:
+    if diagram_type == "ontology_map":
+        return _relationship_primary_items(contract, diagram_type) + _ontology_instances(contract)
+    return _relationship_primary_items(contract, diagram_type)
+
+
+def _relationship_instance_ids(contract: dict, diagram_type: str) -> set[str]:
+    if diagram_type != "ontology_map":
+        return set()
+    return {str(item["id"]) for item in _ontology_instances(contract)}
+
+
+def _relationship_default_metrics(contract: dict, diagram_type: str) -> dict[str, float]:
+    if diagram_type == "ontology_map":
+        return {
+            "width": float(contract.get("concept_width", 220)),
+            "header_h": float(contract.get("concept_header_height", 40)),
+            "row_h": float(contract.get("concept_attribute_row_height", 25)),
+            "col_gap": float(contract.get("concept_col_gap", 112)),
+            "row_gap": float(contract.get("concept_row_gap", 132)),
+            "instance_w": float(contract.get("instance_width", 180)),
+            "instance_h": float(contract.get("instance_height", 62)),
+        }
+    return {
+        "width": float(contract.get("entity_width", 220)),
+        "header_h": float(contract.get("entity_header_height", 42)),
+        "row_h": float(contract.get("attribute_row_height", 26)),
+        "col_gap": float(contract.get("entity_col_gap", 110)),
+        "row_gap": float(contract.get("entity_row_gap", 120)),
+        "instance_w": 0.0,
+        "instance_h": 0.0,
+    }
+
+
+def _relationship_item_size(
+    item: dict,
+    defaults: dict[str, float],
+    instance_ids: set[str],
+) -> tuple[float, float]:
+    if str(item.get("id", "")) in instance_ids:
+        width = float(item.get("width", defaults["instance_w"]))
+        height = float(item.get("height", defaults["instance_h"]))
+        return width, height
+    return _entity_size(item, defaults["width"], defaults["header_h"], defaults["row_h"])
+
+
 def _rect_center(rect: tuple[float, float, float, float]) -> tuple[float, float]:
     x, y, w, h = rect
     return x + w / 2, y + h / 2
@@ -2510,6 +2620,25 @@ def _rect_anchor_on_side(rect: tuple[float, float, float, float], side: str) -> 
     if side == "bottom":
         return cx, y + h
     return cx, cy
+
+
+def _rect_edge_anchor_toward(
+    rect: tuple[float, float, float, float],
+    target: tuple[float, float],
+    side: str,
+    inset: float = 22.0,
+) -> tuple[float, float]:
+    x, y, w, h = rect
+    tx, ty = target
+    if side == "top":
+        return _clamp(tx, x + inset, x + w - inset), y
+    if side == "bottom":
+        return _clamp(tx, x + inset, x + w - inset), y + h
+    if side == "left":
+        return x, _clamp(ty, y + inset, y + h - inset)
+    if side == "right":
+        return x + w, _clamp(ty, y + inset, y + h - inset)
+    return _rect_center(rect)
 
 
 def _rect_anchor_with_side(
@@ -2601,10 +2730,10 @@ def _slot_axis_value(centers: dict[int, float], coord: float) -> float:
     return centers[keys[0]]
 
 
-def _object_relationship_grid(contract: dict, positions: dict[str, tuple[float, float, float, float]]) -> dict:
+def _object_relationship_grid(contract: dict, positions: dict[str, tuple[float, float, float, float]], diagram_type: str) -> dict:
     row_values: dict[int, list[float]] = {}
     col_values: dict[int, list[float]] = {}
-    for entity in contract.get("entities", []) or []:
+    for entity in _relationship_primary_items(contract, diagram_type):
         if not isinstance(entity, dict):
             continue
         entity_id = str(entity.get("id", ""))
@@ -2802,29 +2931,272 @@ def _render_object_entity(entity: dict, rect: tuple[float, float, float, float],
     return "".join(parts)
 
 
-def _object_relationship_layout(contract: dict, style: dict) -> tuple[int, int, dict[str, tuple[float, float, float, float]], float, dict]:
+def _render_ontology_concept(concept: dict, rect: tuple[float, float, float, float], style: dict, canvas_w: float) -> str:
+    x, y, w, h = rect
+    kind = str(concept.get("kind", "ontology"))
+    color = _accent_color(style, concept, "ontology")
+    card = _style_component(style, "card")
+    fill = card.get("fill", "card_fill")
+    header_fill = "panel_fill_strong"
+    radius = min(float(card.get("radius", 8)), 7)
+    header_h = float(concept.get("header_height", concept.get("concept_header_height", 40)))
+    row_h = float(concept.get("attribute_row_height", concept.get("concept_attribute_row_height", 25)))
+    title_size = _clamp(18.0 * _clamp(canvas_w / 1500.0, 0.98, 1.08), 18.0, 19.5)
+    attr_size = _clamp(13.5 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 13.2, 14.8)
+    parts = [f'<g id="concept-{e(concept.get("id", ""))}" class="ontology-concept-card card" data-kind="{e(kind)}">']
+    parts.append(
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" '
+        f'{_paint_attr(style, "fill", fill, "#FFFFFF", card.get("fill_opacity"))} '
+        f'stroke="{color}" stroke-width="1.3"/>'
+    )
+    parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{header_h}" rx="{radius}" {_paint_attr(style, "fill", header_fill, "#FFFFFF", 0.06)}/>')
+    title_lines = wrap_text(str(concept.get("label", concept.get("id", "Concept"))), max_chars=max(8, int((w - 28) / (title_size * 0.58))), max_lines=1)
+    parts.append(
+        f'<text x="{x + w/2}" y="{y + header_h/2 + title_size/3}" text-anchor="middle" class="card-title ontology-concept-title" '
+        f'style="font-size:{_fmt_px(title_size)}">{e(title_lines[0])}</text>'
+    )
+    parts.append(f'<line x1="{x}" y1="{y + header_h}" x2="{x + w}" y2="{y + header_h}" stroke="{color}" stroke-opacity="0.62" stroke-width="1"/>')
+    text_primary = style_color(style, "text_primary", "#0F172A")
+    text_secondary = style_color(style, "text_secondary", "#64748B")
+    for idx, attr in enumerate(_entity_attributes(concept)):
+        ay = y + header_h + idx * row_h
+        if idx > 0:
+            parts.append(f'<line x1="{x}" y1="{ay}" x2="{x + w}" y2="{ay}" stroke="{color}" stroke-opacity="0.25" stroke-width="1"/>')
+        attr_name = str(attr.get("name", "attribute"))
+        attr_type = str(attr.get("type", ""))
+        name_lines = wrap_text(attr_name, max_chars=max(7, int((w - 30) / (attr_size * 0.52))), max_lines=1)
+        parts.append(f'<text x="{x + 16}" y="{ay + row_h/2 + attr_size/3}" class="ontology-attr" style="font-size:{_fmt_px(attr_size)};fill:{text_primary}">{e(name_lines[0])}</text>')
+        if attr_type:
+            parts.append(f'<text x="{x + w - 14}" y="{ay + row_h/2 + attr_size/3}" text-anchor="end" class="ontology-datatype" style="font-size:{_fmt_px(attr_size)};fill:{text_secondary}">{e(attr_type)}</text>')
+    parts.append('</g>')
+    return "".join(parts)
+
+
+def _render_ontology_instance(instance: dict, rect: tuple[float, float, float, float], style: dict, canvas_w: float) -> str:
+    x, y, w, h = rect
+    color = _accent_color(style, instance, "package")
+    card = _style_component(style, "card")
+    fill = card.get("fill", "card_fill")
+    radius = min(float(card.get("radius", 8)), 7)
+    title_size = _clamp(15.5 * _clamp(canvas_w / 1500.0, 0.98, 1.08), 15.5, 16.8)
+    sub_size = _clamp(12.8 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 12.5, 13.8)
+    text_primary = style_color(style, "text_primary", "#0F172A")
+    text_secondary = style_color(style, "text_secondary", "#64748B")
+    label = str(instance.get("label", instance.get("id", "Instance")))
+    subtitle = str(instance.get("subtitle", instance.get("concept", "")))
+    title_lines = wrap_text(label, max_chars=max(8, int((w - 28) / (title_size * 0.55))), max_lines=1)
+    sub_lines = wrap_text(subtitle, max_chars=max(8, int((w - 28) / (sub_size * 0.52))), max_lines=1) if subtitle else []
+    block_h = title_size + (5 + sub_size if sub_lines else 0)
+    block_y = y + (h - block_h) / 2
+    parts = [f'<g id="instance-{e(instance.get("id", ""))}" class="ontology-instance-card card" data-concept="{e(instance.get("concept", ""))}">']
+    parts.append(
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" '
+        f'{_paint_attr(style, "fill", fill, "#FFFFFF", card.get("fill_opacity"))} '
+        f'stroke="{color}" stroke-width="1.3"/>'
+    )
+    parts.append(f'<text x="{x + w/2}" y="{block_y + title_size}" text-anchor="middle" class="ontology-instance-title" style="font-size:{_fmt_px(title_size)};font-weight:700;fill:{text_primary}">{e(title_lines[0])}</text>')
+    if sub_lines:
+        parts.append(f'<text x="{x + w/2}" y="{block_y + title_size + 5 + sub_size}" text-anchor="middle" class="ontology-instance-sub" style="font-size:{_fmt_px(sub_size)};font-weight:500;fill:{text_secondary}">{e(sub_lines[0])}</text>')
+    parts.append('</g>')
+    return "".join(parts)
+
+
+def _axis_segment_crosses_rect(a: tuple[float, float], b: tuple[float, float], rect: tuple[float, float, float, float], pad: float = 0.0) -> bool:
+    x, y, w, h = rect
+    x -= pad
+    y -= pad
+    w += 2 * pad
+    h += 2 * pad
+    if abs(a[0] - b[0]) < EPS:
+        seg_x = a[0]
+        if not (x < seg_x < x + w):
+            return False
+        return max(min(a[1], b[1]), y) < min(max(a[1], b[1]), y + h)
+    if abs(a[1] - b[1]) < EPS:
+        seg_y = a[1]
+        if not (y < seg_y < y + h):
+            return False
+        return max(min(a[0], b[0]), x) < min(max(a[0], b[0]), x + w)
+    return False
+
+
+def _points_cross_any_rect(points: list[tuple[float, float]], rects: list[tuple[float, float, float, float]], pad: float = 0.0) -> bool:
+    for a, b in zip(points, points[1:]):
+        if any(_axis_segment_crosses_rect(a, b, rect, pad) for rect in rects):
+            return True
+    return False
+
+
+def _relationship_natural_anchor_sides(
+    source_rect: tuple[float, float, float, float],
+    target_rect: tuple[float, float, float, float],
+    rel: dict,
+) -> tuple[str | None, str | None, str | None, str | None]:
+    sx, sy, sw, sh = source_rect
+    tx, ty, tw, th = target_rect
+    scx, scy = _rect_center(source_rect)
+    tcx, tcy = _rect_center(target_rect)
+    source_side = rel.get("from_anchor")
+    target_side = rel.get("to_anchor")
+    source_diamond_side = rel.get("from_diamond_anchor")
+    target_diamond_side = rel.get("to_diamond_anchor")
+    if source_side or target_side or source_diamond_side or target_diamond_side:
+        return source_side, target_side, source_diamond_side, target_diamond_side
+    if sx + sw <= tx and abs(scy - tcy) <= max(sh, th) * 0.38:
+        return "right", "left", "left", "right"
+    if tx + tw <= sx and abs(scy - tcy) <= max(sh, th) * 0.38:
+        return "left", "right", "right", "left"
+    if sy + sh <= ty and abs(scx - tcx) <= max(sw, tw) * 0.38:
+        return "bottom", "top", "top", "bottom"
+    if ty + th <= sy and abs(scx - tcx) <= max(sw, tw) * 0.38:
+        return "top", "bottom", "bottom", "top"
+    return None, None, None, None
+
+
+def _relationship_link_pair(
+    rel: dict,
+    source_rect: tuple[float, float, float, float],
+    target_rect: tuple[float, float, float, float],
+    cx: float,
+    cy: float,
+    diamond_w: float,
+    diamond_h: float,
+    avoid_rects: list[tuple[float, float, float, float]],
+) -> tuple[list[tuple[float, float]], list[tuple[float, float]], str, str, str, str]:
+    source_side_hint, target_side_hint, from_diamond_hint, to_diamond_hint = _relationship_natural_anchor_sides(source_rect, target_rect, rel)
+    variants: list[tuple[str | None, str | None, str | None, str | None]] = [
+        (source_side_hint, target_side_hint, from_diamond_hint, to_diamond_hint),
+    ]
+    for source_side, target_side, from_diamond_side, to_diamond_side in (
+        ("right", "left", "left", "right"),
+        ("left", "right", "right", "left"),
+        ("bottom", "top", "top", "bottom"),
+        ("top", "bottom", "bottom", "top"),
+        (None, None, None, None),
+    ):
+        variant = (source_side, target_side, from_diamond_side, to_diamond_side)
+        if variant not in variants:
+            variants.append(variant)
+
+    best: tuple[list[tuple[float, float]], list[tuple[float, float]], str, str, str, str] | None = None
+    best_score: tuple[int, int] | None = None
+    for source_side, target_side, from_diamond_side, to_diamond_side in variants:
+        s_anchor, s_side = _rect_anchor_with_side(source_rect, (cx, cy), source_side)
+        t_anchor, t_side = _rect_anchor_with_side(target_rect, (cx, cy), target_side)
+        d_from, d_from_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, s_anchor, from_diamond_side)
+        d_to, d_to_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, t_anchor, to_diamond_side)
+        source_points = _orthogonal_link_points(s_anchor, d_from, s_side, d_from_side)
+        target_points = _orthogonal_link_points(d_to, t_anchor, d_to_side, t_side)
+        crosses = int(_points_cross_any_rect(source_points, avoid_rects, 8.0)) + int(_points_cross_any_rect(target_points, avoid_rects, 8.0))
+        bends = max(0, len(source_points) - 2) + max(0, len(target_points) - 2)
+        score = (crosses, bends)
+        if best_score is None or score < best_score:
+            best_score = score
+            best = (source_points, target_points, s_side, t_side, d_from_side, d_to_side)
+        if crosses == 0:
+            break
+    assert best is not None
+    return best
+
+
+def _ontology_instance_link_points(
+    concept_rect: tuple[float, float, float, float],
+    instance_rect: tuple[float, float, float, float],
+    obstacles: list[tuple[float, float, float, float]],
+    lane_offset: float = 0.0,
+    concept_anchor_override: object = None,
+    instance_anchor_override: object = None,
+) -> list[tuple[float, float]]:
+    instance_center = _rect_center(instance_rect)
+    if concept_anchor_override:
+        concept_anchor, concept_side = _rect_anchor_with_side(concept_rect, instance_center, concept_anchor_override)
+    else:
+        concept_anchor, concept_side = _rect_edge_anchor_toward(concept_rect, instance_center, "bottom"), "bottom"
+    if instance_anchor_override:
+        instance_anchor, instance_side = _rect_anchor_with_side(instance_rect, concept_anchor, instance_anchor_override)
+    else:
+        instance_anchor, instance_side = _rect_edge_anchor_toward(instance_rect, concept_anchor, "top"), "top"
+    direct_points = _orthogonal_link_points(concept_anchor, instance_anchor, concept_side, instance_side)
+    if not _points_cross_any_rect(direct_points, obstacles, 12.0):
+        return direct_points
+    cx, _cy = _rect_center(concept_rect)
+    ix, _iy = _rect_center(instance_rect)
+    xs = [concept_rect[0], instance_rect[0]] + [rect[0] for rect in obstacles]
+    rights = [concept_rect[0] + concept_rect[2], instance_rect[0] + instance_rect[2]] + [rect[0] + rect[2] for rect in obstacles]
+    corridor_x = min(xs) - 48.0 if ix <= cx else max(rights) + 48.0
+    corridor_x += lane_offset
+    top_lane_y = concept_anchor[1] + 34.0 + lane_offset
+    bottom_lane_y = instance_anchor[1] - 34.0 + lane_offset
+    points = [
+        concept_anchor,
+        (concept_anchor[0], top_lane_y),
+        (corridor_x, top_lane_y),
+        (corridor_x, bottom_lane_y),
+        (instance_anchor[0], bottom_lane_y),
+        instance_anchor,
+    ]
+    return points
+
+
+def _render_ontology_instance_links(contract: dict, positions: dict[str, tuple[float, float, float, float]], style: dict) -> list[str]:
+    paths: list[str] = []
+    color = style_color(style, "accent_green", "#6EE66E")
+    instances = _ontology_instances(contract)
+    lane_step = float(contract.get("ontology_instance_lane_gap", 18.0))
+    for idx, instance in enumerate(instances):
+        instance_id = str(instance.get("id", ""))
+        concept_id = str(instance.get("concept", ""))
+        if instance_id not in positions or concept_id not in positions:
+            continue
+        concept_rect = positions[concept_id]
+        instance_rect = positions[instance_id]
+        obstacles = [rect for item_id, rect in positions.items() if item_id not in {concept_id, instance_id}]
+        lane_offset = float(instance.get("lane_offset", (idx - (len(instances) - 1) / 2) * lane_step))
+        points = _ontology_instance_link_points(
+            concept_rect,
+            instance_rect,
+            obstacles,
+            lane_offset,
+            instance.get("concept_anchor"),
+            instance.get("instance_anchor"),
+        )
+        paths.append(
+            f'<path d="{_rounded_path(points)}" class="edge ontology-instance-link" '
+            f'style="stroke:{color};opacity:0.78" stroke-dasharray="6 5" data-from="{e(concept_id)}" data-to="{e(instance_id)}"/>'
+        )
+    return paths
+
+
+def _object_relationship_layout(contract: dict, style: dict, diagram_type: str) -> tuple[int, int, dict[str, tuple[float, float, float, float]], float, dict]:
     metrics = layout_metrics(style)
-    entities = [e for e in contract.get("entities", []) if isinstance(e, dict) and e.get("id")]
+    entities = _relationship_layout_items(contract, diagram_type)
+    primary_items = _relationship_primary_items(contract, diagram_type)
+    instance_ids = _relationship_instance_ids(contract, diagram_type)
     margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
     top_y = int(contract.get("top_y", metrics["top_y"]))
-    default_w = float(contract.get("entity_width", 220))
-    header_h = float(contract.get("entity_header_height", 42))
-    row_h = float(contract.get("attribute_row_height", 26))
-    col_gap = float(contract.get("entity_col_gap", 110))
-    row_gap = float(contract.get("entity_row_gap", 120))
+    defaults = _relationship_default_metrics(contract, diagram_type)
+    default_w = defaults["width"]
+    col_gap = defaults["col_gap"]
+    row_gap = defaults["row_gap"]
     max_diamond_w = max(
         [float(rel.get("diamond_width", 96)) for rel in contract.get("relationships", []) if isinstance(rel, dict)]
         or [96.0]
     )
     col_gap = max(col_gap, float(contract.get("relationship_col_gap_min", max_diamond_w + 48)))
     row_gap = max(row_gap, float(contract.get("relationship_row_gap_min", 132)))
-    sizes = {str(entity["id"]): _entity_size(entity, default_w, header_h, row_h) for entity in entities}
+    sizes = {str(entity["id"]): _relationship_item_size(entity, defaults, instance_ids) for entity in entities}
+    order_index = {id(entity): idx for idx, entity in enumerate(entities)}
+    concept_max_row = max(
+        (int(entity.get("row", 0)) for entity in primary_items if str(entity.get("id", "")) not in instance_ids),
+        default=0,
+    )
     rows: dict[int, list[dict]] = {}
     for idx, entity in enumerate(entities):
-        row = int(entity.get("row", 0))
+        default_row = concept_max_row + 1 if str(entity.get("id", "")) in instance_ids else 0
+        row = int(entity.get("row", default_row))
         rows.setdefault(row, []).append(entity)
     for row_entities in rows.values():
-        row_entities.sort(key=lambda entity: (entity.get("col", entities.index(entity)), entities.index(entity)))
+        row_entities.sort(key=lambda entity: (entity.get("col", order_index[id(entity)]), order_index[id(entity)]))
     max_row_w = 0.0
     for row_entities in rows.values():
         if any("col" in entity for entity in row_entities):
@@ -2859,7 +3231,7 @@ def _object_relationship_layout(contract: dict, style: dict) -> tuple[int, int, 
             positions[entity_id] = (ex, ey, ew, eh)
             x += ew + col_gap
         y += row_h_actual + row_gap
-    grid = _object_relationship_grid(contract, positions)
+    grid = _object_relationship_grid(contract, positions, diagram_type)
     entity_rects = list(positions.values())
     relationship_bottoms = []
     for rel in contract.get("relationships", []) or []:
@@ -2876,9 +3248,24 @@ def _object_relationship_layout(contract: dict, style: dict) -> tuple[int, int, 
         default=top_y,
     )
     panels = _info_panels(contract)
+    left_panels: list[dict] = []
+    right_panels: list[dict] = []
+    bottom_panels = panels
+    if diagram_type == "ontology_map":
+        left_panels, right_panels, bottom_panels = _ontology_panel_groups(panels)
     panel_y = content_bottom + 36
-    _layouts, panels_h = _info_panel_layouts(panels, margin_x, panel_y, width - 2 * margin_x, width)
-    height = int(max(contract.get("height", 0), panel_y + panels_h + 64 if panels else content_bottom + 82))
+    _layouts, panels_h = _info_panel_layouts(bottom_panels, margin_x, panel_y, width - 2 * margin_x, width)
+    side_panel_w = float(contract.get("ontology_side_panel_width", 220))
+    side_top = top_y
+    side_h = 0.0
+    if diagram_type == "ontology_map":
+        side_h = max(
+            _ontology_side_panel_height(left_panels, side_panel_w, width),
+            _ontology_side_panel_height(right_panels, side_panel_w, width),
+        )
+    bottom_h = panel_y + panels_h + 64 if bottom_panels else content_bottom + 82
+    side_bottom_h = side_top + side_h + 64 if side_h else 0
+    height = int(max(contract.get("height", 0), bottom_h, side_bottom_h))
     return width, height, positions, panel_y, grid
 
 
@@ -2899,6 +3286,32 @@ def _auto_relationship_center(source_rect: tuple[float, float, float, float], ta
     return (scx + tcx) / 2, (scy + tcy) / 2
 
 
+def _snap_relationship_center_to_card_axis(
+    cx: float,
+    cy: float,
+    source_rect: tuple[float, float, float, float],
+    target_rect: tuple[float, float, float, float],
+    diamond_w: float,
+    diamond_h: float,
+    rel: dict,
+) -> tuple[float, float]:
+    if rel.get("snap_to_axis") is False:
+        return cx, cy
+    sx, sy, sw, sh = source_rect
+    tx, ty, tw, th = target_rect
+    scx, scy = _rect_center(source_rect)
+    tcx, tcy = _rect_center(target_rect)
+    y_axis = (scy + tcy) / 2
+    x_axis = (scx + tcx) / 2
+    snap_y_tolerance = max(18.0, diamond_h * 0.55)
+    snap_x_tolerance = max(18.0, diamond_w * 0.28)
+    if (sx + sw <= tx or tx + tw <= sx) and abs(cy - y_axis) <= snap_y_tolerance:
+        return cx, y_axis
+    if (sy + sh <= ty or ty + th <= sy) and abs(cx - x_axis) <= snap_x_tolerance:
+        return x_axis, cy
+    return cx, cy
+
+
 def _relationship_center(
     rel: dict,
     source_rect: tuple[float, float, float, float],
@@ -2912,18 +3325,18 @@ def _relationship_center(
         auto_x, auto_y = _auto_relationship_center(source_rect, target_rect)
         cx = _slot_axis_value(grid.get("cols", {}), float(rel["col"])) if isinstance(rel.get("col"), (int, float)) else auto_x
         cy = _slot_axis_value(grid.get("rows", {}), float(rel["row"])) if isinstance(rel.get("row"), (int, float)) else auto_y
-        return cx, cy
+        return _snap_relationship_center_to_card_axis(cx, cy, source_rect, target_rect, diamond_w, diamond_h, rel)
     if isinstance(rel.get("x"), (int, float)) and isinstance(rel.get("y"), (int, float)):
         cx, cy = float(rel["x"]), float(rel["y"])
         if not _relationship_overlaps_entity(cx, cy, diamond_w, diamond_h, entity_rects):
-            return cx, cy
+            return _snap_relationship_center_to_card_axis(cx, cy, source_rect, target_rect, diamond_w, diamond_h, rel)
         return _auto_relationship_center(source_rect, target_rect)
     sx, sy = _rect_center(source_rect)
     tx, ty = _rect_center(target_rect)
     cx, cy = _auto_relationship_center(source_rect, target_rect)
     if _relationship_overlaps_entity(cx, cy, diamond_w, diamond_h, entity_rects):
         return (sx + tx) / 2, (sy + ty) / 2
-    return cx, cy
+    return _snap_relationship_center_to_card_axis(cx, cy, source_rect, target_rect, diamond_w, diamond_h, rel)
 
 
 def _render_relationship_diamond(rel: dict, cx: float, cy: float, style: dict, canvas_w: float) -> str:
@@ -2951,13 +3364,18 @@ def _render_relationship_diamond(rel: dict, cx: float, cy: float, style: dict, c
 
 
 def _render_object_relationship(contract: dict, style: dict, diagram_type: str) -> str:
-    width, height, positions, panel_y, grid = _object_relationship_layout(contract, style)
+    width, height, positions, panel_y, grid = _object_relationship_layout(contract, style, diagram_type)
     margin_x = int(contract.get("canvas_margin_x", layout_metrics(style)["canvas_margin_x"]))
     parts = _svg_shell_start(contract, style, width, height, diagram_type)
     diamond_specs: list[tuple[dict, float, float]] = []
     link_parts: list[str] = []
     label_parts: list[str] = []
     entity_rects = list(positions.values())
+    item_by_id = {str(item["id"]): item for item in _relationship_layout_items(contract, diagram_type)}
+    instance_ids = _relationship_instance_ids(contract, diagram_type)
+    relationship_link_class = "edge object-relationship-link"
+    if diagram_type == "ontology_map":
+        relationship_link_class += " ontology-relationship-link"
     used_label_boxes: list[tuple[float, float, float, float]] = []
     line_color = style_color(style, "line_primary", "#F4F8FF")
     card_label_size = _clamp(14.0 * _clamp(width / 1500.0, 0.95, 1.08), 13.5, 15.0)
@@ -2978,7 +3396,7 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
         relationship_layouts.append((rel, source, target, cx, cy, diamond_w, diamond_h))
         all_diamond_boxes.append(_relationship_box(cx, cy, diamond_w, diamond_h))
 
-    for rel, source, target, cx, cy, diamond_w, diamond_h in relationship_layouts:
+    for rel_idx, (rel, source, target, cx, cy, diamond_w, diamond_h) in enumerate(relationship_layouts):
         source_rect = positions[source]
         target_rect = positions[target]
         color = style_color(style, rel.get("accent"), "")
@@ -2999,7 +3417,7 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
             )
             self_points = _orthogonal_link_points(d_anchor, card_anchor, d_side, card_side)
             self_route = "axis" if len(self_points) == 2 else "orthogonal"
-            link_parts.append(f'<path d="{_rounded_path(self_points)}" class="edge object-relationship-link" style="stroke:{color};opacity:0.9"{dash} data-route="{self_route}" data-link-end="self" data-card-anchor="{card_side}" data-diamond-anchor="{d_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+            link_parts.append(f'<path d="{_rounded_path(self_points)}" class="{relationship_link_class}" style="stroke:{color};opacity:0.9"{dash} data-route="{self_route}" data-link-end="self" data-card-anchor="{card_side}" data-diamond-anchor="{d_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
             for key, endpoint in (("from_cardinality", "from"), ("to_cardinality", "to")):
                 card = rel.get(key)
                 if card:
@@ -3019,16 +3437,23 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
                     )
             diamond_specs.append((rel, cx, cy))
             continue
-        s_anchor, s_side = _rect_anchor_with_side(source_rect, (cx, cy), rel.get("from_anchor"))
-        t_anchor, t_side = _rect_anchor_with_side(target_rect, (cx, cy), rel.get("to_anchor"))
-        d_from, d_from_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, s_anchor, rel.get("from_diamond_anchor"))
-        d_to, d_to_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, t_anchor, rel.get("to_diamond_anchor"))
-        source_points = _orthogonal_link_points(s_anchor, d_from, s_side, d_from_side)
-        target_points = _orthogonal_link_points(d_to, t_anchor, d_to_side, t_side)
+        avoid_diamond_boxes = [box for idx, box in enumerate(all_diamond_boxes) if idx != rel_idx]
+        source_points, target_points, s_side, t_side, d_from_side, d_to_side = _relationship_link_pair(
+            rel,
+            source_rect,
+            target_rect,
+            cx,
+            cy,
+            diamond_w,
+            diamond_h,
+            avoid_diamond_boxes,
+        )
+        s_anchor = source_points[0]
+        t_anchor = target_points[-1]
         source_route = "axis" if len(source_points) == 2 else "orthogonal"
         target_route = "axis" if len(target_points) == 2 else "orthogonal"
-        link_parts.append(f'<path d="{_rounded_path(source_points)}" class="edge object-relationship-link" style="stroke:{color};opacity:0.9"{dash} data-route="{source_route}" data-link-end="from" data-card-anchor="{s_side}" data-diamond-anchor="{d_from_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
-        link_parts.append(f'<path d="{_rounded_path(target_points)}" class="edge object-relationship-link" style="stroke:{color};opacity:0.9"{dash} data-route="{target_route}" data-link-end="to" data-card-anchor="{t_side}" data-diamond-anchor="{d_to_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+        link_parts.append(f'<path d="{_rounded_path(source_points)}" class="{relationship_link_class}" style="stroke:{color};opacity:0.9"{dash} data-route="{source_route}" data-link-end="from" data-card-anchor="{s_side}" data-diamond-anchor="{d_from_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+        link_parts.append(f'<path d="{_rounded_path(target_points)}" class="{relationship_link_class}" style="stroke:{color};opacity:0.9"{dash} data-route="{target_route}" data-link-end="to" data-card-anchor="{t_side}" data-diamond-anchor="{d_to_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
         for key, anchor, side, rect, endpoint in (
             ("from_cardinality", s_anchor, s_side, source_rect, "from"),
             ("to_cardinality", t_anchor, t_side, target_rect, "to"),
@@ -3052,14 +3477,30 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
         diamond_specs.append((rel, cx, cy))
 
     parts.extend(link_parts)
+    if diagram_type == "ontology_map":
+        parts.extend(_render_ontology_instance_links(contract, positions, style))
     for entity_id in sorted(positions, key=lambda eid: (positions[eid][1], positions[eid][0])):
-        entity = next(entity for entity in contract.get("entities", []) if str(entity.get("id")) == entity_id)
-        parts.append(_render_object_entity(entity, positions[entity_id], style, width))
+        entity = item_by_id[entity_id]
+        if diagram_type == "ontology_map":
+            if entity_id in instance_ids:
+                parts.append(_render_ontology_instance(entity, positions[entity_id], style, width))
+            else:
+                parts.append(_render_ontology_concept(entity, positions[entity_id], style, width))
+        else:
+            parts.append(_render_object_entity(entity, positions[entity_id], style, width))
     for rel, cx, cy in diamond_specs:
         parts.append(_render_relationship_diamond(rel, cx, cy, style, width))
     parts.extend(label_parts)
     panels = _info_panels(contract)
-    _render_info_panels(parts, panels, style, margin_x, panel_y, width - 2 * margin_x, width)
+    if diagram_type == "ontology_map":
+        left_panels, right_panels, bottom_panels = _ontology_panel_groups(panels)
+        side_panel_w = float(contract.get("ontology_side_panel_width", 220))
+        side_top = int(contract.get("top_y", layout_metrics(style)["top_y"]))
+        _render_ontology_side_panels(parts, left_panels, style, margin_x, side_top, side_panel_w, width)
+        _render_ontology_side_panels(parts, right_panels, style, width - margin_x - side_panel_w, side_top, side_panel_w, width)
+        _render_info_panels(parts, bottom_panels, style, margin_x, panel_y, width - 2 * margin_x, width)
+    else:
+        _render_info_panels(parts, panels, style, margin_x, panel_y, width - 2 * margin_x, width)
     _append_annotations(parts, contract, style, width, height)
     parts.append('</svg>')
     return "\n".join(parts) + "\n"
