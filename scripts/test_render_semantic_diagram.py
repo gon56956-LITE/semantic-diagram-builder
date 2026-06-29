@@ -1006,6 +1006,22 @@ def main() -> int:
         row_gap = lower[1] - (upper[1] + upper[3])
         if row_gap < 60:
             raise AssertionError("capability_domain_map stress stacked capability rows should reserve a clearer connector corridor")
+    capability_header = re.search(
+        r'<rect x="([-0-9.]+)" y="[-0-9.]+" width="([-0-9.]+)" height="[-0-9.]+" rx="5" fill="none" stroke="#6EE66E"',
+        capability_stress_svg,
+    )
+    renewal_route = next(
+        (attrs for attrs in path_attrs(capability_stress_svg, {"capability-map-link"}) if 'data-from="customer_success"' in attrs and 'data-to="renewal"' in attrs),
+        "",
+    )
+    d_match = re.search(r'\bd="([^"]+)"', renewal_route)
+    if not capability_header or not d_match:
+        raise AssertionError("capability_domain_map stress should expose the customer success renewal route and capability row header")
+    header_right = float(capability_header.group(1)) + float(capability_header.group(2))
+    route_values = [float(value) for value in re.findall(r'[-0-9.]+', d_match.group(1))]
+    route_left = min(route_values[0::2])
+    if route_left - header_right < 24:
+        raise AssertionError("capability_domain_map left detour corridor should clear the capability row header")
     support_lane_shifts = [
         float(value)
         for value in re.findall(r'data-relation="supports"[^>]*data-lane-shift="([-0-9.]+)"', capability_stress_svg)

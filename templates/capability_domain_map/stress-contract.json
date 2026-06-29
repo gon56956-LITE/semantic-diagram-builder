@@ -6,6 +6,7 @@
   "width": 2300,
   "column_width": 200,
   "column_gap": 72,
+  "label_gap": 84,
   "relationship_lane_gap": 16,
   "level_gap": 40,
   "item_height": 96,
