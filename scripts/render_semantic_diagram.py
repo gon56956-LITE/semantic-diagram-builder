@@ -795,9 +795,19 @@ def _horizontal_bus_segments(points: list[float], y: float, gap: tuple[float, fl
         return [_horizontal_bus(clean, y)]
 
     gap_left, gap_right = sorted(gap)
+    gap_mid = (gap_left + gap_right) / 2
     segments = []
-    left = [x for x in clean if x <= gap_left + 1e-6]
-    right = [x for x in clean if x >= gap_right - 1e-6]
+    left = []
+    right = []
+    for x in clean:
+        if x <= gap_left + 1e-6:
+            left.append(x)
+        elif x >= gap_right - 1e-6:
+            right.append(x)
+        elif x < gap_mid:
+            left.append(x)
+        elif x > gap_mid:
+            right.append(x)
     if len(left) >= 2 and max(left) - min(left) > 1e-6:
         segments.append(_horizontal_bus(left, y))
     if len(right) >= 2 and max(right) - min(right) > 1e-6:
@@ -971,6 +981,7 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
     row_bus_ys = [layout["rows"][row]["fanin_bus_y"] + lane_shift for row in row_sources]
     first_bus_y = min(row_bus_ys)
     join_y = max(row_bus_ys)
+    has_cross_row_trunk = abs(first_bus_y - join_y) > 1e-6
     tx, ty = center_top(positions[target_id])
     aligned_sources = []
     for source_id in _unique(source_ids):
@@ -981,7 +992,7 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
             aligned_sources.append((sy, source_id))
     direct_source_id = max(aligned_sources)[1] if aligned_sources else None
 
-    if abs(first_bus_y - join_y) > 1e-6:
+    if has_cross_row_trunk:
         paths.append(
             _path(
                 _rounded_path([(trunk_anchor_x, first_bus_y), (trunk_x, first_bus_y), (trunk_x, join_y), (trunk_anchor_x, join_y)]),
@@ -1012,6 +1023,8 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
             paths.append(_path(source_path, "edge fanin route-shared branch", extra_attrs=family_attrs))
         if abs(bus_y - join_y) <= 1e-6:
             source_span = list(source_centers)
+            if has_cross_row_trunk:
+                source_span.append(trunk_anchor_x)
             if not source_span and direct_source_id:
                 source_span = [tx]
             if not source_span:

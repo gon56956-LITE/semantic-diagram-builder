@@ -58,7 +58,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | hub_spoke/stress | 1800x1269 | 1660x1209 | 70/22 | 13 | 12 | 3 | 59/1564 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/minimal | 1100x839 | 960x779 | 70/22 | 3 | 2 | 0 | 12/286 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/reference | 1600x1307 | 1460x1247 | 70/22 | 10 | 22 | 0 | 27/487 | 0 (0%) | 0 | ok |
-| layered_knowledge_topology/stress | 1900x1307 | 1760x1247 | 70/22 | 17 | 37 | 0 | 50/936 | 1 (2%) | 0 | ok |
+| layered_knowledge_topology/stress | 1900x1307 | 1760x1247 | 70/22 | 17 | 39 | 0 | 50/936 | 1 (2%) | 0 | ok |
 | object_relationship_diagram/minimal | 950x329 | 699x269 | 126/22 | 2 | 2 | 0 | 17/213 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/reference | 1500x897 | 1360x837 | 70/22 | 7 | 12 | 2 | 84/843 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/stress | 1700x1487 | 1560x1427 | 70/22 | 10 | 19 | 3 | 132/1548 | 0 (0%) | 0 | height above max_height 1450px; dense but acceptable |

@@ -578,6 +578,16 @@ def main() -> int:
     ]
     if not layered_blue_bus_lefts or min(layered_blue_bus_lefts) < 1000:
         raise AssertionError("layered_knowledge_topology right-side fan-in family should not extend to the left trunk")
+    layered_green_lower_bus_spans = [
+        (float(match.group(1)), float(match.group(2)))
+        for attrs in path_attrs(layered_stress_svg, {"fanin", "bus"})
+        if 'data-route-family="0"' in attrs
+        if (match := re.search(r'\bM ([-0-9.]+) 989\.0 L ([-0-9.]+) 989\.0', attrs))
+    ]
+    if not any(left <= 169.0 and right >= 728.0 for left, right in layered_green_lower_bus_spans):
+        raise AssertionError("layered_knowledge_topology lower fan-in bus should connect the side trunk to the local merge span")
+    if not any(left <= 751.5 and right >= 756.0 for left, right in layered_green_lower_bus_spans):
+        raise AssertionError("layered_knowledge_topology lower fan-in bus should not drop branch anchors inside the merge gap")
 
     source_boundary_stress = load_json("templates/source_boundary_map/stress-contract.json")
     source_boundary_stress_svg = assert_valid("source boundary map stress template", source_boundary_stress)
@@ -617,6 +627,8 @@ def main() -> int:
     ]
     if not any(left < 964.0 and right > 1144.0 for left, right in source_lower_fanin_bus_spans):
         raise AssertionError("source_boundary_map stress lower fan-in bus should overlap branch and merge anchors")
+    if not any(left <= 1172.0 and right >= 1731.0 for left, right in source_lower_fanin_bus_spans):
+        raise AssertionError("source_boundary_map stress lower fan-in bus should connect the local merge span back to the side trunk")
     source_family_bus_y = {
         int(family): {
             round(float(y), 1)
