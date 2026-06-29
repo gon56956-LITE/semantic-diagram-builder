@@ -30,7 +30,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | registry_table/stress | 1457 | 1397 | 174 | 22 | content span 1397px, panel span 174px; bottom whitespace 22px |
 | relationship_matrix/stress | 1802 | 1612 | 330 | 22 | 11x11 matrix, 121 cells; grid span 1262px, top-connected span 330px; bottom whitespace 22px; height driven by matrix rows and companion panels |
 | source_boundary_map/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
-| taxonomy_tree/stress | 1359 | 1299 | 0 | 22 | content span 1299px, panel span 0px; bottom whitespace 22px |
+| taxonomy_tree/stress | 1335 | 1275 | 0 | 22 | content span 1275px, panel span 0px; bottom whitespace 22px |
 
 ## Truncation Diagnostics
 
@@ -75,4 +75,4 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 33 | 0 | 40/777 | 0 (0%) | 0 | ok |
 | taxonomy_tree/minimal | 850x557 | 610x497 | 170/22 | 2 | 1 | 0 | 10/177 | 0 (0%) | 0 | ok |
 | taxonomy_tree/reference | 1800x789 | 1660x729 | 70/22 | 10 | 9 | 0 | 30/397 | 0 (0%) | 0 | ok |
-| taxonomy_tree/stress | 1700x1359 | 1412x1299 | 218/22 | 27 | 26 | 0 | 77/1011 | 0 (0%) | 0 | ok |
+| taxonomy_tree/stress | 1700x1335 | 1470x1275 | 160/22 | 27 | 26 | 0 | 78/1017 | 0 (0%) | 0 | ok |

@@ -799,8 +799,8 @@ def main() -> int:
     level1_centers = [stress_rects[node_id][0] + stress_rects[node_id][2] / 2 for node_id in level1_parent_ids]
     if level1_centers != sorted(level1_centers):
         raise AssertionError("taxonomy_tree family-backbone Level 1 families should preserve declared order")
-    if "Level 2+" not in stress_tree_svg:
-        raise AssertionError("taxonomy_tree family-backbone layout should label deeper vertical branches")
+    if "Level 2" not in stress_tree_svg or "Level 3" not in stress_tree_svg or "Level 2+" in stress_tree_svg:
+        raise AssertionError("taxonomy_tree family-backbone layout should label Level 2 and Level 3 separately")
     taxonomy_attrs = path_attrs(stress_tree_svg, {"taxonomy-link"})
     backbone_attrs = [attrs for attrs in taxonomy_attrs if 'data-layout="family_backbone"' in attrs]
     if len(backbone_attrs) != len(stress_tree["nodes"]) - 1:
@@ -824,19 +824,17 @@ def main() -> int:
         return collected
 
     for family_id in level1_parent_ids:
-        desc_ids = collect_descendants(family_id)
-        if len(desc_ids) < 4:
+        level2_ids = child_map[family_id]
+        if len(level2_ids) < 3:
             raise AssertionError("taxonomy_tree family-backbone stress should exercise several nodes per family")
-        family_x = stress_rects[family_id][0]
-        desc_ys = []
-        for desc_id in desc_ids:
-            if abs(stress_rects[desc_id][0] - family_x) > 0.5:
-                raise AssertionError("taxonomy_tree family-backbone descendants should align under their Level 1 family")
-            if stress_rects[desc_id][1] <= stress_rects[family_id][1]:
-                raise AssertionError("taxonomy_tree family-backbone descendants should sit below the family card")
-            desc_ys.append(stress_rects[desc_id][1])
-        if desc_ys != sorted(desc_ys):
-            raise AssertionError("taxonomy_tree family-backbone descendants should run vertically down the family lane")
+        level2_xs = {round(stress_rects[node_id][0], 1) for node_id in level2_ids}
+        if len(level2_xs) != 1:
+            raise AssertionError("taxonomy_tree Level 2 siblings should share the family backbone column")
+        level2_ys = [stress_rects[node_id][1] for node_id in level2_ids]
+        if level2_ys != sorted(level2_ys):
+            raise AssertionError("taxonomy_tree Level 2 siblings should run vertically down the family lane")
+        if any(stress_rects[node_id][1] <= stress_rects[family_id][1] for node_id in level2_ids):
+            raise AssertionError("taxonomy_tree Level 2 nodes should sit below the family card")
         family_attrs = [attrs for attrs in backbone_attrs if f'data-family="{family_id}"' in attrs]
         if not family_attrs:
             raise AssertionError(f"taxonomy_tree family-backbone links should expose data-family for {family_id}")
@@ -847,9 +845,40 @@ def main() -> int:
     ]
     if not third_level_edges or 'data-depth="3"' not in stress_tree_svg:
         raise AssertionError("taxonomy_tree family-backbone stress should exercise third-level branches")
+    nested_attrs = [attrs for attrs in backbone_attrs if 'data-link-tier="nested_branch"' in attrs]
+    if len(nested_attrs) != len(third_level_edges):
+        raise AssertionError("taxonomy_tree Level 2 to Level 3 links should use nested branch metadata")
     for child_id, parent_id in third_level_edges:
-        if stress_rects[child_id][1] <= stress_rects[parent_id][1]:
+        parent_rect = stress_rects[parent_id]
+        child_rect = stress_rects[child_id]
+        if child_rect[1] <= parent_rect[1]:
             raise AssertionError("taxonomy_tree third-level nodes should continue downward from their parent")
+        if child_rect[0] <= parent_rect[0] + 30:
+            raise AssertionError("taxonomy_tree third-level nodes should be visibly indented from Level 2")
+        attrs = next(
+            (
+                attrs for attrs in nested_attrs
+                if f'data-parent="{parent_id}"' in attrs and f'data-child="{child_id}"' in attrs
+            ),
+            "",
+        )
+        if not attrs:
+            raise AssertionError("taxonomy_tree third-level edge should be marked as nested_branch")
+        d_match = re.search(r'\bd="([^"]+)"', attrs)
+        if not d_match:
+            raise AssertionError("taxonomy_tree nested branch path should include geometry")
+        start_match = re.search(r'^M ([-0-9.]+) ([-0-9.]+)\b', d_match.group(1))
+        end_match = re.search(r'L ([-0-9.]+) ([-0-9.]+)$', d_match.group(1))
+        if not start_match or not end_match:
+            raise AssertionError("taxonomy_tree nested branch should be an orthogonal path from parent bottom to child left")
+        start = (float(start_match.group(1)), float(start_match.group(2)))
+        end = (float(end_match.group(1)), float(end_match.group(2)))
+        expected_start = (parent_rect[0] + parent_rect[2] / 2, parent_rect[1] + parent_rect[3])
+        expected_end = (child_rect[0], child_rect[1] + child_rect[3] / 2)
+        if any(abs(actual - expected) > 0.5 for actual, expected in zip(start, expected_start)):
+            raise AssertionError("taxonomy_tree nested branch should start at the Level 2 bottom anchor")
+        if any(abs(actual - expected) > 0.5 for actual, expected in zip(end, expected_end)):
+            raise AssertionError("taxonomy_tree nested branch should enter the Level 3 left anchor")
     family_colors = {
         color.upper()
         for family_id in level1_parent_ids

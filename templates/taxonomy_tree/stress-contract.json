@@ -8,7 +8,10 @@
   "card_width": 220,
   "family_gap": 92,
   "backbone_node_gap": 30,
+  "backbone_block_gap": 30,
+  "backbone_nested_gap": 22,
   "backbone_start_gap": 66,
+  "backbone_depth_indent": 56,
   "backbone_offset": 32,
   "nodes": [
     {"id": "root", "label": "Knowledge Asset System", "subtitle": "root class", "kind": "hub"},

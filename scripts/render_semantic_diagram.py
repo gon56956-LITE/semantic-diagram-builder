@@ -2777,6 +2777,9 @@ def _render_tree_family_backbone(
     root_gap = max(float(contract.get("root_gap", 118)), 96.0)
     backbone_start_gap = max(float(contract.get("backbone_start_gap", 70)), 54.0)
     backbone_node_gap = max(float(contract.get("backbone_node_gap", contract.get("tree_row_gap", 34))), 28.0)
+    backbone_nested_gap = max(float(contract.get("backbone_nested_gap", 22)), 18.0)
+    backbone_block_gap = max(float(contract.get("backbone_block_gap", backbone_node_gap)), 28.0)
+    depth_indent = max(float(contract.get("backbone_depth_indent", 56)), 36.0)
     backbone_offset = max(float(contract.get("backbone_offset", 30)), 22.0)
 
     order = {
@@ -2812,8 +2815,16 @@ def _render_tree_family_backbone(
         return items
 
     family_descendants = {family_id: descendants(family_id) for family_id in family_roots}
+    family_max_depth = {
+        family_id: max((depths[node_id] for node_id in [family_id] + family_descendants[family_id]), default=1)
+        for family_id in family_roots
+    }
+    family_lane_width = {
+        family_id: card_w + max(0, family_max_depth[family_id] - 2) * depth_indent
+        for family_id in family_roots
+    }
     family_count = max(1, len(family_roots))
-    family_band_w = family_count * card_w + max(0, family_count - 1) * family_gap
+    family_band_w = sum(family_lane_width.values()) + max(0, family_count - 1) * family_gap
     min_width = int(2 * margin_x + family_band_w)
     width = int(max(contract.get("width", 1500), min_width))
     family_x0 = (width - family_band_w) / 2
@@ -2830,13 +2841,31 @@ def _render_tree_family_backbone(
         for idx, root in enumerate(sorted_roots):
             positions[root] = (root_x0 + idx * (card_w + root_gap_x), root_y, card_w, card_h)
 
-    for family_idx, family_id in enumerate(family_roots):
-        x = family_x0 + family_idx * (card_w + family_gap)
+    family_base_x: dict[str, float] = {}
+    cursor_x = family_x0
+    for family_id in family_roots:
+        family_base_x[family_id] = cursor_x
+        cursor_x += family_lane_width[family_id] + family_gap
+
+    def place_subtree(family_id: str, node_id: str, y: float) -> float:
+        x = family_base_x[family_id] + max(0, depths[node_id] - 2) * depth_indent
+        positions[node_id] = (x, y, card_w, card_h)
+        subtree_bottom = y + card_h
+        child_y = y + card_h + backbone_nested_gap
+        for child_id in children[node_id]:
+            child_bottom = place_subtree(family_id, child_id, child_y)
+            subtree_bottom = max(subtree_bottom, child_bottom)
+            child_y = child_bottom + backbone_nested_gap
+        return subtree_bottom
+
+    for family_id in family_roots:
+        x = family_base_x[family_id] + max(0.0, family_lane_width[family_id] - card_w) / 2
         if family_id not in positions or parent_map.get(family_id):
             positions[family_id] = (x, level1_y, card_w, card_h)
-        for node_idx, node_id in enumerate(family_descendants[family_id]):
-            y = desc_y0 + node_idx * (card_h + backbone_node_gap)
-            positions[node_id] = (x, y, card_w, card_h)
+        subtree_y = desc_y0
+        for child_id in children[family_id]:
+            subtree_bottom = place_subtree(family_id, child_id, subtree_y)
+            subtree_y = subtree_bottom + backbone_block_gap
 
     content_bottom = max((y + h for _x, y, _w, h in positions.values()), default=top_y + card_h)
     height = int(max(contract.get("height", 0), content_bottom + 110))
@@ -2856,7 +2885,7 @@ def _render_tree_family_backbone(
     ]
     family_rank = {family_id: idx for idx, family_id in enumerate(family_roots)}
     family_backbone_x = {
-        family_id: positions[family_id][0] - backbone_offset
+        family_id: family_base_x[family_id] - backbone_offset
         for family_id in family_roots
         if family_id in positions
     }
@@ -2871,19 +2900,21 @@ def _render_tree_family_backbone(
         parent_rect = positions[parent_id]
         child_rect = positions[child_id]
         child_family = family_by_node.get(child_id, child_id)
+        parent_depth = depths.get(parent_id, 0)
+        child_depth = depths.get(child_id, 0)
         sx, sy = center_bottom(parent_rect)
         tx, ty = center_top(child_rect)
         if parent_id in sorted_roots and child_id in family_roots:
             lane_y = (sy + ty) / 2
             if abs(sx - tx) < 1e-6:
-                return _rounded_path([(sx, sy), (tx, ty)]), {"lane_y": lane_y}
-            return _rounded_path([(sx, sy), (sx, lane_y), (tx, lane_y), (tx, ty)]), {"lane_y": lane_y}
+                return _rounded_path([(sx, sy), (tx, ty)]), {"lane_y": lane_y, "link_tier": 0}
+            return _rounded_path([(sx, sy), (sx, lane_y), (tx, lane_y), (tx, ty)]), {"lane_y": lane_y, "link_tier": 0}
 
         backbone_x = family_backbone_x.get(child_family, child_rect[0] - backbone_offset)
         child_x, child_y, _child_w, child_h = child_rect
         child_cy = child_y + child_h / 2
         parent_x, parent_y, parent_w, parent_h = parent_rect
-        if parent_id == child_family or depths.get(parent_id, 0) <= 1:
+        if parent_id == child_family or (parent_depth <= 1 and child_depth == 2):
             branch_y = parent_y + parent_h + min(24.0, backbone_start_gap / 2)
             route = _rounded_path([
                 (parent_x + parent_w / 2, parent_y + parent_h),
@@ -2892,16 +2923,19 @@ def _render_tree_family_backbone(
                 (backbone_x, child_cy),
                 (child_x, child_cy),
             ])
-            return route, {"backbone_x": backbone_x, "branch_y": branch_y}
+            return route, {"backbone_x": backbone_x, "branch_y": branch_y, "link_tier": 1}
 
-        parent_cy = parent_y + parent_h / 2
+        parent_cx, parent_bottom = center_bottom(parent_rect)
+        nested_x = child_x - max(14.0, backbone_offset / 2)
+        branch_y = (parent_bottom + child_y) / 2
         route = _rounded_path([
-            (parent_x, parent_cy),
-            (backbone_x, parent_cy),
-            (backbone_x, child_cy),
+            (parent_cx, parent_bottom),
+            (parent_cx, branch_y),
+            (nested_x, branch_y),
+            (nested_x, child_cy),
             (child_x, child_cy),
         ])
-        return route, {"backbone_x": backbone_x, "branch_y": parent_cy}
+        return route, {"nested_x": nested_x, "branch_y": branch_y, "link_tier": 2}
 
     parts = _svg_shell_start(contract, style, width, height, diagram_type)
     for child_id, parent_id in parent_map.items():
@@ -2910,15 +2944,20 @@ def _render_tree_family_backbone(
         family_id = family_by_node.get(child_id, child_id)
         color = color_for_family(family_id)
         route, route_meta = route_for(parent_id, child_id)
+        link_tier = int(route_meta.pop("link_tier", 1))
+        link_tier_name = "root_family" if link_tier == 0 else "family_backbone" if link_tier == 1 else "nested_branch"
         meta_attrs = " ".join(
             f'data-{key.replace("_", "-")}="{round(value, 2)}"'
             for key, value in route_meta.items()
         )
+        link_classes = "edge taxonomy-link taxonomy-backbone-link"
+        if link_tier == 2:
+            link_classes += " taxonomy-nested-link"
         parts.append(_path(
             route,
-            "edge taxonomy-link taxonomy-backbone-link",
+            link_classes,
             "arrow",
-            f'data-layout="family_backbone" data-family="{e(family_id)}" data-parent="{e(parent_id)}" data-child="{e(child_id)}" data-depth="{depths.get(child_id, 0)}" {meta_attrs} style="stroke:{color};opacity:0.92"',
+            f'data-layout="family_backbone" data-link-tier="{link_tier_name}" data-family="{e(family_id)}" data-parent="{e(parent_id)}" data-child="{e(child_id)}" data-depth="{depths.get(child_id, 0)}" {meta_attrs} style="stroke:{color};opacity:0.92"',
         ))
 
     for node_id in sorted(positions, key=lambda nid: (positions[nid][1], positions[nid][0], order.get(nid, 0))):
@@ -2928,7 +2967,10 @@ def _render_tree_family_backbone(
     if family_roots and any(parent_map.get(family_id) for family_id in family_roots):
         parts.append(f'<text x="{margin_x}" y="{level1_y - 14}" class="tree-level-label">Level 1</text>')
     if any(family_descendants.values()):
-        parts.append(f'<text x="{margin_x}" y="{desc_y0 - 14}" class="tree-level-label">Level 2+</text>')
+        parts.append(f'<text x="{margin_x}" y="{desc_y0 - 14}" class="tree-level-label">Level 2</text>')
+    if max(depths.values(), default=0) >= 3:
+        level3_label_y = desc_y0 + card_h + backbone_nested_gap - 14
+        parts.append(f'<text x="{margin_x}" y="{level3_label_y}" class="tree-level-label">Level 3</text>')
     _append_annotations(parts, contract, style, width, height)
     parts.append('</svg>')
     return "\n".join(parts) + "\n"
