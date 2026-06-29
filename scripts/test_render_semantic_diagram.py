@@ -570,6 +570,14 @@ def main() -> int:
     }
     if not layered_family_bus_y[0] or not layered_family_bus_y[1] or layered_family_bus_y[0] & layered_family_bus_y[1]:
         raise AssertionError("layered_knowledge_topology stress fan-in families should use separate bus lanes")
+    layered_blue_bus_lefts = [
+        float(match.group(1))
+        for attrs in path_attrs(layered_stress_svg, {"fanin", "bus"})
+        if 'data-route-family="1"' in attrs
+        if (match := re.search(r'\bM ([-0-9.]+) [-0-9.]+ L', attrs))
+    ]
+    if not layered_blue_bus_lefts or min(layered_blue_bus_lefts) < 1000:
+        raise AssertionError("layered_knowledge_topology right-side fan-in family should not extend to the left trunk")
 
     source_boundary_stress = load_json("templates/source_boundary_map/stress-contract.json")
     source_boundary_stress_svg = assert_valid("source boundary map stress template", source_boundary_stress)
@@ -597,6 +605,22 @@ def main() -> int:
     }
     if not source_family_bus_y[0] or not source_family_bus_y[1] or source_family_bus_y[0] & source_family_bus_y[1]:
         raise AssertionError("source_boundary_map stress fan-in families should use separate bus lanes")
+    source_green_bus_lefts = [
+        float(match.group(1))
+        for attrs in path_attrs(source_boundary_stress_svg, {"fanin", "bus"})
+        if 'data-route-family="0"' in attrs
+        if (match := re.search(r'\bM ([-0-9.]+) [-0-9.]+ L', attrs))
+    ]
+    source_blue_bus_lefts = [
+        float(match.group(1))
+        for attrs in path_attrs(source_boundary_stress_svg, {"fanin", "bus"})
+        if 'data-route-family="1"' in attrs
+        if (match := re.search(r'\bM ([-0-9.]+) [-0-9.]+ L', attrs))
+    ]
+    if not source_green_bus_lefts or min(source_green_bus_lefts) < 360:
+        raise AssertionError("source_boundary_map controlled-docs fan-in bus should not extend past the left package lane")
+    if not source_blue_bus_lefts or min(source_blue_bus_lefts) < 900:
+        raise AssertionError("source_boundary_map record-system fan-in bus should not detour to the far-left trunk")
     reusable_branch = [
         d for d in path_ds(source_boundary_stress_svg, {"fanin", "branch"})
         if d.startswith("M 950.0 957.0 ")
@@ -640,13 +664,13 @@ def main() -> int:
         raise AssertionError("right-of-source fan-out terminals should round in from the left")
 
     fanin_branch_turns = q_turns(svg, {"fanin", "branch"})
-    if not all(end_x < turn_x for _start_x, turn_x, end_x in fanin_branch_turns):
-        raise AssertionError("left-side fan-in branches should round toward the left trunk")
+    if not any(end_x > turn_x for _start_x, turn_x, end_x in fanin_branch_turns):
+        raise AssertionError("join-row fan-in branches should round toward the local target span")
+    if not any(end_x < turn_x for _start_x, turn_x, end_x in fanin_branch_turns):
+        raise AssertionError("cross-row fan-in branches should still round toward the side trunk")
     fanin_merge_turns = q_turns(svg, {"fanin", "merge"})
-    if not any(start_x < turn_x for start_x, turn_x, _end_x in fanin_merge_turns):
-        raise AssertionError("center fan-in target should merge from the left bus segment")
-    if not any(start_x > turn_x for start_x, turn_x, _end_x in fanin_merge_turns):
-        raise AssertionError("center fan-in target should merge from the right bus segment")
+    if not fanin_merge_turns:
+        raise AssertionError("fan-in target should render a rounded merge into the terminal")
 
     model = renderer.build_layout_model(multi)
     positions = model["positions"]

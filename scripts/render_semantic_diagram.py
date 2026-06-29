@@ -770,6 +770,15 @@ def _connector_family_lane_shift(style: dict, role: str, index: int) -> float:
     return offsets[index % len(offsets)] * gap
 
 
+def _preferred_side_for_points(layout: dict, x_values: list[float], fallback: str) -> str:
+    if not x_values:
+        return fallback
+    left_x = _side_x(layout, "left")
+    right_x = _side_x(layout, "right")
+    avg_x = sum(x_values) / len(x_values)
+    return "left" if abs(avg_x - left_x) <= abs(avg_x - right_x) else "right"
+
+
 def _vertical_branch(x: float, start_y: float, end_y: float) -> str:
     return _rounded_path([(x, start_y), (x, end_y)])
 
@@ -954,7 +963,9 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
     family_attrs = _connector_family_attrs(style, "fanin", family_index)
     lane_shift = _connector_family_lane_shift(style, "fanin", family_index)
     routed = {(source_id, target_id) for sources in row_sources.values() for source_id in sources}
-    side = layout.get("fanin_side", "left")
+    source_center_xs = [center_bottom(positions[source_id])[0] for source_id in _unique(source_ids) if source_id in positions]
+    target_center_x = center_top(positions[target_id])[0]
+    side = _preferred_side_for_points(layout, source_center_xs + [target_center_x], layout.get("fanin_side", "left"))
     trunk_x = _side_x(layout, side)
     trunk_inward = 1 if side == "left" else -1
     trunk_anchor_x = trunk_x + trunk_inward * 14
@@ -1001,7 +1012,11 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
             source_centers.append(source_anchor)
             paths.append(_path(source_path, "edge fanin route-shared branch", extra_attrs=family_attrs))
         if abs(bus_y - join_y) <= 1e-6:
-            source_span = source_centers + [trunk_anchor_x]
+            source_span = list(source_centers)
+            if not source_span and direct_source_id:
+                source_span = [tx]
+            if not source_span:
+                source_span = [trunk_anchor_x]
             if direct_source_id and min(source_span) < tx < max(source_span):
                 terminal_merge_paths, terminal_gap, terminal_start_y = _split_curve_from_bus(tx, join_y, ty)
                 terminal_anchors = list(terminal_gap)

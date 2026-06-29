@@ -45,16 +45,14 @@
 <path d="M 814.0 825.0 L 1441.0 825.0" class="edge fanout route-shared bus"/>
 <path d="M 814.0 825.0 L 807.0 825.0 Q 800.0 825.0 800.0 832.0 L 800.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
 <path d="M 1219.33 825.0 L 1212.33 825.0 Q 1205.33 825.0 1205.33 832.0 L 1205.33 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
-<path d="M 159.0 777.0 L 152.0 777.0 Q 145.0 777.0 145.0 784.0 L 145.0 982.0 Q 145.0 989.0 152.0 989.0 L 159.0 989.0" class="edge fanin route-shared trunk"/>
-<path d="M 394.67 745.0 L 394.67 770.0 Q 394.67 777.0 387.67 777.0 L 380.67 777.0" class="edge fanin route-shared branch"/>
-<path d="M 800.0 745.0 L 800.0 770.0 Q 800.0 777.0 793.0 777.0 L 786.0 777.0" class="edge fanin route-shared branch"/>
-<path d="M 1205.33 745.0 L 1205.33 770.0 Q 1205.33 777.0 1198.33 777.0 L 1191.33 777.0" class="edge fanin route-shared branch"/>
-<path d="M 159.0 777.0 L 1191.33 777.0" class="edge fanin route-shared bus"/>
+<path d="M 1441.0 777.0 L 1448.0 777.0 Q 1455.0 777.0 1455.0 784.0 L 1455.0 982.0 Q 1455.0 989.0 1448.0 989.0 L 1441.0 989.0" class="edge fanin route-shared trunk"/>
+<path d="M 394.67 745.0 L 394.67 770.0 Q 394.67 777.0 401.67 777.0 L 408.67 777.0" class="edge fanin route-shared branch"/>
+<path d="M 800.0 745.0 L 800.0 770.0 Q 800.0 777.0 807.0 777.0 L 814.0 777.0" class="edge fanin route-shared branch"/>
+<path d="M 1205.33 745.0 L 1205.33 770.0 Q 1205.33 777.0 1212.33 777.0 L 1219.33 777.0" class="edge fanin route-shared branch"/>
+<path d="M 408.67 777.0 L 1441.0 777.0" class="edge fanin route-shared bus"/>
 <path d="M 1205.33 957.0 L 1205.33 982.0 Q 1205.33 989.0 1198.33 989.0 L 1191.33 989.0" class="edge fanin route-shared branch"/>
-<path d="M 159.0 989.0 L 786.0 989.0" class="edge fanin route-shared bus"/>
 <path d="M 814.0 989.0 L 1191.33 989.0" class="edge fanin route-shared bus"/>
-<path d="M 786.0 989.0 L 793.0 989.0 Q 800.0 989.0 800.0 996.0 L 800.0 1003.0" class="edge fanin route-shared merge"/>
-<path d="M 814.0 989.0 L 807.0 989.0 Q 800.0 989.0 800.0 996.0 L 800.0 1003.0" class="edge fanin route-shared merge"/>
+<path d="M 814.0 989.0 L 807.0 989.0 Q 800.0 989.0 800.0 996.0 L 800.0 1103.0" class="edge fanin route-shared merge"/>
 <path d="M 800.0 957.0 L 800.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)"/>
 <path d="M 772.0 229.0 L 828.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
 <path d="M 592.0 279 L 592.0 407" class="edge" marker-end="url(#arrow)"/>
