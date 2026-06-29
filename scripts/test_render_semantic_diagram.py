@@ -213,20 +213,6 @@ def assert_ontology_stress_layout(svg: str) -> None:
         raise AssertionError("ontology_map governed_by links should use simple elbows instead of extra detours")
 
 
-def first_q_lanes_from(svg: str, source_bottoms: set[float]) -> set[float]:
-    lanes = set()
-    start_pattern = re.compile(r'^M ([-0-9.]+) ([-0-9.]+)\b')
-    q_pattern = re.compile(r'\bQ [-0-9.]+ ([-0-9.]+) [-0-9.]+ [-0-9.]+')
-    for d in path_ds(svg, {"taxonomy-link"}):
-        start = start_pattern.search(d)
-        q = q_pattern.search(d)
-        if not start or not q:
-            continue
-        if round(float(start.group(2)), 1) in source_bottoms:
-            lanes.add(round(float(q.group(1)), 1))
-    return lanes
-
-
 def assert_card_type_scale(label: str, svg: str) -> None:
     title_sizes = text_font_sizes(svg, "card-title")
     sub_sizes = text_font_sizes(svg, "card-sub")
@@ -804,63 +790,75 @@ def main() -> int:
             raise AssertionError(f"taxonomy_tree stress should not truncate semantic title text: {truncated}")
     width_match = re.search(r'<svg[^>]*width="([0-9.]+)"', stress_tree_svg)
     if not width_match or float(width_match.group(1)) > 1800:
-        raise AssertionError("taxonomy_tree should wrap dense levels instead of forcing an overly wide canvas")
+        raise AssertionError("taxonomy_tree family-backbone stress should fit the template gallery width")
     stress_rects = node_rects(stress_tree_svg)
-    leaf_ids = {
-        "domain_map",
-        "ownership_map",
-        "flow_overview",
-        "glossary",
-        "parameter_register",
-        "risk_register",
-        "work_module",
-        "training_module",
-        "playbook",
-        "source_doc",
-        "quality_record",
-        "test_result",
-    }
-    leaf_rows = {round(stress_rects[node_id][1], 1) for node_id in leaf_ids}
-    if len(leaf_rows) < 2:
-        raise AssertionError("taxonomy_tree dense leaf level should wrap into multiple visual rows")
-    level1_parent_ids = {"maps", "registries", "modules", "evidence"}
-    level1_bottoms = {
-        round(stress_rects[node_id][1] + stress_rects[node_id][3], 1)
-        for node_id in level1_parent_ids
-    }
-    level1_lanes = first_q_lanes_from(stress_tree_svg, level1_bottoms)
-    if len(level1_lanes) < 3:
-        raise AssertionError("taxonomy_tree Level 1 parents should use separate local fan-out lanes")
+    level1_parent_ids = ["maps", "registries", "modules", "evidence"]
+    level1_rows = {round(stress_rects[node_id][1], 1) for node_id in level1_parent_ids}
+    if len(level1_rows) != 1:
+        raise AssertionError("taxonomy_tree family-backbone layout should keep Level 1 families in one horizontal row")
+    level1_centers = [stress_rects[node_id][0] + stress_rects[node_id][2] / 2 for node_id in level1_parent_ids]
+    if level1_centers != sorted(level1_centers):
+        raise AssertionError("taxonomy_tree family-backbone Level 1 families should preserve declared order")
+    if "Level 2+" not in stress_tree_svg:
+        raise AssertionError("taxonomy_tree family-backbone layout should label deeper vertical branches")
     taxonomy_attrs = path_attrs(stress_tree_svg, {"taxonomy-link"})
-    level1_edge_attrs = [
-        attrs for attrs in taxonomy_attrs
-        if re.search(r'data-parent="(maps|registries|modules|evidence)"', attrs)
+    backbone_attrs = [attrs for attrs in taxonomy_attrs if 'data-layout="family_backbone"' in attrs]
+    if len(backbone_attrs) != len(stress_tree["nodes"]) - 1:
+        raise AssertionError("taxonomy_tree family-backbone layout should route every parent-child edge with layout metadata")
+    if any('data-corridor-x=' in attrs or 'data-row-lane-y=' in attrs for attrs in backbone_attrs):
+        raise AssertionError("taxonomy_tree family-backbone layout should not use wrapped horizontal row corridors")
+    parent_lookup = {
+        str(node["id"]): str(node["parent"])
+        for node in stress_tree["nodes"]
+        if isinstance(node, dict) and node.get("parent")
+    }
+    child_map = {str(node["id"]): [] for node in stress_tree["nodes"] if isinstance(node, dict) and node.get("id")}
+    for child_id, parent_id in parent_lookup.items():
+        child_map[parent_id].append(child_id)
+
+    def collect_descendants(node_id: str) -> list[str]:
+        collected: list[str] = []
+        for child_id in child_map[node_id]:
+            collected.append(child_id)
+            collected.extend(collect_descendants(child_id))
+        return collected
+
+    for family_id in level1_parent_ids:
+        desc_ids = collect_descendants(family_id)
+        if len(desc_ids) < 4:
+            raise AssertionError("taxonomy_tree family-backbone stress should exercise several nodes per family")
+        family_x = stress_rects[family_id][0]
+        desc_ys = []
+        for desc_id in desc_ids:
+            if abs(stress_rects[desc_id][0] - family_x) > 0.5:
+                raise AssertionError("taxonomy_tree family-backbone descendants should align under their Level 1 family")
+            if stress_rects[desc_id][1] <= stress_rects[family_id][1]:
+                raise AssertionError("taxonomy_tree family-backbone descendants should sit below the family card")
+            desc_ys.append(stress_rects[desc_id][1])
+        if desc_ys != sorted(desc_ys):
+            raise AssertionError("taxonomy_tree family-backbone descendants should run vertically down the family lane")
+        family_attrs = [attrs for attrs in backbone_attrs if f'data-family="{family_id}"' in attrs]
+        if not family_attrs:
+            raise AssertionError(f"taxonomy_tree family-backbone links should expose data-family for {family_id}")
+    third_level_edges = [
+        (child_id, parent_id)
+        for child_id, parent_id in parent_lookup.items()
+        if parent_lookup.get(parent_id) in level1_parent_ids
     ]
-    level1_colors = {
+    if not third_level_edges or 'data-depth="3"' not in stress_tree_svg:
+        raise AssertionError("taxonomy_tree family-backbone stress should exercise third-level branches")
+    for child_id, parent_id in third_level_edges:
+        if stress_rects[child_id][1] <= stress_rects[parent_id][1]:
+            raise AssertionError("taxonomy_tree third-level nodes should continue downward from their parent")
+    family_colors = {
         color.upper()
-        for attrs in level1_edge_attrs
+        for family_id in level1_parent_ids
+        for attrs in backbone_attrs
+        if f'data-family="{family_id}"' in attrs
         for color in re.findall(r'style="[^"]*stroke:(#[0-9A-Fa-f]{6})', attrs)
     }
-    if len(level1_colors) < 4:
-        raise AssertionError("taxonomy_tree Level 1 fan-out groups should use distinct connector colors")
-    wrapped_corridors = {
-        re.search(r'data-parent="([^"]+)"', attrs).group(1): float(re.search(r'data-corridor-x="([-0-9.]+)"', attrs).group(1))
-        for attrs in level1_edge_attrs
-        if 'data-corridor-x=' in attrs and re.search(r'data-parent="([^"]+)"', attrs)
-    }
-    if len(wrapped_corridors) < 2:
-        raise AssertionError("taxonomy_tree stress case should exercise wrapped parent corridors")
-    if len(set(round(value, 1) for value in wrapped_corridors.values())) != len(wrapped_corridors):
-        raise AssertionError("taxonomy_tree wrapped fan-out groups should not share the same vertical corridor")
-    wrapped_row_lanes = {
-        re.search(r'data-parent="([^"]+)"', attrs).group(1): float(re.search(r'data-row-lane-y="([-0-9.]+)"', attrs).group(1))
-        for attrs in level1_edge_attrs
-        if 'data-row-lane-y=' in attrs and re.search(r'data-parent="([^"]+)"', attrs)
-    }
-    if len(wrapped_row_lanes) < 2:
-        raise AssertionError("taxonomy_tree stress case should exercise wrapped row lanes")
-    if len(set(round(value, 1) for value in wrapped_row_lanes.values())) != len(wrapped_row_lanes):
-        raise AssertionError("taxonomy_tree wrapped fan-out groups should use staggered row lanes")
+    if len(family_colors) < 4:
+        raise AssertionError("taxonomy_tree family-backbone families should use distinct connector colors")
     conflict_tree = copy.deepcopy(tree)
     conflict_tree["edges"] = [{"from": "maps", "to": "glossary", "relation": "parent"}]
     try:

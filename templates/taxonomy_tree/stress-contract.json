@@ -1,32 +1,45 @@
 {
   "title": "Taxonomy Tree Stress",
-  "subtitle": "Stress contract with multiple levels and many leaf nodes",
+  "subtitle": "Stress contract with first-level families and vertical backbones",
   "diagram_type": "taxonomy_tree",
+  "tree_layout": "family_backbone",
   "style": "accent-blueprint",
   "width": 1700,
   "card_width": 220,
-  "tree_max_per_row": 6,
-  "tree_col_gap": 44,
+  "family_gap": 92,
+  "backbone_node_gap": 30,
+  "backbone_start_gap": 66,
+  "backbone_offset": 32,
   "nodes": [
     {"id": "root", "label": "Knowledge Asset System", "subtitle": "root class", "kind": "hub"},
     {"id": "maps", "label": "Map Assets", "subtitle": "structured views", "kind": "capability", "parent": "root", "order": 0},
     {"id": "registries", "label": "Registry Assets", "subtitle": "controlled tables", "kind": "registry", "parent": "root", "order": 1},
     {"id": "modules", "label": "Module Assets", "subtitle": "reusable packages", "kind": "package", "parent": "root", "order": 2},
-    {"id": "evidence", "label": "Evidence Assets", "subtitle": "source-backed proof", "kind": "evidence", "parent": "root", "order": 3},
+    {"id": "evidence", "label": "Evidence Assets", "subtitle": "source proof", "kind": "evidence", "parent": "root", "order": 3},
     {"id": "domain_map", "label": "Domain Map", "subtitle": "systems + boundaries", "kind": "capability", "parent": "maps", "order": 0},
+    {"id": "boundary_view", "label": "Boundary View", "subtitle": "interfaces + owners", "kind": "decision", "parent": "domain_map", "order": 0},
     {"id": "ownership_map", "label": "Ownership Map", "subtitle": "responsibility", "kind": "decision", "parent": "maps", "order": 1},
-    {"id": "flow_overview", "label": "Knowledge Flow Overview", "subtitle": "high-level movement", "kind": "process", "parent": "maps", "order": 2},
+    {"id": "stewardship_path", "label": "Stewardship Path", "subtitle": "owner + reviewer", "kind": "quality", "parent": "ownership_map", "order": 0},
+    {"id": "flow_overview", "label": "Knowledge Flow Overview", "subtitle": "movement map", "kind": "process", "parent": "maps", "order": 2},
     {"id": "glossary", "label": "Glossary", "subtitle": "controlled terms", "kind": "glossary", "parent": "registries", "order": 0},
+    {"id": "term_review", "label": "Term Review", "subtitle": "approval cadence", "kind": "quality", "parent": "glossary", "order": 0},
     {"id": "parameter_register", "label": "Parameter Register", "subtitle": "CTQ families", "kind": "registry", "parent": "registries", "order": 1},
+    {"id": "ctq_thresholds", "label": "CTQ Thresholds", "subtitle": "limits + units", "kind": "risk", "parent": "parameter_register", "order": 0},
     {"id": "risk_register", "label": "Risk Register", "subtitle": "constraints", "kind": "risk", "parent": "registries", "order": 2},
+    {"id": "risk_controls", "label": "Risk Controls", "subtitle": "mitigation rules", "kind": "decision", "parent": "risk_register", "order": 0},
     {"id": "work_module", "label": "Work Module", "subtitle": "approved package", "kind": "package", "parent": "modules", "order": 0},
+    {"id": "reuse_package", "label": "Reuse Package", "subtitle": "versioned module", "kind": "package", "parent": "work_module", "order": 0},
     {"id": "training_module", "label": "Training Module", "subtitle": "reuse content", "kind": "package", "parent": "modules", "order": 1},
     {"id": "playbook", "label": "Exception Playbook", "subtitle": "risk response", "kind": "risk", "parent": "modules", "order": 2},
+    {"id": "exception_steps", "label": "Exception Steps", "subtitle": "actions + owners", "kind": "process", "parent": "playbook", "order": 0},
     {"id": "source_doc", "label": "Source Document", "subtitle": "authority", "kind": "source", "parent": "evidence", "order": 0},
+    {"id": "controlled_source", "label": "Controlled Source", "subtitle": "approved baseline", "kind": "source", "parent": "source_doc", "order": 0},
     {"id": "quality_record", "label": "Quality Record", "subtitle": "approval proof", "kind": "quality", "parent": "evidence", "order": 1},
-    {"id": "test_result", "label": "Test Result", "subtitle": "measured evidence", "kind": "evidence", "parent": "evidence", "order": 2}
+    {"id": "approval_record", "label": "Approval Record", "subtitle": "signoff trail", "kind": "evidence", "parent": "quality_record", "order": 0},
+    {"id": "test_result", "label": "Test Result", "subtitle": "measured evidence", "kind": "evidence", "parent": "evidence", "order": 2},
+    {"id": "measured_sample", "label": "Measured Sample", "subtitle": "result packet", "kind": "quality", "parent": "test_result", "order": 0}
   ],
   "annotations": [
-    {"text": "Stress template: wide trees should preserve level labels, readable cards, and parent-child connectors.", "placement": "footer"}
+    {"text": "Stress template: first-level families remain horizontal; deeper taxonomy branches use separate vertical backbones to reduce shared corridors.", "placement": "footer"}
   ]
 }

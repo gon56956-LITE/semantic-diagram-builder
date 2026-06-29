@@ -30,7 +30,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | registry_table/stress | 1457 | 1397 | 174 | 22 | content span 1397px, panel span 174px; bottom whitespace 22px |
 | relationship_matrix/stress | 1802 | 1612 | 330 | 22 | 11x11 matrix, 121 cells; grid span 1262px, top-connected span 330px; bottom whitespace 22px; height driven by matrix rows and companion panels |
 | source_boundary_map/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
-| taxonomy_tree/stress | 977 | 917 | 0 | 22 | content span 917px, panel span 0px; bottom whitespace 22px |
+| taxonomy_tree/stress | 1359 | 1299 | 0 | 22 | content span 1299px, panel span 0px; bottom whitespace 22px |
 
 ## Truncation Diagnostics
 
@@ -39,7 +39,6 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | relationship_matrix/stress | 17 | 0 | 17 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'account ow...'; compact-fit:matrix-preview-title@matrix-preview-node 'Commercial...'; compact-fit:matrix-preview-sub@matrix-preview-node 'commercial...' |
 | registry_table/stress | 8 | 8 | 0 | context-review | context-review:table-cell-secondary@svg 'hidden cross-domain ownersh...'; context-review:table-cell-secondary@svg 'and must trigger re-review...'; context-review:table-cell-secondary@svg 'traceability to the affecte...' |
 | boundary_ownership_map/reference | 3 | 3 | 0 | context-review | context-review:table-cell-secondary@svg 'Customer Data Stewa...'; context-review:table-cell-secondary@svg 'Operations Data Own...'; context-review:table-cell-secondary@svg 'Operations Data Ste...' |
-| taxonomy_tree/stress | 2 | 2 | 0 | context-review | context-review:card-sub@node-evidence 'source-backed p...'; context-review:card-sub@node-flow_overview 'high-level move...' |
 | layered_knowledge_topology/stress | 1 | 1 | 0 | context-review | context-review:card-sub@node-package_e 'fixture + inspection r...' |
 | relationship_matrix/minimal | 1 | 0 | 1 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'catalog...' |
 
@@ -76,4 +75,4 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 33 | 0 | 40/777 | 0 (0%) | 0 | ok |
 | taxonomy_tree/minimal | 850x557 | 610x497 | 170/22 | 2 | 1 | 0 | 10/177 | 0 (0%) | 0 | ok |
 | taxonomy_tree/reference | 1800x789 | 1660x729 | 70/22 | 10 | 9 | 0 | 30/397 | 0 (0%) | 0 | ok |
-| taxonomy_tree/stress | 1700x977 | 1550x917 | 80/22 | 17 | 16 | 0 | 50/684 | 2 (4%) | 0 | ok |
+| taxonomy_tree/stress | 1700x1359 | 1412x1299 | 218/22 | 27 | 26 | 0 | 77/1011 | 0 (0%) | 0 | ok |

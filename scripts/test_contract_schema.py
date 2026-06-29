@@ -112,6 +112,12 @@ def main() -> int:
     assert_schema_error("registry bad info panel item", registry_bad_panel, "unknown keys")
 
     taxonomy = load_contract("taxonomy-tree-contract.json")
+    taxonomy_backbone = copy.deepcopy(taxonomy)
+    taxonomy_backbone["tree_layout"] = "family_backbone"
+    assert_schema_pass("taxonomy family backbone layout", taxonomy_backbone)
+    taxonomy_bad_layout = copy.deepcopy(taxonomy)
+    taxonomy_bad_layout["tree_layout"] = "family_grid"
+    assert_schema_error("taxonomy bad tree_layout", taxonomy_bad_layout, "tree_layout")
     taxonomy_no_links = copy.deepcopy(taxonomy)
     for node in taxonomy_no_links["nodes"]:
         node.pop("parent", None)

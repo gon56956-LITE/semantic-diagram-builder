@@ -76,6 +76,7 @@ GROUPED_LAYERED_TYPES = {
 }
 
 TREE_PARENT_RELATIONS = {"parent", "parent_of", "contains", "has_child", "classifies"}
+TREE_LAYOUTS = {"level_rows", "family_backbone"}
 ROUTING_MODES = {"auto", "row_bus_side_trunk", "simple"}
 ROUTING_SIDES = {"left", "right"}
 COLUMN_ALIGNS = {"left", "center", "right"}
@@ -443,6 +444,14 @@ def _validate_registry_table(contract: dict[str, Any], diagram_type: str) -> Non
 
 def _validate_taxonomy_tree(contract: dict[str, Any], diagram_type: str) -> None:
     _forbid_fields(contract, diagram_type, {"groups", "columns", "rows", "hub_id", "info_panels"})
+    tree_layout = contract.get("tree_layout", "level_rows")
+    if tree_layout in (None, ""):
+        tree_layout = "level_rows"
+    if not isinstance(tree_layout, str):
+        raise DiagramTypeError(f"{diagram_type} tree_layout must be a string")
+    if tree_layout not in TREE_LAYOUTS:
+        supported = ", ".join(sorted(TREE_LAYOUTS))
+        raise DiagramTypeError(f'{diagram_type} tree_layout "{tree_layout}" is not supported; supported layouts: {supported}')
     nodes = _object_items(_list_field(contract, "nodes", diagram_type, required=True), "nodes", diagram_type)
     edges = _object_items(_list_field(contract, "edges", diagram_type, required=False, allow_empty=True), "edges", diagram_type)
 

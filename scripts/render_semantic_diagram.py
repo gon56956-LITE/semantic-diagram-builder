@@ -2759,10 +2759,188 @@ def _tree_maps(contract: dict) -> tuple[dict[str, dict], dict[str, str], dict[st
     return node_by_id, parent_map, children, roots
 
 
+def _render_tree_family_backbone(
+    contract: dict,
+    style: dict,
+    diagram_type: str,
+    node_by_id: dict[str, dict],
+    parent_map: dict[str, str],
+    children: dict[str, list[str]],
+    roots: list[str],
+) -> str:
+    metrics = layout_metrics(style)
+    margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
+    top_y = int(contract.get("top_y", metrics["top_y"]))
+    card_w = float(contract.get("card_width", 230))
+    card_h = float(contract.get("card_height", metrics["card_h"]))
+    family_gap = max(float(contract.get("family_gap", contract.get("tree_col_gap", metrics["card_col_gap"]))), 72.0)
+    root_gap = max(float(contract.get("root_gap", 118)), 96.0)
+    backbone_start_gap = max(float(contract.get("backbone_start_gap", 70)), 54.0)
+    backbone_node_gap = max(float(contract.get("backbone_node_gap", contract.get("tree_row_gap", 34))), 28.0)
+    backbone_offset = max(float(contract.get("backbone_offset", 30)), 22.0)
+
+    order = {
+        str(n["id"]): i
+        for i, n in enumerate(contract.get("nodes", []))
+        if isinstance(n, dict) and n.get("id")
+    }
+    sorted_roots = sorted(roots, key=lambda node_id: (node_by_id[node_id].get("order", order.get(node_id, 0)), order.get(node_id, 0)))
+    depths: dict[str, int] = {}
+
+    def assign_depth(node_id: str, depth: int) -> None:
+        depths[node_id] = depth
+        for child_id in children[node_id]:
+            assign_depth(child_id, depth + 1)
+
+    for root in sorted_roots:
+        assign_depth(root, 0)
+
+    family_roots: list[str] = []
+    for root in sorted_roots:
+        if children[root]:
+            family_roots.extend(children[root])
+        else:
+            family_roots.append(root)
+    if not family_roots:
+        family_roots = sorted_roots
+
+    def descendants(node_id: str) -> list[str]:
+        items: list[str] = []
+        for child_id in children[node_id]:
+            items.append(child_id)
+            items.extend(descendants(child_id))
+        return items
+
+    family_descendants = {family_id: descendants(family_id) for family_id in family_roots}
+    family_count = max(1, len(family_roots))
+    family_band_w = family_count * card_w + max(0, family_count - 1) * family_gap
+    min_width = int(2 * margin_x + family_band_w)
+    width = int(max(contract.get("width", 1500), min_width))
+    family_x0 = (width - family_band_w) / 2
+    root_y = float(top_y)
+    level1_y = root_y + card_h + root_gap
+    desc_y0 = level1_y + card_h + backbone_start_gap
+
+    positions: dict[str, tuple[float, float, float, float]] = {}
+    if sorted_roots:
+        root_count = len(sorted_roots)
+        root_gap_x = max(family_gap, 72.0)
+        root_band_w = root_count * card_w + max(0, root_count - 1) * root_gap_x
+        root_x0 = (width - root_band_w) / 2
+        for idx, root in enumerate(sorted_roots):
+            positions[root] = (root_x0 + idx * (card_w + root_gap_x), root_y, card_w, card_h)
+
+    for family_idx, family_id in enumerate(family_roots):
+        x = family_x0 + family_idx * (card_w + family_gap)
+        if family_id not in positions or parent_map.get(family_id):
+            positions[family_id] = (x, level1_y, card_w, card_h)
+        for node_idx, node_id in enumerate(family_descendants[family_id]):
+            y = desc_y0 + node_idx * (card_h + backbone_node_gap)
+            positions[node_id] = (x, y, card_w, card_h)
+
+    content_bottom = max((y + h for _x, y, _w, h in positions.values()), default=top_y + card_h)
+    height = int(max(contract.get("height", 0), content_bottom + 110))
+
+    family_by_node: dict[str, str] = {}
+    for family_id, node_ids in family_descendants.items():
+        family_by_node[family_id] = family_id
+        for node_id in node_ids:
+            family_by_node[node_id] = family_id
+
+    family_palette = [
+        style_color(style, "accent_cyan", "#16D9FF"),
+        style_color(style, "accent_yellow", "#FFD84D"),
+        style_color(style, "accent_green", "#6EE66E"),
+        style_color(style, "accent_purple", "#B56CFF"),
+        style_color(style, "accent_orange", "#FF9F2E"),
+    ]
+    family_rank = {family_id: idx for idx, family_id in enumerate(family_roots)}
+    family_backbone_x = {
+        family_id: positions[family_id][0] - backbone_offset
+        for family_id in family_roots
+        if family_id in positions
+    }
+
+    def color_for_family(family_id: str) -> str:
+        explicit = node_by_id[family_id].get("accent") if family_id in node_by_id else None
+        if isinstance(explicit, str) and VALID_HEX.match(explicit):
+            return explicit
+        return family_palette[family_rank.get(family_id, 0) % len(family_palette)]
+
+    def route_for(parent_id: str, child_id: str) -> tuple[str, dict[str, float]]:
+        parent_rect = positions[parent_id]
+        child_rect = positions[child_id]
+        child_family = family_by_node.get(child_id, child_id)
+        sx, sy = center_bottom(parent_rect)
+        tx, ty = center_top(child_rect)
+        if parent_id in sorted_roots and child_id in family_roots:
+            lane_y = (sy + ty) / 2
+            if abs(sx - tx) < 1e-6:
+                return _rounded_path([(sx, sy), (tx, ty)]), {"lane_y": lane_y}
+            return _rounded_path([(sx, sy), (sx, lane_y), (tx, lane_y), (tx, ty)]), {"lane_y": lane_y}
+
+        backbone_x = family_backbone_x.get(child_family, child_rect[0] - backbone_offset)
+        child_x, child_y, _child_w, child_h = child_rect
+        child_cy = child_y + child_h / 2
+        parent_x, parent_y, parent_w, parent_h = parent_rect
+        if parent_id == child_family or depths.get(parent_id, 0) <= 1:
+            branch_y = parent_y + parent_h + min(24.0, backbone_start_gap / 2)
+            route = _rounded_path([
+                (parent_x + parent_w / 2, parent_y + parent_h),
+                (parent_x + parent_w / 2, branch_y),
+                (backbone_x, branch_y),
+                (backbone_x, child_cy),
+                (child_x, child_cy),
+            ])
+            return route, {"backbone_x": backbone_x, "branch_y": branch_y}
+
+        parent_cy = parent_y + parent_h / 2
+        route = _rounded_path([
+            (parent_x, parent_cy),
+            (backbone_x, parent_cy),
+            (backbone_x, child_cy),
+            (child_x, child_cy),
+        ])
+        return route, {"backbone_x": backbone_x, "branch_y": parent_cy}
+
+    parts = _svg_shell_start(contract, style, width, height, diagram_type)
+    for child_id, parent_id in parent_map.items():
+        if parent_id not in positions or child_id not in positions:
+            continue
+        family_id = family_by_node.get(child_id, child_id)
+        color = color_for_family(family_id)
+        route, route_meta = route_for(parent_id, child_id)
+        meta_attrs = " ".join(
+            f'data-{key.replace("_", "-")}="{round(value, 2)}"'
+            for key, value in route_meta.items()
+        )
+        parts.append(_path(
+            route,
+            "edge taxonomy-link taxonomy-backbone-link",
+            "arrow",
+            f'data-layout="family_backbone" data-family="{e(family_id)}" data-parent="{e(parent_id)}" data-child="{e(child_id)}" data-depth="{depths.get(child_id, 0)}" {meta_attrs} style="stroke:{color};opacity:0.92"',
+        ))
+
+    for node_id in sorted(positions, key=lambda nid: (positions[nid][1], positions[nid][0], order.get(nid, 0))):
+        parts.append(make_card(node_by_id[node_id], *positions[node_id], style, width))
+    if sorted_roots:
+        parts.append(f'<text x="{margin_x}" y="{root_y - 14}" class="tree-level-label">Level 0</text>')
+    if family_roots and any(parent_map.get(family_id) for family_id in family_roots):
+        parts.append(f'<text x="{margin_x}" y="{level1_y - 14}" class="tree-level-label">Level 1</text>')
+    if any(family_descendants.values()):
+        parts.append(f'<text x="{margin_x}" y="{desc_y0 - 14}" class="tree-level-label">Level 2+</text>')
+    _append_annotations(parts, contract, style, width, height)
+    parts.append('</svg>')
+    return "\n".join(parts) + "\n"
+
+
 def _render_tree(contract: dict, style: dict, diagram_type: str) -> str:
     node_by_id, parent_map, children, roots = _tree_maps(contract)
     if not node_by_id:
         raise DiagramTypeError("taxonomy_tree requires nodes")
+    tree_layout = contract.get("tree_layout", "level_rows") or "level_rows"
+    if tree_layout == "family_backbone":
+        return _render_tree_family_backbone(contract, style, diagram_type, node_by_id, parent_map, children, roots)
     metrics = layout_metrics(style)
     margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
     card_w = float(contract.get("card_width", 230))
