@@ -3807,6 +3807,8 @@ def _render_ontology_instance_links(contract: dict, positions: dict[str, tuple[f
     paths: list[str] = []
     instances = _ontology_instances(contract)
     lane_step = float(contract.get("ontology_instance_lane_gap", 18.0))
+    concept_ids = _unique(str(instance.get("concept", "")) for instance in instances if instance.get("concept"))
+    concept_palette_index = {concept_id: idx for idx, concept_id in enumerate(concept_ids)}
     for idx, instance in enumerate(instances):
         instance_id = str(instance.get("id", ""))
         concept_id = str(instance.get("concept", ""))
@@ -3824,10 +3826,12 @@ def _render_ontology_instance_links(contract: dict, positions: dict[str, tuple[f
             instance.get("concept_anchor"),
             instance.get("instance_anchor"),
         )
-        color = _accent_color(style, instance, "package")
+        color = _connector_palette_color(style, "ontology_instance_palette", concept_palette_index.get(concept_id, idx))
+        if not color:
+            color = _accent_color(style, instance, "package")
         paths.append(
             f'<path d="{_rounded_path(points)}" class="edge ontology-instance-link" '
-            f'style="stroke:{color};opacity:0.78" stroke-dasharray="6 5" data-from="{e(concept_id)}" data-to="{e(instance_id)}"/>'
+            f'style="stroke:{color};opacity:0.78" stroke-dasharray="6 5" data-route-family="{e(concept_id)}" data-route-color="{color}" data-from="{e(concept_id)}" data-to="{e(instance_id)}"/>'
         )
     return paths
 

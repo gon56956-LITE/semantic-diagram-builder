@@ -945,6 +945,17 @@ def main() -> int:
         raise AssertionError("ontology_map stress template should exercise multiple instances per concept")
     if ontology_stress_svg.count('class="edge ontology-instance-link"') < 6:
         raise AssertionError("ontology_map stress template should exercise instance-to-concept link lanes")
+    ontology_instance_link_colors = {
+        color.upper()
+        for link in re.findall(r'<path\b[^>]*class="edge ontology-instance-link"[^>]*/>', ontology_stress_svg)
+        for color in re.findall(r'style="[^"]*stroke:(#[0-9A-Fa-f]{6})', link)
+    }
+    if len(ontology_instance_link_colors) < 4:
+        raise AssertionError("ontology_map stress instance links should use concept-family route colors")
+    if ontology_instance_link_colors == {"#6EE66E"}:
+        raise AssertionError("ontology_map stress instance links should not collapse into one green dashed corridor")
+    if not re.search(r'class="edge ontology-instance-link"[^>]*data-route-family="product"', ontology_stress_svg):
+        raise AssertionError("ontology_map stress instance links should expose concept-family route metadata")
     if 'ontology-side-panel' in ontology_stress_svg:
         raise AssertionError("ontology_map stress template should keep explanatory panels below the map")
     if ontology_stress_svg.count('class="info-panel"') < 3:

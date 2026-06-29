@@ -138,6 +138,7 @@
       "fanout_palette": ["fanout", "accent_cyan", "accent_yellow", "accent_purple", "accent_green"],
       "fanin_palette": ["fanin", "accent_purple", "accent_yellow", "accent_orange", "accent_cyan"],
       "relation_palette": ["accent_cyan", "accent_yellow", "accent_green", "accent_purple", "accent_orange"],
+      "ontology_instance_palette": ["accent_cyan", "accent_yellow", "accent_purple", "accent_orange", "accent_green"],
       "relation_colors": {
         "data_flow": "accent_orange",
         "flow": "accent_orange",
