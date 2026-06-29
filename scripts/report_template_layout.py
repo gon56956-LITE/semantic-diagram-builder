@@ -20,6 +20,8 @@ TAG_RE = re.compile(r'<(rect|circle|line|path)\b([^>]*)/?>', re.S)
 TEXT_RE = re.compile(r'<text\b([^>]*)>(.*?)</text>', re.S)
 ATTR_RE = re.compile(r'([A-Za-z_:][\w:.-]*)="([^"]*)"')
 STYLE_FONT_RE = re.compile(r'\bfont-size\s*:\s*([0-9.]+)px')
+CLASS_RE = re.compile(r'\bclass="([^"]+)"')
+GROUP_HINT_RE = re.compile(r'<g\b([^>]*)>')
 
 
 @dataclass(frozen=True)
@@ -62,6 +64,14 @@ class LayoutStats:
     def text_density(self) -> float:
         area_units = max(1.0, (self.width * self.height) / 100_000.0)
         return self.text_chars / area_units
+
+
+@dataclass(frozen=True)
+class TruncationRecord:
+    class_name: str
+    component: str
+    severity: str
+    text: str
 
 
 def _attrs(raw: str) -> dict[str, str]:
@@ -177,6 +187,87 @@ def _text_values(svg: str) -> list[str]:
 
 def _count_class(svg: str, class_name: str) -> int:
     return sum(1 for raw_classes in re.findall(r'\bclass="([^"]+)"', svg) if class_name in raw_classes.split())
+
+
+def _primary_text_class(classes: set[str]) -> str:
+    priority = [
+        "card-title",
+        "capability-title",
+        "table-cell",
+        "ontology-attr",
+        "ontology-datatype",
+        "matrix-row-label",
+        "matrix-col-label",
+        "matrix-rank-label",
+        "matrix-preview-title",
+        "matrix-preview-sub",
+        "card-sub",
+        "capability-sub",
+        "table-cell-secondary",
+        "info-panel-item",
+    ]
+    for class_name in priority:
+        if class_name in classes:
+            return class_name
+    return sorted(classes)[0] if classes else "text"
+
+
+def _truncation_severity(classes: set[str]) -> str:
+    if classes & {"matrix-preview-title", "matrix-preview-sub", "matrix-rank-label", "matrix-row-label", "matrix-col-label"}:
+        return "compact-fit"
+    if classes & {"card-title", "capability-title", "table-cell", "ontology-attr", "ontology-datatype"}:
+        return "semantic-review"
+    if classes & {"card-sub", "capability-sub", "table-cell-secondary", "info-panel-item"}:
+        return "context-review"
+    return "review"
+
+
+def _component_hint(svg: str, start: int) -> str:
+    window_start = max(0, start - 900)
+    hint = "svg"
+    for match in GROUP_HINT_RE.finditer(svg[window_start:start]):
+        attrs = _attrs(match.group(1))
+        classes = attrs.get("class", "")
+        if attrs.get("id"):
+            hint = attrs["id"]
+        elif classes:
+            hint = classes.split()[0]
+    return hint
+
+
+def _truncation_records(entry: TemplateEntry) -> list[TruncationRecord]:
+    svg = entry.svg.read_text(encoding="utf-8-sig")
+    records: list[TruncationRecord] = []
+    for match in TEXT_RE.finditer(svg):
+        attrs_raw, raw_text = match.groups()
+        text = html.unescape(re.sub(r'<[^>]+>', '', raw_text)).strip()
+        if "..." not in text:
+            continue
+        class_match = CLASS_RE.search(attrs_raw)
+        classes = set(class_match.group(1).split()) if class_match else set()
+        records.append(
+            TruncationRecord(
+                class_name=_primary_text_class(classes),
+                component=_component_hint(svg, match.start()),
+                severity=_truncation_severity(classes),
+                text=text,
+            )
+        )
+    return records
+
+
+def _truncation_summary(entry: TemplateEntry) -> tuple[int, int, int, str, str]:
+    records = _truncation_records(entry)
+    review = [record for record in records if record.severity != "compact-fit"]
+    compact = [record for record in records if record.severity == "compact-fit"]
+    severity_rank = {"semantic-review": 3, "context-review": 2, "review": 1, "compact-fit": 0}
+    highest = max(records, key=lambda record: severity_rank.get(record.severity, 0)).severity if records else "none"
+    examples = review[:3] or compact[:3]
+    example_text = "; ".join(
+        f"{record.severity}:{record.class_name}@{record.component} '{record.text}'"
+        for record in examples
+    )
+    return len(records), len(review), len(compact), highest, example_text or "none"
 
 
 def _rects_for_group_class(svg: str, class_name: str) -> list[tuple[float, float, float, float]]:
@@ -436,11 +527,14 @@ def _fmt_num(value: float) -> str:
 
 
 def _markdown_table(headers: list[str], rows: list[list[str]]) -> str:
+    def cell(value: str) -> str:
+        return value.replace("|", r"\|").replace("\n", " ")
+
     lines = [
-        "| " + " | ".join(headers) + " |",
+        "| " + " | ".join(cell(header) for header in headers) + " |",
         "| " + " | ".join("---" for _ in headers) + " |",
     ]
-    lines.extend("| " + " | ".join(row) + " |" for row in rows)
+    lines.extend("| " + " | ".join(cell(value) for value in row) + " |" for row in rows)
     return "\n".join(lines)
 
 
@@ -469,6 +563,17 @@ def render_report(stats: list[LayoutStats]) -> str:
             _fmt_num(panel_span),
             _fmt_num(item.bottom_whitespace),
             detail,
+        ])
+    truncation_rows = []
+    for item in sorted((stat for stat in stats if stat.ellipsis_count), key=lambda stat: (-stat.ellipsis_count, stat.template_id)):
+        total, review, compact, highest, examples = _truncation_summary(item.entry)
+        truncation_rows.append([
+            item.template_id,
+            str(total),
+            str(review),
+            str(compact),
+            highest,
+            examples,
         ])
     summary_rows = [
         [
@@ -504,6 +609,13 @@ def render_report(stats: list[LayoutStats]) -> str:
             _markdown_table(
                 ["Template", "Canvas H", "Main Span", "Panel Span", "Bottom WS", "Diagnosis"],
                 diagnostic_rows,
+            ),
+            "",
+            "## Truncation Diagnostics",
+            "",
+            _markdown_table(
+                ["Template", "Total", "Review", "Compact", "Highest Concern", "Examples"],
+                truncation_rows,
             ),
             "",
             "## Template Metrics",

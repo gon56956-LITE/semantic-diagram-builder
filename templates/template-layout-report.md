@@ -32,6 +32,20 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | source_boundary_map/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
 | taxonomy_tree/stress | 977 | 917 | 0 | 22 | content span 917px, panel span 0px; bottom whitespace 22px |
 
+## Truncation Diagnostics
+
+| Template | Total | Review | Compact | Highest Concern | Examples |
+| --- | --- | --- | --- | --- | --- |
+| relationship_matrix/stress | 17 | 0 | 17 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'account ow...'; compact-fit:matrix-preview-title@matrix-preview-node 'Commercial...'; compact-fit:matrix-preview-sub@matrix-preview-node 'commercial...' |
+| hub_spoke/stress | 10 | 10 | 0 | context-review | context-review:card-sub@node-hub 'orchestration + mon...'; context-review:card-sub@node-portal 'request intake + navigati...'; context-review:card-sub@node-domain 'systems + ownership corri...' |
+| taxonomy_tree/stress | 10 | 10 | 0 | semantic-review | semantic-review:card-title@node-root 'Asset Sy...'; context-review:card-sub@node-maps 'structured vi...'; context-review:card-sub@node-registries 'controlled ta...' |
+| registry_table/stress | 8 | 8 | 0 | context-review | context-review:table-cell-secondary@svg 'hidden cross-domain ownersh...'; context-review:table-cell-secondary@svg 'and must trigger re-review...'; context-review:table-cell-secondary@svg 'traceability to the affecte...' |
+| source_boundary_map/stress | 5 | 5 | 0 | semantic-review | semantic-review:card-title@node-asset_a 'Knowledge Pack...'; semantic-review:card-title@node-asset_b 'Parameter Pack...'; semantic-review:card-title@node-asset_c 'Handling Playb...' |
+| boundary_ownership_map/reference | 3 | 3 | 0 | context-review | context-review:table-cell-secondary@svg 'Customer Data Stewa...'; context-review:table-cell-secondary@svg 'Operations Data Own...'; context-review:table-cell-secondary@svg 'Operations Data Ste...' |
+| layered_knowledge_topology/stress | 3 | 3 | 0 | semantic-review | semantic-review:card-title@node-package_e 'Alignment Pack...'; context-review:card-sub@node-package_e 'fixture + inspection ru...'; semantic-review:card-title@node-plm_docs 'PLM Source Docume...' |
+| relationship_matrix/minimal | 1 | 0 | 1 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'catalog...' |
+| taxonomy_tree/reference | 1 | 1 | 0 | context-review | context-review:card-sub@node-boundary 'authority + ow...' |
+
 ## Template Metrics
 
 | Template | Canvas | Content | Whitespace R/B | Cards | Lines | Panels | Text Cnt/Chars | Ellipsis | QA | Notes |

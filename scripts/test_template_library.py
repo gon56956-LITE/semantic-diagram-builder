@@ -167,6 +167,12 @@ def main() -> int:
         fail("template layout report should explain dense capability map height drivers")
     if "relationship_matrix/stress" not in expected_report or "height driven by matrix rows and companion panels" not in expected_report:
         fail("template layout report should explain dense relationship matrix height drivers")
+    if "## Truncation Diagnostics" not in expected_report:
+        fail("template layout report should include truncation diagnostics")
+    if "relationship_matrix/stress" not in expected_report or "compact-fit:matrix-preview" not in expected_report:
+        fail("template layout report should classify matrix truncation as compact-fit")
+    if "taxonomy_tree/stress" not in expected_report or "semantic-review:card-title" not in expected_report:
+        fail("template layout report should surface high-semantic card title truncation")
 
     print("template library selftest: PASS")
     return 0
