@@ -24,7 +24,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | boundary_ownership_map/stress | 1247 | 1187 | 0 | 22 | content span 1187px, panel span 0px; bottom whitespace 22px |
 | capability_domain_map/stress | 1529 | 1056 | 160 | 22 | 5 levels, 48 items, max stack 2; item span 1056px, panel span 160px; bottom whitespace 22px; height driven by content rows, not whitespace |
 | hub_spoke/stress | 1269 | 1209 | 193 | 22 | content span 1209px, panel span 193px; bottom whitespace 22px |
-| layered_knowledge_topology/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
+| layered_knowledge_topology/stress | 1349 | 1289 | 0 | 22 | content span 1289px, panel span 0px; bottom whitespace 22px |
 | object_relationship_diagram/stress | 1487 | 984 | 289 | 22 | 10 objects/concepts, 10 relationships; diagram span 984px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
 | ontology_map/stress | 1398 | 892 | 289 | 22 | 8 objects/concepts, 8 relationships; diagram span 892px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
 | registry_table/stress | 1457 | 1397 | 174 | 22 | content span 1397px, panel span 174px; bottom whitespace 22px |
@@ -57,7 +57,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | hub_spoke/stress | 1800x1269 | 1660x1209 | 70/22 | 13 | 12 | 3 | 59/1564 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/minimal | 1100x839 | 960x779 | 70/22 | 3 | 2 | 0 | 12/286 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/reference | 1600x1307 | 1460x1247 | 70/22 | 10 | 22 | 0 | 27/487 | 0 (0%) | 0 | ok |
-| layered_knowledge_topology/stress | 1900x1307 | 1760x1247 | 70/22 | 17 | 39 | 0 | 50/936 | 1 (2%) | 0 | ok |
+| layered_knowledge_topology/stress | 1900x1349 | 1760x1289 | 70/22 | 18 | 44 | 0 | 53/1098 | 1 (2%) | 0 | ok |
 | object_relationship_diagram/minimal | 950x329 | 699x269 | 126/22 | 2 | 2 | 0 | 17/213 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/reference | 1500x897 | 1360x837 | 70/22 | 7 | 12 | 2 | 84/843 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/stress | 1700x1487 | 1560x1427 | 70/22 | 10 | 19 | 3 | 132/1548 | 0 (0%) | 0 | height above max_height 1450px; dense but acceptable |

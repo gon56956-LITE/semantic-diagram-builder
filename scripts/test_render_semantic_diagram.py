@@ -555,6 +555,30 @@ def main() -> int:
     for truncated in ("Alignment Pack...", "Source Docume..."):
         if truncated in layered_stress_svg:
             raise AssertionError(f"layered_knowledge_topology stress should not truncate semantic title text: {truncated}")
+    layered_source_lane_sources = {
+        source_id
+        for attrs in path_attrs(layered_stress_svg, {"fanout"})
+        for source_id in re.findall(r'data-source-id="([^"]+)"', attrs)
+    }
+    if not {"knowledge_map", "glossary"} <= layered_source_lane_sources:
+        raise AssertionError("layered_knowledge_topology stress should exercise multi-source fan-out lanes")
+    layered_source_lane_bus_y = {
+        source_id: {
+            round(float(y), 1)
+            for attrs in path_attrs(layered_stress_svg, {"fanout", "bus"})
+            if f'data-source-id="{source_id}"' in attrs
+            for y in re.findall(r'\bM [-0-9.]+ ([-0-9.]+) L', attrs)
+        }
+        for source_id in ("knowledge_map", "glossary")
+    }
+    if not layered_source_lane_bus_y["knowledge_map"] or not layered_source_lane_bus_y["glossary"]:
+        raise AssertionError("layered_knowledge_topology stress should expose measurable fan-out bus lanes")
+    if layered_source_lane_bus_y["knowledge_map"] & layered_source_lane_bus_y["glossary"]:
+        raise AssertionError("different entry-layer source fan-outs should use distinct bus y lanes")
+    if not any('edge-dashed' in attrs and 'data-source-id="glossary"' in attrs for attrs in path_attrs(layered_stress_svg, {"fanout"})):
+        raise AssertionError("dashed source fan-out lanes should preserve dashed semantics")
+    if not any('data-direct-lane="1"' in attrs and 'data-route-color="' in attrs for attrs in path_attrs(layered_stress_svg, {"direct-link"})):
+        raise AssertionError("single-target source links should share the source-lane color/offset plan")
     shared_direct = {
         "title": "Shared Direct Corridor Regression",
         "diagram_type": "layered_knowledge_topology",
@@ -632,15 +656,21 @@ def main() -> int:
     ]
     if not layered_blue_bus_lefts or min(layered_blue_bus_lefts) < 1000:
         raise AssertionError("layered_knowledge_topology right-side fan-in family should not extend to the left trunk")
-    layered_green_lower_bus_spans = [
-        (float(match.group(1)), float(match.group(2)))
+    layered_green_bus_spans = [
+        (float(match.group(1)), float(match.group(2)), float(match.group(3)))
         for attrs in path_attrs(layered_stress_svg, {"fanin", "bus"})
         if 'data-route-family="0"' in attrs
-        if (match := re.search(r'\bM ([-0-9.]+) 989\.0 L ([-0-9.]+) 989\.0', attrs))
+        if (match := re.search(r'\bM ([-0-9.]+) ([-0-9.]+) L ([-0-9.]+) [-0-9.]+', attrs))
+    ]
+    layered_green_lower_y = max((y for _left, y, _right in layered_green_bus_spans), default=None)
+    layered_green_lower_bus_spans = [
+        (left, right)
+        for left, y, right in layered_green_bus_spans
+        if layered_green_lower_y is not None and abs(y - layered_green_lower_y) < 1
     ]
     if not any(left <= 169.0 and right >= 728.0 for left, right in layered_green_lower_bus_spans):
         raise AssertionError("layered_knowledge_topology lower fan-in bus should connect the side trunk to the local merge span")
-    if not any(left <= 751.5 and right >= 756.0 for left, right in layered_green_lower_bus_spans):
+    if not any(740.0 <= left <= 760.0 and 748.0 <= right <= 770.0 for left, right in layered_green_lower_bus_spans):
         raise AssertionError("layered_knowledge_topology lower fan-in bus should not drop branch anchors inside the merge gap")
 
     source_boundary_stress = load_json("templates/source_boundary_map/stress-contract.json")

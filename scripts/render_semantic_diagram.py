@@ -555,6 +555,7 @@ def build_layout_model(contract: dict, style: dict | None = None, contract_path:
         groups.append({"id": "ungrouped", "label": "Ungrouped", "type": "layer"})
 
     stats = _connector_stats(nodes, groups, contract.get("edges", []))
+    source_lanes = _source_lane_indices(stats, contract.get("edges", []))
 
     width = int(contract.get("width", 1500))
     margin_x = int(contract.get("canvas_margin_x", metrics["canvas_margin_x"]))
@@ -581,6 +582,14 @@ def build_layout_model(contract: dict, style: dict | None = None, contract_path:
             requested_mode == "auto" and row_count > 1 and (has_fanout or has_fanin)
         )
         mode = "row_bus_side_trunk" if use_row_bus else "simple"
+        fanout_lane_shifts = [
+            _connector_family_lane_shift(style, "fanout", lane_index)
+            for (_source_group, target_group, _source_id), lane_index in source_lanes.items()
+            if target_group == gid
+        ]
+        fanout_lane_up = max([0.0] + [-shift for shift in fanout_lane_shifts if shift < 0])
+        fanout_lane_down = max([0.0] + [shift for shift in fanout_lane_shifts if shift > 0])
+        fanout_clearance = metrics["bus_to_card_clearance"] + int(math.ceil(fanout_lane_down))
 
         row_gap = max(
             int(g.get("row_gap", contract.get("card_row_gap", metrics["card_row_gap"]))),
@@ -588,14 +597,14 @@ def build_layout_model(contract: dict, style: dict | None = None, contract_path:
         )
         if mode == "row_bus_side_trunk" and row_count > 1:
             if has_fanout and has_fanin:
-                row_gap = max(row_gap, 2 * metrics["bus_to_card_clearance"] + metrics["bus_lane_gap"])
+                row_gap = max(row_gap, fanout_clearance + metrics["bus_to_card_clearance"] + metrics["bus_lane_gap"])
             else:
-                row_gap = max(row_gap, metrics["bus_to_card_clearance"] + metrics["bus_bottom_clearance"])
+                row_gap = max(row_gap, fanout_clearance + metrics["bus_bottom_clearance"])
 
         top_pad = int(g.get("top_pad", contract.get("layer_top_pad", metrics["layer_top_pad"])))
         bottom_pad = int(g.get("bottom_pad", contract.get("layer_bottom_pad", metrics["layer_bottom_pad"])))
         if mode == "row_bus_side_trunk" and has_fanout:
-            top_pad = max(top_pad, metrics["layer_label_h"] + metrics["bus_to_card_clearance"])
+            top_pad = max(top_pad, metrics["layer_label_h"] + fanout_clearance + int(math.ceil(fanout_lane_up)))
         if mode == "row_bus_side_trunk" and has_fanin:
             bottom_pad = max(bottom_pad, metrics["bus_to_card_clearance"] + metrics["bus_bottom_clearance"])
 
@@ -634,7 +643,7 @@ def build_layout_model(contract: dict, style: dict | None = None, contract_path:
             row_infos[row_id] = {
                 "top": row_top,
                 "bottom": row_top + card_h,
-                "fanout_bus_y": row_top - metrics["bus_to_card_clearance"],
+                "fanout_bus_y": row_top - fanout_clearance,
                 "fanin_bus_y": row_top + card_h + metrics["bus_to_card_clearance"],
                 "nodes": [n.get("id") for n in row_nodes],
             }
@@ -756,8 +765,18 @@ def _connector_palette_color(style: dict, palette_name: str, index: int, fallbac
     return color if VALID_HEX.match(color) else fallback
 
 
-def _connector_family_attrs(style: dict, role: str, index: int) -> str:
-    color = _connector_palette_color(style, f"{role}_palette", index)
+def _connector_family_attrs(
+    style: dict,
+    role: str,
+    index: int,
+    color_index: int | None = None,
+    palette_name: str | None = None,
+) -> str:
+    color = _connector_palette_color(
+        style,
+        palette_name or f"{role}_palette",
+        index if color_index is None else color_index,
+    )
     if not color:
         return ""
     return f'style="stroke:{color}" data-route-family="{index}" data-route-color="{color}"'
@@ -835,6 +854,32 @@ def _direct_edge_attrs(
         attrs.append(f'data-direct-lane="{lane_index}"')
         attrs.append(f'data-lane-shift="{round(lane_shift, 2)}"')
     return " ".join(attrs)
+
+
+def _source_lane_indices(stats: dict, edges: list[dict]) -> dict[tuple[str, str, str], int]:
+    node_groups = stats["node_groups"]
+    group_order = stats["group_order"]
+    source_groups: dict[tuple[str, str], list[str]] = {}
+    for edge in edges:
+        fr, to = edge.get("from"), edge.get("to")
+        source_group = node_groups.get(fr)
+        target_group = node_groups.get(to)
+        if not source_group or not target_group or source_group == target_group:
+            continue
+        if group_order.get(source_group, 0) >= group_order.get(target_group, 0):
+            continue
+        key = (source_group, target_group)
+        source_order = source_groups.setdefault(key, [])
+        if fr not in source_order:
+            source_order.append(fr)
+
+    lanes: dict[tuple[str, str, str], int] = {}
+    for (source_group, target_group), source_order in source_groups.items():
+        if len(source_order) <= 1:
+            continue
+        for lane_index, source_id in enumerate(source_order):
+            lanes[(source_group, target_group, source_id)] = lane_index
+    return lanes
 
 
 def _preferred_side_for_points(layout: dict, x_values: list[float], fallback: str) -> str:
@@ -932,7 +977,17 @@ def _split_curve_from_bus(x: float, bus_y: float, target_y: float) -> tuple[list
     )
 
 
-def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str], model: dict, family_index: int = 0) -> tuple[list[str], set[tuple[str, str]]]:
+def _fanout_family_paths(
+    source_id: str,
+    target_group: str,
+    target_ids: list[str],
+    model: dict,
+    family_index: int = 0,
+    lane_index: int = 0,
+    *,
+    use_lane_shift: bool = False,
+    edge_lookup: dict[tuple[str, str], dict] | None = None,
+) -> tuple[list[str], set[tuple[str, str]]]:
     positions = model["positions"]
     layout = model["group_layouts"].get(target_group)
     if not layout or layout["mode"] != "row_bus_side_trunk" or source_id not in positions:
@@ -950,13 +1005,33 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
         return [], set()
 
     paths = []
-    family_attrs = _connector_family_attrs(model.get("style", {}), "fanout", family_index)
+    style = model.get("style", {})
+    family_attrs = _connector_family_attrs(
+        style,
+        "fanout",
+        family_index,
+        color_index=lane_index if use_lane_shift else None,
+        palette_name="relation_palette" if use_lane_shift else None,
+    )
+    lane_shift = _connector_family_lane_shift(style, "fanout", lane_index) if use_lane_shift else 0.0
+    if use_lane_shift:
+        family_attrs = (
+            f'{family_attrs} data-source-id="{e(source_id)}" '
+            f'data-source-lane="{lane_index}" data-lane-shift="{round(lane_shift, 2)}"'
+        )
+    family_edges = (
+        [edge_lookup.get((source_id, target_id), {}) for targets in row_targets.values() for target_id in targets]
+        if edge_lookup
+        else []
+    )
+    family_is_dashed = bool(family_edges) and all(edge.get("style") == "dashed" for edge in family_edges)
+    dash_class = " edge-dashed" if family_is_dashed else ""
     routed = {(source_id, target_id) for targets in row_targets.values() for target_id in targets}
     sx, sy = center_bottom(positions[source_id])
     side = layout.get("fanout_side", "right")
     trunk_x = _side_x(layout, side)
     first_row = min(row_targets)
-    first_bus_y = layout["rows"][first_row]["fanout_bus_y"]
+    first_bus_y = layout["rows"][first_row]["fanout_bus_y"] + lane_shift
     has_lower_rows = any(row != first_row for row in row_targets)
     trunk_inward = -1 if side == "right" else 1
     trunk_anchor_x = trunk_x + trunk_inward * 14
@@ -968,7 +1043,7 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
         source_paths, source_bus_gap = _split_curve_to_bus(sx, sy, first_bus_y)
         source_bus_anchors = list(source_bus_gap)
         for source_path in source_paths:
-            paths.append(_path(source_path, "edge fanout route-shared branch", extra_attrs=family_attrs))
+            paths.append(_path(source_path, f"edge{dash_class} fanout route-shared branch", extra_attrs=family_attrs))
     else:
         source_path, source_bus_anchor = _curve_to_bus_toward(
             sx,
@@ -977,23 +1052,23 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
             (min(first_target_centers) + max(first_target_centers)) / 2,
         )
         source_bus_anchors = [source_bus_anchor]
-        paths.append(_path(source_path, "edge fanout route-shared branch", extra_attrs=family_attrs))
+        paths.append(_path(source_path, f"edge{dash_class} fanout route-shared branch", extra_attrs=family_attrs))
 
     for row in sorted(row_targets):
         if row == first_row:
             continue
-        bus_y = layout["rows"][row]["fanout_bus_y"]
+        bus_y = layout["rows"][row]["fanout_bus_y"] + lane_shift
         paths.append(
             _path(
                 _rounded_path([(trunk_anchor_x, first_bus_y), (trunk_x, first_bus_y), (trunk_x, bus_y), (trunk_anchor_x, bus_y)]),
-                "edge fanout route-shared trunk",
+                f"edge{dash_class} fanout route-shared trunk",
                 extra_attrs=family_attrs,
             )
         )
 
     for row in sorted(row_targets):
         targets = row_targets[row]
-        bus_y = layout["rows"][row]["fanout_bus_y"]
+        bus_y = layout["rows"][row]["fanout_bus_y"] + lane_shift
         terminal_paths = []
         upstream_x = sx if row == first_row else trunk_x
         if row == first_row:
@@ -1011,9 +1086,9 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
             terminal_paths.append(terminal_path)
             bus_points.append(terminal_anchor)
         for bus_d in _horizontal_bus_segments(bus_points, bus_y):
-            paths.append(_path(bus_d, "edge fanout route-shared bus", extra_attrs=family_attrs))
+            paths.append(_path(bus_d, f"edge{dash_class} fanout route-shared bus", extra_attrs=family_attrs))
         for terminal_path in terminal_paths:
-            paths.append(_path(terminal_path, "edge fanout terminal", "arrow-fanout", family_attrs))
+            paths.append(_path(terminal_path, f"edge{dash_class} fanout terminal", "arrow-fanout", family_attrs))
     return paths, routed
 
 
@@ -1129,14 +1204,37 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
     paths = []
     routed_edges: set[tuple[str, str]] = set()
     stats = model["stats"]
+    edge_lookup = {(edge.get("from"), edge.get("to")): edge for edge in edges}
+    source_lanes = _source_lane_indices(stats, edges)
     for family_index, ((source_id, target_group), target_ids) in enumerate(stats["fanout_families"].items()):
-        family_paths, family_edges = _fanout_family_paths(source_id, target_group, target_ids, model, family_index)
+        source_group = stats["node_groups"].get(source_id)
+        source_lane = source_lanes.get((source_group, target_group, source_id), 0)
+        family_paths, family_edges = _fanout_family_paths(
+            source_id,
+            target_group,
+            target_ids,
+            model,
+            family_index,
+            source_lane,
+            use_lane_shift=(source_group, target_group, source_id) in source_lanes,
+            edge_lookup=edge_lookup,
+        )
         paths.extend(family_paths)
         routed_edges.update(family_edges)
-    for family_index, ((source_group, target_id), source_ids) in enumerate(stats["fanin_families"].items()):
-        family_paths, family_edges = _fanin_family_paths(source_group, target_id, source_ids, model, family_index)
+    fanin_family_index = 0
+    for (source_group, target_id), source_ids in stats["fanin_families"].items():
+        remaining_source_ids = [
+            source_id for source_id in _unique(source_ids)
+            if (source_id, target_id) not in routed_edges
+        ]
+        if len(remaining_source_ids) <= 1:
+            continue
+        family_paths, family_edges = _fanin_family_paths(source_group, target_id, remaining_source_ids, model, fanin_family_index)
+        if not family_paths:
+            continue
         paths.extend(family_paths)
         routed_edges.update(family_edges)
+        fanin_family_index += 1
 
     positions = model["positions"]
     direct_edges = []
@@ -1150,14 +1248,26 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
         if corridor_key:
             corridor_groups.setdefault(corridor_key, []).append(len(direct_edges) - 1)
     direct_lane_indices = {}
-    for _corridor_key, indices in corridor_groups.items():
-        if len(indices) <= 1:
-            continue
-        source_ids = {direct_edges[direct_index][1] for direct_index in indices}
-        if len(source_ids) <= 1:
-            continue
-        for lane_index, direct_index in enumerate(indices):
+    for direct_index, (_edge, fr, to, _corridor_key) in enumerate(direct_edges):
+        source_group = stats["node_groups"].get(fr)
+        target_group = stats["node_groups"].get(to)
+        lane_index = source_lanes.get((source_group, target_group, fr))
+        if lane_index is not None:
             direct_lane_indices[direct_index] = lane_index
+    for _corridor_key, indices in corridor_groups.items():
+        unassigned_indices = [direct_index for direct_index in indices if direct_index not in direct_lane_indices]
+        if len(unassigned_indices) <= 1:
+            continue
+        source_order = []
+        for direct_index in unassigned_indices:
+            source_id = direct_edges[direct_index][1]
+            if source_id not in source_order:
+                source_order.append(source_id)
+        if len(source_order) <= 1:
+            continue
+        source_lane_map = {source_id: lane_index for lane_index, source_id in enumerate(source_order)}
+        for direct_index in unassigned_indices:
+            direct_lane_indices[direct_index] = source_lane_map[direct_edges[direct_index][1]]
 
     for direct_index, (edge, fr, to, corridor_key) in enumerate(direct_edges):
         shared_corridor = direct_index in direct_lane_indices
