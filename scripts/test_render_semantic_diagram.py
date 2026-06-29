@@ -772,6 +772,35 @@ def main() -> int:
         raise AssertionError("hub_spoke stress template should render operating info panels")
     if hub_stress_svg.count('class="hub-spoke-node spoke-block card"') < 10:
         raise AssertionError("hub_spoke stress template should exercise many designed spoke blocks")
+    for expected in (
+        "routing + orchestration +",
+        "monitoring",
+        "request intake + navigation",
+        "systems + ownership corridors",
+        "classification + constraints",
+        "known deviations + mitigations",
+        "readiness + decision support",
+        "approved modules + instances",
+        "ownership + reuse permissions",
+        "optional out-of-scope links",
+        "health signals + trace logs",
+    ):
+        if expected not in hub_stress_svg:
+            raise AssertionError(f"hub_spoke stress should preserve context subtitle text: {expected}")
+    for truncated in (
+        "orchestration + mon...",
+        "navigati...",
+        "ownership corri...",
+        "constrai...",
+        "mitiga...",
+        "decision supp...",
+        "instan...",
+        "reuse permiss...",
+        "out-of-scope lin...",
+        "trace lo...",
+    ):
+        if truncated in hub_stress_svg:
+            raise AssertionError(f"hub_spoke stress should not truncate context subtitle text: {truncated}")
 
     object_relationship = load_json("templates/object_relationship_diagram/reference-contract.json")
     object_relationship_svg = assert_valid("object relationship reference template", object_relationship)

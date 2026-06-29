@@ -173,6 +173,8 @@ def main() -> int:
         fail("template layout report should classify matrix truncation as compact-fit")
     if "semantic-review:card-title" in expected_report:
         fail("template layout report should not contain high-semantic card title truncation in bundled templates")
+    if "context-review:card-sub@node-hub" in expected_report:
+        fail("template layout report should not retain hub/spoke stress subtitle truncation")
     if "taxonomy_tree/stress" not in expected_report or "context-review:card-sub" not in expected_report:
         fail("template layout report should keep context-level subtitle truncation visible for review")
 

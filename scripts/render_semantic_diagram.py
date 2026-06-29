@@ -2845,9 +2845,23 @@ def _render_spoke_block(node: dict, x: float, y: float, w: float, h: float, styl
     title_size = _clamp(19.0 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 18.0, 20.5)
     sub_size = _clamp(14.5 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 13.5, 15.5)
     text_x = x + 66
-    text_w = max(80, w - 82)
-    title_lines = _hub_text_lines(node.get("label", node.get("id", "Spoke")), max(8, int(text_w / (title_size * 0.62))), 2)
-    sub_lines = _hub_text_lines(node.get("subtitle", ""), max(10, int(text_w / (sub_size * 0.60))), 1)
+    text_w = max(80, x + w - 8 - text_x)
+    title_lines = _wrap_text_to_width(
+        str(node.get("label", node.get("id", "Spoke"))),
+        text_w,
+        title_size,
+        max_lines=2,
+        min_chars=8,
+        char_factor=0.58,
+    )
+    sub_lines = _wrap_text_to_width(
+        str(node.get("subtitle", "")),
+        text_w,
+        sub_size,
+        max_lines=1,
+        min_chars=10,
+        char_factor=0.54,
+    )
     block_h = len(title_lines) * (title_size + 2) + (sub_size + 5 if sub_lines else 0)
     top = y + (h - block_h) / 2
     parts = [f'<g id="node-{e(node.get("id", ""))}" class="hub-spoke-node spoke-block card">']
@@ -2872,7 +2886,14 @@ def _render_hub_core(node: dict, cx: float, cy: float, radius: float, style: dic
     title_size = _clamp(22.0 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 21.0, 24.0)
     sub_size = _clamp(15.0 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 14.0, 16.0)
     title_lines = _hub_text_lines(node.get("label", "Hub"), 15, 2)
-    sub_lines = _hub_text_lines(node.get("subtitle", ""), 20, 2)
+    sub_lines = _wrap_text_to_width(
+        str(node.get("subtitle", "")),
+        radius * 1.65,
+        sub_size,
+        max_lines=2,
+        min_chars=16,
+        char_factor=0.54,
+    )
     block_h = len(title_lines) * (title_size + 2) + (len(sub_lines) * (sub_size + 2) + 6 if sub_lines else 0)
     top = cy - block_h / 2
     parts = [f'<g id="node-{e(node.get("id", ""))}" class="hub-core card">']

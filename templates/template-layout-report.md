@@ -37,7 +37,6 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | Template | Total | Review | Compact | Highest Concern | Examples |
 | --- | --- | --- | --- | --- | --- |
 | relationship_matrix/stress | 17 | 0 | 17 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'account ow...'; compact-fit:matrix-preview-title@matrix-preview-node 'Commercial...'; compact-fit:matrix-preview-sub@matrix-preview-node 'commercial...' |
-| hub_spoke/stress | 10 | 10 | 0 | context-review | context-review:card-sub@node-hub 'orchestration + mon...'; context-review:card-sub@node-portal 'request intake + navigati...'; context-review:card-sub@node-domain 'systems + ownership corri...' |
 | registry_table/stress | 8 | 8 | 0 | context-review | context-review:table-cell-secondary@svg 'hidden cross-domain ownersh...'; context-review:table-cell-secondary@svg 'and must trigger re-review...'; context-review:table-cell-secondary@svg 'traceability to the affecte...' |
 | boundary_ownership_map/reference | 3 | 3 | 0 | context-review | context-review:table-cell-secondary@svg 'Customer Data Stewa...'; context-review:table-cell-secondary@svg 'Operations Data Own...'; context-review:table-cell-secondary@svg 'Operations Data Ste...' |
 | taxonomy_tree/stress | 2 | 2 | 0 | context-review | context-review:card-sub@node-evidence 'source-backed p...'; context-review:card-sub@node-flow_overview 'high-level move...' |
@@ -56,7 +55,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | capability_domain_map/stress | 2364x1473 | 2224x1413 | 70/22 | 48 | 62 | 3 | 119/1815 | 0 (0%) | 0 | height above max_height 1300px; dense but acceptable |
 | hub_spoke/minimal | 1300x620 | 970x560 | 165/22 | 3 | 2 | 0 | 9/186 | 0 (0%) | 0 | ok |
 | hub_spoke/reference | 1500x645 | 1170x585 | 165/22 | 7 | 6 | 0 | 18/336 | 0 (0%) | 0 | ok |
-| hub_spoke/stress | 1800x1269 | 1660x1209 | 70/22 | 13 | 12 | 3 | 60/1558 | 10 (17%) | 0 | ok |
+| hub_spoke/stress | 1800x1269 | 1660x1209 | 70/22 | 13 | 12 | 3 | 59/1564 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/minimal | 1100x839 | 960x779 | 70/22 | 3 | 2 | 0 | 12/286 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/reference | 1600x1307 | 1460x1247 | 70/22 | 10 | 25 | 0 | 27/487 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/stress | 1900x1307 | 1760x1247 | 70/22 | 17 | 39 | 0 | 50/936 | 1 (2%) | 0 | ok |
