@@ -836,6 +836,27 @@ def main() -> int:
     long_lane = renderer._capability_level_label_width({}, [{"id": "sub", "label": "Sub-Domains"}])
     if not short_lane < long_lane:
         raise AssertionError("capability level label lane should grow from label content instead of using one fixed width")
+    long_header_capability = {
+        "title": "Capability Long Header Regression",
+        "diagram_type": "capability_domain_map",
+        "style": "accent-blueprint",
+        "width": 900,
+        "levels": [{"id": "capability", "label": "Capabilities", "kind": "capability"}],
+        "columns": [
+            {"id": "customer", "label": "Customer Experience Operations", "kind": "object"},
+            {"id": "data", "label": "Semantic Governance Intelligence", "kind": "source"},
+        ],
+        "items": [
+            {"id": "experience", "label": "Experience Ops", "level": "capability", "column": "customer"},
+            {"id": "governance", "label": "Governance", "level": "capability", "column": "data"},
+        ],
+    }
+    long_header_svg = assert_valid("capability domain map long header regression", long_header_capability)
+    if long_header_svg.count('class="capability-column-label"') < 4:
+        raise AssertionError("capability_domain_map long column headers should wrap into multiple label lines")
+    for long_label in ("Customer Experience Operations", "Semantic Governance Intelligence"):
+        if f">{long_label}</text>" in long_header_svg:
+            raise AssertionError("capability_domain_map column headers should fit long labels inside the header slot")
 
     relationship_matrix = load_json("templates/relationship_matrix/reference-contract.json")
     relationship_svg = assert_valid("relationship matrix reference template", relationship_matrix)
@@ -857,6 +878,14 @@ def main() -> int:
         raise AssertionError("relationship_matrix stress template should not widen solely to reserve an auxiliary panel rail")
     if "Payment approval gates shipment release" not in relationship_stress_svg:
         raise AssertionError("relationship_matrix stress template should render static focus relationship details")
+    fitted_rank_label = renderer._fit_text_to_width(
+        "Very Long Semantic Relationship Node Label For Dense Ranking Panels",
+        150,
+        18,
+        min_chars=8,
+    )
+    if not fitted_rank_label.endswith("...") or len(fitted_rank_label) > 18:
+        raise AssertionError("relationship_matrix ranking labels should have a reusable width-fitting guard")
 
     print("render_semantic_diagram selftest: PASS")
     return 0

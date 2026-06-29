@@ -82,6 +82,35 @@ def wrap_text(text: str, max_chars: int = 22, max_lines: int = 2) -> list[str]:
     return lines
 
 
+def _truncate_text_line(text: str, max_chars: int) -> str:
+    max_chars = max(4, max_chars)
+    if len(text) <= max_chars:
+        return text
+    return text[: max_chars - 3].rstrip() + "..."
+
+
+def _wrap_text_to_width(
+    text: str,
+    pixel_width: float,
+    font_size: float,
+    max_lines: int = 2,
+    min_chars: int = 8,
+    char_factor: float = 0.56,
+) -> list[str]:
+    max_chars = max(min_chars, int(max(1.0, pixel_width) / max(1.0, font_size * char_factor)))
+    return [_truncate_text_line(line, max_chars) for line in wrap_text(text, max_chars=max_chars, max_lines=max_lines)]
+
+
+def _fit_text_to_width(
+    text: str,
+    pixel_width: float,
+    font_size: float,
+    min_chars: int = 8,
+    char_factor: float = 0.56,
+) -> str:
+    return _wrap_text_to_width(text, pixel_width, font_size, max_lines=1, min_chars=min_chars, char_factor=char_factor)[0]
+
+
 def style_for_contract(contract: dict, contract_path: Path | None = None) -> dict:
     return load_style_package(contract.get("style"), contract_path)
 
@@ -1739,11 +1768,19 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
     max_count = max((row[1] for row in connected_rows), default=1)
     for idx, (entity_id, count_value, strong_value) in enumerate(connected_rows):
         y = top_conn_y + 76 + idx * 32
-        label = entity_by_id[entity_id].get("label", entity_id)
         rank_bar_x = top_conn_x + top_conn_w - 206
+        label_x = top_conn_x + 58
+        label_w = max(90.0, rank_bar_x - label_x - 18.0)
+        label = _fit_text_to_width(
+            str(entity_by_id[entity_id].get("label", entity_id)),
+            label_w,
+            note_size + 0.6,
+            min_chars=8,
+            char_factor=0.56,
+        )
         rank_bar_w = 112 * count_value / max_count
         parts.append(f'<text x="{top_conn_x + 28}" y="{y}" class="matrix-rank" style="font-size:{_fmt_px(note_size)};fill:{secondary}">{idx + 1}</text>')
-        parts.append(f'<text x="{top_conn_x + 58}" y="{y}" class="matrix-rank-label" style="font-size:{_fmt_px(note_size + 0.6)};font-weight:700;fill:{line}">{e(label)}</text>')
+        parts.append(f'<text x="{label_x}" y="{y}" class="matrix-rank-label" style="font-size:{_fmt_px(note_size + 0.6)};font-weight:700;fill:{line}">{e(label)}</text>')
         parts.append(f'<rect x="{rank_bar_x}" y="{y - 13}" width="112" height="14" rx="2" fill="{style_color(style, "background_dark", "#031E42")}" stroke="{line}" stroke-opacity="0.18"/>')
         parts.append(f'<rect x="{rank_bar_x}" y="{y - 13}" width="{rank_bar_w}" height="14" rx="2" fill="{style_color(style, "accent_cyan", "#16D9FF")}" opacity="0.82"/>')
         parts.append(f'<text x="{top_conn_x + top_conn_w - 78}" y="{y}" class="matrix-rank-value" style="font-size:{_fmt_px(note_size)};fill:{line}">{count_value}</text>')
@@ -2369,10 +2406,24 @@ def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str
         icon_kind = str(column.get("kind", "index"))
         parts.append(f'<rect x="{cx}" y="{top_y + 9}" width="{cw}" height="{header_h - 18}" rx="5" fill="none" stroke="{color}" stroke-opacity="0.7" stroke-width="1"/>')
         parts.append(_capability_header_icon_svg(icon_kind, cx + 12, top_y + 13, color, style, "capability-column-icon"))
-        parts.append(
-            f'<text x="{cx + 52}" y="{top_y + 35}" text-anchor="start" class="capability-column-label" '
-            f'style="font-size:{_fmt_px(col_label_size)};font-weight:700;fill:{line}">{e(column.get("label", column.get("id")))}</text>'
+        label_lines = _wrap_text_to_width(
+            str(column.get("label", column.get("id"))),
+            max(70.0, cw - 64.0),
+            col_label_size,
+            max_lines=2,
+            min_chars=7,
+            char_factor=0.55,
         )
+        label_line_h = col_label_size + 2
+        label_y = top_y + 35
+        if len(label_lines) > 1:
+            label_y -= (len(label_lines) - 1) * label_line_h / 2
+        for line_idx, line_text in enumerate(label_lines):
+            text_y = label_y if line_idx == 0 else label_y + line_idx * label_line_h
+            parts.append(
+                f'<text x="{cx + 52}" y="{text_y}" text-anchor="start" class="capability-column-label" '
+                f'style="font-size:{_fmt_px(col_label_size)};font-weight:700;fill:{line}">{e(line_text)}</text>'
+            )
 
     positions: dict[str, tuple[float, float, float, float]] = {}
     level_y: dict[str, float] = {}
