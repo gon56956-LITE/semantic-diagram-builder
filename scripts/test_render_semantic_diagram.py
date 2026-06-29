@@ -559,6 +559,17 @@ def main() -> int:
     for truncated in ("Alignment Pack...", "Source Docume..."):
         if truncated in layered_stress_svg:
             raise AssertionError(f"layered_knowledge_topology stress should not truncate semantic title text: {truncated}")
+    layered_family_bus_y = {
+        int(family): {
+            round(float(y), 1)
+            for attrs in path_attrs(layered_stress_svg, {"fanin", "bus"})
+            if (family_match := re.search(r'data-route-family="([0-9]+)"', attrs)) and int(family_match.group(1)) == family
+            for y in re.findall(r'\bM [-0-9.]+ ([-0-9.]+) L', attrs)
+        }
+        for family in (0, 1)
+    }
+    if not layered_family_bus_y[0] or not layered_family_bus_y[1] or layered_family_bus_y[0] & layered_family_bus_y[1]:
+        raise AssertionError("layered_knowledge_topology stress fan-in families should use separate bus lanes")
 
     source_boundary_stress = load_json("templates/source_boundary_map/stress-contract.json")
     source_boundary_stress_svg = assert_valid("source boundary map stress template", source_boundary_stress)
@@ -575,6 +586,23 @@ def main() -> int:
     }
     if len(source_fanin_colors) < 2:
         raise AssertionError("source_boundary_map stress should color repeated fan-in families distinctly")
+    source_family_bus_y = {
+        int(family): {
+            round(float(y), 1)
+            for attrs in path_attrs(source_boundary_stress_svg, {"fanin", "bus"})
+            if (family_match := re.search(r'data-route-family="([0-9]+)"', attrs)) and int(family_match.group(1)) == family
+            for y in re.findall(r'\bM [-0-9.]+ ([-0-9.]+) L', attrs)
+        }
+        for family in (0, 1)
+    }
+    if not source_family_bus_y[0] or not source_family_bus_y[1] or source_family_bus_y[0] & source_family_bus_y[1]:
+        raise AssertionError("source_boundary_map stress fan-in families should use separate bus lanes")
+    reusable_branch = [
+        d for d in path_ds(source_boundary_stress_svg, {"fanin", "branch"})
+        if d.startswith("M 950.0 957.0 ")
+    ]
+    if not reusable_branch or "Q 950.0 1005.0 957.0 1005.0" not in reusable_branch[0]:
+        raise AssertionError("source_boundary_map reusable training branch should round right toward the record-system merge")
 
     unknown = copy.deepcopy(layered)
     unknown["diagram_type"] = "unknown_type"

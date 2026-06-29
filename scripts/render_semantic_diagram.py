@@ -763,6 +763,13 @@ def _connector_family_attrs(style: dict, role: str, index: int) -> str:
     return f'style="stroke:{color}" data-route-family="{index}" data-route-color="{color}"'
 
 
+def _connector_family_lane_shift(style: dict, role: str, index: int) -> float:
+    connector = _style_component(style, "connector")
+    gap = float(connector.get(f"{role}_lane_gap", connector.get("family_lane_gap", 16.0)))
+    offsets = [0.0, 1.0, -1.0, 2.0, -2.0, 3.0, -3.0]
+    return offsets[index % len(offsets)] * gap
+
+
 def _vertical_branch(x: float, start_y: float, end_y: float) -> str:
     return _rounded_path([(x, start_y), (x, end_y)])
 
@@ -943,13 +950,15 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
         return [], set()
 
     paths = []
-    family_attrs = _connector_family_attrs(model.get("style", {}), "fanin", family_index)
+    style = model.get("style", {})
+    family_attrs = _connector_family_attrs(style, "fanin", family_index)
+    lane_shift = _connector_family_lane_shift(style, "fanin", family_index)
     routed = {(source_id, target_id) for sources in row_sources.values() for source_id in sources}
     side = layout.get("fanin_side", "left")
     trunk_x = _side_x(layout, side)
     trunk_inward = 1 if side == "left" else -1
     trunk_anchor_x = trunk_x + trunk_inward * 14
-    row_bus_ys = [layout["rows"][row]["fanin_bus_y"] for row in row_sources]
+    row_bus_ys = [layout["rows"][row]["fanin_bus_y"] + lane_shift for row in row_sources]
     first_bus_y = min(row_bus_ys)
     join_y = max(row_bus_ys)
     tx, ty = center_top(positions[target_id])
@@ -981,13 +990,14 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
 
     for row in sorted(row_sources):
         sources = row_sources[row]
-        bus_y = layout["rows"][row]["fanin_bus_y"]
+        bus_y = layout["rows"][row]["fanin_bus_y"] + lane_shift
         source_centers = []
         for source_id in sources:
             if source_id == direct_source_id:
                 continue
             sx, sy = center_bottom(positions[source_id])
-            source_path, source_anchor = _curve_to_bus_toward(sx, sy, bus_y, trunk_x)
+            target_direction_x = tx if abs(bus_y - join_y) <= 1e-6 else trunk_x
+            source_path, source_anchor = _curve_to_bus_toward(sx, sy, bus_y, target_direction_x)
             source_centers.append(source_anchor)
             paths.append(_path(source_path, "edge fanin route-shared branch", extra_attrs=family_attrs))
         if abs(bus_y - join_y) <= 1e-6:
