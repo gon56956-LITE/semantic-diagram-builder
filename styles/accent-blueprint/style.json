@@ -87,6 +87,8 @@
       "strong_line": "grid_line_strong",
       "size": 12,
       "strong_every": 5,
+      "reference_width": 1500,
+      "scale_with_canvas": true,
       "opacity": 1
     }
   },

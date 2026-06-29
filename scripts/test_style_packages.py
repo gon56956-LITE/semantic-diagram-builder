@@ -71,6 +71,14 @@ def main() -> int:
         if required not in accent_svg:
             raise AssertionError(f"accent-blueprint SVG missing {required}")
 
+    wide_accent_contract = copy.deepcopy(accent_contract)
+    wide_accent_contract["width"] = 2400
+    wide_accent_svg = renderer.render(wide_accent_contract)
+    if 'id="blueprint-grid-small" width="19.2" height="19.2"' not in wide_accent_svg:
+        raise AssertionError("accent-blueprint grid should scale with canvas width")
+    if 'stroke-width="1.12"' not in wide_accent_svg or 'stroke-width="1.6"' not in wide_accent_svg:
+        raise AssertionError("accent-blueprint grid strokes should scale with canvas width")
+
     boundary = load_contract("accent-blueprint-boundary-contract.json")
     boundary_model = renderer.build_layout_model(boundary)
     boundary_svg = renderer.render(boundary)

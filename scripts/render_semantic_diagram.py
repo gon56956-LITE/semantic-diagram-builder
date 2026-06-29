@@ -160,6 +160,10 @@ def _fmt_px(value: float) -> str:
     return f"{round(value, 1):g}px"
 
 
+def _fmt_num(value: float) -> str:
+    return f"{round(value, 2):g}"
+
+
 def _card_text_metrics(style: dict, canvas_w: float) -> dict[str, float]:
     title_token = _px(style_token(style, "tokens.typography.card_title_size", "18px"), 18)
     sub_token = _px(style_token(style, "tokens.typography.card_sub_size", "13.5px"), 13.5)
@@ -203,7 +207,7 @@ def _css_attr(value: object) -> str:
     return str(value).replace("\\", "\\\\").replace('"', '\\"')
 
 
-def style_block(style: dict) -> str:
+def style_block(style: dict, canvas_w: float | None = None) -> str:
     typography = style_token(style, "tokens.typography", {})
     if not isinstance(typography, dict):
         typography = {}
@@ -239,13 +243,23 @@ def style_block(style: dict) -> str:
     grid = style_token(style, "tokens.grid", {})
     grid_defs = ""
     if isinstance(grid, dict) and grid.get("enabled"):
-        small = grid.get("size", 16)
-        large = grid.get("strong_every", 5) * small if isinstance(grid.get("strong_every", 5), (int, float)) else 80
+        small_base = max(1.0, _number(grid.get("size", 16), 16))
+        strong_every = max(1.0, _number(grid.get("strong_every", 5), 5))
+        reference_w = max(1.0, _number(grid.get("reference_width", 1500), 1500))
+        scale = 1.0
+        if grid.get("scale_with_canvas", True) and canvas_w:
+            scale = max(0.1, float(canvas_w) / reference_w)
+        small_value = small_base * scale
+        large_value = small_base * strong_every * scale
+        small = _fmt_num(small_value)
+        large = _fmt_num(large_value)
+        small_stroke = _fmt_num(_number(grid.get("stroke_width", 0.7), 0.7) * scale)
+        strong_stroke = _fmt_num(_number(grid.get("strong_stroke_width", 1), 1) * scale)
         line_color, line_opacity = style_paint(style, grid.get("line", "grid_line"), "#FFFFFF")
         strong_color, strong_opacity = style_paint(style, grid.get("strong_line", "grid_line_strong"), "#FFFFFF")
         grid_defs = f"""
-  <pattern id="blueprint-grid-small" width="{small}" height="{small}" patternUnits="userSpaceOnUse"><path d="M {small} 0 H 0 V {small}" fill="none" stroke="{line_color}" stroke-opacity="{line_opacity if line_opacity is not None else 0.08}" stroke-width="0.7"/></pattern>
-  <pattern id="blueprint-grid" width="{large}" height="{large}" patternUnits="userSpaceOnUse"><rect width="{large}" height="{large}" fill="url(#blueprint-grid-small)"/><path d="M {large} 0 H 0 V {large}" fill="none" stroke="{strong_color}" stroke-opacity="{strong_opacity if strong_opacity is not None else 0.14}" stroke-width="1"/> </pattern>"""
+  <pattern id="blueprint-grid-small" width="{small}" height="{small}" patternUnits="userSpaceOnUse"><path d="M {small} 0 H 0 V {small}" fill="none" stroke="{line_color}" stroke-opacity="{line_opacity if line_opacity is not None else 0.08}" stroke-width="{small_stroke}"/></pattern>
+  <pattern id="blueprint-grid" width="{large}" height="{large}" patternUnits="userSpaceOnUse"><rect width="{large}" height="{large}" fill="url(#blueprint-grid-small)"/><path d="M {large} 0 H 0 V {large}" fill="none" stroke="{strong_color}" stroke-opacity="{strong_opacity if strong_opacity is not None else 0.14}" stroke-width="{strong_stroke}"/> </pattern>"""
 
     extra_defs = "\n".join(part.strip() for part in (shadow_def, grid_defs) if part.strip())
     extra_defs = f"\n  {extra_defs}" if extra_defs else ""
@@ -1053,7 +1067,7 @@ def _svg_shell_start(contract: dict, style: dict, width: float, height: float, d
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{e(contract.get("title", "Semantic Diagram"))}" data-style="{e(style_id(style))}" data-diagram-type="{e(diagram_type)}"{variant_attr}>'
     ]
-    parts.append(style_block(style))
+    parts.append(style_block(style, width))
     parts.extend(_canvas_parts(style, width, height))
     title = contract.get("title", "Semantic Diagram")
     subtitle = contract.get("subtitle", "")

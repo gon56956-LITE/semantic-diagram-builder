@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1514" viewBox="0 0 2200 1514" role="img" aria-label="Relationship Matrix Reference" data-style="accent-blueprint" data-diagram-type="relationship_matrix">
 <defs>
-  <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
-  <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
+  <pattern id="blueprint-grid-small" width="17.6" height="17.6" patternUnits="userSpaceOnUse"><path d="M 17.6 0 H 0 V 17.6" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1.03"/></pattern>
+  <pattern id="blueprint-grid" width="88" height="88" patternUnits="userSpaceOnUse"><rect width="88" height="88" fill="url(#blueprint-grid-small)"/><path d="M 88 0 H 0 V 88" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.47"/> </pattern>
   <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
   <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
   <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
