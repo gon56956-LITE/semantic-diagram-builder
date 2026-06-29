@@ -326,23 +326,42 @@ def make_card(node: dict, x: float, y: float, w: float, h: float, style: dict, c
     shadow = card.get("shadow", {})
     shadow_enabled = bool(shadow.get("enabled", True)) if isinstance(shadow, dict) else bool(shadow)
     filter_attr = ' filter="url(#shadow)"' if shadow_enabled else ""
+    compact_card = w < 250
     pad_x = float(card.get("padding_x", 18))
     icon_gap = float(card.get("icon_gap", 16))
+    if compact_card:
+        pad_x = min(pad_x, 16.0)
+        icon_gap = min(icon_gap, 6.0)
     text_x = x + pad_x + 22 + icon_gap
     text_w = max(80, w - (text_x - x) - pad_x)
     text_metrics = _card_text_metrics(style, canvas_width or w)
     title_size = text_metrics["title_size"]
     sub_size = text_metrics["sub_size"]
-    title_line_h = text_metrics["title_line_h"]
-    sub_line_h = text_metrics["sub_line_h"]
-    sub_gap = text_metrics["sub_gap"]
-    title_chars = max(8, int(text_w / max(8.0, title_size * 0.66)))
-    title_lines = wrap_text(node.get("label", node.get("id", "Object")), max_chars=title_chars, max_lines=2)
+    if compact_card:
+        title_size = min(title_size, 21.0)
+        sub_size = min(sub_size, 16.0)
+    title_line_h = max(title_size + 1.5, title_size * 1.08)
+    sub_line_h = max(sub_size + 1.5, sub_size * 1.1)
+    sub_gap = _clamp(title_size * 0.18, 3.0, 5.0)
+    title_lines = _wrap_text_to_width(
+        str(node.get("label", node.get("id", "Object"))),
+        text_w,
+        title_size,
+        max_lines=2,
+        min_chars=8,
+        char_factor=0.58,
+    )
     sub = node.get("subtitle", "")
     sub_lines: list[str] = []
     if sub:
-        sub_chars = max(10, int(text_w / max(7.0, sub_size * 0.58)))
-        sub_lines = wrap_text(sub, max_chars=sub_chars, max_lines=1 if len(title_lines) > 1 else 2)
+        sub_lines = _wrap_text_to_width(
+            str(sub),
+            text_w,
+            sub_size,
+            max_lines=1 if len(title_lines) > 1 else 2,
+            min_chars=10,
+            char_factor=0.54,
+        )
     parts = [f'<g id="node-{e(node.get("id", ""))}" class="card node-card">']
     fill_attrs = _paint_attr(style, "fill", fill, fill_default, card.get("fill_opacity"))
     parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" {fill_attrs} stroke="{stroke}" stroke-width="{stroke_width}"{filter_attr}/>')

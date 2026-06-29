@@ -38,13 +38,11 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | --- | --- | --- | --- | --- | --- |
 | relationship_matrix/stress | 17 | 0 | 17 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'account ow...'; compact-fit:matrix-preview-title@matrix-preview-node 'Commercial...'; compact-fit:matrix-preview-sub@matrix-preview-node 'commercial...' |
 | hub_spoke/stress | 10 | 10 | 0 | context-review | context-review:card-sub@node-hub 'orchestration + mon...'; context-review:card-sub@node-portal 'request intake + navigati...'; context-review:card-sub@node-domain 'systems + ownership corri...' |
-| taxonomy_tree/stress | 10 | 10 | 0 | semantic-review | semantic-review:card-title@node-root 'Asset Sy...'; context-review:card-sub@node-maps 'structured vi...'; context-review:card-sub@node-registries 'controlled ta...' |
 | registry_table/stress | 8 | 8 | 0 | context-review | context-review:table-cell-secondary@svg 'hidden cross-domain ownersh...'; context-review:table-cell-secondary@svg 'and must trigger re-review...'; context-review:table-cell-secondary@svg 'traceability to the affecte...' |
-| source_boundary_map/stress | 5 | 5 | 0 | semantic-review | semantic-review:card-title@node-asset_a 'Knowledge Pack...'; semantic-review:card-title@node-asset_b 'Parameter Pack...'; semantic-review:card-title@node-asset_c 'Handling Playb...' |
 | boundary_ownership_map/reference | 3 | 3 | 0 | context-review | context-review:table-cell-secondary@svg 'Customer Data Stewa...'; context-review:table-cell-secondary@svg 'Operations Data Own...'; context-review:table-cell-secondary@svg 'Operations Data Ste...' |
-| layered_knowledge_topology/stress | 3 | 3 | 0 | semantic-review | semantic-review:card-title@node-package_e 'Alignment Pack...'; context-review:card-sub@node-package_e 'fixture + inspection ru...'; semantic-review:card-title@node-plm_docs 'PLM Source Docume...' |
+| taxonomy_tree/stress | 2 | 2 | 0 | context-review | context-review:card-sub@node-evidence 'source-backed p...'; context-review:card-sub@node-flow_overview 'high-level move...' |
+| layered_knowledge_topology/stress | 1 | 1 | 0 | context-review | context-review:card-sub@node-package_e 'fixture + inspection r...' |
 | relationship_matrix/minimal | 1 | 0 | 1 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'catalog...' |
-| taxonomy_tree/reference | 1 | 1 | 0 | context-review | context-review:card-sub@node-boundary 'authority + ow...' |
 
 ## Template Metrics
 
@@ -61,7 +59,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | hub_spoke/stress | 1800x1269 | 1660x1209 | 70/22 | 13 | 12 | 3 | 60/1558 | 10 (17%) | 0 | ok |
 | layered_knowledge_topology/minimal | 1100x839 | 960x779 | 70/22 | 3 | 2 | 0 | 12/286 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/reference | 1600x1307 | 1460x1247 | 70/22 | 10 | 25 | 0 | 27/487 | 0 (0%) | 0 | ok |
-| layered_knowledge_topology/stress | 1900x1307 | 1760x1247 | 70/22 | 17 | 39 | 0 | 52/935 | 3 (6%) | 0 | ok |
+| layered_knowledge_topology/stress | 1900x1307 | 1760x1247 | 70/22 | 17 | 39 | 0 | 50/936 | 1 (2%) | 0 | ok |
 | object_relationship_diagram/minimal | 950x329 | 699x269 | 126/22 | 2 | 2 | 0 | 17/213 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/reference | 1500x897 | 1360x837 | 70/22 | 7 | 12 | 2 | 84/843 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/stress | 1700x1487 | 1560x1427 | 70/22 | 10 | 19 | 3 | 132/1548 | 0 (0%) | 0 | height above max_height 1450px; dense but acceptable |
@@ -76,7 +74,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | relationship_matrix/stress | 2400x1802 | 2304x1742 | 48/22 | 0 | 0 | 3 | 252/1455 | 17 (7%) | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
 | source_boundary_map/minimal | 1100x800 | 960x740 | 70/22 | 2 | 1 | 0 | 9/260 | 0 (0%) | 0 | ok |
 | source_boundary_map/reference | 1536x1307 | 1468x1247 | 0/22 | 11 | 26 | 0 | 32/701 | 0 (0%) | 0 | ok |
-| source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 34 | 0 | 41/777 | 5 (12%) | 0 | ok |
+| source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 34 | 0 | 40/777 | 0 (0%) | 0 | ok |
 | taxonomy_tree/minimal | 850x557 | 610x497 | 170/22 | 2 | 1 | 0 | 10/177 | 0 (0%) | 0 | ok |
-| taxonomy_tree/reference | 1800x789 | 1660x729 | 70/22 | 10 | 9 | 0 | 34/389 | 1 (3%) | 0 | ok |
-| taxonomy_tree/stress | 1700x977 | 1550x917 | 80/22 | 17 | 16 | 0 | 57/663 | 10 (18%) | 0 | ok |
+| taxonomy_tree/reference | 1800x789 | 1660x729 | 70/22 | 10 | 9 | 0 | 30/397 | 0 (0%) | 0 | ok |
+| taxonomy_tree/stress | 1700x977 | 1550x917 | 80/22 | 17 | 16 | 0 | 50/684 | 2 (4%) | 0 | ok |

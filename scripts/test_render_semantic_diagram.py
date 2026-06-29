@@ -551,6 +551,24 @@ def main() -> int:
     if not any("takes precedence" in warning for warning in conflict_warnings):
         raise AssertionError("diagram_type should take precedence over conflicting layout")
 
+    layered_stress = load_json("templates/layered_knowledge_topology/stress-contract.json")
+    layered_stress_svg = assert_valid("layered knowledge topology stress template", layered_stress)
+    for expected in ("Alignment Package", "Source Documents"):
+        if expected not in layered_stress_svg:
+            raise AssertionError(f"layered_knowledge_topology stress should preserve semantic title text: {expected}")
+    for truncated in ("Alignment Pack...", "Source Docume..."):
+        if truncated in layered_stress_svg:
+            raise AssertionError(f"layered_knowledge_topology stress should not truncate semantic title text: {truncated}")
+
+    source_boundary_stress = load_json("templates/source_boundary_map/stress-contract.json")
+    source_boundary_stress_svg = assert_valid("source boundary map stress template", source_boundary_stress)
+    for expected in ("Knowledge Package", "Parameter Package", "Handling Playbook", "Controlled Procedure", "Documents"):
+        if expected not in source_boundary_stress_svg:
+            raise AssertionError(f"source_boundary_map stress should preserve semantic title text: {expected}")
+    for truncated in ("Knowledge Pack...", "Parameter Pack...", "Handling Playb...", "Procedure Documen..."):
+        if truncated in source_boundary_stress_svg:
+            raise AssertionError(f"source_boundary_map stress should not truncate semantic title text: {truncated}")
+
     unknown = copy.deepcopy(layered)
     unknown["diagram_type"] = "unknown_type"
     try:
@@ -664,6 +682,12 @@ def main() -> int:
         raise AssertionError("taxonomy level labels should be readable at gallery scale")
     stress_tree = load_json("templates/taxonomy_tree/stress-contract.json")
     stress_tree_svg = assert_valid("taxonomy tree stress template", stress_tree)
+    for expected in ("Asset System", "Flow Overview"):
+        if expected not in stress_tree_svg:
+            raise AssertionError(f"taxonomy_tree stress should preserve semantic title text: {expected}")
+    for truncated in ("Asset Sy...", "Flow Ove..."):
+        if truncated in stress_tree_svg:
+            raise AssertionError(f"taxonomy_tree stress should not truncate semantic title text: {truncated}")
     width_match = re.search(r'<svg[^>]*width="([0-9.]+)"', stress_tree_svg)
     if not width_match or float(width_match.group(1)) > 1800:
         raise AssertionError("taxonomy_tree should wrap dense levels instead of forcing an overly wide canvas")

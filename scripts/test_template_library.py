@@ -171,8 +171,10 @@ def main() -> int:
         fail("template layout report should include truncation diagnostics")
     if "relationship_matrix/stress" not in expected_report or "compact-fit:matrix-preview" not in expected_report:
         fail("template layout report should classify matrix truncation as compact-fit")
-    if "taxonomy_tree/stress" not in expected_report or "semantic-review:card-title" not in expected_report:
-        fail("template layout report should surface high-semantic card title truncation")
+    if "semantic-review:card-title" in expected_report:
+        fail("template layout report should not contain high-semantic card title truncation in bundled templates")
+    if "taxonomy_tree/stress" not in expected_report or "context-review:card-sub" not in expected_report:
+        fail("template layout report should keep context-level subtitle truncation visible for review")
 
     print("template library selftest: PASS")
     return 0
