@@ -29,7 +29,7 @@
 </defs>
 <rect x="0" y="0" width="826" height="673" rx="28" fill="#F8FBFF"/>
 <text x="413.0" y="54" text-anchor="middle" class="title">Capability Domain Map Minimal</text>
-<text x="413.0" y="80" text-anchor="middle" class="subtitle">Small capability/domain map contract</text>
+<text x="413.0" y="80.0" text-anchor="middle" class="subtitle">Small capability/domain map contract</text>
 <rect x="69.91999999999996" y="115" width="686.1600000000001" height="56.0" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#334155" stroke-opacity="0.52" stroke-width="1"/>
 <rect x="302.08" y="124" width="205.0" height="38.0" rx="5" fill="none" stroke="#06B6D4" stroke-opacity="0.7" stroke-width="1"/>
 <g class="capability-column-icon capability-header-icon" data-kind="object"><rect x="314.08" y="128" width="30" height="30" rx="6" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="329.08" cy="143" r="8" fill="#ECFEFF" stroke="#06B6D4" stroke-width="1.7"/><path d="M324.08,143 H334.08 M329.08,138 V148" class="icon-line" stroke="#06B6D4"/></g>

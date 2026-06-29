@@ -29,7 +29,7 @@
 </defs>
 <rect x="0" y="0" width="1100" height="467" rx="28" fill="#F8FBFF"/>
 <text x="550.0" y="54" text-anchor="middle" class="title">Registry Table Minimal</text>
-<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for a semantic registry</text>
+<text x="550.0" y="80.0" text-anchor="middle" class="subtitle">Minimal standard contract for a semantic registry</text>
 <rect x="70" y="115" width="960" height="242" rx="16" fill="#FFFFFF" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
 <rect x="70" y="115" width="960" height="58" rx="16" fill="#EEF6FF"/>
 <text x="86.0" y="149.16666666666666" text-anchor="start" class="table-header" style="font-size:15.5px">Term</text>

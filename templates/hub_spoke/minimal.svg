@@ -29,7 +29,7 @@
 </defs>
 <rect x="0" y="0" width="1300" height="620" rx="28" fill="#F8FBFF"/>
 <text x="650.0" y="54" text-anchor="middle" class="title">Hub Spoke Minimal</text>
-<text x="650.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for a hub-spoke map</text>
+<text x="650.0" y="80.0" text-anchor="middle" class="subtitle">Minimal standard contract for a hub-spoke map</text>
 <circle cx="650.0" cy="390" r="138.0" fill="none" stroke="#2F7DFF" stroke-opacity="0.16" stroke-width="1.4"/>
 <path d="M 532.0 390.0 L 445.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
 <path d="M 768.0 390.0 L 855.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>

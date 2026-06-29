@@ -31,102 +31,102 @@
 <rect x="0" y="0" width="2400" height="1802" rx="0" fill="#062B5F"/>
 <rect x="0" y="0" width="2400" height="1802" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="1200.0" y="54" text-anchor="middle" class="title">Relationship Matrix Stress</text>
-<text x="1200.0" y="80" text-anchor="middle" class="subtitle">Dense static companion view with many same-entity relationships</text>
+<text x="1200.0" y="80.0" text-anchor="middle" class="subtitle">Dense static companion view with many same-entity relationships</text>
 <g class="matrix-primary-preview">
 <rect x="48.0" y="118.0" width="580.0" height="1262.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.54" stroke-width="1"/>
 <text x="66.0" y="150.0" class="info-panel-title" style="font-size:19.1px">PRIMARY DIAGRAM (REFERENCE ONLY)</text>
 <text x="66.0" y="180.0" class="note" style="font-size:17.4px">Dense reference view: too many lines to read directly.</text>
 <line x1="174.8" y1="236.0" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
 <line x1="501.2" y1="236.0" x2="174.8" y2="236.0" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
-<line x1="501.2" y1="236.0" x2="174.8" y2="445.6" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
-<line x1="174.8" y1="445.6" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="174.8" y1="445.6" x2="501.2" y2="498.0" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
-<line x1="501.2" y1="498.0" x2="174.8" y2="445.6" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="501.2" y1="498.0" x2="174.8" y2="655.2" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
-<line x1="174.8" y1="655.2" x2="501.2" y2="498.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="174.8" y1="655.2" x2="501.2" y2="760.0" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
-<line x1="501.2" y1="760.0" x2="174.8" y2="655.2" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="174.8" y1="864.8" x2="174.8" y2="655.2" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
-<line x1="174.8" y1="655.2" x2="174.8" y2="864.8" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.35"/>
-<line x1="501.2" y1="236.0" x2="501.2" y2="1022.0" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
-<line x1="501.2" y1="1022.0" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="501.2" y1="236.0" x2="174.8" y2="1074.4" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="174.8" y1="1074.4" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="501.2" y1="236.0" x2="501.2" y2="1284.0" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
-<line x1="501.2" y1="1284.0" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="501.2" y1="1284.0" x2="501.2" y2="760.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="174.8" y1="1284.0" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
-<line x1="501.2" y1="236.0" x2="501.2" y2="498.0" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.7" stroke-dasharray="5 5"/>
-<line x1="501.2" y1="498.0" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.7" stroke-dasharray="5 5"/>
-<line x1="174.8" y1="236.0" x2="501.2" y2="498.0" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.7" stroke-dasharray="5 5"/>
-<line x1="501.2" y1="498.0" x2="174.8" y2="236.0" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.35" stroke-dasharray="5 5"/>
-<line x1="174.8" y1="236.0" x2="501.2" y2="1022.0" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.7" stroke-dasharray="5 5"/>
-<line x1="174.8" y1="236.0" x2="174.8" y2="1074.4" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.35" stroke-dasharray="5 5"/>
+<line x1="501.2" y1="236.0" x2="174.8" y2="434.8" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
+<line x1="174.8" y1="434.8" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="174.8" y1="434.8" x2="501.2" y2="484.5" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
+<line x1="501.2" y1="484.5" x2="174.8" y2="434.8" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="501.2" y1="484.5" x2="174.8" y2="633.6" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
+<line x1="174.8" y1="633.6" x2="501.2" y2="484.5" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="174.8" y1="633.6" x2="501.2" y2="733.0" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
+<line x1="501.2" y1="733.0" x2="174.8" y2="633.6" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="174.8" y1="832.4000000000001" x2="174.8" y2="633.6" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
+<line x1="174.8" y1="633.6" x2="174.8" y2="832.4000000000001" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.35"/>
+<line x1="501.2" y1="236.0" x2="501.2" y2="981.5" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
+<line x1="501.2" y1="981.5" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="501.2" y1="236.0" x2="174.8" y2="1031.2" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="174.8" y1="1031.2" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="501.2" y1="236.0" x2="501.2" y2="1230.0" class="matrix-preview-link" stroke="#FFD84D" stroke-opacity="0.42" stroke-width="2.05"/>
+<line x1="501.2" y1="1230.0" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="501.2" y1="1230.0" x2="501.2" y2="733.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="174.8" y1="1230.0" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#F4F8FF" stroke-opacity="0.42" stroke-width="1.7"/>
+<line x1="501.2" y1="236.0" x2="501.2" y2="484.5" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.7" stroke-dasharray="5 5"/>
+<line x1="501.2" y1="484.5" x2="501.2" y2="236.0" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.7" stroke-dasharray="5 5"/>
+<line x1="174.8" y1="236.0" x2="501.2" y2="484.5" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.7" stroke-dasharray="5 5"/>
+<line x1="501.2" y1="484.5" x2="174.8" y2="236.0" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.35" stroke-dasharray="5 5"/>
+<line x1="174.8" y1="236.0" x2="501.2" y2="981.5" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.7" stroke-dasharray="5 5"/>
+<line x1="174.8" y1="236.0" x2="174.8" y2="1031.2" class="matrix-preview-link" stroke="#16D9FF" stroke-opacity="0.42" stroke-width="1.35" stroke-dasharray="5 5"/>
 <g class="matrix-preview-node" data-entity="customer">
 <rect x="82.0" y="198.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.9" stroke-width="1"/>
 <rect x="94.0" y="229.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M94.0,234.0 H114.0 M104.0,229.0 V245.0" class="icon-line" stroke="#16D9FF"/>
 <text x="126.0" y="226.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Customer</text>
-<text x="126.0" y="250.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">account owner</text>
+<text x="126.0" y="250.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">account ow...</text>
 </g>
 <g class="matrix-preview-node" data-entity="order">
 <rect x="408.4" y="198.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.9" stroke-width="1"/>
 <path d="M420.4,226.0 H434.4 L440.4,232.0 V246.0 H420.4 Z" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M434.4,226.0 V232.0 H440.4" class="icon-line" stroke="#16D9FF"/>
 <text x="452.4" y="226.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Order</text>
-<text x="452.4" y="250.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">commercial event</text>
+<text x="452.4" y="250.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">commercial...</text>
 </g>
 <g class="matrix-preview-node" data-entity="order_item">
-<rect x="82.0" y="407.6" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.9" stroke-width="1"/>
-<path d="M94.0,435.6 H108.0 L114.0,441.6 V455.6 H94.0 Z" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M108.0,435.6 V441.6 H114.0" class="icon-line" stroke="#16D9FF"/>
-<text x="126.0" y="435.6" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Order Item</text>
-<text x="126.0" y="459.6" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">line detail</text>
+<rect x="82.0" y="396.8" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.9" stroke-width="1"/>
+<path d="M94.0,424.8 H108.0 L114.0,430.8 V444.8 H94.0 Z" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M108.0,424.8 V430.8 H114.0" class="icon-line" stroke="#16D9FF"/>
+<text x="126.0" y="424.8" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Order Item</text>
+<text x="126.0" y="448.8" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">line detail</text>
 </g>
 <g class="matrix-preview-node" data-entity="product">
-<rect x="408.4" y="460.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-opacity="0.9" stroke-width="1"/>
-<rect x="420.4" y="491.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M420.4,496.0 H440.4 M430.4,491.0 V507.0" class="icon-line" stroke="#6EE66E"/>
-<text x="452.4" y="488.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Product</text>
-<text x="452.4" y="512.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">catalog item</text>
+<rect x="408.4" y="446.5" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-opacity="0.9" stroke-width="1"/>
+<rect x="420.4" y="477.5" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M420.4,482.5 H440.4 M430.4,477.5 V493.5" class="icon-line" stroke="#6EE66E"/>
+<text x="452.4" y="474.5" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Product</text>
+<text x="452.4" y="498.5" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">catalog it...</text>
 </g>
 <g class="matrix-preview-node" data-entity="inventory">
-<rect x="82.0" y="617.2" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-opacity="0.9" stroke-width="1"/>
-<circle cx="104.0" cy="655.2" r="8" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M99.0,655.2 H109.0 M104.0,650.2 V660.2" class="icon-line" stroke="#6EE66E"/>
-<text x="126.0" y="645.2" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Inventory</text>
-<text x="126.0" y="669.2" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">available stock</text>
+<rect x="82.0" y="595.6" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-opacity="0.9" stroke-width="1"/>
+<circle cx="104.0" cy="633.6" r="8" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M99.0,633.6 H109.0 M104.0,628.6 V638.6" class="icon-line" stroke="#6EE66E"/>
+<text x="126.0" y="623.6" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Inventory</text>
+<text x="126.0" y="647.6" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">available...</text>
 </g>
 <g class="matrix-preview-node" data-entity="warehouse">
-<rect x="408.4" y="722.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-opacity="0.9" stroke-width="1"/>
-<circle cx="430.4" cy="760.0" r="8" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M425.4,760.0 H435.4 M430.4,755.0 V765.0" class="icon-line" stroke="#6EE66E"/>
-<text x="452.4" y="750.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Warehouse</text>
-<text x="452.4" y="774.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">storage node</text>
+<rect x="408.4" y="695.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-opacity="0.9" stroke-width="1"/>
+<circle cx="430.4" cy="733.0" r="8" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M425.4,733.0 H435.4 M430.4,728.0 V738.0" class="icon-line" stroke="#6EE66E"/>
+<text x="452.4" y="723.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Warehouse</text>
+<text x="452.4" y="747.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">storage no...</text>
 </g>
 <g class="matrix-preview-node" data-entity="supplier">
-<rect x="82.0" y="826.8" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-opacity="0.9" stroke-width="1"/>
-<circle cx="104.0" cy="864.8" r="8" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M99.0,864.8 H109.0 M104.0,859.8 V869.8" class="icon-line" stroke="#B56CFF"/>
-<text x="126.0" y="854.8" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Supplier</text>
-<text x="126.0" y="878.8" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">external source</text>
+<rect x="82.0" y="794.4000000000001" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-opacity="0.9" stroke-width="1"/>
+<circle cx="104.0" cy="832.4000000000001" r="8" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M99.0,832.4000000000001 H109.0 M104.0,827.4000000000001 V837.4000000000001" class="icon-line" stroke="#B56CFF"/>
+<text x="126.0" y="822.4000000000001" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Supplier</text>
+<text x="126.0" y="846.4000000000001" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">external s...</text>
 </g>
 <g class="matrix-preview-node" data-entity="payment">
-<rect x="408.4" y="984.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.9" stroke-width="1"/>
-<path d="M430.4,1012.0 L440.4,1030.0 H420.4 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M430.4,1019.0 V1025.0 M430.4,1029.0 V1029.0" class="icon-line" stroke="#FFD84D"/>
-<text x="452.4" y="1012.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Payment</text>
-<text x="452.4" y="1036.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">settlement</text>
+<rect x="408.4" y="943.5" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.9" stroke-width="1"/>
+<path d="M430.4,971.5 L440.4,989.5 H420.4 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M430.4,978.5 V984.5 M430.4,988.5 V988.5" class="icon-line" stroke="#FFD84D"/>
+<text x="452.4" y="971.5" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Payment</text>
+<text x="452.4" y="995.5" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">settlement</text>
 </g>
 <g class="matrix-preview-node" data-entity="invoice">
-<rect x="82.0" y="1036.4" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.9" stroke-width="1"/>
-<path d="M104.0,1064.4 L114.0,1082.4 H94.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M104.0,1071.4 V1077.4 M104.0,1081.4 V1081.4" class="icon-line" stroke="#FFD84D"/>
-<text x="126.0" y="1064.4" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Invoice</text>
-<text x="126.0" y="1088.4" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">financial record</text>
+<rect x="82.0" y="993.2" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.9" stroke-width="1"/>
+<path d="M104.0,1021.2 L114.0,1039.2 H94.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M104.0,1028.2 V1034.2 M104.0,1038.2 V1038.2" class="icon-line" stroke="#FFD84D"/>
+<text x="126.0" y="1021.2" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Invoice</text>
+<text x="126.0" y="1045.2" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">financial...</text>
 </g>
 <g class="matrix-preview-node" data-entity="shipment">
-<rect x="408.4" y="1246.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-opacity="0.9" stroke-width="1"/>
-<circle cx="424.4" cy="1285.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="438.4" cy="1278.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="438.4" cy="1292.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M428.4,1285.0 H432.4 M434.4,1281.0 L432.4,1285.0 L434.4,1289.0" class="icon-line" stroke="#FF9F2E"/>
-<text x="452.4" y="1274.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Shipment</text>
-<text x="452.4" y="1298.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">delivery flow</text>
+<rect x="408.4" y="1192.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-opacity="0.9" stroke-width="1"/>
+<circle cx="424.4" cy="1231.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="438.4" cy="1224.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="438.4" cy="1238.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M428.4,1231.0 H432.4 M434.4,1227.0 L432.4,1231.0 L434.4,1235.0" class="icon-line" stroke="#FF9F2E"/>
+<text x="452.4" y="1220.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Shipment</text>
+<text x="452.4" y="1244.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">delivery f...</text>
 </g>
 <g class="matrix-preview-node" data-entity="return">
-<rect x="82.0" y="1246.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-opacity="0.9" stroke-width="1"/>
-<path d="M104.0,1274.0 L113.0,1279.0 V1289.0 L104.0,1294.0 L95.0,1289.0 V1279.0 Z" fill="none" stroke="#FF9F2E" stroke-width="1.2"/><path d="M100.0,1284.0 L103.0,1288.0 L109.0,1280.0" class="icon-line" stroke="#FF9F2E"/>
-<text x="126.0" y="1274.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Return</text>
-<text x="126.0" y="1298.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">reverse flow</text>
+<rect x="82.0" y="1192.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-opacity="0.9" stroke-width="1"/>
+<path d="M104.0,1220.0 L113.0,1225.0 V1235.0 L104.0,1240.0 L95.0,1235.0 V1225.0 Z" fill="none" stroke="#FF9F2E" stroke-width="1.2"/><path d="M100.0,1230.0 L103.0,1234.0 L109.0,1226.0" class="icon-line" stroke="#FF9F2E"/>
+<text x="126.0" y="1220.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Return</text>
+<text x="126.0" y="1244.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">reverse fl...</text>
 </g>
 <text x="82.0" y="1329.6" class="note" style="font-size:17.4px;fill:#C9DAF5">Too many edges here. Read the matrix for type,</text>
 <text x="82.0" y="1352.0" class="note" style="font-size:17.4px;fill:#C9DAF5">strength, and coverage.</text>

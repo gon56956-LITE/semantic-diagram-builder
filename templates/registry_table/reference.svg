@@ -31,7 +31,7 @@
 <rect x="0" y="0" width="1500" height="657" rx="0" fill="#062B5F"/>
 <rect x="0" y="0" width="1500" height="657" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="750.0" y="54" text-anchor="middle" class="title">Registry Table Reference</text>
-<text x="750.0" y="80" text-anchor="middle" class="subtitle">Reference contract for a compact semantic register</text>
+<text x="750.0" y="80.0" text-anchor="middle" class="subtitle">Reference contract for a compact semantic register</text>
 <rect x="70" y="115" width="1360" height="432" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <rect x="70" y="115" width="1360" height="60" rx="6" fill="#FFFFFF" fill-opacity="0.06"/>
 <text x="86.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Term</text>

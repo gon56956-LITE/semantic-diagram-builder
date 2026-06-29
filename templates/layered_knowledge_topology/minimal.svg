@@ -29,7 +29,7 @@
 </defs>
 <rect x="0" y="0" width="1100" height="839" rx="28" fill="#F8FBFF"/>
 <text x="550.0" y="54" text-anchor="middle" class="title">Layered Knowledge Topology Minimal</text>
-<text x="550.0" y="80" text-anchor="middle" class="subtitle">Minimal standard contract for layered knowledge topology</text>
+<text x="550.0" y="80.0" text-anchor="middle" class="subtitle">Minimal standard contract for layered knowledge topology</text>
 <rect x="70" y="115" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
 <rect x="70" y="343" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
 <rect x="70" y="571" width="960" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>

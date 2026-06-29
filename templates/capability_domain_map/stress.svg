@@ -31,7 +31,7 @@
 <rect x="0" y="0" width="2364" height="1473" rx="0" fill="#062B5F"/>
 <rect x="0" y="0" width="2364" height="1473" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="1182.0" y="54" text-anchor="middle" class="title">Capability / Domain Map Stress</text>
-<text x="1182.0" y="80" text-anchor="middle" class="subtitle">Dense capability map with stacked sub-domains, shared enablers, and sparse dependencies</text>
+<text x="1182.0" y="80.0" text-anchor="middle" class="subtitle">Dense capability map with stacked sub-domains, shared enablers, and sparse dependencies</text>
 <rect x="69.92000000000007" y="115" width="2224.16" height="56.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.52" stroke-width="1"/>
 <rect x="302.0800000000001" y="124" width="200.0" height="38.0" rx="5" fill="none" stroke="#16D9FF" stroke-opacity="0.7" stroke-width="1"/>
 <g class="capability-column-icon capability-header-icon" data-kind="object"><rect x="314.0800000000001" y="128" width="30" height="30" rx="6" fill="#031E42" stroke="#16D9FF" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="329.0800000000001" cy="143" r="8" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M324.0800000000001,143 H334.0800000000001 M329.0800000000001,138 V148" class="icon-line" stroke="#16D9FF"/></g>
@@ -160,12 +160,13 @@
 <g id="capability-item-risk_controls" class="capability-map-item card" data-kind="risk"><rect x="1326.0800000000002" y="1105.0" width="200.0" height="96.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-width="1.2"/><text x="1342.0800000000002" y="1160.9099999999999" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#F4F8FF">Risk &amp; Controls</text></g>
 <g id="capability-item-integration_layer" class="capability-map-item card" data-kind="process"><rect x="1838.0800000000002" y="1105.0" width="456.0" height="96.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#FF9F2E" stroke-width="1.2"/><text x="1854.0800000000002" y="1160.9099999999999" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#F4F8FF">Integration Layer</text></g>
 <g class="info-panel" data-panel-id="usage">
-<rect x="70.0" y="1249.0" width="729.3333333333334" height="110.24000000000001" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="70.0" y="1249.0" width="729.3333333333334" height="129.36" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
 <text x="88.0" y="1277.0" class="info-panel-title">Usage</text>
 <rect x="88.0" y="1295.0" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
 <text x="106.0" y="1305.0" class="info-panel-item" style="font-size:15.1px">Stress test: many domains and stacked cards should remain readable.</text>
 <rect x="88.0" y="1320.12" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
-<text x="106.0" y="1330.12" class="info-panel-item" style="font-size:15.1px">Relationships remain sparse; dense overlays belong in a separate dependency view.</text>
+<text x="106.0" y="1330.12" class="info-panel-item" style="font-size:15.1px">Relationships remain sparse; dense overlays belong in a separate dependency</text>
+<text x="106.0" y="1349.2399999999998" class="info-panel-item" style="font-size:15.1px">view.</text>
 </g>
 <g class="info-panel" data-panel-id="qa">
 <rect x="817.3333333333334" y="1249.0" width="729.3333333333334" height="160.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>

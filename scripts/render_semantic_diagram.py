@@ -307,12 +307,12 @@ def make_card(node: dict, x: float, y: float, w: float, h: float, style: dict, c
     title_line_h = text_metrics["title_line_h"]
     sub_line_h = text_metrics["sub_line_h"]
     sub_gap = text_metrics["sub_gap"]
-    title_chars = max(8, int(text_w / max(8.0, title_size * 0.52)))
+    title_chars = max(8, int(text_w / max(8.0, title_size * 0.66)))
     title_lines = wrap_text(node.get("label", node.get("id", "Object")), max_chars=title_chars, max_lines=2)
     sub = node.get("subtitle", "")
     sub_lines: list[str] = []
     if sub:
-        sub_chars = max(10, int(text_w / max(7.0, sub_size * 0.5)))
+        sub_chars = max(10, int(text_w / max(7.0, sub_size * 0.58)))
         sub_lines = wrap_text(sub, max_chars=sub_chars, max_lines=1 if len(title_lines) > 1 else 2)
     parts = [f'<g id="node-{e(node.get("id", ""))}" class="card node-card">']
     fill_attrs = _paint_attr(style, "fill", fill, fill_default, card.get("fill_opacity"))
@@ -1011,7 +1011,10 @@ def _svg_shell_start(contract: dict, style: dict, width: float, height: float, d
     subtitle = contract.get("subtitle", "")
     parts.append(f'<text x="{width/2}" y="54" text-anchor="middle" class="title">{e(title)}</text>')
     if subtitle:
-        parts.append(f'<text x="{width/2}" y="80" text-anchor="middle" class="subtitle">{e(subtitle)}</text>')
+        subtitle_size = _px(_font_css(style, "tokens.typography.subtitle_size", "14px"), 14)
+        subtitle_chars = max(28, int((width - 120) / max(7.0, subtitle_size * 0.56)))
+        subtitle_lines = wrap_text(str(subtitle), max_chars=subtitle_chars, max_lines=2)
+        _render_wrapped_text(parts, subtitle_lines, width / 2, 80, "subtitle", anchor="middle", line_h=subtitle_size + 4)
     return parts
 
 
@@ -1265,7 +1268,7 @@ def _info_panel_height(panel: dict, panel_w: float, canvas_w: float) -> float:
     body_size = _clamp(14.0 * _clamp(canvas_w / 1500.0, 0.95, 1.08), 14.0, 15.2)
     line_h = body_size + 4
     content_w = max(120, panel_w - 42)
-    max_chars = max(16, int(content_w / (body_size * 0.52)))
+    max_chars = max(16, int(content_w / (body_size * 0.60)))
     items = panel.get("items", [])
     if not isinstance(items, list):
         items = []
@@ -1323,7 +1326,7 @@ def _render_info_panels(parts: list[str], panels: list[dict], style: dict, x: fl
         if not isinstance(items, list):
             items = []
         text_y = py + 56
-        max_chars = max(16, int(max(120, pw - 48) / (body_size * 0.52)))
+        max_chars = max(16, int(max(120, pw - 48) / (body_size * 0.60)))
         for item in items:
             text, kind, accent = _info_panel_item_text(item)
             if not text:
@@ -1488,7 +1491,7 @@ def _render_matrix_primary_preview(
         dense_card_w = min(210, max(176, w * 0.32))
         card_h = 76
         top = y + 118
-        bottom = y + h - 96
+        bottom = y + h - 150
         lane_counts = [math.ceil(count / 2), count // 2]
         lane_x = [x + 34, x + w - dense_card_w - 34]
         lane_step = [
@@ -1527,7 +1530,7 @@ def _render_matrix_primary_preview(
         parts.append(f'<g class="matrix-preview-node" data-entity="{e(entity["id"])}">')
         parts.append(_panel_rect_svg(style, ex, ey, ew, eh, fill="panel_fill", stroke=color, stroke_opacity=0.9, radius=6))
         parts.append(icon_svg(str(entity.get("kind", "object")), ex + 12, ey + eh / 2 - 10, color, style))
-        preview_chars = max(9, int((ew - 50) / 8.2))
+        preview_chars = max(9, int((ew - 54) / max(8.8, note_size * 0.64)))
         label = wrap_text(str(entity.get("label", entity["id"])), max_chars=preview_chars, max_lines=1)[0]
         sub = wrap_text(str(entity.get("subtitle", "Entity")), max_chars=preview_chars, max_lines=1)[0]
         parts.append(f'<text x="{ex + 44}" y="{ey + 28}" class="matrix-preview-title" style="font-size:{_fmt_px(note_size)};font-weight:700;fill:{line}">{e(label)}</text>')
@@ -2767,8 +2770,8 @@ def _render_spoke_block(node: dict, x: float, y: float, w: float, h: float, styl
     sub_size = _clamp(14.5 * _clamp(canvas_w / 1500.0, 0.92, 1.08), 13.5, 15.5)
     text_x = x + 66
     text_w = max(80, w - 82)
-    title_lines = _hub_text_lines(node.get("label", node.get("id", "Spoke")), max(8, int(text_w / (title_size * 0.55))), 2)
-    sub_lines = _hub_text_lines(node.get("subtitle", ""), max(10, int(text_w / (sub_size * 0.52))), 1)
+    title_lines = _hub_text_lines(node.get("label", node.get("id", "Spoke")), max(8, int(text_w / (title_size * 0.62))), 2)
+    sub_lines = _hub_text_lines(node.get("subtitle", ""), max(10, int(text_w / (sub_size * 0.60))), 1)
     block_h = len(title_lines) * (title_size + 2) + (sub_size + 5 if sub_lines else 0)
     top = y + (h - block_h) / 2
     parts = [f'<g id="node-{e(node.get("id", ""))}" class="hub-spoke-node spoke-block card">']
@@ -3125,6 +3128,20 @@ def _orthogonal_link_points(
     return cleaned
 
 
+def _simple_orthogonal_link_points(
+    start: tuple[float, float],
+    end: tuple[float, float],
+    start_side: str,
+    end_side: str,
+) -> list[tuple[float, float]]:
+    if abs(start[0] - end[0]) < EPS or abs(start[1] - end[1]) < EPS:
+        return [start, end]
+    start_horizontal = start_side in {"left", "right"}
+    end_horizontal = end_side in {"left", "right"}
+    corner = (start[0], end[1]) if not start_horizontal and end_horizontal else (end[0], start[1])
+    return [start, corner, end]
+
+
 def _side_vector(side: str) -> tuple[float, float]:
     if side == "left":
         return -1.0, 0.0
@@ -3430,8 +3447,9 @@ def _relationship_link_pair(
         d_from, d_from_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, s_anchor, from_diamond_side)
         d_to, d_to_side = _diamond_anchor_with_side(cx, cy, diamond_w, diamond_h, t_anchor, to_diamond_side)
         lane_offset = float(rel.get("lane_offset", 0.0))
-        source_points = _offset_relationship_lane(_orthogonal_link_points(s_anchor, d_from, s_side, d_from_side), lane_offset)
-        target_points = _offset_relationship_lane(_orthogonal_link_points(d_to, t_anchor, d_to_side, t_side), lane_offset)
+        link_points = _simple_orthogonal_link_points if rel.get("simple_elbow") is True else _orthogonal_link_points
+        source_points = _offset_relationship_lane(link_points(s_anchor, d_from, s_side, d_from_side), lane_offset)
+        target_points = _offset_relationship_lane(link_points(d_to, t_anchor, d_to_side, t_side), lane_offset)
         crosses = int(_points_cross_any_rect(source_points, avoid_rects, 8.0)) + int(_points_cross_any_rect(target_points, avoid_rects, 8.0))
         bends = max(0, len(source_points) - 2) + max(0, len(target_points) - 2)
         score = (crosses, bends)

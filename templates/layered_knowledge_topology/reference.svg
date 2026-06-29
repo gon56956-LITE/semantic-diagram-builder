@@ -29,7 +29,7 @@
 </defs>
 <rect x="0" y="0" width="1600" height="1307" rx="28" fill="#F8FBFF"/>
 <text x="800.0" y="54" text-anchor="middle" class="title">Layered Knowledge Topology Reference</text>
-<text x="800.0" y="80" text-anchor="middle" class="subtitle">Reference contract with multi-row fan-out and fan-in</text>
+<text x="800.0" y="80.0" text-anchor="middle" class="subtitle">Reference contract with multi-row fan-out and fan-in</text>
 <rect x="70" y="115" width="1460" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
 <rect x="70" y="343" width="1460" height="196" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>
 <rect x="70" y="571" width="1460" height="436" class="group-panel" rx="26" fill="#EEF6FF" fill-opacity="0.58"/>

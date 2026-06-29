@@ -193,6 +193,14 @@ def assert_ontology_stress_layout(svg: str) -> None:
     reviewed = relationship_diamond_center(svg, "reviewed_by")
     if governed[0] > reviewed[0] - 80 or governed[1] < reviewed[1] + 120:
         raise AssertionError("ontology_map governed_by diamond should sit lower and left of the reviewed_by diamond")
+    supplied = relationship_diamond_center(svg, "supplied_by")
+    constrained = relationship_diamond_center(svg, "constrained_by")
+    proved = relationship_diamond_center(svg, "proved_by")
+    if not (supplied[0] < constrained[0] < proved[0]) or max(y for _x, y in (supplied, constrained, proved)) - min(y for _x, y in (supplied, constrained, proved)) > 12:
+        raise AssertionError("ontology_map stress middle-row diamonds should align with their source/target lanes")
+    governed_paths = re.findall(r'<path\b[^>]*\bdata-relationship="governed_by"[^>]*/>', svg)
+    if len(governed_paths) < 2 or any(path.count(" Q ") > 1 for path in governed_paths[:2]):
+        raise AssertionError("ontology_map governed_by links should use simple elbows instead of extra detours")
 
 
 def first_q_lanes_from(svg: str, source_bottoms: set[float]) -> set[float]:
@@ -441,6 +449,15 @@ def assert_relationship_matrix_design(svg: str, expected_total: int) -> None:
             overlap_y = min(y + h, oy + oh) - max(y, oy)
             if overlap_x > 1 and overlap_y > 1:
                 raise AssertionError("relationship_matrix preview cards should not overlap")
+    footer_lines = [
+        (float(y), float(size), text)
+        for y, size, text in re.findall(r'<text x="[^"]+" y="([-0-9.]+)" class="note" style="font-size:([0-9.]+)px[^"]*">(Too many edges here[^<]*|[^<]*coverage\\.)</text>', svg)
+    ]
+    if footer_lines:
+        preview_bottom = max(y + h for _x, y, _w, h in preview_rects)
+        footer_top = min(y - size * 1.15 for y, size, _text in footer_lines)
+        if footer_top - preview_bottom < 28:
+            raise AssertionError("relationship_matrix preview footer should keep clear space below the last card row")
     if not row_label_sizes or min(row_label_sizes) < 18:
         raise AssertionError("relationship_matrix row labels should remain readable")
     if not col_label_sizes or min(col_label_sizes) < 18:

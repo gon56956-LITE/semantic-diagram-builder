@@ -31,7 +31,7 @@
 <rect x="0" y="0" width="1500" height="645" rx="0" fill="#062B5F"/>
 <rect x="0" y="0" width="1500" height="645" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="750.0" y="54" text-anchor="middle" class="title">Hub Spoke Reference</text>
-<text x="750.0" y="80" text-anchor="middle" class="subtitle">Reference contract for a designed hub-spoke map</text>
+<text x="750.0" y="80.0" text-anchor="middle" class="subtitle">Reference contract for a designed hub-spoke map</text>
 <circle cx="750.0" cy="390" r="138.0" fill="none" stroke="#16D9FF" stroke-opacity="0.16" stroke-width="1.4"/>
 <path d="M 640.19 346.8 L 445.0 270.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
 <path d="M 632.0 390.0 L 445.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>

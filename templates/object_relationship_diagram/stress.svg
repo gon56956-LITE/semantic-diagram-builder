@@ -31,7 +31,7 @@
 <rect x="0" y="0" width="1700" height="1487" rx="0" fill="#062B5F"/>
 <rect x="0" y="0" width="1700" height="1487" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="850.0" y="54" text-anchor="middle" class="title">Object Relationship Diagram Stress</text>
-<text x="850.0" y="80" text-anchor="middle" class="subtitle">Dense ER-style map with many entities, weak entities, keys, optional relations, and metadata panels</text>
+<text x="850.0" y="80.0" text-anchor="middle" class="subtitle">Dense ER-style map with many entities, weak entities, keys, optional relations, and metadata panels</text>
 <path d="M 385.0 220.0 L 412.0 220.0" class="edge object-relationship-link" style="stroke:#F4F8FF;opacity:0.9" data-route="axis" data-link-end="from" data-card-anchor="right" data-diamond-anchor="left" data-relationship="account_customer" data-from="account" data-to="customer"/>
 <path d="M 508.0 220.0 L 535.0 220.0" class="edge object-relationship-link" style="stroke:#F4F8FF;opacity:0.9" data-route="axis" data-link-end="to" data-card-anchor="left" data-diamond-anchor="right" data-relationship="account_customer" data-from="account" data-to="customer"/>
 <path d="M 775.0 220.0 L 802.0 220.0" class="edge object-relationship-link" style="stroke:#F4F8FF;opacity:0.9" data-route="axis" data-link-end="from" data-card-anchor="right" data-diamond-anchor="left" data-relationship="customer_order" data-from="customer" data-to="order"/>

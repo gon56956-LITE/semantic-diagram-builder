@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1444" viewBox="0 0 2400 1444" role="img" aria-label="Registry Table Stress" data-style="accent-blueprint" data-diagram-type="registry_table">
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1457" viewBox="0 0 2400 1457" role="img" aria-label="Registry Table Stress" data-style="accent-blueprint" data-diagram-type="registry_table">
 <defs>
   <pattern id="blueprint-grid-small" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 H 0 V 12" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.7"/></pattern>
   <pattern id="blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="url(#blueprint-grid-small)"/><path d="M 60 0 H 0 V 60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"/> </pattern>
@@ -28,10 +28,10 @@
     [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
   </style>
 </defs>
-<rect x="0" y="0" width="2400" height="1444" rx="0" fill="#062B5F"/>
-<rect x="0" y="0" width="2400" height="1444" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<rect x="0" y="0" width="2400" height="1457" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="2400" height="1457" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="1200.0" y="54" text-anchor="middle" class="title">Registry Table Stress</text>
-<text x="1200.0" y="80" text-anchor="middle" class="subtitle">Dense semantic register with long definitions, status signals, owners, risks, and governance notes</text>
+<text x="1200.0" y="80.0" text-anchor="middle" class="subtitle">Dense semantic register with long definitions, status signals, owners, risks, and governance notes</text>
 <rect x="70" y="115" width="2260" height="1073" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <rect x="70" y="115" width="2260" height="65" rx="6" fill="#FFFFFF" fill-opacity="0.06"/>
 <text x="86.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Term</text>
@@ -213,25 +213,27 @@
 <text x="106.0" y="1343.3599999999997" class="info-panel-item" style="font-size:15.1px">Purple: external systems, optional links, out-of-bound references</text>
 </g>
 <g class="info-panel" data-panel-id="rules">
-<rect x="829.3333333333334" y="1212" width="741.3333333333334" height="154.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="829.3333333333334" y="1212" width="741.3333333333334" height="173.60000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>
 <text x="847.3333333333334" y="1240" class="info-panel-title">Registry Rules</text>
 <rect x="847.3333333333334" y="1258" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
-<text x="865.3333333333334" y="1268.0" class="info-panel-item" style="font-size:15.1px">Every term must resolve to one accountable owner and one evidence requirement.</text>
-<rect x="847.3333333333334" y="1283.12" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
-<text x="865.3333333333334" y="1293.12" class="info-panel-item" style="font-size:15.1px">Lifecycle state must describe current use permission, not project mood.</text>
-<rect x="847.3333333333334" y="1308.2399999999998" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
-<text x="865.3333333333334" y="1318.2399999999998" class="info-panel-item" style="font-size:15.1px">Long definitions should wrap inside cells without shrinking the register into unreadable</text>
-<text x="865.3333333333334" y="1337.3599999999997" class="info-panel-item" style="font-size:15.1px">type.</text>
+<text x="865.3333333333334" y="1268.0" class="info-panel-item" style="font-size:15.1px">Every term must resolve to one accountable owner and one evidence</text>
+<text x="865.3333333333334" y="1287.12" class="info-panel-item" style="font-size:15.1px">requirement.</text>
+<rect x="847.3333333333334" y="1302.24" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
+<text x="865.3333333333334" y="1312.24" class="info-panel-item" style="font-size:15.1px">Lifecycle state must describe current use permission, not project mood.</text>
+<rect x="847.3333333333334" y="1327.36" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
+<text x="865.3333333333334" y="1337.36" class="info-panel-item" style="font-size:15.1px">Long definitions should wrap inside cells without shrinking the register</text>
+<text x="865.3333333333334" y="1356.4799999999998" class="info-panel-item" style="font-size:15.1px">into unreadable type.</text>
 </g>
 <g class="info-panel" data-panel-id="metadata">
-<rect x="1588.6666666666667" y="1212" width="741.3333333333334" height="135.36" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="1588.6666666666667" y="1212" width="741.3333333333334" height="154.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
 <text x="1606.6666666666667" y="1240" class="info-panel-title">Review Metadata</text>
 <rect x="1606.6666666666667" y="1258" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
-<text x="1624.6666666666667" y="1268.0" class="info-panel-item" style="font-size:15.1px">Cadence: monthly semantic review; immediate review on controlled-source change</text>
-<rect x="1606.6666666666667" y="1283.12" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
-<text x="1624.6666666666667" y="1293.12" class="info-panel-item" style="font-size:15.1px">Consumers: architecture, quality, document control, knowledge operations</text>
-<rect x="1606.6666666666667" y="1308.2399999999998" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
-<text x="1624.6666666666667" y="1318.2399999999998" class="info-panel-item" style="font-size:15.1px">Version: stress template v1.1</text>
+<text x="1624.6666666666667" y="1268.0" class="info-panel-item" style="font-size:15.1px">Cadence: monthly semantic review; immediate review on controlled-source</text>
+<text x="1624.6666666666667" y="1287.12" class="info-panel-item" style="font-size:15.1px">change</text>
+<rect x="1606.6666666666667" y="1302.24" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
+<text x="1624.6666666666667" y="1312.24" class="info-panel-item" style="font-size:15.1px">Consumers: architecture, quality, document control, knowledge operations</text>
+<rect x="1606.6666666666667" y="1327.36" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
+<text x="1624.6666666666667" y="1337.36" class="info-panel-item" style="font-size:15.1px">Version: stress template v1.1</text>
 </g>
-<text x="1200.0" y="1416" text-anchor="middle" class="note">Stress template: long rows, semantic badges, and governance panels should remain readable without turning the table into a dashboard.</text>
+<text x="1200.0" y="1429" text-anchor="middle" class="note">Stress template: long rows, semantic badges, and governance panels should remain readable without turning the table into a dashboard.</text>
 </svg>

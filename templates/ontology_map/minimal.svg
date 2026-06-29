@@ -29,7 +29,7 @@
 </defs>
 <rect x="0" y="0" width="980" height="643" rx="28" fill="#F8FBFF"/>
 <text x="490.0" y="54" text-anchor="middle" class="title">Ontology Map Minimal</text>
-<text x="490.0" y="80" text-anchor="middle" class="subtitle">Small ontology contract with concepts, a relationship, and an instance</text>
+<text x="490.0" y="80.0" text-anchor="middle" class="subtitle">Small ontology contract with concepts, a relationship, and an instance</text>
 <path d="M 415.0 166.0 L 442.0 166.0" class="edge object-relationship-link ontology-relationship-link" style="stroke:#334155;opacity:0.9" data-route="axis" data-link-end="from" data-card-anchor="right" data-diamond-anchor="left" data-relationship="works_for" data-from="person" data-to="organization"/>
 <path d="M 538.0 166.0 L 565.0 166.0" class="edge object-relationship-link ontology-relationship-link" style="stroke:#334155;opacity:0.9" data-route="axis" data-link-end="to" data-card-anchor="left" data-diamond-anchor="right" data-relationship="works_for" data-from="person" data-to="organization"/>
 <path d="M 393.0 217.0 L 393.0 278.5 Q 393.0 283.0 397.5 283.0 L 397.5 283.0 Q 402.0 283.0 402.0 287.5 L 402.0 349.0" class="edge ontology-instance-link" style="stroke:#22C55E;opacity:0.78" stroke-dasharray="6 5" data-from="person" data-to="alice"/>

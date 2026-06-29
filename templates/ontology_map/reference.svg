@@ -31,7 +31,7 @@
 <rect x="0" y="0" width="1500" height="1104" rx="0" fill="#062B5F"/>
 <rect x="0" y="0" width="1500" height="1104" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="750.0" y="54" text-anchor="middle" class="title">Ontology Map Reference</text>
-<text x="750.0" y="80" text-anchor="middle" class="subtitle">Reference ontology map with concepts, relationship diamonds, attributes, instances, and bottom panels</text>
+<text x="750.0" y="80.0" text-anchor="middle" class="subtitle">Reference ontology map with concepts, relationship diamonds, attributes, instances, and bottom panels</text>
 <path d="M 645.0 226.0 L 700.0 226.0" class="edge object-relationship-link ontology-relationship-link" style="stroke:#F4F8FF;opacity:0.9" data-route="axis" data-link-end="from" data-card-anchor="right" data-diamond-anchor="left" data-relationship="works_for" data-from="person" data-to="organization"/>
 <path d="M 800.0 226.0 L 855.0 226.0" class="edge object-relationship-link ontology-relationship-link" style="stroke:#F4F8FF;opacity:0.9" data-route="axis" data-link-end="to" data-card-anchor="left" data-diamond-anchor="right" data-relationship="works_for" data-from="person" data-to="organization"/>
 <path d="M 537.5 302.0 L 537.5 333.0" class="edge object-relationship-link ontology-relationship-link" style="stroke:#F4F8FF;opacity:0.9" data-route="axis" data-link-end="from" data-card-anchor="bottom" data-diamond-anchor="top" data-relationship="has_address" data-from="person" data-to="address"/>

@@ -31,7 +31,7 @@
 <rect x="0" y="0" width="1900" height="1247" rx="0" fill="#062B5F"/>
 <rect x="0" y="0" width="1900" height="1247" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="950.0" y="54" text-anchor="middle" class="title">Boundary Ownership Map Stress</text>
-<text x="950.0" y="80" text-anchor="middle" class="subtitle">Stress contract for dense domain swimlanes, external parties, and ownership assignments</text>
+<text x="950.0" y="80.0" text-anchor="middle" class="subtitle">Stress contract for dense domain swimlanes, external parties, and ownership assignments</text>
 <rect x="70" y="107" width="1760" height="56" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <rect x="88" y="122" width="28" height="14" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.3"/>
 <text x="128" y="133" class="note" style="font-size:14px">Domain</text>

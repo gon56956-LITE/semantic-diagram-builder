@@ -29,7 +29,7 @@
 </defs>
 <rect x="0" y="0" width="1960" height="1190" rx="28" fill="#F8FBFF"/>
 <text x="980.0" y="54" text-anchor="middle" class="title">Relationship Matrix Minimal</text>
-<text x="980.0" y="80" text-anchor="middle" class="subtitle">Minimal same-entity relationship matrix companion view</text>
+<text x="980.0" y="80.0" text-anchor="middle" class="subtitle">Minimal same-entity relationship matrix companion view</text>
 <g class="matrix-primary-preview">
 <rect x="48.0" y="118.0" width="580.0" height="650.0" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#334155" stroke-opacity="0.54" stroke-width="1"/>
 <text x="66.0" y="150.0" class="info-panel-title" style="font-size:17.5px">PRIMARY DIAGRAM (REFERENCE ONLY)</text>
@@ -56,7 +56,7 @@
 <rect x="263.64102564102564" y="595.5" width="148.71794871794873" height="66" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#22C55E" stroke-opacity="0.9" stroke-width="1"/>
 <rect x="275.64102564102564" y="621.5" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M275.64102564102564,626.5 H295.64102564102564 M285.64102564102564,621.5 V637.5" class="icon-line" stroke="#22C55E"/>
 <text x="307.64102564102564" y="623.5" class="matrix-preview-title" style="font-size:16px;font-weight:700;fill:#334155">Product</text>
-<text x="307.64102564102564" y="647.5" class="matrix-preview-sub" style="font-size:15.2px;fill:#64748B">catalog item</text>
+<text x="307.64102564102564" y="647.5" class="matrix-preview-sub" style="font-size:15.2px;fill:#64748B">catalog...</text>
 </g>
 <g class="matrix-preview-node" data-entity="payment">
 <rect x="72.24102564102563" y="420.0" width="148.71794871794873" height="66" rx="6" fill="#FFFFFF" fill-opacity="0.58" stroke="#F97316" stroke-opacity="0.9" stroke-width="1"/>

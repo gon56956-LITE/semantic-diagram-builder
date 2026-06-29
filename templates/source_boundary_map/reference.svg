@@ -31,7 +31,7 @@
 <rect x="0" y="0" width="1536" height="1307" rx="0" fill="#062B5F"/>
 <rect x="0" y="0" width="1536" height="1307" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
 <text x="768.0" y="54" text-anchor="middle" class="title">Source Boundary Map Reference</text>
-<text x="768.0" y="80" text-anchor="middle" class="subtitle">Reference contract for derived assets and controlled sources</text>
+<text x="768.0" y="80.0" text-anchor="middle" class="subtitle">Reference contract for derived assets and controlled sources</text>
 <rect x="70" y="115" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
 <rect x="70" y="343" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
 <rect x="70" y="571" width="1396" height="436" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
