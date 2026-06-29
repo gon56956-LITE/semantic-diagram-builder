@@ -49,6 +49,15 @@ def main() -> int:
 """,
     )
     assert_issue(
+        "card title text overflow",
+        """
+<svg width="400" height="260">
+<g id="node-long" class="card node-card"><rect x="20" y="20" width="120" height="96" fill="#FFFFFF" stroke="#334155"/><text x="40" y="62" class="card-title" style="font-size:18px">Very Long Unwrapped Semantic Label</text></g>
+</svg>
+""",
+        "card-title text",
+    )
+    assert_issue(
         "hard connector turn",
         '<svg width="100" height="100"><path d="M 0 0 L 10 0 L 10 10" class="edge"/></svg>',
         "hard orthogonal turn",
@@ -261,6 +270,44 @@ def main() -> int:
 </svg>
 """,
         "top-connected label",
+    )
+    assert_issue(
+        "relationship matrix row label overflow",
+        """
+<svg width="900" height="680" data-diagram-type="relationship_matrix">
+<g class="relationship-matrix-grid info-panel">
+<rect x="20" y="20" width="280" height="220" fill="#FFFFFF" stroke="#334155"/>
+<text x="40" y="124" class="matrix-row-label" style="font-size:18px">Very Long Matrix Row Label</text>
+<text x="212" y="72" text-anchor="middle" class="matrix-col-label" style="font-size:18px">Col</text>
+<rect x="180" y="90" width="64" height="64" class="matrix-cell" fill="none"/>
+<text x="212" y="130" class="matrix-cell-value" style="font-size:24px">1</text>
+</g>
+<g class="matrix-primary-preview info-panel"><rect x="320" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/></g>
+<g class="matrix-summary-panel info-panel"><rect x="460" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/><rect x="480" y="70" width="80" height="14" class="matrix-distribution-bar" fill="#06B6D4"/></g>
+<g class="matrix-focus-detail-panel info-panel"><rect x="600" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/></g>
+<g class="matrix-top-connected-panel info-panel"><rect x="20" y="300" width="420" height="160" fill="#FFFFFF" stroke="#334155"/></g>
+</svg>
+""",
+        "row label",
+    )
+    assert_issue(
+        "relationship matrix column label overflow",
+        """
+<svg width="900" height="680" data-diagram-type="relationship_matrix">
+<g class="relationship-matrix-grid info-panel">
+<rect x="20" y="20" width="280" height="220" fill="#FFFFFF" stroke="#334155"/>
+<text x="40" y="124" class="matrix-row-label" style="font-size:18px">Row</text>
+<text x="212" y="72" text-anchor="middle" class="matrix-col-label" style="font-size:18px">Very Long Matrix Column Label</text>
+<rect x="180" y="90" width="64" height="64" class="matrix-cell" fill="none"/>
+<text x="212" y="130" class="matrix-cell-value" style="font-size:24px">1</text>
+</g>
+<g class="matrix-primary-preview info-panel"><rect x="320" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/></g>
+<g class="matrix-summary-panel info-panel"><rect x="460" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/><rect x="480" y="70" width="80" height="14" class="matrix-distribution-bar" fill="#06B6D4"/></g>
+<g class="matrix-focus-detail-panel info-panel"><rect x="600" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/></g>
+<g class="matrix-top-connected-panel info-panel"><rect x="20" y="300" width="420" height="160" fill="#FFFFFF" stroke="#334155"/></g>
+</svg>
+""",
+        "column label",
     )
     print("validate_semantic_svg selftest: PASS")
     return 0

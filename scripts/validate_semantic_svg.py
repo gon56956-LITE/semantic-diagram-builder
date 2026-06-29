@@ -7,6 +7,7 @@ ambiguous dashed-line overuse, and obvious text-collision risk.
 """
 from __future__ import annotations
 
+import html
 import re
 import sys
 from pathlib import Path
@@ -55,6 +56,10 @@ TEXT_ELEMENT_RE = re.compile(r'<text\b([^>]*)>(.*?)</text>', re.S)
 TEXT_TAG_RE = re.compile(r'<text\b([^>]*)>', re.S)
 LAYER_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"[^>]*>?</rect>|<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"[^>]*/>')
 GROUP_LABEL_RE = re.compile(r'<text[^>]*class="group-label"[^>]*>')
+MATRIX_PREVIEW_NODE_BODY_RE = re.compile(
+    r'<g\b(?=[^>]*\bclass="[^"]*\bmatrix-preview-node\b[^"]*")[^>]*>(.*?)</g>',
+    re.S,
+)
 MATRIX_TOP_CONNECTED_PANEL_RE = re.compile(
     r'<g\b(?=[^>]*\bclass="[^"]*\bmatrix-top-connected-panel\b[^"]*")[^>]*>(.*?)</g>',
     re.S,
@@ -74,6 +79,7 @@ STYLE_FONT_RE = re.compile(r'\bfont\s*:[^;}]*?([0-9.]+)px', re.S)
 INLINE_FONT_RE = re.compile(r'\bfont-size\s*:\s*([0-9.]+)px')
 X_ATTR_RE = re.compile(r'\bx="([-0-9.]+)"')
 Y_ATTR_RE = re.compile(r'\by="([-0-9.]+)"')
+TEXT_ANCHOR_RE = re.compile(r'\btext-anchor="([^"]+)"')
 CONNECTOR_CLASSES = {
     'edge',
     'edge-dashed',
@@ -118,6 +124,30 @@ INLINE_TEXT_MIN_SIZES = {
     'ontology-datatype': 13.0,
     'ontology-instance-title': 15.0,
     'ontology-instance-sub': 12.5,
+}
+BOUNDED_TEXT_CLASSES = {
+    'card-title',
+    'card-sub',
+    'capability-title',
+    'capability-sub',
+    'matrix-preview-title',
+    'matrix-preview-sub',
+    'ontology-attr',
+    'ontology-datatype',
+    'ontology-instance-title',
+    'ontology-instance-sub',
+}
+TEXT_WIDTH_FACTORS = {
+    'card-title': 0.58,
+    'card-sub': 0.54,
+    'capability-title': 0.58,
+    'capability-sub': 0.54,
+    'matrix-preview-title': 0.58,
+    'matrix-preview-sub': 0.54,
+    'ontology-attr': 0.54,
+    'ontology-datatype': 0.54,
+    'ontology-instance-title': 0.58,
+    'ontology-instance-sub': 0.54,
 }
 
 
@@ -409,6 +439,15 @@ def _text_width_estimate(text: str, size: float, factor: float = 0.56) -> float:
     return len(text) * size * factor
 
 
+def _text_horizontal_bounds(text_x: float, text: str, size: float, anchor: str, factor: float) -> tuple[float, float]:
+    width = _text_width_estimate(text, size, factor)
+    if anchor == 'middle':
+        return text_x - width / 2, text_x + width / 2
+    if anchor == 'end':
+        return text_x - width, text_x
+    return text_x, text_x + width
+
+
 def _text_elements_with_class(svg: str, class_name: str) -> list[tuple[float, float, float, str]]:
     elements: list[tuple[float, float, float, str]] = []
     for attrs, raw_text in TEXT_ELEMENT_RE.findall(svg):
@@ -420,9 +459,43 @@ def _text_elements_with_class(svg: str, class_name: str) -> list[tuple[float, fl
         font_match = INLINE_FONT_RE.search(attrs)
         if not x_match or not y_match or not font_match:
             continue
-        text = re.sub(r'<[^>]+>', '', raw_text).strip()
+        text = html.unescape(re.sub(r'<[^>]+>', '', raw_text)).strip()
         elements.append((float(x_match.group(1)), float(y_match.group(1)), float(font_match.group(1)), text))
     return elements
+
+
+def _check_text_fit_in_rect_groups(svg: str, issues: list[str]) -> None:
+    groups = CARD_RE.findall(svg) + MATRIX_PREVIEW_NODE_BODY_RE.findall(svg)
+    for group_idx, body in enumerate(groups, start=1):
+        rect = RECT_RE.search(body)
+        if not rect:
+            continue
+        rect_x, _rect_y, rect_w, _rect_h = map(float, rect.groups())
+        left_limit = rect_x + 8.0
+        right_limit = rect_x + rect_w - 8.0
+        for attrs, raw_text in TEXT_ELEMENT_RE.findall(body):
+            class_match = CLASS_RE.search(attrs)
+            if not class_match:
+                continue
+            classes = set(class_match.group(1).split())
+            matched = classes & BOUNDED_TEXT_CLASSES
+            if not matched:
+                continue
+            x_match = X_ATTR_RE.search(attrs)
+            font_match = INLINE_FONT_RE.search(attrs)
+            if not x_match or not font_match:
+                continue
+            class_name = sorted(matched)[0]
+            text = html.unescape(re.sub(r'<[^>]+>', '', raw_text)).strip()
+            if not text:
+                continue
+            anchor_match = TEXT_ANCHOR_RE.search(attrs)
+            anchor = anchor_match.group(1) if anchor_match else 'start'
+            text_x = float(x_match.group(1))
+            size = float(font_match.group(1))
+            left, right = _text_horizontal_bounds(text_x, text, size, anchor, TEXT_WIDTH_FACTORS.get(class_name, 0.56))
+            if left < left_limit - 2.0 or right > right_limit + 2.0:
+                fail(f'{class_name} text in visual group {group_idx} overflows its card bounds; wrap or truncate the label', issues)
 
 
 def _check_arrow_markers(svg: str, issues: list[str]) -> None:
@@ -760,6 +833,21 @@ def _check_relationship_matrix_geometry(svg: str, issues: list[str]) -> None:
         if w < 52 or h < 52:
             fail(f'relationship_matrix cell {idx} is below readable size: {w:.0f}x{h:.0f}', issues)
             break
+    if cells:
+        first_cell_x = min(x for x, _y, _w, _h in cells)
+        top_row_y = min(y for _x, y, _w, _h in cells)
+        top_row_cells = [cell for cell in cells if abs(cell[1] - top_row_y) <= 2.0]
+        for idx, (text_x, _text_y, size, text) in enumerate(_text_elements_with_class(svg, 'matrix-row-label'), start=1):
+            right = text_x + _text_width_estimate(text, size, 0.54)
+            if right > first_cell_x - 12.0 + 2.0:
+                fail(f'relationship_matrix row label {idx} overflows into the matrix cells; fit or truncate the label', issues)
+        for idx, (text_x, _text_y, size, text) in enumerate(_text_elements_with_class(svg, 'matrix-col-label'), start=1):
+            if not top_row_cells:
+                continue
+            nearest = min(top_row_cells, key=lambda cell: abs((cell[0] + cell[2] / 2) - text_x))
+            label_w = _text_width_estimate(text, size, 0.54)
+            if label_w > nearest[2] - 12.0 + 2.0:
+                fail(f'relationship_matrix column label {idx} overflows its matrix column; fit or truncate the label', issues)
     if 'matrix-selected-cell' in svg:
         fail('relationship_matrix is static and should not render an interactive-looking selected cell', issues)
     if 'class="matrix-distribution-bar"' not in svg:
@@ -964,6 +1052,7 @@ def check_svg(svg: str) -> list[str]:
 
     _check_arrow_markers(svg, issues)
     _check_text_scale(svg, issues)
+    _check_text_fit_in_rect_groups(svg, issues)
     _check_group_label_shields(svg, issues)
     _check_canvas_density(svg, issues)
     _check_object_relationship_geometry(svg, issues)
@@ -1003,7 +1092,7 @@ def check_svg(svg: str) -> list[str]:
         if has_sub and h < 72:
             fail(f'card {idx} height {h:.0f} is too short for a subtitle', issues)
         for klass, raw in TEXT_RE.findall(card):
-            text = re.sub(r'<[^>]+>', '', raw)
+            text = html.unescape(re.sub(r'<[^>]+>', '', raw))
             if klass == 'title' and len(text) > max(18, int(w / 8)):
                 fail(f'card {idx} title may be too long for width {w:.0f}: {text}', issues)
 
