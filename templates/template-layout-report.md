@@ -17,6 +17,21 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | 7 | boundary_ownership_map/stress | 0 | ok |
 | 8 | capability_domain_map/minimal | 0 | ok |
 
+## Height Diagnostics
+
+| Template | Canvas H | Main Span | Panel Span | Bottom WS | Diagnosis |
+| --- | --- | --- | --- | --- | --- |
+| boundary_ownership_map/stress | 1247 | 1187 | 0 | 22 | content span 1187px, panel span 0px; bottom whitespace 22px |
+| capability_domain_map/stress | 1473 | 1000 | 160 | 22 | 5 levels, 48 items, max stack 2; item span 1000px, panel span 160px; bottom whitespace 22px; height driven by content rows, not whitespace |
+| hub_spoke/stress | 1269 | 1209 | 193 | 22 | content span 1209px, panel span 193px; bottom whitespace 22px |
+| layered_knowledge_topology/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
+| object_relationship_diagram/stress | 1487 | 984 | 289 | 22 | 10 objects/concepts, 10 relationships; diagram span 984px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
+| ontology_map/stress | 1398 | 892 | 289 | 22 | 8 objects/concepts, 8 relationships; diagram span 892px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
+| registry_table/stress | 1457 | 1397 | 174 | 22 | content span 1397px, panel span 174px; bottom whitespace 22px |
+| relationship_matrix/stress | 1802 | 1612 | 330 | 22 | 11x11 matrix, 121 cells; grid span 1262px, top-connected span 330px; bottom whitespace 22px; height driven by matrix rows and companion panels |
+| source_boundary_map/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
+| taxonomy_tree/stress | 977 | 917 | 0 | 22 | content span 917px, panel span 0px; bottom whitespace 22px |
+
 ## Template Metrics
 
 | Template | Canvas | Content | Whitespace R/B | Cards | Lines | Panels | Text Cnt/Chars | Ellipsis | QA | Notes |

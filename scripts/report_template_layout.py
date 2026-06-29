@@ -179,6 +179,123 @@ def _count_class(svg: str, class_name: str) -> int:
     return sum(1 for raw_classes in re.findall(r'\bclass="([^"]+)"', svg) if class_name in raw_classes.split())
 
 
+def _rects_for_group_class(svg: str, class_name: str) -> list[tuple[float, float, float, float]]:
+    group_re = re.compile(
+        rf'<g\b(?=[^>]*\bclass="[^"]*\b{re.escape(class_name)}\b[^"]*")[^>]*>(.*?)</g>',
+        re.S,
+    )
+    rects: list[tuple[float, float, float, float]] = []
+    for body in group_re.findall(svg):
+        rect_match = re.search(r'<rect\b([^>]*)', body)
+        if not rect_match:
+            continue
+        attrs = _attrs(rect_match.group(1))
+        rects.append((
+            _number(attrs, "x"),
+            _number(attrs, "y"),
+            _number(attrs, "width"),
+            _number(attrs, "height"),
+        ))
+    return rects
+
+
+def _vertical_span(rects: list[tuple[float, float, float, float]]) -> float:
+    if not rects:
+        return 0.0
+    top = min(y for _x, y, _w, _h in rects)
+    bottom = max(y + h for _x, y, _w, h in rects)
+    return max(0.0, bottom - top)
+
+
+def _read_contract(entry: TemplateEntry) -> dict:
+    return json.loads(entry.contract.read_text(encoding="utf-8-sig"))
+
+
+def _safe_info_panel_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    try:
+        return validator._info_panel_rects(svg)  # type: ignore[attr-defined]
+    except Exception:
+        return []
+
+
+def _safe_card_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    try:
+        return validator._card_rects(svg)  # type: ignore[attr-defined]
+    except Exception:
+        return []
+
+
+def _safe_capability_item_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    try:
+        return list(validator._capability_item_rects(svg).values())  # type: ignore[attr-defined]
+    except Exception:
+        return []
+
+
+def _height_driver(stats: LayoutStats) -> tuple[float, float, str]:
+    entry = stats.entry
+    svg = entry.svg.read_text(encoding="utf-8-sig")
+    contract = _read_contract(entry)
+    panels = _safe_info_panel_rects(svg)
+    panel_span = _vertical_span(panels)
+    bottom_note = f"bottom whitespace {stats.bottom_whitespace:.0f}px"
+
+    if entry.diagram_type == "capability_domain_map":
+        item_rects = _safe_capability_item_rects(svg)
+        item_span = _vertical_span(item_rects)
+        items = [item for item in contract.get("items", []) if isinstance(item, dict)]
+        stack_counts: dict[tuple[str, str], int] = {}
+        for item in items:
+            key = (str(item.get("level", "")), str(item.get("column", "")))
+            stack_counts[key] = stack_counts.get(key, 0) + 1
+        max_stack = max(stack_counts.values(), default=0)
+        levels = len(contract.get("levels", []))
+        detail = (
+            f"{levels} levels, {len(items)} items, max stack {max_stack}; "
+            f"item span {item_span:.0f}px, panel span {panel_span:.0f}px; "
+            f"{bottom_note}; height driven by content rows, not whitespace"
+        )
+        return item_span, panel_span, detail
+
+    if entry.diagram_type == "relationship_matrix":
+        cells = [tuple(map(float, match.groups())) for match in validator.MATRIX_CELL_RE.finditer(svg)]  # type: ignore[attr-defined]
+        matrix_size = int(len(cells) ** 0.5) if cells else 0
+        grid_rects = _rects_for_group_class(svg, "relationship-matrix-grid")
+        preview_rects = _rects_for_group_class(svg, "matrix-primary-preview")
+        summary_rects = _rects_for_group_class(svg, "matrix-summary-panel") + _rects_for_group_class(svg, "matrix-focus-detail-panel")
+        top_rects = _rects_for_group_class(svg, "matrix-top-connected-panel")
+        grid_span = _vertical_span(grid_rects)
+        top_span = _vertical_span(top_rects)
+        main_span = _vertical_span(grid_rects + preview_rects + summary_rects + top_rects)
+        detail = (
+            f"{matrix_size}x{matrix_size} matrix, {len(cells)} cells; "
+            f"grid span {grid_span:.0f}px, top-connected span {top_span:.0f}px; "
+            f"{bottom_note}; height driven by matrix rows and companion panels"
+        )
+        return main_span, top_span, detail
+
+    if entry.diagram_type in {"object_relationship_diagram", "ontology_map"}:
+        cards = _safe_card_rects(svg)
+        diamonds = []
+        try:
+            diamonds = validator._relationship_diamond_rects(svg)  # type: ignore[attr-defined]
+        except Exception:
+            diamonds = []
+        main_span = _vertical_span(cards + diamonds)
+        relation_count = len(contract.get("relationships", []))
+        object_count = len(contract.get("entities", contract.get("concepts", [])))
+        detail = (
+            f"{object_count} objects/concepts, {relation_count} relationships; "
+            f"diagram span {main_span:.0f}px, panel span {panel_span:.0f}px; "
+            f"{bottom_note}; height driven by relationship geometry and info panels"
+        )
+        return main_span, panel_span, detail
+
+    main_span = stats.content_bounds[3]
+    detail = f"content span {stats.content_bounds[3]:.0f}px, panel span {panel_span:.0f}px; {bottom_note}"
+    return main_span, panel_span, detail
+
+
 def _risk_notes(
     entry: TemplateEntry,
     width: float,
@@ -338,6 +455,21 @@ def render_report(stats: list[LayoutStats]) -> str:
         ]
         for idx, item in enumerate(ranked[:8], start=1)
     ]
+    diagnostic_candidates = [
+        item for item in sorted(stats, key=lambda item: item.template_id)
+        if item.entry.variant == "stress" or (item.entry.max_height is not None and item.height > item.entry.max_height)
+    ]
+    diagnostic_rows = []
+    for item in diagnostic_candidates:
+        main_span, panel_span, detail = _height_driver(item)
+        diagnostic_rows.append([
+            item.template_id,
+            _fmt_num(item.height),
+            _fmt_num(main_span),
+            _fmt_num(panel_span),
+            _fmt_num(item.bottom_whitespace),
+            detail,
+        ])
     summary_rows = [
         [
             item.template_id,
@@ -366,6 +498,13 @@ def render_report(stats: list[LayoutStats]) -> str:
             "## Top Layout Follow-ups",
             "",
             _markdown_table(["Rank", "Template", "Priority", "Notes"], top_rows),
+            "",
+            "## Height Diagnostics",
+            "",
+            _markdown_table(
+                ["Template", "Canvas H", "Main Span", "Panel Span", "Bottom WS", "Diagnosis"],
+                diagnostic_rows,
+            ),
             "",
             "## Template Metrics",
             "",

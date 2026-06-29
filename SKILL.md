@@ -209,7 +209,7 @@ Before final delivery, verify:
 - Run `py scripts/validate_semantic_svg.py output.svg` when possible, then run `git diff --check` for generated SVGs when working in a git repo.
 - For style QA, build a gallery with `py scripts/build_style_gallery.py examples/style-gallery.html examples/your-contract.json` and compare against the style reference image or screenshot.
 - After renderer, style, or example changes, run `py scripts/test_style_gallery_quality.py` so the gallery stays fresh and catches shared visual regressions such as tiny text, mismatched arrowheads, missing group-label shields, or oversized canvases.
-- After template-level visual/layout changes, regenerate `templates/template-layout-report.md` with `py scripts/report_template_layout.py templates/template-layout-report.md` so dense, sparse, oversized, or truncation-heavy templates stay visible as follow-up candidates. Treat height above `max_height` as a review signal only; compress only when the report or visual QA shows real redundancy such as excess whitespace or low content utilization.
+- After template-level visual/layout changes, regenerate `templates/template-layout-report.md` with `py scripts/report_template_layout.py templates/template-layout-report.md` so dense, sparse, oversized, or truncation-heavy templates stay visible as follow-up candidates. Use the height diagnostics to distinguish content-driven height from real redundancy. Treat height above `max_height` as a review signal only; compress only when the report or visual QA shows real redundancy such as excess whitespace or low content utilization.
 
 ## Script usage
 

@@ -161,6 +161,12 @@ def main() -> int:
     expected_report = layout_report.render_report(layout_report.scan_templates())
     if current_report.strip() != expected_report.strip():
         fail("template-layout-report.md is stale; regenerate it with scripts/report_template_layout.py")
+    if "## Height Diagnostics" not in expected_report:
+        fail("template layout report should include height source diagnostics")
+    if "capability_domain_map/stress" not in expected_report or "height driven by content rows, not whitespace" not in expected_report:
+        fail("template layout report should explain dense capability map height drivers")
+    if "relationship_matrix/stress" not in expected_report or "height driven by matrix rows and companion panels" not in expected_report:
+        fail("template layout report should explain dense relationship matrix height drivers")
 
     print("template library selftest: PASS")
     return 0
