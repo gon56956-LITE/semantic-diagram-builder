@@ -783,8 +783,8 @@ def _vertical_branch(x: float, start_y: float, end_y: float) -> str:
     return _rounded_path([(x, start_y), (x, end_y)])
 
 
-def _horizontal_bus(points: list[float], y: float) -> str:
-    return _rounded_path([(min(points), y), (max(points), y)])
+def _horizontal_bus(points: list[float], y: float, overlap: float = 2.0) -> str:
+    return _rounded_path([(min(points) - overlap, y), (max(points) + overlap, y)])
 
 
 def _horizontal_bus_segments(points: list[float], y: float, gap: tuple[float, float] | None = None) -> list[str]:

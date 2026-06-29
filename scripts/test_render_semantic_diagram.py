@@ -602,8 +602,21 @@ def main() -> int:
         attrs for attrs in path_attrs(source_boundary_stress_svg, {"fanout", "bus"})
         if 'data-route-family="1"' in attrs
     ]
-    if not any('M 410.5 613.0 L 1731.0 613.0' in attrs for attrs in source_fanout_buses):
+    source_fanout_bus_spans = [
+        (float(match.group(1)), float(match.group(2)))
+        for attrs in source_fanout_buses
+        if (match := re.search(r'\bM ([-0-9.]+) 613\.0 L ([-0-9.]+) 613\.0', attrs))
+    ]
+    if not any(left <= 410.5 and right >= 1731.0 for left, right in source_fanout_bus_spans):
         raise AssertionError("source_boundary_map stress fan-out first-row bus should stay visually continuous")
+    source_lower_fanin_bus_spans = [
+        (float(match.group(1)), float(match.group(2)))
+        for attrs in path_attrs(source_boundary_stress_svg, {"fanin", "bus"})
+        if 'data-route-family="1"' in attrs
+        if (match := re.search(r'\bM ([-0-9.]+) 1005\.0 L ([-0-9.]+) 1005\.0', attrs))
+    ]
+    if not any(left < 964.0 and right > 1144.0 for left, right in source_lower_fanin_bus_spans):
+        raise AssertionError("source_boundary_map stress lower fan-in bus should overlap branch and merge anchors")
     source_family_bus_y = {
         int(family): {
             round(float(y), 1)
