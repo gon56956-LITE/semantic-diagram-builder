@@ -22,7 +22,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | Template | Canvas H | Main Span | Panel Span | Bottom WS | Diagnosis |
 | --- | --- | --- | --- | --- | --- |
 | boundary_ownership_map/stress | 1247 | 1187 | 0 | 22 | content span 1187px, panel span 0px; bottom whitespace 22px |
-| capability_domain_map/stress | 1473 | 1000 | 160 | 22 | 5 levels, 48 items, max stack 2; item span 1000px, panel span 160px; bottom whitespace 22px; height driven by content rows, not whitespace |
+| capability_domain_map/stress | 1529 | 1056 | 160 | 22 | 5 levels, 48 items, max stack 2; item span 1056px, panel span 160px; bottom whitespace 22px; height driven by content rows, not whitespace |
 | hub_spoke/stress | 1269 | 1209 | 193 | 22 | content span 1209px, panel span 193px; bottom whitespace 22px |
 | layered_knowledge_topology/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
 | object_relationship_diagram/stress | 1487 | 984 | 289 | 22 | 10 objects/concepts, 10 relationships; diagram span 984px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
@@ -52,7 +52,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | boundary_ownership_map/stress | 1900x1247 | 1760x1187 | 70/22 | 0 | 6 | 0 | 142/2016 | 0 (0%) | 0 | ok |
 | capability_domain_map/minimal | 826x673 | 686x613 | 70/22 | 4 | 4 | 1 | 19/410 | 0 (0%) | 0 | ok |
 | capability_domain_map/reference | 1792x1305 | 1652x1245 | 70/22 | 32 | 40 | 3 | 84/1263 | 0 (0%) | 0 | ok |
-| capability_domain_map/stress | 2476x1473 | 2336x1413 | 70/22 | 48 | 62 | 3 | 119/1815 | 0 (0%) | 0 | height above max_height 1300px; dense but acceptable |
+| capability_domain_map/stress | 2476x1529 | 2336x1469 | 70/22 | 48 | 62 | 3 | 119/1815 | 0 (0%) | 0 | height above max_height 1300px; dense but acceptable |
 | hub_spoke/minimal | 1300x620 | 970x560 | 165/22 | 3 | 2 | 0 | 9/186 | 0 (0%) | 0 | ok |
 | hub_spoke/reference | 1500x645 | 1170x585 | 165/22 | 7 | 6 | 0 | 18/336 | 0 (0%) | 0 | ok |
 | hub_spoke/stress | 1800x1269 | 1660x1209 | 70/22 | 13 | 12 | 3 | 59/1564 | 0 (0%) | 0 | ok |

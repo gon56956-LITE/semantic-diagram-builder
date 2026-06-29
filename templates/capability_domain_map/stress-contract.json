@@ -9,7 +9,7 @@
   "relationship_lane_gap": 16,
   "level_gap": 40,
   "item_height": 96,
-  "item_gap": 36,
+  "item_gap": 64,
   "levels": [
     {"id": "strategic", "label": "Strategic Objectives", "kind": "glossary", "accent": "accent_purple"},
     {"id": "domain", "label": "Business Domains", "kind": "index", "accent": "accent_cyan"},
@@ -103,7 +103,7 @@
     {"from": "analytics_ops", "to": "decision_intel", "relation": "contains"},
     {"from": "data_platform", "to": "pipeline", "relation": "supports", "style": "dashed", "lane_offset": -10},
     {"from": "data_platform", "to": "renewal", "relation": "supports", "style": "dashed", "lane_offset": 10},
-    {"from": "data_platform", "to": "semantic_layer", "relation": "supports", "style": "dashed", "lane_offset": -16},
+    {"from": "data_platform", "to": "semantic_layer", "relation": "supports", "style": "dashed", "lane_offset": -50},
     {"from": "process_excellence", "to": "production_flow", "relation": "supports", "style": "dashed", "lane_offset": -8},
     {"from": "process_excellence", "to": "materials", "relation": "supports", "style": "dashed", "lane_offset": 8},
     {"from": "risk_controls", "to": "exception_mgmt", "relation": "supports", "style": "dashed"},

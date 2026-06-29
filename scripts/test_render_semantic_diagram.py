@@ -103,6 +103,16 @@ def node_rects(svg: str) -> dict[str, tuple[float, float, float, float]]:
     return rects
 
 
+def capability_item_rects(svg: str) -> dict[str, tuple[float, float, float, float]]:
+    rects = {}
+    pattern = re.compile(
+        r'<g id="capability-item-([^"]+)"[^>]*><rect x="([-0-9.]+)" y="([-0-9.]+)" width="([-0-9.]+)" height="([-0-9.]+)"'
+    )
+    for item_id, x, y, w, h in pattern.findall(svg):
+        rects[item_id] = (float(x), float(y), float(w), float(h))
+    return rects
+
+
 def info_panel_rects(svg: str) -> dict[str, tuple[float, float, float, float]]:
     rects = {}
     pattern = re.compile(
@@ -987,6 +997,15 @@ def main() -> int:
         raise AssertionError("capability_domain_map stress template should exercise sparse but meaningful overlays")
     if capability_stress_svg.count('data-relation="supports"') < 8:
         raise AssertionError("capability_domain_map stress template should exercise shared enabler support overlays")
+    capability_rects = capability_item_rects(capability_stress_svg)
+    for upper_id, lower_id in (("pipeline", "renewal"), ("service_mgmt", "api_mgmt")):
+        upper = capability_rects.get(upper_id)
+        lower = capability_rects.get(lower_id)
+        if not upper or not lower:
+            raise AssertionError("capability_domain_map stress template should expose measurable stacked capability cards")
+        row_gap = lower[1] - (upper[1] + upper[3])
+        if row_gap < 60:
+            raise AssertionError("capability_domain_map stress stacked capability rows should reserve a clearer connector corridor")
     support_lane_shifts = [
         float(value)
         for value in re.findall(r'data-relation="supports"[^>]*data-lane-shift="([-0-9.]+)"', capability_stress_svg)
