@@ -8,14 +8,14 @@ Height above `max_height` is a review signal, not an automatic compression targe
 
 | Rank | Template | Priority | Notes |
 | --- | --- | --- | --- |
-| 1 | capability_domain_map/stress | 0 | height above max_height 1300px; dense but acceptable |
-| 2 | object_relationship_diagram/stress | 0 | height above max_height 1450px; dense but acceptable |
-| 3 | ontology_map/stress | 0 | height above max_height 1350px; dense but acceptable |
-| 4 | relationship_matrix/stress | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
-| 5 | boundary_ownership_map/minimal | 0 | ok |
-| 6 | boundary_ownership_map/reference | 0 | ok |
-| 7 | boundary_ownership_map/stress | 0 | ok |
-| 8 | capability_domain_map/minimal | 0 | ok |
+| 1 | taxonomy_tree/reference | 5 | right whitespace 298px |
+| 2 | capability_domain_map/stress | 0 | height above max_height 1300px; dense but acceptable |
+| 3 | object_relationship_diagram/stress | 0 | height above max_height 1450px; dense but acceptable |
+| 4 | ontology_map/stress | 0 | height above max_height 1350px; dense but acceptable |
+| 5 | relationship_matrix/stress | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
+| 6 | boundary_ownership_map/minimal | 0 | ok |
+| 7 | boundary_ownership_map/reference | 0 | ok |
+| 8 | boundary_ownership_map/stress | 0 | ok |
 
 ## Height Diagnostics
 
@@ -74,5 +74,5 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | source_boundary_map/reference | 1536x1307 | 1468x1247 | 0/22 | 11 | 23 | 0 | 32/701 | 0 (0%) | 0 | ok |
 | source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 33 | 0 | 40/777 | 0 (0%) | 0 | ok |
 | taxonomy_tree/minimal | 850x557 | 610x497 | 170/22 | 2 | 1 | 0 | 10/177 | 0 (0%) | 0 | ok |
-| taxonomy_tree/reference | 1800x789 | 1660x729 | 70/22 | 10 | 9 | 0 | 30/397 | 0 (0%) | 0 | ok |
-| taxonomy_tree/stress | 1700x1335 | 1470x1275 | 160/22 | 27 | 26 | 0 | 78/1017 | 0 (0%) | 0 | ok |
+| taxonomy_tree/reference | 1500x835 | 1132x775 | 298/22 | 10 | 9 | 0 | 30/438 | 0 (0%) | 0 | right whitespace 298px |
+| taxonomy_tree/stress | 1700x1335 | 1516x1275 | 160/22 | 27 | 26 | 0 | 77/1011 | 0 (0%) | 0 | ok |

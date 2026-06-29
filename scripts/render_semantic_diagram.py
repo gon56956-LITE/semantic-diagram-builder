@@ -2963,14 +2963,12 @@ def _render_tree_family_backbone(
     for node_id in sorted(positions, key=lambda nid: (positions[nid][1], positions[nid][0], order.get(nid, 0))):
         parts.append(make_card(node_by_id[node_id], *positions[node_id], style, width))
     if sorted_roots:
-        parts.append(f'<text x="{margin_x}" y="{root_y - 14}" class="tree-level-label">Level 0</text>')
+        label_x = max(24.0, min(float(margin_x), min(family_backbone_x.values(), default=float(margin_x)) - 112.0))
+        parts.append(f'<text x="{label_x}" y="{root_y - 14}" class="tree-level-label">Level 0</text>')
     if family_roots and any(parent_map.get(family_id) for family_id in family_roots):
-        parts.append(f'<text x="{margin_x}" y="{level1_y - 14}" class="tree-level-label">Level 1</text>')
+        parts.append(f'<text x="{label_x}" y="{level1_y - 14}" class="tree-level-label">Level 1</text>')
     if any(family_descendants.values()):
-        parts.append(f'<text x="{margin_x}" y="{desc_y0 - 14}" class="tree-level-label">Level 2</text>')
-    if max(depths.values(), default=0) >= 3:
-        level3_label_y = desc_y0 + card_h + backbone_nested_gap - 14
-        parts.append(f'<text x="{margin_x}" y="{level3_label_y}" class="tree-level-label">Level 3</text>')
+        parts.append(f'<text x="{label_x}" y="{desc_y0 - 14}" class="tree-level-label">Level 2+</text>')
     _append_annotations(parts, contract, style, width, height)
     parts.append('</svg>')
     return "\n".join(parts) + "\n"

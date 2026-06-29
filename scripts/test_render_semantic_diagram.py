@@ -780,6 +780,12 @@ def main() -> int:
     assert_card_type_scale("taxonomy_tree", tree_svg)
     if css_font_size(tree_svg, "tree-level-label") < 15:
         raise AssertionError("taxonomy level labels should be readable at gallery scale")
+    reference_tree = load_json("templates/taxonomy_tree/reference-contract.json")
+    reference_tree_svg = assert_valid("taxonomy tree reference template", reference_tree)
+    if 'data-layout="family_backbone"' not in reference_tree_svg:
+        raise AssertionError("taxonomy_tree reference template should use the family-backbone layout")
+    if "Level 2+" not in reference_tree_svg:
+        raise AssertionError("taxonomy_tree reference template should use the shared Level 2+ label")
     stress_tree = load_json("templates/taxonomy_tree/stress-contract.json")
     stress_tree_svg = assert_valid("taxonomy tree stress template", stress_tree)
     for expected in ("Asset System", "Flow Overview"):
@@ -799,14 +805,25 @@ def main() -> int:
     level1_centers = [stress_rects[node_id][0] + stress_rects[node_id][2] / 2 for node_id in level1_parent_ids]
     if level1_centers != sorted(level1_centers):
         raise AssertionError("taxonomy_tree family-backbone Level 1 families should preserve declared order")
-    if "Level 2" not in stress_tree_svg or "Level 3" not in stress_tree_svg or "Level 2+" in stress_tree_svg:
-        raise AssertionError("taxonomy_tree family-backbone layout should label Level 2 and Level 3 separately")
+    if "Level 2+" not in stress_tree_svg or "Level 3" in stress_tree_svg:
+        raise AssertionError("taxonomy_tree family-backbone layout should combine nested levels under Level 2+")
     taxonomy_attrs = path_attrs(stress_tree_svg, {"taxonomy-link"})
     backbone_attrs = [attrs for attrs in taxonomy_attrs if 'data-layout="family_backbone"' in attrs]
     if len(backbone_attrs) != len(stress_tree["nodes"]) - 1:
         raise AssertionError("taxonomy_tree family-backbone layout should route every parent-child edge with layout metadata")
     if any('data-corridor-x=' in attrs or 'data-row-lane-y=' in attrs for attrs in backbone_attrs):
         raise AssertionError("taxonomy_tree family-backbone layout should not use wrapped horizontal row corridors")
+    level2_label_match = re.search(r'<text x="([-0-9.]+)" y="[-0-9.]+" class="tree-level-label">Level 2\+</text>', stress_tree_svg)
+    backbone_xs = [
+        float(match.group(1))
+        for attrs in backbone_attrs
+        for match in [re.search(r'data-backbone-x="([-0-9.]+)"', attrs)]
+        if match
+    ]
+    if not level2_label_match or not backbone_xs:
+        raise AssertionError("taxonomy_tree family-backbone stress should expose Level 2+ label and backbone geometry")
+    if float(level2_label_match.group(1)) > min(backbone_xs) - 80:
+        raise AssertionError("taxonomy_tree Level 2+ label should stay clear of the leftmost backbone corridor")
     parent_lookup = {
         str(node["id"]): str(node["parent"])
         for node in stress_tree["nodes"]
@@ -815,13 +832,6 @@ def main() -> int:
     child_map = {str(node["id"]): [] for node in stress_tree["nodes"] if isinstance(node, dict) and node.get("id")}
     for child_id, parent_id in parent_lookup.items():
         child_map[parent_id].append(child_id)
-
-    def collect_descendants(node_id: str) -> list[str]:
-        collected: list[str] = []
-        for child_id in child_map[node_id]:
-            collected.append(child_id)
-            collected.extend(collect_descendants(child_id))
-        return collected
 
     for family_id in level1_parent_ids:
         level2_ids = child_map[family_id]
