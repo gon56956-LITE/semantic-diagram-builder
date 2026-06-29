@@ -555,6 +555,53 @@ def main() -> int:
     for truncated in ("Alignment Pack...", "Source Docume..."):
         if truncated in layered_stress_svg:
             raise AssertionError(f"layered_knowledge_topology stress should not truncate semantic title text: {truncated}")
+    shared_direct = {
+        "title": "Shared Direct Corridor Regression",
+        "diagram_type": "layered_knowledge_topology",
+        "style": "accent-blueprint",
+        "width": 1300,
+        "max_nodes_per_row": 3,
+        "groups": [
+            {"id": "entry", "label": "Entry", "type": "layer"},
+            {"id": "synthesis", "label": "Synthesis", "type": "layer"},
+        ],
+        "nodes": [
+            {"id": "source_a", "label": "Source A", "subtitle": "solid route", "kind": "index", "group": "entry"},
+            {"id": "source_b", "label": "Source B", "subtitle": "dashed route", "kind": "query", "group": "entry"},
+            {"id": "source_c", "label": "Source C", "subtitle": "solid route", "kind": "glossary", "group": "entry"},
+            {"id": "target_a", "label": "Target A", "subtitle": "left target", "kind": "process", "group": "synthesis"},
+            {"id": "target_b", "label": "Target B", "subtitle": "middle target", "kind": "quality", "group": "synthesis"},
+            {"id": "target_c", "label": "Target C", "subtitle": "right target", "kind": "risk", "group": "synthesis"},
+        ],
+        "edges": [
+            {"from": "source_a", "to": "target_b", "relation": "opens"},
+            {"from": "source_b", "to": "target_c", "relation": "optional", "style": "dashed"},
+            {"from": "source_c", "to": "target_a", "relation": "supports"},
+        ],
+    }
+    shared_direct_svg = assert_valid("shared direct corridor regression", shared_direct)
+    shared_direct_attrs = [
+        attrs for attrs in path_attrs(shared_direct_svg, {"direct-link"}) if 'data-direct-corridor=' in attrs
+    ]
+    if len(shared_direct_attrs) != 3:
+        raise AssertionError("shared direct corridor should tag all three cross-layer direct links")
+    shared_direct_colors = {
+        color.upper()
+        for attrs in shared_direct_attrs
+        for color in re.findall(r'style="[^"]*stroke:(#[0-9A-Fa-f]{6})', attrs)
+    }
+    if len(shared_direct_colors) < 3 or "#F4F8FF" in shared_direct_colors:
+        raise AssertionError("shared direct corridor links should use distinct semantic route colors instead of default white")
+    shared_direct_shifts = {
+        float(match.group(1))
+        for attrs in shared_direct_attrs
+        if (match := re.search(r'data-lane-shift="([-0-9.]+)"', attrs))
+    }
+    if len(shared_direct_shifts) != 3:
+        raise AssertionError("shared direct corridor links should receive distinct lane offsets")
+    if not any("edge-dashed" in attrs and 'data-route-color="' in attrs for attrs in shared_direct_attrs):
+        raise AssertionError("dashed direct links in shared corridors should keep dash semantics while receiving a route color")
+
     layered_family_bus_y = {
         int(family): {
             round(float(y), 1)

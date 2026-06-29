@@ -770,6 +770,73 @@ def _connector_family_lane_shift(style: dict, role: str, index: int) -> float:
     return offsets[index % len(offsets)] * gap
 
 
+def _direct_corridor_key(a: tuple[float, float, float, float], b: tuple[float, float, float, float]) -> str | None:
+    _ax, ay, _aw, ah = a
+    _bx, by, _bw, bh = b
+    if abs((ay + ah / 2) - (by + bh / 2)) < 40:
+        return None
+    sx, sy = center_bottom(a) if ay < by else center_top(a)
+    _tx, ty = center_top(b) if ay < by else center_bottom(b)
+    if abs(ty - sy) < 1e-6:
+        return None
+    direction = "down" if sy < ty else "up"
+    return f"{direction}:{round(min(sy, ty), 1)}:{round(max(sy, ty), 1)}"
+
+
+def _direct_corridor_lane_shift(style: dict, lane_index: int) -> float:
+    connector = _style_component(style, "connector")
+    gap = float(connector.get("direct_lane_gap", connector.get("relation_lane_gap", 12.0)))
+    offsets = [0.0, -1.0, 1.0, -2.0, 2.0, -3.0, 3.0]
+    return offsets[lane_index % len(offsets)] * gap
+
+
+def _direct_corridor_bus_y(
+    a: tuple[float, float, float, float],
+    b: tuple[float, float, float, float],
+    lane_shift: float,
+) -> float | None:
+    _ax, ay, _aw, _ah = a
+    _bx, by, _bw, _bh = b
+    sx, sy = center_bottom(a) if ay < by else center_top(a)
+    tx, ty = center_top(b) if ay < by else center_bottom(b)
+    if abs(tx - sx) < 1e-6:
+        return None
+    low = min(sy, ty) + 8.0
+    high = max(sy, ty) - 8.0
+    if low > high:
+        return (sy + ty) / 2
+    return _clamp((sy + ty) / 2 + lane_shift, low, high)
+
+
+def _direct_edge_attrs(
+    style: dict,
+    edge: dict,
+    *,
+    shared_corridor: bool,
+    lane_index: int,
+    lane_shift: float,
+    corridor_key: str | None,
+) -> str:
+    default_color = style_color(style, "line_primary", "#F4F8FF")
+    color = _connector_relation_color(
+        style,
+        edge,
+        default_token="line_primary",
+        palette_index=lane_index,
+        use_palette=shared_corridor,
+    )
+    attrs = []
+    if shared_corridor or color.upper() != default_color.upper():
+        attrs.append(f'style="stroke:{color}"')
+        attrs.append(f'data-route-color="{color}"')
+    if shared_corridor and corridor_key:
+        attrs.append(f'data-direct-corridor="{e(corridor_key)}"')
+    if shared_corridor:
+        attrs.append(f'data-direct-lane="{lane_index}"')
+        attrs.append(f'data-lane-shift="{round(lane_shift, 2)}"')
+    return " ".join(attrs)
+
+
 def _preferred_side_for_points(layout: dict, x_values: list[float], fallback: str) -> str:
     if not x_values:
         return fallback
@@ -1072,12 +1139,43 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
         routed_edges.update(family_edges)
 
     positions = model["positions"]
+    direct_edges = []
+    corridor_groups: dict[str, list[int]] = {}
     for edge in edges:
         fr, to = edge.get("from"), edge.get("to")
         if fr not in positions or to not in positions or (fr, to) in routed_edges:
             continue
-        cls = "edge edge-dashed" if edge.get("style") == "dashed" else "edge"
-        paths.append(_path(edge_path(positions[fr], positions[to]), cls, "arrow"))
+        corridor_key = _direct_corridor_key(positions[fr], positions[to])
+        direct_edges.append((edge, fr, to, corridor_key))
+        if corridor_key:
+            corridor_groups.setdefault(corridor_key, []).append(len(direct_edges) - 1)
+    direct_lane_indices = {}
+    for _corridor_key, indices in corridor_groups.items():
+        if len(indices) <= 1:
+            continue
+        for lane_index, direct_index in enumerate(indices):
+            direct_lane_indices[direct_index] = lane_index
+
+    for direct_index, (edge, fr, to, corridor_key) in enumerate(direct_edges):
+        shared_corridor = direct_index in direct_lane_indices
+        lane_index = direct_lane_indices.get(direct_index, 0)
+        lane_shift = _direct_corridor_lane_shift(model.get("style", {}), lane_index) if shared_corridor else 0.0
+        bus_y = _direct_corridor_bus_y(positions[fr], positions[to], lane_shift) if shared_corridor else None
+        cls_parts = ["edge"]
+        if edge.get("style") == "dashed":
+            cls_parts.append("edge-dashed")
+        if shared_corridor:
+            cls_parts.append("direct-link")
+        cls = " ".join(cls_parts)
+        extra_attrs = _direct_edge_attrs(
+            model.get("style", {}),
+            edge,
+            shared_corridor=shared_corridor,
+            lane_index=lane_index,
+            lane_shift=lane_shift,
+            corridor_key=corridor_key,
+        )
+        paths.append(_path(edge_path(positions[fr], positions[to], bus_y), cls, "arrow", extra_attrs))
     return paths
 
 

@@ -125,7 +125,20 @@
       "fanout_opacity": 0.74,
       "fanin_opacity": 0.74,
       "dasharray": "8 8",
-      "dashed_opacity": 0.66
+      "dashed_opacity": 0.66,
+      "relation_palette": ["fanout", "accent_yellow", "accent_green", "accent_purple", "accent_orange"],
+      "relation_colors": {
+        "data_flow": "accent_orange",
+        "flow": "accent_orange",
+        "feeds": "accent_orange",
+        "shared_responsibility": "accent_purple",
+        "hosting_boundary": "accent_purple",
+        "federation": "accent_cyan",
+        "reporting": "accent_yellow",
+        "reviewed_by": "accent_yellow",
+        "reviewed by": "accent_yellow",
+        "optional": "accent_purple"
+      }
     },
     "table": {
       "fill": "card_fill",
