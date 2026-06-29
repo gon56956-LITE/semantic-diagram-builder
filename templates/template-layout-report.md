@@ -57,8 +57,8 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | hub_spoke/reference | 1500x645 | 1170x585 | 165/22 | 7 | 6 | 0 | 18/336 | 0 (0%) | 0 | ok |
 | hub_spoke/stress | 1800x1269 | 1660x1209 | 70/22 | 13 | 12 | 3 | 59/1564 | 0 (0%) | 0 | ok |
 | layered_knowledge_topology/minimal | 1100x839 | 960x779 | 70/22 | 3 | 2 | 0 | 12/286 | 0 (0%) | 0 | ok |
-| layered_knowledge_topology/reference | 1600x1307 | 1460x1247 | 70/22 | 10 | 23 | 0 | 27/487 | 0 (0%) | 0 | ok |
-| layered_knowledge_topology/stress | 1900x1307 | 1760x1247 | 70/22 | 17 | 38 | 0 | 50/936 | 1 (2%) | 0 | ok |
+| layered_knowledge_topology/reference | 1600x1307 | 1460x1247 | 70/22 | 10 | 22 | 0 | 27/487 | 0 (0%) | 0 | ok |
+| layered_knowledge_topology/stress | 1900x1307 | 1760x1247 | 70/22 | 17 | 37 | 0 | 50/936 | 1 (2%) | 0 | ok |
 | object_relationship_diagram/minimal | 950x329 | 699x269 | 126/22 | 2 | 2 | 0 | 17/213 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/reference | 1500x897 | 1360x837 | 70/22 | 7 | 12 | 2 | 84/843 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/stress | 1700x1487 | 1560x1427 | 70/22 | 10 | 19 | 3 | 132/1548 | 0 (0%) | 0 | height above max_height 1450px; dense but acceptable |
@@ -72,8 +72,8 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | relationship_matrix/reference | 2200x1514 | 2104x1454 | 48/22 | 0 | 0 | 3 | 177/1080 | 0 (0%) | 0 | ok |
 | relationship_matrix/stress | 2400x1802 | 2304x1742 | 48/22 | 0 | 0 | 3 | 252/1455 | 17 (7%) | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
 | source_boundary_map/minimal | 1100x800 | 960x740 | 70/22 | 2 | 1 | 0 | 9/260 | 0 (0%) | 0 | ok |
-| source_boundary_map/reference | 1536x1307 | 1468x1247 | 0/22 | 11 | 24 | 0 | 32/701 | 0 (0%) | 0 | ok |
-| source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 34 | 0 | 40/777 | 0 (0%) | 0 | ok |
+| source_boundary_map/reference | 1536x1307 | 1468x1247 | 0/22 | 11 | 23 | 0 | 32/701 | 0 (0%) | 0 | ok |
+| source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 33 | 0 | 40/777 | 0 (0%) | 0 | ok |
 | taxonomy_tree/minimal | 850x557 | 610x497 | 170/22 | 2 | 1 | 0 | 10/177 | 0 (0%) | 0 | ok |
 | taxonomy_tree/reference | 1800x789 | 1660x729 | 70/22 | 10 | 9 | 0 | 30/397 | 0 (0%) | 0 | ok |
 | taxonomy_tree/stress | 1700x977 | 1550x917 | 80/22 | 17 | 16 | 0 | 50/684 | 2 (4%) | 0 | ok |

@@ -37,8 +37,7 @@
 <path d="M 592.0 507.0 L 592.0 606.0 Q 592.0 613.0 585.0 613.0 L 578.0 613.0" class="edge fanout route-shared branch"/>
 <path d="M 592.0 507.0 L 592.0 606.0 Q 592.0 613.0 599.0 613.0 L 606.0 613.0" class="edge fanout route-shared branch"/>
 <path d="M 1441.0 613.0 L 1448.0 613.0 Q 1455.0 613.0 1455.0 620.0 L 1455.0 818.0 Q 1455.0 825.0 1448.0 825.0 L 1441.0 825.0" class="edge fanout route-shared trunk"/>
-<path d="M 408.67 613.0 L 578.0 613.0" class="edge fanout route-shared bus"/>
-<path d="M 606.0 613.0 L 1441.0 613.0" class="edge fanout route-shared bus"/>
+<path d="M 408.67 613.0 L 1441.0 613.0" class="edge fanout route-shared bus"/>
 <path d="M 408.67 613.0 L 401.67 613.0 Q 394.67 613.0 394.67 620.0 L 394.67 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
 <path d="M 786.0 613.0 L 793.0 613.0 Q 800.0 613.0 800.0 620.0 L 800.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
 <path d="M 1191.33 613.0 L 1198.33 613.0 Q 1205.33 613.0 1205.33 620.0 L 1205.33 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>

@@ -933,8 +933,7 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
             terminal_path, terminal_anchor = _curve_from_bus_from_side(tx, bus_y, ty, upstream_x)
             terminal_paths.append(terminal_path)
             bus_points.append(terminal_anchor)
-        bus_gap = source_bus_gap if row == first_row else None
-        for bus_d in _horizontal_bus_segments(bus_points, bus_y, bus_gap):
+        for bus_d in _horizontal_bus_segments(bus_points, bus_y):
             paths.append(_path(bus_d, "edge fanout route-shared bus", extra_attrs=family_attrs))
         for terminal_path in terminal_paths:
             paths.append(_path(terminal_path, "edge fanout terminal", "arrow-fanout", family_attrs))

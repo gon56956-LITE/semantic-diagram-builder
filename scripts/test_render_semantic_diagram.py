@@ -594,6 +594,16 @@ def main() -> int:
     }
     if len(source_fanin_colors) < 2:
         raise AssertionError("source_boundary_map stress should color repeated fan-in families distinctly")
+    if "#16D9FF" in source_fanin_colors:
+        raise AssertionError("source_boundary_map stress fan-in families should not reuse cyan fan-out lanes")
+    if "#B56CFF" not in source_fanin_colors:
+        raise AssertionError("source_boundary_map stress fan-in alternate family should use the purple route lane")
+    source_fanout_buses = [
+        attrs for attrs in path_attrs(source_boundary_stress_svg, {"fanout", "bus"})
+        if 'data-route-family="1"' in attrs
+    ]
+    if not any('M 410.5 613.0 L 1731.0 613.0' in attrs for attrs in source_fanout_buses):
+        raise AssertionError("source_boundary_map stress fan-out first-row bus should stay visually continuous")
     source_family_bus_y = {
         int(family): {
             round(float(y), 1)
