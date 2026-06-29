@@ -52,7 +52,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | boundary_ownership_map/stress | 1900x1247 | 1760x1187 | 70/22 | 0 | 6 | 0 | 142/2016 | 0 (0%) | 0 | ok |
 | capability_domain_map/minimal | 826x673 | 686x613 | 70/22 | 4 | 4 | 1 | 19/410 | 0 (0%) | 0 | ok |
 | capability_domain_map/reference | 1792x1305 | 1652x1245 | 70/22 | 32 | 40 | 3 | 84/1263 | 0 (0%) | 0 | ok |
-| capability_domain_map/stress | 2364x1473 | 2224x1413 | 70/22 | 48 | 62 | 3 | 119/1815 | 0 (0%) | 0 | height above max_height 1300px; dense but acceptable |
+| capability_domain_map/stress | 2476x1473 | 2336x1413 | 70/22 | 48 | 62 | 3 | 119/1815 | 0 (0%) | 0 | height above max_height 1300px; dense but acceptable |
 | hub_spoke/minimal | 1300x620 | 970x560 | 165/22 | 3 | 2 | 0 | 9/186 | 0 (0%) | 0 | ok |
 | hub_spoke/reference | 1500x645 | 1170x585 | 165/22 | 7 | 6 | 0 | 18/336 | 0 (0%) | 0 | ok |
 | hub_spoke/stress | 1800x1269 | 1660x1209 | 70/22 | 13 | 12 | 3 | 59/1564 | 0 (0%) | 0 | ok |

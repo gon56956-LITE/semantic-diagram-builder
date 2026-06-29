@@ -27,6 +27,7 @@ Style packages may define:
 - card fill, radius, border mode, and shadow behavior.
 - icon fill mode and stroke widths.
 - connector primary/fanout/fanin colors, stroke width, dash style, and marker colors.
+- connector palettes for repeated fan-in/fan-out families, dashed relation overlays, and relation-specific colors.
 - table fill, header fill, grid opacity, and table typography.
 - tree, hub, spoke, and metadata panel visual defaults.
 - semantic accent mapping by node `kind`.
@@ -50,6 +51,13 @@ Style packages may not:
 - thin rectangular panels, compact technical typography, and clean arrowheads.
 
 Accent colors are semantic emphasis, not the whole theme. The diagram should remain blue-and-white first.
+
+Connector color policy:
+
+- Primary structural links stay white or near-white.
+- Repeated fan-in/fan-out families may use the connector family palette so shared corridors remain distinguishable.
+- Sparse dashed overlays use relation-specific colors first, then source-object accent or the relation palette when the relation repeats.
+- Explicit edge or relationship `accent` values still win when a contract needs a known semantic color.
 
 ## QA
 

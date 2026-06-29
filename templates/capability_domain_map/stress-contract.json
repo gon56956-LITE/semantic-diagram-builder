@@ -5,7 +5,8 @@
   "style": "accent-blueprint",
   "width": 2300,
   "column_width": 200,
-  "column_gap": 56,
+  "column_gap": 72,
+  "relationship_lane_gap": 16,
   "level_gap": 40,
   "item_height": 96,
   "item_gap": 36,
@@ -71,10 +72,10 @@
     {"id": "api_mgmt", "label": "API Mgmt", "subtitle": "interfaces", "level": "capability", "column": "technology", "kind": "capability"},
     {"id": "semantic_layer", "label": "Semantic Layer", "subtitle": "shared meaning", "level": "capability", "column": "data", "kind": "capability"},
     {"id": "decision_intel", "label": "Decision Intel", "subtitle": "trusted insight", "level": "capability", "column": "data", "kind": "capability"},
-    {"id": "data_platform", "label": "Data Platform", "level": "enabling", "column": "customer", "span": 2, "kind": "process", "accent": "accent_orange"},
+    {"id": "data_platform", "label": "Data Platform", "level": "enabling", "column": "customer", "span": 2, "kind": "process", "accent": "accent_cyan"},
     {"id": "process_excellence", "label": "Process Excellence", "level": "enabling", "column": "operations", "span": 2, "kind": "process", "accent": "accent_orange"},
-    {"id": "risk_controls", "label": "Risk & Controls", "level": "enabling", "column": "finance", "span": 1, "kind": "risk", "accent": "accent_orange"},
-    {"id": "integration_layer", "label": "Integration Layer", "level": "enabling", "column": "technology", "span": 2, "kind": "process", "accent": "accent_orange"}
+    {"id": "risk_controls", "label": "Risk & Controls", "level": "enabling", "column": "finance", "span": 1, "kind": "risk", "accent": "accent_yellow"},
+    {"id": "integration_layer", "label": "Integration Layer", "level": "enabling", "column": "technology", "span": 2, "kind": "process", "accent": "accent_purple"}
   ],
   "relationships": [
     {"from": "growth", "to": "customer_domain", "relation": "guides", "accent": "accent_purple"},
@@ -100,14 +101,14 @@
     {"from": "integration_ops", "to": "api_mgmt", "relation": "contains"},
     {"from": "data_governance", "to": "semantic_layer", "relation": "contains"},
     {"from": "analytics_ops", "to": "decision_intel", "relation": "contains"},
-    {"from": "data_platform", "to": "pipeline", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": -10},
-    {"from": "data_platform", "to": "renewal", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": 10},
-    {"from": "data_platform", "to": "semantic_layer", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": -16},
-    {"from": "process_excellence", "to": "production_flow", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": -8},
-    {"from": "process_excellence", "to": "materials", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": 8},
-    {"from": "risk_controls", "to": "exception_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange"},
-    {"from": "integration_layer", "to": "service_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": -10},
-    {"from": "integration_layer", "to": "api_mgmt", "relation": "supports", "style": "dashed", "accent": "accent_orange", "lane_offset": 10}
+    {"from": "data_platform", "to": "pipeline", "relation": "supports", "style": "dashed", "lane_offset": -10},
+    {"from": "data_platform", "to": "renewal", "relation": "supports", "style": "dashed", "lane_offset": 10},
+    {"from": "data_platform", "to": "semantic_layer", "relation": "supports", "style": "dashed", "lane_offset": -16},
+    {"from": "process_excellence", "to": "production_flow", "relation": "supports", "style": "dashed", "lane_offset": -8},
+    {"from": "process_excellence", "to": "materials", "relation": "supports", "style": "dashed", "lane_offset": 8},
+    {"from": "risk_controls", "to": "exception_mgmt", "relation": "supports", "style": "dashed"},
+    {"from": "integration_layer", "to": "service_mgmt", "relation": "supports", "style": "dashed", "lane_offset": -10},
+    {"from": "integration_layer", "to": "api_mgmt", "relation": "supports", "style": "dashed", "lane_offset": 10}
   ],
   "info_panels": [
     {

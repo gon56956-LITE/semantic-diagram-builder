@@ -111,8 +111,8 @@
     {"from": "customer_data", "to": "payment_gateway", "relation": "shared_responsibility", "style": "dashed", "accent": "accent_purple"},
     {"from": "operations_data", "to": "logistics_provider", "relation": "data_flow", "accent": "accent_orange"},
     {"from": "financial_data", "to": "regulator", "relation": "reporting", "style": "dashed", "accent": "accent_yellow"},
-    {"from": "data_platform", "to": "cloud_provider", "relation": "hosting_boundary", "style": "dashed", "accent": "accent_purple"},
-    {"from": "iam", "to": "identity_provider", "relation": "federation", "style": "dashed", "accent": "accent_purple"}
+    {"from": "data_platform", "to": "cloud_provider", "relation": "hosting_boundary", "style": "dashed", "accent": "accent_green"},
+    {"from": "iam", "to": "identity_provider", "relation": "federation", "style": "dashed", "accent": "accent_cyan"}
   ],
   "ownership_key": [
     {"code": "R", "label": "Responsible", "description": "Executes / ensures"},

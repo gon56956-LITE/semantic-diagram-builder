@@ -779,6 +779,7 @@ def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:
         if text_x + _text_width_estimate(text, size, 0.55) > right_limit + 2.0:
             fail(f'capability column label {idx} overflows its header slot; wrap or truncate the label', issues)
     vertical_lanes: list[tuple[float, float, float, str]] = []
+    horizontal_lanes: list[tuple[float, float, float, str]] = []
     for attrs, d, _classes in _path_attrs_with_classes(svg, {'capability-map-link'}):
         match = DIRECT_LINE_RE.match(d)
         if not match:
@@ -800,6 +801,8 @@ def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:
             orient, a, b = seg
             if orient == 'v' and abs(a[1] - b[1]) >= 36:
                 vertical_lanes.append((a[0], min(a[1], b[1]), max(a[1], b[1]), _path_stroke(attrs)))
+            if orient == 'h' and abs(a[0] - b[0]) >= 56:
+                horizontal_lanes.append((a[1], min(a[0], b[0]), max(a[0], b[0]), _path_stroke(attrs)))
     for idx, lane in enumerate(vertical_lanes):
         x, y1, y2, stroke = lane
         if not stroke:
@@ -809,7 +812,18 @@ def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:
                 continue
             overlap = min(y2, other_y2) - max(y1, other_y1)
             if overlap >= 36:
-                fail('capability map links share the same same-color vertical corridor; offset the route lanes', issues)
+                fail('capability map links share the same-color vertical corridor; offset the route lanes', issues)
+                return
+    for idx, lane in enumerate(horizontal_lanes):
+        y, x1, x2, stroke = lane
+        if not stroke:
+            continue
+        for other_y, other_x1, other_x2, other_stroke in horizontal_lanes[idx + 1:]:
+            if stroke != other_stroke or abs(y - other_y) >= 3:
+                continue
+            overlap = min(x2, other_x2) - max(x1, other_x1)
+            if overlap >= 56:
+                fail('capability map links share the same-color horizontal corridor; offset the route lanes', issues)
                 return
 
 

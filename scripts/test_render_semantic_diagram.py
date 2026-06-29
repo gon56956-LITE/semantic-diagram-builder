@@ -568,6 +568,13 @@ def main() -> int:
     for truncated in ("Knowledge Pack...", "Parameter Pack...", "Handling Playb...", "Procedure Documen..."):
         if truncated in source_boundary_stress_svg:
             raise AssertionError(f"source_boundary_map stress should not truncate semantic title text: {truncated}")
+    source_fanin_colors = {
+        color.upper()
+        for attrs in path_attrs(source_boundary_stress_svg, {"fanin"})
+        for color in re.findall(r'style="[^"]*stroke:(#[0-9A-Fa-f]{6})', attrs)
+    }
+    if len(source_fanin_colors) < 2:
+        raise AssertionError("source_boundary_map stress should color repeated fan-in families distinctly")
 
     unknown = copy.deepcopy(layered)
     unknown["diagram_type"] = "unknown_type"
@@ -672,6 +679,16 @@ def main() -> int:
     if 'data-variant="domain_ownership_matrix"' not in boundary_matrix_svg:
         raise AssertionError("boundary_ownership_map matrix SVG should expose data-variant")
     assert_boundary_matrix_design(boundary_matrix_svg)
+    boundary_matrix_stress = load_json("templates/boundary_ownership_map/stress-contract.json")
+    boundary_matrix_stress_svg = assert_valid("boundary ownership matrix stress template", boundary_matrix_stress)
+    boundary_dashed_colors = {
+        color.upper()
+        for attrs in path_attrs(boundary_matrix_stress_svg, {"boundary-matrix-link"})
+        if 'stroke-dasharray=' in attrs
+        for color in re.findall(r'style="[^"]*stroke:(#[0-9A-Fa-f]{6})', attrs)
+    }
+    if len(boundary_dashed_colors) < 4:
+        raise AssertionError("boundary_ownership_map stress dashed relationships should use a broader semantic color set")
 
     tree = load_contract("taxonomy-tree-contract.json")
     tree_svg = assert_valid("taxonomy tree example", tree)
@@ -851,6 +868,8 @@ def main() -> int:
     reviewed_links = re.findall(r'<path\b[^>]*\bdata-relationship="reviewed_by"[^>]*/>', ontology_stress_svg)
     if len(reviewed_links) < 2 or any('data-route="axis"' not in link for link in reviewed_links[:2]):
         raise AssertionError("ontology_map reviewed_by relation should stay on the direct Evidence-Policy axis")
+    if any('stroke:#FFD84D' not in link for link in reviewed_links[:2]):
+        raise AssertionError("ontology_map reviewed_by dashed relation should use the relation color standard")
 
     capability_map = load_json("templates/capability_domain_map/reference-contract.json")
     capability_svg = assert_valid("capability domain map reference template", capability_map)
@@ -876,6 +895,14 @@ def main() -> int:
     ]
     if len({round(value, 1) for value in support_lane_shifts if abs(value) > 0.1}) < 4:
         raise AssertionError("capability_domain_map support overlays should use staggered lane shifts")
+    support_colors = {
+        color.upper()
+        for attrs in path_attrs(capability_stress_svg, {"capability-map-link"})
+        if 'data-relation="supports"' in attrs
+        for color in re.findall(r'style="[^"]*stroke:(#[0-9A-Fa-f]{6})', attrs)
+    }
+    if len(support_colors) < 4:
+        raise AssertionError("capability_domain_map support overlays should color by source enabler semantics")
     repeated_corridors = re.findall(r'data-relation="supports"[^>]*data-corridor-x="([-0-9.]+)"', capability_stress_svg)
     if len(repeated_corridors) < 3:
         raise AssertionError("capability_domain_map stress template should exercise detour corridors")

@@ -658,6 +658,7 @@ def build_layout_model(contract: dict, style: dict | None = None, contract_path:
         "group_layouts": group_layouts,
         "groups": groups,
         "stats": stats,
+        "style": style,
     }
 
 
@@ -745,6 +746,23 @@ def _path(d: str, classes: str, marker: str | None = None, extra_attrs: str = ""
     return f'<path d="{d}" class="{classes}"{marker_attr}{extra}/>'
 
 
+def _connector_palette_color(style: dict, palette_name: str, index: int, fallback: str = "") -> str:
+    connector = _style_component(style, "connector")
+    palette = connector.get(palette_name)
+    if not isinstance(palette, list) or not palette:
+        return fallback
+    raw = palette[index % len(palette)]
+    color = style_color(style, raw, "")
+    return color if VALID_HEX.match(color) else fallback
+
+
+def _connector_family_attrs(style: dict, role: str, index: int) -> str:
+    color = _connector_palette_color(style, f"{role}_palette", index)
+    if not color:
+        return ""
+    return f'style="stroke:{color}" data-route-family="{index}" data-route-color="{color}"'
+
+
 def _vertical_branch(x: float, start_y: float, end_y: float) -> str:
     return _rounded_path([(x, start_y), (x, end_y)])
 
@@ -821,7 +839,7 @@ def _split_curve_from_bus(x: float, bus_y: float, target_y: float) -> tuple[list
     )
 
 
-def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str], model: dict) -> tuple[list[str], set[tuple[str, str]]]:
+def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str], model: dict, family_index: int = 0) -> tuple[list[str], set[tuple[str, str]]]:
     positions = model["positions"]
     layout = model["group_layouts"].get(target_group)
     if not layout or layout["mode"] != "row_bus_side_trunk" or source_id not in positions:
@@ -839,6 +857,7 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
         return [], set()
 
     paths = []
+    family_attrs = _connector_family_attrs(model.get("style", {}), "fanout", family_index)
     routed = {(source_id, target_id) for targets in row_targets.values() for target_id in targets}
     sx, sy = center_bottom(positions[source_id])
     side = layout.get("fanout_side", "right")
@@ -856,7 +875,7 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
         source_paths, source_bus_gap = _split_curve_to_bus(sx, sy, first_bus_y)
         source_bus_anchors = list(source_bus_gap)
         for source_path in source_paths:
-            paths.append(_path(source_path, "edge fanout route-shared branch"))
+            paths.append(_path(source_path, "edge fanout route-shared branch", extra_attrs=family_attrs))
     else:
         source_path, source_bus_anchor = _curve_to_bus_toward(
             sx,
@@ -865,7 +884,7 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
             (min(first_target_centers) + max(first_target_centers)) / 2,
         )
         source_bus_anchors = [source_bus_anchor]
-        paths.append(_path(source_path, "edge fanout route-shared branch"))
+        paths.append(_path(source_path, "edge fanout route-shared branch", extra_attrs=family_attrs))
 
     for row in sorted(row_targets):
         if row == first_row:
@@ -875,6 +894,7 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
             _path(
                 _rounded_path([(trunk_anchor_x, first_bus_y), (trunk_x, first_bus_y), (trunk_x, bus_y), (trunk_anchor_x, bus_y)]),
                 "edge fanout route-shared trunk",
+                extra_attrs=family_attrs,
             )
         )
 
@@ -899,13 +919,13 @@ def _fanout_family_paths(source_id: str, target_group: str, target_ids: list[str
             bus_points.append(terminal_anchor)
         bus_gap = source_bus_gap if row == first_row else None
         for bus_d in _horizontal_bus_segments(bus_points, bus_y, bus_gap):
-            paths.append(_path(bus_d, "edge fanout route-shared bus"))
+            paths.append(_path(bus_d, "edge fanout route-shared bus", extra_attrs=family_attrs))
         for terminal_path in terminal_paths:
-            paths.append(_path(terminal_path, "edge fanout terminal", "arrow-fanout"))
+            paths.append(_path(terminal_path, "edge fanout terminal", "arrow-fanout", family_attrs))
     return paths, routed
 
 
-def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str], model: dict) -> tuple[list[str], set[tuple[str, str]]]:
+def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str], model: dict, family_index: int = 0) -> tuple[list[str], set[tuple[str, str]]]:
     positions = model["positions"]
     layout = model["group_layouts"].get(source_group)
     if not layout or layout["mode"] != "row_bus_side_trunk" or target_id not in positions:
@@ -923,6 +943,7 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
         return [], set()
 
     paths = []
+    family_attrs = _connector_family_attrs(model.get("style", {}), "fanin", family_index)
     routed = {(source_id, target_id) for sources in row_sources.values() for source_id in sources}
     side = layout.get("fanin_side", "left")
     trunk_x = _side_x(layout, side)
@@ -946,6 +967,7 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
             _path(
                 _rounded_path([(trunk_anchor_x, first_bus_y), (trunk_x, first_bus_y), (trunk_x, join_y), (trunk_anchor_x, join_y)]),
                 "edge fanin route-shared trunk",
+                extra_attrs=family_attrs,
             )
         )
 
@@ -967,7 +989,7 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
             sx, sy = center_bottom(positions[source_id])
             source_path, source_anchor = _curve_to_bus_toward(sx, sy, bus_y, trunk_x)
             source_centers.append(source_anchor)
-            paths.append(_path(source_path, "edge fanin route-shared branch"))
+            paths.append(_path(source_path, "edge fanin route-shared branch", extra_attrs=family_attrs))
         if abs(bus_y - join_y) <= 1e-6:
             source_span = source_centers + [trunk_anchor_x]
             if direct_source_id and min(source_span) < tx < max(source_span):
@@ -991,11 +1013,11 @@ def _fanin_family_paths(source_group: str, target_id: str, source_ids: list[str]
             bus_points = source_centers + [trunk_anchor_x]
             bus_gap = None
         for bus_d in _horizontal_bus_segments(bus_points, bus_y, bus_gap):
-            paths.append(_path(bus_d, "edge fanin route-shared bus"))
+            paths.append(_path(bus_d, "edge fanin route-shared bus", extra_attrs=family_attrs))
 
     for terminal_path in terminal_merge_paths:
-        paths.append(_path(terminal_path, "edge fanin route-shared merge"))
-    paths.append(_path(terminal_marker_path, "edge fanin terminal", "arrow-fanin"))
+        paths.append(_path(terminal_path, "edge fanin route-shared merge", extra_attrs=family_attrs))
+    paths.append(_path(terminal_marker_path, "edge fanin terminal", "arrow-fanin", family_attrs))
     return paths, routed
 
 
@@ -1003,12 +1025,12 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
     paths = []
     routed_edges: set[tuple[str, str]] = set()
     stats = model["stats"]
-    for (source_id, target_group), target_ids in stats["fanout_families"].items():
-        family_paths, family_edges = _fanout_family_paths(source_id, target_group, target_ids, model)
+    for family_index, ((source_id, target_group), target_ids) in enumerate(stats["fanout_families"].items()):
+        family_paths, family_edges = _fanout_family_paths(source_id, target_group, target_ids, model, family_index)
         paths.extend(family_paths)
         routed_edges.update(family_edges)
-    for (source_group, target_id), source_ids in stats["fanin_families"].items():
-        family_paths, family_edges = _fanin_family_paths(source_group, target_id, source_ids, model)
+    for family_index, ((source_group, target_id), source_ids) in enumerate(stats["fanin_families"].items()):
+        family_paths, family_edges = _fanin_family_paths(source_group, target_id, source_ids, model, family_index)
         paths.extend(family_paths)
         routed_edges.update(family_edges)
 
@@ -1281,6 +1303,56 @@ def _accent_color(style: dict, item: dict, fallback_kind: str = "object") -> str
             return color
     color = kind_accent(style, item.get("kind", fallback_kind))
     return color if VALID_HEX.match(color) else style_color(style, "line_primary", "#F4F8FF")
+
+
+def _relation_color_candidates(rel: dict) -> list[str]:
+    candidates = []
+    for key in ("relation", "id", "label", "style"):
+        raw = rel.get(key)
+        if raw is None:
+            continue
+        value = str(raw).strip()
+        if not value:
+            continue
+        candidates.append(value)
+        normalized = re.sub(r"\s+", "_", value.lower())
+        if normalized != value:
+            candidates.append(normalized)
+    return candidates
+
+
+def _connector_relation_color(
+    style: dict,
+    rel: dict,
+    *,
+    default_token: str = "line_primary",
+    source_item: dict | None = None,
+    prefer_source: bool = False,
+    palette_index: int | None = None,
+    use_palette: bool = False,
+) -> str:
+    raw = rel.get("accent")
+    if raw:
+        color = style_color(style, raw, "")
+        if VALID_HEX.match(color):
+            return color
+    if prefer_source and source_item:
+        color = _accent_color(style, source_item, "object")
+        if VALID_HEX.match(color):
+            return color
+    connector = _style_component(style, "connector")
+    relation_colors = connector.get("relation_colors", {})
+    if isinstance(relation_colors, dict):
+        for key in _relation_color_candidates(rel):
+            if key in relation_colors:
+                color = style_color(style, relation_colors[key], "")
+                if VALID_HEX.match(color):
+                    return color
+    if use_palette and palette_index is not None:
+        color = _connector_palette_color(style, "relation_palette", palette_index)
+        if color:
+            return color
+    return style_color(style, default_token, "#F4F8FF")
 
 
 def _panel_rect_svg(
@@ -2132,17 +2204,21 @@ def _render_boundary_ownership_matrix(contract: dict, style: dict, diagram_type:
         return min(candidates, key=lambda value: abs(value - target_center))
 
     corridor_use_count: dict[float, int] = {}
-    corridor_offsets = [0, -5, 5, -8, 8]
-    for rel in contract.get("relationships", []) or []:
+    corridor_offsets = [0, -10, 10, -18, 18, -26, 26]
+    for rel_idx, rel in enumerate(contract.get("relationships", []) or []):
         if not isinstance(rel, dict):
             continue
         source = str(rel.get("from", ""))
         target = str(rel.get("to", ""))
         if source not in item_positions or target not in item_positions:
             continue
-        color = style_color(style, rel.get("accent"), "")
-        if not VALID_HEX.match(color):
-            color = orange if rel.get("relation") in {"data_flow", "flow", "feeds"} else purple if rel.get("style") == "dashed" else line
+        color = _connector_relation_color(
+            style,
+            rel,
+            default_token="line_primary",
+            palette_index=rel_idx,
+            use_palette=rel.get("style") == "dashed",
+        )
         dash = ' stroke-dasharray="6 5"' if rel.get("style") == "dashed" or rel.get("relation") in {"shared_responsibility", "external"} else ""
         extra_attrs = ""
         if target in external_ids and source in item_domains:
@@ -2305,11 +2381,42 @@ def _capability_detour_corridor_key(
     return round(_capability_corridor_base_x(a, b, obstacles, sy, ty, corridor_offset), 2)
 
 
-def _capability_lane_shift(index: int, corridor_offset: float) -> float:
-    offsets = [0.0, -8.0, 8.0, -14.0, 14.0, -20.0, 20.0]
-    raw = offsets[index % len(offsets)]
-    limit = max(0.0, corridor_offset - 10.0)
+def _capability_lane_shift(index: int, corridor_offset: float, lane_gap: float = 12.0) -> float:
+    offsets = [0.0, -1.0, 1.0, -2.0, 2.0, -3.0, 3.0]
+    raw = offsets[index % len(offsets)] * lane_gap
+    limit = max(lane_gap, corridor_offset - 6.0)
     return max(-limit, min(limit, raw))
+
+
+def _capability_route_band_key(
+    a: tuple[float, float, float, float],
+    b: tuple[float, float, float, float],
+) -> float | None:
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    if ay + ah <= by:
+        return round((ay + ah + by) / 2, 1)
+    if by + bh <= ay:
+        return round((by + bh + ay) / 2, 1)
+    return None
+
+
+def _shifted_lane(base: float, low: float, high: float, shift: float) -> float:
+    if low > high:
+        return base
+    return _clamp(base + shift, low, high)
+
+
+def _detour_clearance(stub: float, lane_shift: float, gap: float, max_extra: float) -> float:
+    endpoint_extra = min(abs(lane_shift), max_extra)
+    return min(stub + endpoint_extra, max(stub, gap / 2 - 2.0))
+
+
+def _direct_lane_y(sy: float, ty: float, lane_shift: float) -> float:
+    low = min(sy, ty) + 8.0
+    high = max(sy, ty) - 8.0
+    base = (sy + ty) / 2
+    return _shifted_lane(base, low, high, lane_shift)
 
 
 def _capability_level_label_width(contract: dict, levels: list[dict]) -> float:
@@ -2340,14 +2447,21 @@ def _capability_link_path(
     def detour_path(sx: float, sy: float, tx: float, ty: float) -> str:
         direction = 1 if ty >= sy else -1
         stub = 8.0
+        gap = abs(ty - sy)
+        source_clearance = _detour_clearance(stub, lane_shift, gap, 34.0)
+        target_clearance = _detour_clearance(stub, lane_shift, gap, 14.0)
+        low = min(sy, ty) + stub
+        high = max(sy, ty) - stub
         corridor_x = _capability_corridor_base_x(a, b, obstacles, sy, ty, corridor_offset) + lane_shift
+        source_lane_y = _clamp(sy + direction * source_clearance, low, high)
+        target_lane_y = _clamp(ty - direction * target_clearance, low, high)
         return _rounded_path(
             [
                 (sx, sy),
-                (sx, sy + direction * stub),
-                (corridor_x, sy + direction * stub),
-                (corridor_x, ty - direction * stub),
-                (tx, ty - direction * stub),
+                (sx, source_lane_y),
+                (corridor_x, source_lane_y),
+                (corridor_x, target_lane_y),
+                (tx, target_lane_y),
                 (tx, ty),
             ],
             radius=10,
@@ -2360,7 +2474,7 @@ def _capability_link_path(
             if _vertical_segment_blocked(sx, sy, ty, obstacles):
                 return detour_path(sx, sy, tx, ty)
             return _rounded_path([(sx, sy), (tx, ty)])
-        lane_y = (sy + ty) / 2
+        lane_y = _direct_lane_y(sy, ty, lane_shift)
         if _vertical_segment_blocked(sx, sy, lane_y, obstacles) or _vertical_segment_blocked(tx, lane_y, ty, obstacles):
             return detour_path(sx, sy, tx, ty)
         return _rounded_path([(sx, sy), (sx, lane_y), (tx, lane_y), (tx, ty)])
@@ -2371,7 +2485,7 @@ def _capability_link_path(
             if _vertical_segment_blocked(sx, sy, ty, obstacles):
                 return detour_path(sx, sy, tx, ty)
             return _rounded_path([(sx, sy), (tx, ty)])
-        lane_y = (sy + ty) / 2
+        lane_y = _direct_lane_y(sy, ty, lane_shift)
         if _vertical_segment_blocked(sx, sy, lane_y, obstacles) or _vertical_segment_blocked(tx, lane_y, ty, obstacles):
             return detour_path(sx, sy, tx, ty)
         return _rounded_path([(sx, sy), (sx, lane_y), (tx, lane_y), (tx, ty)])
@@ -2466,6 +2580,7 @@ def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str
 
     positions: dict[str, tuple[float, float, float, float]] = {}
     level_y: dict[str, float] = {}
+    items_by_id = {str(item["id"]): item for item in items if item.get("id")}
     y = map_y
     for level in levels:
         level_id = str(level["id"])
@@ -2502,24 +2617,32 @@ def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str
         y += row_h + row_gap
 
     corridor_offset = col_gap / 2
-    corridor_counts: dict[float, int] = {}
-    for rel in contract.get("relationships", []) or []:
+    relationship_lane_gap = float(contract.get("relationship_lane_gap", 14.0))
+    route_counts: dict[tuple[str, float], int] = {}
+    for rel_idx, rel in enumerate(contract.get("relationships", []) or []):
         if not isinstance(rel, dict):
             continue
         source = str(rel.get("from", ""))
         target = str(rel.get("to", ""))
         if source not in positions or target not in positions:
             continue
-        color = style_color(style, rel.get("accent"), "")
-        if not VALID_HEX.match(color):
-            color = style_color(style, "accent_orange" if rel.get("relation") in {"enables", "dependency", "supports"} else "line_primary", "#F4F8FF")
+        color = _connector_relation_color(
+            style,
+            rel,
+            default_token="line_primary",
+            source_item=items_by_id.get(source),
+            prefer_source=rel.get("relation") in {"supports", "enables", "dependency"},
+            palette_index=rel_idx,
+            use_palette=rel.get("style") in {"dashed", "secondary"} or rel.get("relation") in {"supports", "shared"},
+        )
         dash = ' stroke-dasharray="6 5"' if rel.get("style") in {"dashed", "secondary"} or rel.get("relation") in {"supports", "shared"} else ""
         obstacles = [rect for item_id, rect in positions.items() if item_id not in {source, target}]
         corridor_key = _capability_detour_corridor_key(positions[source], positions[target], obstacles, corridor_offset)
-        corridor_index = corridor_counts.get(corridor_key, 0) if corridor_key is not None else 0
-        if corridor_key is not None:
-            corridor_counts[corridor_key] = corridor_index + 1
-        lane_shift = _capability_lane_shift(corridor_index, corridor_offset) if corridor_key is not None else 0.0
+        band_key = _capability_route_band_key(positions[source], positions[target])
+        route_key = ("corridor", corridor_key) if corridor_key is not None else ("band", band_key or 0.0)
+        route_index = route_counts.get(route_key, 0)
+        route_counts[route_key] = route_index + 1
+        lane_shift = _capability_lane_shift(route_index, corridor_offset, relationship_lane_gap) if band_key is not None else 0.0
         lane_shift += float(rel.get("lane_offset", 0.0))
         path = _capability_link_path(positions[source], positions[target], obstacles, corridor_offset, lane_shift)
         corridor_attr = f' data-corridor-x="{round(corridor_key, 1):g}"' if corridor_key is not None else ""
@@ -3645,7 +3768,6 @@ def _ontology_instance_link_points(
 
 def _render_ontology_instance_links(contract: dict, positions: dict[str, tuple[float, float, float, float]], style: dict) -> list[str]:
     paths: list[str] = []
-    color = style_color(style, "accent_green", "#6EE66E")
     instances = _ontology_instances(contract)
     lane_step = float(contract.get("ontology_instance_lane_gap", 18.0))
     for idx, instance in enumerate(instances):
@@ -3665,6 +3787,7 @@ def _render_ontology_instance_links(contract: dict, positions: dict[str, tuple[f
             instance.get("concept_anchor"),
             instance.get("instance_anchor"),
         )
+        color = _accent_color(style, instance, "package")
         paths.append(
             f'<path d="{_rounded_path(points)}" class="edge ontology-instance-link" '
             f'style="stroke:{color};opacity:0.78" stroke-dasharray="6 5" data-from="{e(concept_id)}" data-to="{e(instance_id)}"/>'
@@ -3895,9 +4018,13 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
     for rel_idx, (rel, source, target, cx, cy, diamond_w, diamond_h) in enumerate(relationship_layouts):
         source_rect = positions[source]
         target_rect = positions[target]
-        color = style_color(style, rel.get("accent"), "")
-        if not VALID_HEX.match(color):
-            color = line_color
+        color = _connector_relation_color(
+            style,
+            rel,
+            default_token="line_primary",
+            palette_index=rel_idx,
+            use_palette=rel.get("style") in {"dashed", "secondary"},
+        )
         dash = ' stroke-dasharray="6 5"' if rel.get("style") in {"dashed", "secondary"} else ""
         rel_id = e(rel.get("id", f"{source}-{target}"))
         label_obstacles = entity_rects + all_diamond_boxes
