@@ -51,9 +51,14 @@ MATRIX_PREVIEW_NODE_RE = re.compile(
 )
 RECT_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"')
 TEXT_RE = re.compile(r'<text[^>]*class="card-(title|sub)"[^>]*>(.*?)</text>')
+TEXT_ELEMENT_RE = re.compile(r'<text\b([^>]*)>(.*?)</text>', re.S)
 TEXT_TAG_RE = re.compile(r'<text\b([^>]*)>', re.S)
 LAYER_RE = re.compile(r'<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"[^>]*>?</rect>|<rect x="([0-9.]+)" y="([0-9.]+)" width="([0-9.]+)" height="([0-9.]+)"[^>]*/>')
 GROUP_LABEL_RE = re.compile(r'<text[^>]*class="group-label"[^>]*>')
+MATRIX_TOP_CONNECTED_PANEL_RE = re.compile(
+    r'<g\b(?=[^>]*\bclass="[^"]*\bmatrix-top-connected-panel\b[^"]*")[^>]*>(.*?)</g>',
+    re.S,
+)
 PATH_RE = re.compile(r'<path\b([^>]*)/?>')
 CLASS_RE = re.compile(r'class="([^"]+)"')
 D_RE = re.compile(r'\bd="([^"]+)"')
@@ -67,6 +72,8 @@ MARKER_RE = re.compile(r'<marker\b([^>]*)>(.*?)</marker>', re.S)
 FILL_RE = re.compile(r'\bfill="([^"]+)"')
 STYLE_FONT_RE = re.compile(r'\bfont\s*:[^;}]*?([0-9.]+)px', re.S)
 INLINE_FONT_RE = re.compile(r'\bfont-size\s*:\s*([0-9.]+)px')
+X_ATTR_RE = re.compile(r'\bx="([-0-9.]+)"')
+Y_ATTR_RE = re.compile(r'\by="([-0-9.]+)"')
 CONNECTOR_CLASSES = {
     'edge',
     'edge-dashed',
@@ -398,6 +405,26 @@ def _inline_font_sizes(svg: str, class_name: str) -> list[float]:
     return sizes
 
 
+def _text_width_estimate(text: str, size: float, factor: float = 0.56) -> float:
+    return len(text) * size * factor
+
+
+def _text_elements_with_class(svg: str, class_name: str) -> list[tuple[float, float, float, str]]:
+    elements: list[tuple[float, float, float, str]] = []
+    for attrs, raw_text in TEXT_ELEMENT_RE.findall(svg):
+        class_match = CLASS_RE.search(attrs)
+        if not class_match or class_name not in class_match.group(1).split():
+            continue
+        x_match = X_ATTR_RE.search(attrs)
+        y_match = Y_ATTR_RE.search(attrs)
+        font_match = INLINE_FONT_RE.search(attrs)
+        if not x_match or not y_match or not font_match:
+            continue
+        text = re.sub(r'<[^>]+>', '', raw_text).strip()
+        elements.append((float(x_match.group(1)), float(y_match.group(1)), float(font_match.group(1)), text))
+    return elements
+
+
 def _check_arrow_markers(svg: str, issues: list[str]) -> None:
     for attrs, body in MARKER_RE.findall(svg):
         id_match = re.search(r'\bid="([^"]+)"', attrs)
@@ -662,6 +689,22 @@ def _check_capability_map_geometry(svg: str, issues: list[str]) -> None:
         fail('capability_domain_map should render level header icons', issues)
     if 'capability-column-icon' not in svg:
         fail('capability_domain_map should render column header icons', issues)
+    header_rects = [
+        tuple(map(float, match.groups()))
+        for match in RECT_RE.finditer(svg)
+        if 80 <= float(match.group(3)) <= 360 and 28 <= float(match.group(4)) <= 70
+    ]
+    for idx, (text_x, text_y, size, text) in enumerate(_text_elements_with_class(svg, 'capability-column-label'), start=1):
+        containing = [
+            rect for rect in header_rects
+            if rect[0] <= text_x <= rect[0] + rect[2] and rect[1] - 8 <= text_y <= rect[1] + rect[3] + 8
+        ]
+        if not containing:
+            continue
+        header = min(containing, key=lambda rect: rect[2] * rect[3])
+        right_limit = header[0] + header[2] - 10.0
+        if text_x + _text_width_estimate(text, size, 0.55) > right_limit + 2.0:
+            fail(f'capability column label {idx} overflows its header slot; wrap or truncate the label', issues)
     vertical_lanes: list[tuple[float, float, float, str]] = []
     for attrs, d, _classes in _path_attrs_with_classes(svg, {'capability-map-link'}):
         match = DIRECT_LINE_RE.match(d)
@@ -737,6 +780,22 @@ def _check_relationship_matrix_geometry(svg: str, issues: list[str]) -> None:
             if _rects_overlap(panel, other, 4.0):
                 fail('relationship_matrix dashboard panels should not overlap', issues)
                 return
+    for panel_body in MATRIX_TOP_CONNECTED_PANEL_RE.findall(svg):
+        panel_rect = RECT_RE.search(panel_body)
+        if not panel_rect:
+            continue
+        px, _py, pw, _ph = tuple(map(float, panel_rect.groups()))
+        fallback_limit = px + pw - 206.0 - 12.0
+        row_bars = [
+            tuple(map(float, match.groups()))
+            for match in RECT_RE.finditer(panel_body)
+            if 90 <= float(match.group(3)) <= 130 and 10 <= float(match.group(4)) <= 18
+        ]
+        for idx, (text_x, text_y, size, text) in enumerate(_text_elements_with_class(panel_body, 'matrix-rank-label'), start=1):
+            same_row_bars = [rect for rect in row_bars if abs(rect[1] - (text_y - 13.0)) <= 3 and rect[0] > text_x]
+            bar_limit = min((rect[0] for rect in same_row_bars), default=fallback_limit) - 12.0
+            if text_x + _text_width_estimate(text, size, 0.56) > bar_limit + 2.0:
+                fail(f'relationship_matrix top-connected label {idx} overlaps the ranking bar area; fit or truncate the label', issues)
     if 'data-style="accent-blueprint"' in svg:
         if 'blueprint-grid' not in svg:
             fail('accent-blueprint relationship_matrix should render the blueprint grid', issues)

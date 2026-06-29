@@ -196,6 +196,20 @@ def main() -> int:
         "too short",
     )
     assert_issue(
+        "capability map column header overflow",
+        """
+<svg width="700" height="360" data-diagram-type="capability_domain_map">
+<rect x="120" y="30" width="120" height="38" fill="none" stroke="#334155"/>
+<g class="capability-level-icon capability-header-icon"></g>
+<g class="capability-column-icon capability-header-icon"></g>
+<text x="40" y="120" class="capability-level-label" style="font-size:15px">Level</text>
+<text x="170" y="55" class="capability-column-label" style="font-size:15px">Very Long Column Header</text>
+<g id="capability-item-a" class="capability-map-item card"><rect x="120" y="120" width="150" height="96" fill="#FFFFFF" stroke="#334155"/><text class="capability-title" style="font-size:16.5px">A</text></g>
+</svg>
+""",
+        "capability column label",
+    )
+    assert_issue(
         "capability map near-card corridor",
         """
 <svg width="700" height="480" data-diagram-type="capability_domain_map">
@@ -228,6 +242,25 @@ def main() -> int:
 </svg>
 """,
         "same-color vertical corridor",
+    )
+    assert_issue(
+        "relationship matrix top connected label overflow",
+        """
+<svg width="900" height="600" data-diagram-type="relationship_matrix">
+<g class="relationship-matrix-grid info-panel"><rect x="20" y="20" width="240" height="120" fill="#FFFFFF" stroke="#334155"/><rect x="40" y="50" width="64" height="64" class="matrix-cell" fill="none"/><text x="72" y="90" class="matrix-cell-value" style="font-size:30px">1</text></g>
+<g class="matrix-primary-preview info-panel"><rect x="280" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/></g>
+<g class="matrix-summary-panel info-panel"><rect x="420" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/><rect x="440" y="70" width="80" height="14" class="matrix-distribution-bar" fill="#06B6D4"/></g>
+<g class="matrix-focus-detail-panel info-panel"><rect x="560" y="20" width="120" height="120" fill="#FFFFFF" stroke="#334155"/></g>
+<g class="matrix-top-connected-panel info-panel">
+<rect x="20" y="180" width="420" height="160" fill="#FFFFFF" stroke="#334155"/>
+<text x="38" y="212" class="info-panel-title" style="font-size:16px">Top Connected</text>
+<text x="78" y="256" class="matrix-rank-label" style="font-size:18px">Very Long Semantic Entity Label</text>
+<rect x="254" y="243" width="112" height="14" fill="#FFFFFF" stroke="#334155"/>
+<rect x="254" y="243" width="80" height="14" fill="#06B6D4"/>
+</g>
+</svg>
+""",
+        "top-connected label",
     )
     print("validate_semantic_svg selftest: PASS")
     return 0
