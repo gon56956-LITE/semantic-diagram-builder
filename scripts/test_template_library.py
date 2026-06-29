@@ -44,7 +44,49 @@ def _svg_height(svg: str) -> float:
     return float(match.group(2))
 
 
+def _check_layout_report_scoring() -> None:
+    dense_entry = layout_report.TemplateEntry(
+        diagram_type="example",
+        variant="stress",
+        title="Dense Stress",
+        svg=Path("dense.svg"),
+        contract=Path("dense-contract.json"),
+        max_height=1000,
+    )
+    dense_score, dense_notes = layout_report._risk_notes(  # noqa: SLF001
+        dense_entry,
+        width=1200,
+        height=1100,
+        content_w=1100,
+        content_h=1040,
+        right_ws=40,
+        bottom_ws=20,
+        ellipsis_ratio=0.0,
+        text_density=80,
+        qa_issue_count=0,
+    )
+    if dense_score != 0 or not any("dense but acceptable" in note for note in dense_notes):
+        fail("height above max_height without redundancy should be a review note, not a compression priority")
+
+    redundant_score, redundant_notes = layout_report._risk_notes(  # noqa: SLF001
+        dense_entry,
+        width=1200,
+        height=1100,
+        content_w=900,
+        content_h=700,
+        right_ws=40,
+        bottom_ws=240,
+        ellipsis_ratio=0.0,
+        text_density=80,
+        qa_issue_count=0,
+    )
+    if redundant_score <= 0 or not any("vertical redundancy" in note for note in redundant_notes):
+        fail("height above max_height should rank only when vertical redundancy is present")
+
+
 def main() -> int:
+    _check_layout_report_scoring()
+
     manifest_path = ROOT / "templates" / "template-gallery-baseline.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
     required_types = set(supported_diagram_types())
