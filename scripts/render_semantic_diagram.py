@@ -1153,6 +1153,9 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
     for _corridor_key, indices in corridor_groups.items():
         if len(indices) <= 1:
             continue
+        source_ids = {direct_edges[direct_index][1] for direct_index in indices}
+        if len(source_ids) <= 1:
+            continue
         for lane_index, direct_index in enumerate(indices):
             direct_lane_indices[direct_index] = lane_index
 

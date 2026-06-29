@@ -56,9 +56,9 @@
 <path d="M 782.0 989.0 L 775.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1103.0" class="edge fanin route-shared merge" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
 <path d="M 768.0 957.0 L 768.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
 <path d="M 740.0 229.0 L 796.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
-<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#16D9FF" data-route-color="#16D9FF" data-direct-corridor="down:279:407" data-direct-lane="0" data-lane-shift="0.0"/>
-<path d="M 560.0 279 L 560.0 317.0 Q 560.0 331.0 574.0 331.0 L 754.0 331.0 Q 768.0 331.0 768.0 345.0 L 768.0 407" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#FFD84D" data-route-color="#FFD84D" data-direct-corridor="down:279:407" data-direct-lane="1" data-lane-shift="-12.0"/>
-<path d="M 560.0 279 L 560.0 341.0 Q 560.0 355.0 574.0 355.0 L 1170.0 355.0 Q 1184.0 355.0 1184.0 369.0 L 1184.0 407" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#6EE66E" data-route-color="#6EE66E" data-direct-corridor="down:279:407" data-direct-lane="2" data-lane-shift="12.0"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 754.0 343.0 Q 768.0 343.0 768.0 357.0 L 768.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 1170.0 343.0 Q 1184.0 343.0 1184.0 357.0 L 1184.0 407" class="edge" marker-end="url(#arrow)"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Navigation / access layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="349" width="276.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Synthesis and governance layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="577" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable knowledge assets</text></g>

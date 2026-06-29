@@ -602,6 +602,17 @@ def main() -> int:
     if not any("edge-dashed" in attrs and 'data-route-color="' in attrs for attrs in shared_direct_attrs):
         raise AssertionError("dashed direct links in shared corridors should keep dash semantics while receiving a route color")
 
+    same_source_fanout = copy.deepcopy(shared_direct)
+    same_source_fanout["title"] = "Same Source Fanout Regression"
+    same_source_fanout["edges"] = [
+        {"from": "source_b", "to": "target_a", "relation": "opens"},
+        {"from": "source_b", "to": "target_b", "relation": "opens"},
+        {"from": "source_b", "to": "target_c", "relation": "opens"},
+    ]
+    same_source_svg = assert_valid("same source fanout regression", same_source_fanout)
+    if path_attrs(same_source_svg, {"direct-link"}):
+        raise AssertionError("same-source direct fan-out should not be colored or staggered as a multi-source shared corridor")
+
     layered_family_bus_y = {
         int(family): {
             round(float(y), 1)

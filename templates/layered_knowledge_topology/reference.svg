@@ -54,8 +54,8 @@
 <path d="M 814.0 989.0 L 807.0 989.0 Q 800.0 989.0 800.0 996.0 L 800.0 1103.0" class="edge fanin route-shared merge"/>
 <path d="M 800.0 957.0 L 800.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)"/>
 <path d="M 772.0 229.0 L 828.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
-<path d="M 592.0 279 L 592.0 407" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#2563EB" data-route-color="#2563EB" data-direct-corridor="down:279:407" data-direct-lane="0" data-lane-shift="0.0"/>
-<path d="M 592.0 279 L 592.0 317.0 Q 592.0 331.0 606.0 331.0 L 994.0 331.0 Q 1008.0 331.0 1008.0 345.0 L 1008.0 407" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#F59E0B" data-route-color="#F59E0B" data-direct-corridor="down:279:407" data-direct-lane="1" data-lane-shift="-12.0"/>
+<path d="M 592.0 279 L 592.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 592.0 279 L 592.0 329.0 Q 592.0 343.0 606.0 343.0 L 994.0 343.0 Q 1008.0 343.0 1008.0 357.0 L 1008.0 407" class="edge" marker-end="url(#arrow)"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="158.4" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Navigation layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="349" width="150.0" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Synthesis layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="577" width="242.4" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable knowledge modules</text></g>
