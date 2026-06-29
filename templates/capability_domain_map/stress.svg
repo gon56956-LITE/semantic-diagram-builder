@@ -35,7 +35,8 @@
 <rect x="69.92000000000007" y="115" width="2224.16" height="56.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.52" stroke-width="1"/>
 <rect x="302.0800000000001" y="124" width="200.0" height="38.0" rx="5" fill="none" stroke="#16D9FF" stroke-opacity="0.7" stroke-width="1"/>
 <g class="capability-column-icon capability-header-icon" data-kind="object"><rect x="314.0800000000001" y="128" width="30" height="30" rx="6" fill="#031E42" stroke="#16D9FF" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="329.0800000000001" cy="143" r="8" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M324.0800000000001,143 H334.0800000000001 M329.0800000000001,138 V148" class="icon-line" stroke="#16D9FF"/></g>
-<text x="354.0800000000001" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">Customer</text>
+<text x="354.0800000000001" y="141.17" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">Customer</text>
+<text x="354.0800000000001" y="158.82999999999998" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">Experience Ops</text>
 <rect x="558.0800000000002" y="124" width="200.0" height="38.0" rx="5" fill="none" stroke="#16D9FF" stroke-opacity="0.7" stroke-width="1"/>
 <g class="capability-column-icon capability-header-icon" data-kind="package"><rect x="570.0800000000002" y="128" width="30" height="30" rx="6" fill="#031E42" stroke="#16D9FF" stroke-width="1.2" stroke-opacity="0.95"/><rect x="575.0800000000002" y="136" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M575.0800000000002,141 H595.0800000000002 M585.0800000000002,136 V152" class="icon-line" stroke="#16D9FF"/></g>
 <text x="610.0800000000002" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">Product</text>
@@ -53,7 +54,8 @@
 <text x="1634.0800000000002" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">People</text>
 <rect x="1838.0800000000002" y="124" width="200.0" height="38.0" rx="5" fill="none" stroke="#16D9FF" stroke-opacity="0.7" stroke-width="1"/>
 <g class="capability-column-icon capability-header-icon" data-kind="query"><rect x="1850.0800000000002" y="128" width="30" height="30" rx="6" fill="#031E42" stroke="#16D9FF" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="1863.0800000000002" cy="141" r="7" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M1869.0800000000002,147 L1875.0800000000002,153" class="icon-line" stroke="#16D9FF"/></g>
-<text x="1890.0800000000002" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">Technology</text>
+<text x="1890.0800000000002" y="141.17" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">Technology</text>
+<text x="1890.0800000000002" y="158.82999999999998" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">Platform</text>
 <rect x="2094.08" y="124" width="200.0" height="38.0" rx="5" fill="none" stroke="#16D9FF" stroke-opacity="0.7" stroke-width="1"/>
 <g class="capability-column-icon capability-header-icon" data-kind="source"><rect x="2106.08" y="128" width="30" height="30" rx="6" fill="#031E42" stroke="#16D9FF" stroke-width="1.2" stroke-opacity="0.95"/><path d="M2111.08,133 H2125.08 L2131.08,139 V153 H2111.08 Z" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M2125.08,133 V139 H2131.08" class="icon-line" stroke="#16D9FF"/></g>
 <text x="2146.08" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#F4F8FF">Data</text>

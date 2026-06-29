@@ -832,6 +832,8 @@ def main() -> int:
         raise AssertionError("capability_domain_map stress template should render bottom info panels")
     if capability_stress_svg.count('capability-column-icon') < 8:
         raise AssertionError("capability_domain_map stress template should exercise column header icons")
+    if not all(label_part in capability_stress_svg for label_part in ("Customer", "Experience Ops", "Technology", "Platform")):
+        raise AssertionError("capability_domain_map stress template should exercise wrapped long column headers")
     short_lane = renderer._capability_level_label_width({}, [{"id": "a", "label": "A"}, {"id": "b", "label": "Ops"}])
     long_lane = renderer._capability_level_label_width({}, [{"id": "sub", "label": "Sub-Domains"}])
     if not short_lane < long_lane:
@@ -878,6 +880,12 @@ def main() -> int:
         raise AssertionError("relationship_matrix stress template should not widen solely to reserve an auxiliary panel rail")
     if "Payment approval gates shipment release" not in relationship_stress_svg:
         raise AssertionError("relationship_matrix stress template should render static focus relationship details")
+    if not re.search(r'class="matrix-rank-label"[^>]*>[^<]*\.\.\.</text>', relationship_stress_svg):
+        raise AssertionError("relationship_matrix stress template should exercise fitted top-connected labels")
+    if not re.search(r'class="matrix-row-label"[^>]*>[^<]*\.\.\.</text>', relationship_stress_svg):
+        raise AssertionError("relationship_matrix stress template should exercise fitted long entity labels")
+    if "Commercial Order Orchestration Control Tower Across Regional Fulfillment Channels</text>" in relationship_stress_svg:
+        raise AssertionError("relationship_matrix stress template should not render long entity labels unbounded")
     fitted_rank_label = renderer._fit_text_to_width(
         "Very Long Semantic Relationship Node Label For Dense Ranking Panels",
         150,

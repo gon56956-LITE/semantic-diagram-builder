@@ -6,9 +6,9 @@
   "width": 2400,
   "entities": [
     {"id": "customer", "label": "Customer", "subtitle": "account owner", "kind": "capability", "accent": "accent_cyan", "order": 0},
-    {"id": "order", "label": "Order", "subtitle": "commercial event", "kind": "source", "accent": "accent_cyan", "order": 1},
+    {"id": "order", "label": "Commercial Order Orchestration Control Tower Across Regional Fulfillment Channels", "subtitle": "commercial event", "kind": "source", "accent": "accent_cyan", "order": 1},
     {"id": "order_item", "label": "Order Item", "subtitle": "line detail", "kind": "source", "accent": "accent_cyan", "order": 2},
-    {"id": "product", "label": "Product", "subtitle": "catalog item", "kind": "package", "accent": "accent_green", "order": 3},
+    {"id": "product", "label": "Product Catalog Governance Workspace For Multi Region Offer Strategy", "subtitle": "catalog item", "kind": "package", "accent": "accent_green", "order": 3},
     {"id": "inventory", "label": "Inventory", "subtitle": "available stock", "kind": "asset", "accent": "accent_green", "order": 4},
     {"id": "warehouse", "label": "Warehouse", "subtitle": "storage node", "kind": "asset", "accent": "accent_green", "order": 5},
     {"id": "supplier", "label": "Supplier", "subtitle": "external source", "kind": "external", "accent": "accent_purple", "order": 6},

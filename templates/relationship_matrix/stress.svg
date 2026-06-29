@@ -71,7 +71,7 @@
 <g class="matrix-preview-node" data-entity="order">
 <rect x="408.4" y="198.0" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.9" stroke-width="1"/>
 <path d="M420.4,226.0 H434.4 L440.4,232.0 V246.0 H420.4 Z" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M434.4,226.0 V232.0 H440.4" class="icon-line" stroke="#16D9FF"/>
-<text x="452.4" y="226.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Order</text>
+<text x="452.4" y="226.0" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Commercial...</text>
 <text x="452.4" y="250.0" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">commercial...</text>
 </g>
 <g class="matrix-preview-node" data-entity="order_item">
@@ -83,7 +83,7 @@
 <g class="matrix-preview-node" data-entity="product">
 <rect x="408.4" y="446.5" width="185.6" height="76" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#6EE66E" stroke-opacity="0.9" stroke-width="1"/>
 <rect x="420.4" y="477.5" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M420.4,482.5 H440.4 M430.4,477.5 V493.5" class="icon-line" stroke="#6EE66E"/>
-<text x="452.4" y="474.5" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Product</text>
+<text x="452.4" y="474.5" class="matrix-preview-title" style="font-size:17.4px;font-weight:700;fill:#F4F8FF">Product Ca...</text>
 <text x="452.4" y="498.5" class="matrix-preview-sub" style="font-size:16.6px;fill:#C9DAF5">catalog it...</text>
 </g>
 <g class="matrix-preview-node" data-entity="inventory">
@@ -172,17 +172,17 @@
 <text x="688.0" y="361.53" class="matrix-row-index" style="font-size:15.8px;fill:#C9DAF5">01</text>
 <text x="730.0" y="363.06363636363636" class="matrix-row-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Customer</text>
 <text x="1084.909090909091" y="248.0" text-anchor="middle" class="matrix-col-index" style="font-size:15.8px;fill:#C9DAF5">02</text>
-<text x="1084.909090909091" y="278.0" text-anchor="middle" class="matrix-col-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Order</text>
+<text x="1084.909090909091" y="278.0" text-anchor="middle" class="matrix-col-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Commerc...</text>
 <text x="688.0" y="457.53" class="matrix-row-index" style="font-size:15.8px;fill:#C9DAF5">02</text>
-<text x="730.0" y="459.06363636363636" class="matrix-row-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Order</text>
+<text x="730.0" y="459.06363636363636" class="matrix-row-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Commercia...</text>
 <text x="1216.1818181818182" y="248.0" text-anchor="middle" class="matrix-col-index" style="font-size:15.8px;fill:#C9DAF5">03</text>
 <text x="1216.1818181818182" y="278.0" text-anchor="middle" class="matrix-col-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Order Item</text>
 <text x="688.0" y="553.53" class="matrix-row-index" style="font-size:15.8px;fill:#C9DAF5">03</text>
 <text x="730.0" y="555.0636363636363" class="matrix-row-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Order Item</text>
 <text x="1347.4545454545457" y="248.0" text-anchor="middle" class="matrix-col-index" style="font-size:15.8px;fill:#C9DAF5">04</text>
-<text x="1347.4545454545457" y="278.0" text-anchor="middle" class="matrix-col-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Product</text>
+<text x="1347.4545454545457" y="278.0" text-anchor="middle" class="matrix-col-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Product...</text>
 <text x="688.0" y="649.53" class="matrix-row-index" style="font-size:15.8px;fill:#C9DAF5">04</text>
-<text x="730.0" y="651.0636363636363" class="matrix-row-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Product</text>
+<text x="730.0" y="651.0636363636363" class="matrix-row-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Product C...</text>
 <text x="1478.7272727272727" y="248.0" text-anchor="middle" class="matrix-col-index" style="font-size:15.8px;fill:#C9DAF5">05</text>
 <text x="1478.7272727272727" y="278.0" text-anchor="middle" class="matrix-col-label" style="font-size:20.2px;font-weight:700;fill:#F4F8FF">Inventory</text>
 <text x="688.0" y="745.53" class="matrix-row-index" style="font-size:15.8px;fill:#C9DAF5">05</text>
@@ -539,13 +539,13 @@
 <rect x="1516.48" y="1400.0" width="835.5199999999998" height="330.0" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
 <text x="1534.48" y="1432.0" class="info-panel-title" style="font-size:19.1px">TOP CONNECTED ENTITIES</text>
 <text x="1544.48" y="1476.0" class="matrix-rank" style="font-size:17.4px;fill:#C9DAF5">1</text>
-<text x="1574.48" y="1476.0" class="matrix-rank-label" style="font-size:18px;font-weight:700;fill:#F4F8FF">Order</text>
+<text x="1574.48" y="1476.0" class="matrix-rank-label" style="font-size:18px;font-weight:700;fill:#F4F8FF">Commercial Order Orchestration Control Tower Across...</text>
 <rect x="2146.0" y="1463.0" width="112" height="14" rx="2" fill="#031E42" stroke="#F4F8FF" stroke-opacity="0.18"/>
 <rect x="2146.0" y="1463.0" width="112.0" height="14" rx="2" fill="#16D9FF" opacity="0.82"/>
 <text x="2274.0" y="1476.0" class="matrix-rank-value" style="font-size:17.4px;fill:#F4F8FF">13</text>
 <text x="2318.0" y="1476.0" class="matrix-rank-strong" style="font-size:17.4px;fill:#FFD84D">5</text>
 <text x="1544.48" y="1508.0" class="matrix-rank" style="font-size:17.4px;fill:#C9DAF5">2</text>
-<text x="1574.48" y="1508.0" class="matrix-rank-label" style="font-size:18px;font-weight:700;fill:#F4F8FF">Product</text>
+<text x="1574.48" y="1508.0" class="matrix-rank-label" style="font-size:18px;font-weight:700;fill:#F4F8FF">Product Catalog Governance Workspace For Multi Regi...</text>
 <rect x="2146.0" y="1495.0" width="112" height="14" rx="2" fill="#031E42" stroke="#F4F8FF" stroke-opacity="0.18"/>
 <rect x="2146.0" y="1495.0" width="94.76923076923077" height="14" rx="2" fill="#16D9FF" opacity="0.82"/>
 <text x="2274.0" y="1508.0" class="matrix-rank-value" style="font-size:17.4px;fill:#F4F8FF">11</text>

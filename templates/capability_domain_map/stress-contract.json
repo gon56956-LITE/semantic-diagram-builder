@@ -17,13 +17,13 @@
     {"id": "enabling", "label": "Enabling Capabilities", "kind": "process", "accent": "accent_orange"}
   ],
   "columns": [
-    {"id": "customer", "label": "Customer", "kind": "object", "accent": "accent_cyan"},
+    {"id": "customer", "label": "Customer Experience Ops", "kind": "object", "accent": "accent_cyan"},
     {"id": "product", "label": "Product", "kind": "package", "accent": "accent_cyan"},
     {"id": "operations", "label": "Operations", "kind": "process", "accent": "accent_cyan"},
     {"id": "quality", "label": "Quality", "kind": "quality", "accent": "accent_cyan"},
     {"id": "finance", "label": "Finance", "kind": "registry", "accent": "accent_cyan"},
     {"id": "people", "label": "People", "kind": "glossary", "accent": "accent_cyan"},
-    {"id": "technology", "label": "Technology", "kind": "query", "accent": "accent_cyan"},
+    {"id": "technology", "label": "Technology Platform", "kind": "query", "accent": "accent_cyan"},
     {"id": "data", "label": "Data", "kind": "source", "accent": "accent_cyan"}
   ],
   "items": [

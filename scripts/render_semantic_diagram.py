@@ -1603,9 +1603,13 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
         scale = _clamp(canvas_w / 2200.0, 0.98, 1.1)
         return _clamp(18.5 * scale, 18.2, 20.2)
 
+    def matrix_label_width_for(canvas_w: float) -> float:
+        label_char_cap = max(8.0, float(contract.get("matrix_label_char_cap", 10)))
+        return label_char_cap * matrix_label_size_for(canvas_w) * 0.54
+
     base_width = int(max(float(contract.get("width", 0) or 0), 1960, 1180 + n * 88))
     label_size = matrix_label_size_for(base_width)
-    longest_label_w = max((len(label) * label_size * 0.54 for label in labels), default=0.0)
+    longest_label_w = min(max((len(label) * label_size * 0.54 for label in labels), default=0.0), matrix_label_width_for(base_width))
     row_label_w = max(220.0, longest_label_w + 78.0)
     min_cell_w = max(92.0, longest_label_w + 22.0)
     min_center_w = row_label_w + n * min_cell_w + 2 * matrix_pad_x
@@ -1613,7 +1617,7 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
     width = int(max(base_width, math.ceil(min_width)))
 
     label_size = matrix_label_size_for(width)
-    longest_label_w = max((len(label) * label_size * 0.54 for label in labels), default=0.0)
+    longest_label_w = min(max((len(label) * label_size * 0.54 for label in labels), default=0.0), matrix_label_width_for(width))
     row_label_w = max(220.0, longest_label_w + 78.0)
     min_cell_w = max(92.0, longest_label_w + 22.0)
     min_center_w = row_label_w + n * min_cell_w + 2 * matrix_pad_x
@@ -1669,12 +1673,14 @@ def _render_relationship_matrix(contract: dict, style: dict, diagram_type: str) 
     parts.append(f'<line x1="{matrix_x}" y1="{matrix_y + header_h}" x2="{matrix_x + matrix_w}" y2="{matrix_y + header_h}" stroke="{grid_color}" stroke-opacity="0.68" stroke-width="1.2"/>')
     for idx, entity in enumerate(entities):
         label = labels[idx]
+        col_label = _fit_text_to_width(label, cell_w - 12.0, label_size, min_chars=6, char_factor=0.54)
+        row_label = _fit_text_to_width(label, row_label_w - 82.0, label_size, min_chars=6, char_factor=0.54)
         col_x = matrix_x + row_label_w + idx * cell_w + cell_w / 2
         row_y = matrix_y + header_h + idx * cell_h + cell_h / 2
         parts.append(f'<text x="{col_x}" y="{matrix_y + 34}" text-anchor="middle" class="matrix-col-index" style="font-size:{_fmt_px(index_size)};fill:{secondary}">{idx + 1:02d}</text>')
-        parts.append(f'<text x="{col_x}" y="{matrix_y + 64}" text-anchor="middle" class="matrix-col-label" style="font-size:{_fmt_px(label_size)};font-weight:700;fill:{line}">{e(label)}</text>')
+        parts.append(f'<text x="{col_x}" y="{matrix_y + 64}" text-anchor="middle" class="matrix-col-label" style="font-size:{_fmt_px(label_size)};font-weight:700;fill:{line}">{e(col_label)}</text>')
         parts.append(f'<text x="{matrix_x + 20}" y="{row_y + index_size * 0.35}" class="matrix-row-index" style="font-size:{_fmt_px(index_size)};fill:{secondary}">{idx + 1:02d}</text>')
-        parts.append(f'<text x="{matrix_x + 62}" y="{row_y + label_size * 0.35}" class="matrix-row-label" style="font-size:{_fmt_px(label_size)};font-weight:700;fill:{line}">{e(label)}</text>')
+        parts.append(f'<text x="{matrix_x + 62}" y="{row_y + label_size * 0.35}" class="matrix-row-label" style="font-size:{_fmt_px(label_size)};font-weight:700;fill:{line}">{e(row_label)}</text>')
 
     for row_idx, source in enumerate(entities):
         for col_idx, target in enumerate(entities):
