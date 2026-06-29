@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import build_style_gallery as gallery  # noqa: E402
+import report_template_layout as layout_report  # noqa: E402
 import render_semantic_diagram as renderer  # noqa: E402
 from semantic_diagram_types import supported_diagram_types  # noqa: E402
 import validate_semantic_contract as contract_validator  # noqa: E402
@@ -112,6 +113,12 @@ def main() -> int:
         fail(f"{manifest['gallery']} is stale; regenerate it with scripts/build_style_gallery.py")
     if len(SVG_RE.findall(current_gallery)) != len(gallery_entries):
         fail("template gallery does not contain one SVG per template entry")
+
+    report_path = ROOT / "templates" / "template-layout-report.md"
+    current_report = report_path.read_text(encoding="utf-8-sig") if report_path.exists() else ""
+    expected_report = layout_report.render_report(layout_report.scan_templates())
+    if current_report.strip() != expected_report.strip():
+        fail("template-layout-report.md is stale; regenerate it with scripts/report_template_layout.py")
 
     print("template library selftest: PASS")
     return 0

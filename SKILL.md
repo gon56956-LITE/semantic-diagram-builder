@@ -209,6 +209,7 @@ Before final delivery, verify:
 - Run `py scripts/validate_semantic_svg.py output.svg` when possible, then run `git diff --check` for generated SVGs when working in a git repo.
 - For style QA, build a gallery with `py scripts/build_style_gallery.py examples/style-gallery.html examples/your-contract.json` and compare against the style reference image or screenshot.
 - After renderer, style, or example changes, run `py scripts/test_style_gallery_quality.py` so the gallery stays fresh and catches shared visual regressions such as tiny text, mismatched arrowheads, missing group-label shields, or oversized canvases.
+- After template-level visual/layout changes, regenerate `templates/template-layout-report.md` with `py scripts/report_template_layout.py templates/template-layout-report.md` so dense, sparse, oversized, or truncation-heavy templates stay visible as follow-up candidates.
 
 ## Script usage
 
@@ -228,6 +229,7 @@ py scripts/test_contract_schema.py
 py scripts/build_style_gallery.py examples/style-gallery.html examples/ocs-r300-layered-contract.json examples/ocs-r300-multirrow-contract.json examples/accent-blueprint-boundary-contract.json examples/registry-table-contract.json examples/taxonomy-tree-contract.json examples/hub-spoke-contract.json
 py scripts/test_style_gallery_quality.py
 py scripts/build_style_gallery.py templates/template-gallery.html templates/layered_knowledge_topology/reference-contract.json templates/layered_knowledge_topology/stress-contract.json templates/source_boundary_map/reference-contract.json templates/source_boundary_map/stress-contract.json templates/boundary_ownership_map/reference-contract.json templates/boundary_ownership_map/stress-contract.json templates/registry_table/reference-contract.json templates/registry_table/stress-contract.json templates/taxonomy_tree/reference-contract.json templates/taxonomy_tree/stress-contract.json templates/hub_spoke/reference-contract.json templates/hub_spoke/stress-contract.json templates/object_relationship_diagram/reference-contract.json templates/object_relationship_diagram/stress-contract.json templates/ontology_map/reference-contract.json templates/ontology_map/stress-contract.json templates/capability_domain_map/reference-contract.json templates/capability_domain_map/stress-contract.json templates/relationship_matrix/reference-contract.json templates/relationship_matrix/stress-contract.json
+py scripts/report_template_layout.py templates/template-layout-report.md
 py scripts/test_template_library.py
 ```
 

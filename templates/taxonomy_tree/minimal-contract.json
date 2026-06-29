@@ -3,7 +3,7 @@
   "subtitle": "Minimal standard contract for a taxonomy tree",
   "diagram_type": "taxonomy_tree",
   "style": "modern-tech",
-  "width": 1100,
+  "width": 850,
   "nodes": [
     {"id": "root", "label": "Knowledge Assets", "subtitle": "root class", "kind": "hub"},
     {"id": "maps", "label": "Maps", "subtitle": "child class", "kind": "capability", "parent": "root"}
