@@ -75,4 +75,4 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 33 | 0 | 40/777 | 0 (0%) | 0 | ok |
 | taxonomy_tree/minimal | 850x557 | 610x497 | 170/22 | 2 | 1 | 0 | 10/177 | 0 (0%) | 0 | ok |
 | taxonomy_tree/reference | 1500x835 | 1132x775 | 298/22 | 10 | 9 | 0 | 30/438 | 0 (0%) | 0 | right whitespace 298px |
-| taxonomy_tree/stress | 1700x1335 | 1516x1275 | 160/22 | 27 | 26 | 0 | 77/1011 | 0 (0%) | 0 | ok |
+| taxonomy_tree/stress | 1700x1335 | 1524x1275 | 106/22 | 27 | 26 | 0 | 77/1011 | 0 (0%) | 0 | ok |

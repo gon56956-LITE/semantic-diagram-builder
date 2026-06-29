@@ -880,8 +880,46 @@ def main() -> int:
     ]
     if not level2_label_match or not backbone_xs:
         raise AssertionError("taxonomy_tree family-backbone stress should expose Level 2+ label and backbone geometry")
-    if float(level2_label_match.group(1)) > min(backbone_xs) - 80:
+    if min(backbone_xs) - float(level2_label_match.group(1)) < 104:
         raise AssertionError("taxonomy_tree Level 2+ label should stay clear of the leftmost backbone corridor")
+    narrow_backbone_tree = {
+        "title": "Narrow Taxonomy Backbone Regression",
+        "diagram_type": "taxonomy_tree",
+        "tree_layout": "family_backbone",
+        "style": "accent-blueprint",
+        "width": 1120,
+        "card_width": 210,
+        "family_gap": 72,
+        "backbone_offset": 32,
+        "nodes": [
+            {"id": "root", "label": "Risk Taxonomy", "subtitle": "root", "kind": "hub"},
+            {"id": "a", "label": "Optical Integrity", "subtitle": "family", "kind": "risk", "parent": "root", "order": 0},
+            {"id": "b", "label": "Mech / Package", "subtitle": "family", "kind": "risk", "parent": "root", "order": 1},
+            {"id": "c", "label": "Route / Data", "subtitle": "family", "kind": "risk", "parent": "root", "order": 2},
+            {"id": "d", "label": "Final Release", "subtitle": "family", "kind": "package", "parent": "root", "order": 3},
+            {"id": "a1", "label": "Optical Contamination", "subtitle": "particles", "kind": "risk", "parent": "a"},
+            {"id": "a2", "label": "Fiber Damage", "subtitle": "splice", "kind": "risk", "parent": "a"},
+            {"id": "b1", "label": "MEMS Flex Damage", "subtitle": "cut", "kind": "risk", "parent": "b"},
+            {"id": "b2", "label": "Gasket Defects", "subtitle": "seal", "kind": "risk", "parent": "b"},
+            {"id": "c1", "label": "Traveler Mismatch", "subtitle": "SN", "kind": "risk", "parent": "c"},
+            {"id": "c2", "label": "Route Ambiguity", "subtitle": "reuse", "kind": "risk", "parent": "c"},
+            {"id": "d1", "label": "FRU Readiness", "subtitle": "module", "kind": "risk", "parent": "d"},
+            {"id": "d2", "label": "Final Release Risk", "subtitle": "labels", "kind": "risk", "parent": "d"},
+        ],
+    }
+    narrow_svg = assert_valid("narrow taxonomy backbone regression", narrow_backbone_tree)
+    narrow_label = re.search(r'<text x="([-0-9.]+)" y="[-0-9.]+" class="tree-level-label">Level 2\+</text>', narrow_svg)
+    narrow_backbone_xs = [
+        float(match.group(1))
+        for attrs in path_attrs(narrow_svg, {"taxonomy-backbone-link"})
+        for match in [re.search(r'data-backbone-x="([-0-9.]+)"', attrs)]
+        if match
+    ]
+    if not narrow_label or not narrow_backbone_xs:
+        raise AssertionError("narrow taxonomy regression should expose Level 2+ label and backbone geometry")
+    if min(narrow_backbone_xs) - float(narrow_label.group(1)) < 104:
+        raise AssertionError("narrow taxonomy regression should reserve a safe gutter for Level 2+ labels")
+
     parent_lookup = {
         str(node["id"]): str(node["parent"])
         for node in stress_tree["nodes"]

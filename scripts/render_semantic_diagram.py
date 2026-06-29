@@ -2882,6 +2882,9 @@ def _render_tree_family_backbone(
     backbone_block_gap = max(float(contract.get("backbone_block_gap", backbone_node_gap)), 28.0)
     depth_indent = max(float(contract.get("backbone_depth_indent", 56)), 36.0)
     backbone_offset = max(float(contract.get("backbone_offset", 30)), 22.0)
+    level_label_x = max(24.0, min(float(margin_x), float(contract.get("level_label_x", margin_x))))
+    level_label_clearance = max(float(contract.get("level_label_clearance", 112)), 104.0)
+    min_backbone_x = level_label_x + level_label_clearance
 
     order = {
         str(n["id"]): i
@@ -2926,9 +2929,9 @@ def _render_tree_family_backbone(
     }
     family_count = max(1, len(family_roots))
     family_band_w = sum(family_lane_width.values()) + max(0, family_count - 1) * family_gap
-    min_width = int(2 * margin_x + family_band_w)
+    min_width = int(max(2 * margin_x + family_band_w, min_backbone_x + backbone_offset + family_band_w + margin_x))
     width = int(max(contract.get("width", 1500), min_width))
-    family_x0 = (width - family_band_w) / 2
+    family_x0 = max((width - family_band_w) / 2, min_backbone_x + backbone_offset)
     root_y = float(top_y)
     level1_y = root_y + card_h + root_gap
     desc_y0 = level1_y + card_h + backbone_start_gap
@@ -3064,7 +3067,7 @@ def _render_tree_family_backbone(
     for node_id in sorted(positions, key=lambda nid: (positions[nid][1], positions[nid][0], order.get(nid, 0))):
         parts.append(make_card(node_by_id[node_id], *positions[node_id], style, width))
     if sorted_roots:
-        label_x = max(24.0, min(float(margin_x), min(family_backbone_x.values(), default=float(margin_x)) - 112.0))
+        label_x = level_label_x
         parts.append(f'<text x="{label_x}" y="{root_y - 14}" class="tree-level-label">Level 0</text>')
     if family_roots and any(parent_map.get(family_id) for family_id in family_roots):
         parts.append(f'<text x="{label_x}" y="{level1_y - 14}" class="tree-level-label">Level 1</text>')
