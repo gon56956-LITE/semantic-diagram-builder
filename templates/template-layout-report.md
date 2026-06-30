@@ -11,11 +11,11 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | 1 | taxonomy_tree/reference | 5 | right whitespace 298px |
 | 2 | capability_domain_map/stress | 0 | height above max_height 1300px; dense but acceptable |
 | 3 | object_relationship_diagram/stress | 0 | height above max_height 1450px; dense but acceptable |
-| 4 | ontology_map/stress | 0 | height above max_height 1350px; dense but acceptable |
-| 5 | relationship_matrix/stress | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
-| 6 | boundary_ownership_map/minimal | 0 | ok |
-| 7 | boundary_ownership_map/reference | 0 | ok |
-| 8 | boundary_ownership_map/stress | 0 | ok |
+| 4 | relationship_matrix/stress | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
+| 5 | boundary_ownership_map/minimal | 0 | ok |
+| 6 | boundary_ownership_map/reference | 0 | ok |
+| 7 | boundary_ownership_map/stress | 0 | ok |
+| 8 | capability_domain_map/minimal | 0 | ok |
 
 ## Height Diagnostics
 
@@ -26,7 +26,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | hub_spoke/stress | 1269 | 1209 | 193 | 22 | content span 1209px, panel span 193px; bottom whitespace 22px |
 | layered_knowledge_topology/stress | 1349 | 1289 | 0 | 22 | content span 1289px, panel span 0px; bottom whitespace 22px |
 | object_relationship_diagram/stress | 1487 | 984 | 289 | 22 | 10 objects/concepts, 10 relationships; diagram span 984px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
-| ontology_map/stress | 1398 | 892 | 289 | 22 | 8 objects/concepts, 8 relationships; diagram span 892px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
+| ontology_map/stress | 1238 | 732 | 289 | 22 | 8 objects/concepts, 8 relationships; diagram span 732px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
 | registry_table/stress | 1457 | 1397 | 174 | 22 | content span 1397px, panel span 174px; bottom whitespace 22px |
 | relationship_matrix/stress | 1802 | 1612 | 330 | 22 | 11x11 matrix, 121 cells; grid span 1262px, top-connected span 330px; bottom whitespace 22px; height driven by matrix rows and companion panels |
 | source_boundary_map/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
@@ -63,8 +63,9 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | object_relationship_diagram/reference | 1500x897 | 1360x837 | 70/22 | 7 | 12 | 2 | 84/843 | 0 (0%) | 0 | ok |
 | object_relationship_diagram/stress | 1700x1487 | 1560x1427 | 70/22 | 10 | 19 | 3 | 132/1548 | 0 (0%) | 0 | height above max_height 1450px; dense but acceptable |
 | ontology_map/minimal | 980x643 | 851x583 | 64/22 | 3 | 3 | 1 | 22/330 | 0 (0%) | 0 | ok |
-| ontology_map/reference | 1500x1104 | 1360x1044 | 70/22 | 7 | 11 | 4 | 77/967 | 0 (0%) | 0 | ok |
-| ontology_map/stress | 1850x1398 | 1710x1338 | 70/22 | 14 | 22 | 4 | 133/1451 | 0 (0%) | 0 | height above max_height 1350px; dense but acceptable |
+| ontology_map/realworld-stress | 1680x858 | 1613x798 | 34/22 | 18 | 22 | 0 | 66/1332 | 0 (0%) | 0 | ok |
+| ontology_map/reference | 1450x1152 | 1310x1092 | 70/22 | 7 | 11 | 4 | 77/967 | 0 (0%) | 0 | ok |
+| ontology_map/stress | 1796x1238 | 1656x1178 | 70/22 | 14 | 22 | 4 | 133/1451 | 0 (0%) | 0 | ok |
 | registry_table/minimal | 1100x467 | 960x407 | 70/22 | 0 | 0 | 0 | 14/281 | 0 (0%) | 0 | ok |
 | registry_table/reference | 1500x657 | 1360x597 | 70/22 | 0 | 0 | 0 | 37/698 | 0 (0%) | 0 | ok |
 | registry_table/stress | 2400x1457 | 2260x1397 | 70/22 | 0 | 0 | 3 | 160/3724 | 8 (5%) | 0 | ok |

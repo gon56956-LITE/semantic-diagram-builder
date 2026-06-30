@@ -65,6 +65,13 @@ def path_attrs(svg: str, required_classes: set[str]) -> list[str]:
     return matches
 
 
+def svg_size(svg: str) -> tuple[float, float]:
+    match = re.search(r'<svg[^>]*\bwidth="([0-9.]+)"[^>]*\bheight="([0-9.]+)"', svg)
+    if not match:
+        raise AssertionError("expected SVG width and height")
+    return float(match.group(1)), float(match.group(2))
+
+
 def assert_rounded_paths(svg: str, required_classes: set[str], label: str) -> None:
     paths = path_ds(svg, required_classes)
     if not paths:
@@ -189,20 +196,36 @@ def assert_three_bottom_panels_use_side_stack(svg: str) -> None:
 
 
 def assert_ontology_stress_layout(svg: str) -> None:
-    first_row = group_rect(svg, "instance-customer_acme")
+    customer = group_rect(svg, "concept-customer")
+    product = group_rect(svg, "concept-product")
+    policy = group_rect(svg, "concept-policy")
+    acme = group_rect(svg, "instance-customer_acme")
     beta = group_rect(svg, "instance-customer_beta")
+    sku_a12 = group_rect(svg, "instance-sku_a12")
     sku_b44 = group_rect(svg, "instance-sku_b44")
-    if beta[1] - (first_row[1] + first_row[3]) < 56:
-        raise AssertionError("ontology_map stress second instance row should leave readable routing space")
+    policy_qms = group_rect(svg, "instance-policy_qms")
+    local_clusters = (
+        (customer, (acme, beta)),
+        (product, (sku_a12, sku_b44)),
+        (policy, (policy_qms,)),
+    )
+    for concept, instances in local_clusters:
+        concept_cx = concept[0] + concept[2] / 2
+        for rect in instances:
+            instance_cx = rect[0] + rect[2] / 2
+            if abs(instance_cx - concept_cx) > 135:
+                raise AssertionError("ontology_map stress instances should stay near their owning concept lane")
     for instance_id, rect in (("customer_beta", beta), ("sku_b44", sku_b44)):
         end_x, end_y = ontology_instance_link_end(svg, instance_id)
-        center_top = (rect[0] + rect[2] / 2, rect[1])
-        if abs(end_x - center_top[0]) > 1 or abs(end_y - center_top[1]) > 1:
-            raise AssertionError("ontology_map stress instance links should land on centered top anchors")
+        if not (rect[0] + 16 <= end_x <= rect[0] + rect[2] - 16) or abs(end_y - (rect[1] + rect[3])) > 1:
+            raise AssertionError("ontology_map stress top-row instance links should land on the instance bottom edge")
+    end_x, end_y = ontology_instance_link_end(svg, "policy_qms")
+    if not (policy_qms[0] + 16 <= end_x <= policy_qms[0] + policy_qms[2] - 16) or abs(end_y - policy_qms[1]) > 1:
+        raise AssertionError("ontology_map stress bottom-row instance links should land on the instance top edge")
     governed = relationship_diamond_center(svg, "governed_by")
     reviewed = relationship_diamond_center(svg, "reviewed_by")
-    if governed[0] > reviewed[0] - 80 or governed[1] < reviewed[1] + 120:
-        raise AssertionError("ontology_map governed_by diamond should sit lower and left of the reviewed_by diamond")
+    if abs(governed[0] - reviewed[0]) > 2 or governed[1] < reviewed[1] + 80:
+        raise AssertionError("ontology_map governed_by diamond should use a lower lane below reviewed_by")
     supplied = relationship_diamond_center(svg, "supplied_by")
     constrained = relationship_diamond_center(svg, "constrained_by")
     proved = relationship_diamond_center(svg, "proved_by")
@@ -211,6 +234,50 @@ def assert_ontology_stress_layout(svg: str) -> None:
     governed_paths = re.findall(r'<path\b[^>]*\bdata-relationship="governed_by"[^>]*/>', svg)
     if len(governed_paths) < 2 or any(path.count(" Q ") > 1 for path in governed_paths[:2]):
         raise AssertionError("ontology_map governed_by links should use simple elbows instead of extra detours")
+
+
+def assert_realworld_ontology_compact_layout(svg: str) -> None:
+    width, height = svg_size(svg)
+    if width / height > 2.2:
+        raise AssertionError("real-world ontology map should compact overly wide one-row concept chains")
+    concept_ids = (
+            "manufacturing-kb",
+            "process-group-class",
+            "controlled-source-class",
+            "distilled-note-class",
+            "synthesis-note-class",
+            "authority-boundary",
+    )
+    concepts = [group_rect(svg, f"concept-{concept_id}") for concept_id in concept_ids]
+    concept_rows = {round(rect[1], 1) for rect in concepts}
+    if len(concept_rows) < 2:
+        raise AssertionError("real-world ontology map should place long concept chains on multiple rows")
+    if max(rect[0] for rect in concepts) > width - 320:
+        raise AssertionError("real-world ontology map should not retain stale far-right explicit x coordinates")
+    concept_by_id = dict(zip(concept_ids, concepts))
+    local_instances = {
+        "wi-knowledge-section": "manufacturing-kb",
+        "public-synthesis-notes": "manufacturing-kb",
+        "process-groups-a": "process-group-class",
+        "process-groups-b": "process-group-class",
+        "not-controlled-wi": "authority-boundary",
+        "release-rework-check": "authority-boundary",
+    }
+    top_concept_y = min(rect[1] for rect in concepts)
+    bottom_concept_bottom = max(rect[1] + rect[3] for rect in concepts)
+    instance_rects = []
+    for instance_id, concept_id in local_instances.items():
+        instance = group_rect(svg, f"instance-{instance_id}")
+        concept = concept_by_id[concept_id]
+        instance_rects.append(instance)
+        instance_cx = instance[0] + instance[2] / 2
+        concept_cx = concept[0] + concept[2] / 2
+        if abs(instance_cx - concept_cx) > 190:
+            raise AssertionError("real-world ontology examples should stay close to their owning concept lane")
+    if not any(rect[1] + rect[3] < top_concept_y for rect in instance_rects):
+        raise AssertionError("real-world ontology examples should be allowed above the top concept row")
+    if not any(rect[1] > bottom_concept_bottom for rect in instance_rects):
+        raise AssertionError("real-world ontology examples should be allowed below the bottom concept row")
 
 
 def assert_card_type_scale(label: str, svg: str) -> None:
@@ -1208,6 +1275,10 @@ def main() -> int:
         raise AssertionError("ontology_map reviewed_by relation should stay on the direct Evidence-Policy axis")
     if any('stroke:#FFD84D' not in link for link in reviewed_links[:2]):
         raise AssertionError("ontology_map reviewed_by dashed relation should use the relation color standard")
+    ontology_realworld = load_json("templates/ontology_map/realworld-stress-contract.json")
+    ontology_realworld_svg = assert_valid("ontology map real-world stress template", ontology_realworld)
+    assert_realworld_ontology_compact_layout(ontology_realworld_svg)
+    assert_no_direct_diagonal_object_links(ontology_realworld_svg)
 
     capability_map = load_json("templates/capability_domain_map/reference-contract.json")
     capability_svg = assert_valid("capability domain map reference template", capability_map)

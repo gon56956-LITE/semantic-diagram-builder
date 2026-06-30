@@ -5,6 +5,10 @@
   "style": "accent-blueprint",
   "width": 1850,
   "top_y": 118,
+  "ontology_layout": "compact_grid",
+  "ontology_compact_columns": 4,
+  "ontology_compact_snake": false,
+  "ontology_compact_preserve_relationship_positions": true,
   "concept_width": 230,
   "concept_col_gap": 180,
   "concept_row_gap": 200,
@@ -27,7 +31,7 @@
     {"id": "supplied_by", "label": "supplied by", "from": "order", "to": "supplier", "from_cardinality": "0..*", "to_cardinality": "1..*", "x": 515, "y": 370, "from_anchor": "bottom", "to_anchor": "top", "from_diamond_anchor": "top", "to_diamond_anchor": "bottom"},
     {"id": "constrained_by", "label": "constrained by", "from": "order", "to": "risk", "from_cardinality": "0..*", "to_cardinality": "0..*", "x": 720, "y": 370, "from_anchor": "bottom", "to_anchor": "top", "from_diamond_anchor": "top", "to_diamond_anchor": "bottom"},
     {"id": "proved_by", "label": "proved by", "from": "product", "to": "evidence", "from_cardinality": "1", "to_cardinality": "0..*", "x": 1130, "y": 370, "from_anchor": "bottom", "to_anchor": "top", "from_diamond_anchor": "top", "to_diamond_anchor": "bottom"},
-    {"id": "governed_by", "label": "governed by", "from": "risk", "to": "policy", "from_cardinality": "1..*", "to_cardinality": "1", "x": 1200, "y": 710, "from_anchor": "bottom", "to_anchor": "bottom", "from_diamond_anchor": "left", "to_diamond_anchor": "right", "simple_elbow": true},
+    {"id": "governed_by", "label": "governed by", "from": "risk", "to": "policy", "from_cardinality": "1..*", "to_cardinality": "1", "x": 1324, "y": 762, "from_anchor": "bottom", "to_anchor": "bottom", "from_diamond_anchor": "left", "to_diamond_anchor": "right", "simple_elbow": true},
     {"id": "reviewed_by", "label": "reviewed by", "from": "evidence", "to": "policy", "from_cardinality": "0..*", "to_cardinality": "1", "style": "dashed", "row": 1, "col": 2.5}
   ],
   "instances": [

@@ -128,6 +128,8 @@ Useful ontology fields for `ontology_map`:
 - `instances[].lane_offset`: optional pixel offset for instance-to-concept lanes when several instances belong to the same concept or share a long corridor.
 - `instances[].concept_anchor` and `instances[].instance_anchor`: optional `left`, `right`, `top`, or `bottom` side controls when the automatic instance link would cross a predicate diamond.
 - `info_panels[]`: ontology maps render legend/about/rules/version panels below the concept canvas. Legacy `placement: "left"` or `"right"` values are treated as ordering guidance, not side gutters.
+- `ontology_layout`: optional `preserve`/`manual` keeps explicit coordinates; `compact_grid` forces the compact grid. Without this field, very wide single-row ontology chains with generated `x`/`y` coordinates may be compacted into a multi-row concept grid with instance examples grouped immediately above or below their owning concept lane.
+- `ontology_compact_columns`, `ontology_compact_snake`, and `ontology_compact_preserve_relationship_positions`: optional compact-grid controls. Use snake rows for long backbone chains; set `ontology_compact_snake: false` for row-major ontology grids; preserve relationship positions only when existing diamond slots were manually reviewed for the compact grid.
 - Ontology maps reuse the object relationship geometry engine but use ontology-specific concept and instance components. Use this type when the concepts/classes and examples are the message; use `object_relationship_diagram` when PK/FK table structure is the message.
 
 Useful capability map fields for `capability_domain_map`:

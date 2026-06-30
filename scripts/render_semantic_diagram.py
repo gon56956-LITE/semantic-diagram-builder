@@ -3703,6 +3703,156 @@ def _relationship_default_metrics(contract: dict, diagram_type: str) -> dict[str
     }
 
 
+def _ontology_should_compact_wide_chain(contract: dict, primary_items: list[dict]) -> bool:
+    mode = str(contract.get("ontology_layout", "")).strip().lower().replace("-", "_")
+    if mode in {"preserve", "manual", "fixed", "fixed_positions"}:
+        return False
+    if mode in {"compact", "compact_grid", "auto_compact"}:
+        return True
+    if len(primary_items) < 5:
+        return False
+    if any(isinstance(item.get("col"), (int, float)) for item in primary_items):
+        return False
+    row_values = {int(item.get("row", 0)) for item in primary_items if isinstance(item.get("row", 0), (int, float))}
+    if len(row_values) > 1:
+        return False
+    explicit_xy = [
+        item
+        for item in primary_items
+        if isinstance(item.get("x"), (int, float)) and isinstance(item.get("y"), (int, float))
+    ]
+    if len(explicit_xy) < max(4, int(len(primary_items) * 0.75)):
+        return False
+    width = float(contract.get("width", 0) or 0)
+    height = float(contract.get("height", 0) or 0)
+    aspect_threshold = float(contract.get("ontology_compact_aspect_threshold", 3.2))
+    if height > 0 and width / height >= aspect_threshold:
+        return True
+    xs = [float(item["x"]) for item in explicit_xy]
+    span_threshold = float(contract.get("ontology_compact_span_threshold", 1800))
+    return max(xs) - min(xs) >= span_threshold
+
+
+def _ontology_effective_relationship(rel: dict, grid: dict) -> dict:
+    if not grid.get("compact_ontology"):
+        return rel
+    if grid.get("compact_preserve_relationship_positions"):
+        return rel
+    compact_rel = dict(rel)
+    for key in ("x", "y", "row", "col"):
+        compact_rel.pop(key, None)
+    return compact_rel
+
+
+def _ontology_compact_columns(contract: dict, concept_count: int) -> int:
+    explicit = contract.get("ontology_compact_columns")
+    if isinstance(explicit, (int, float)) and explicit > 0:
+        return max(1, min(concept_count, int(explicit)))
+    return min(concept_count, min(4, max(3, math.ceil(math.sqrt(concept_count)))))
+
+
+def _ontology_compact_positions(
+    contract: dict,
+    primary_items: list[dict],
+    instances: list[dict],
+    defaults: dict[str, float],
+    sizes: dict[str, tuple[float, float]],
+    margin_x: float,
+    top_y: float,
+    col_gap: float,
+    row_gap: float,
+) -> tuple[int, dict[str, tuple[float, float, float, float]]]:
+    columns = _ontology_compact_columns(contract, len(primary_items))
+    col_w = max((sizes[str(item["id"])][0] for item in primary_items), default=defaults["width"])
+    instance_gap = max(float(contract.get("ontology_compact_instance_gap", 18)), 12.0)
+    instance_row_gap = max(float(contract.get("ontology_compact_instance_row_gap", 18)), 14.0)
+    instance_per_row = max(1, int(contract.get("ontology_compact_instances_per_row", 2)))
+    instance_stacks: dict[str, list[dict]] = {}
+    for instance in instances:
+        concept_id = str(instance.get("concept", ""))
+        if concept_id:
+            instance_stacks.setdefault(concept_id, []).append(instance)
+
+    def instance_group_size(concept_id: str) -> tuple[float, float]:
+        stack = instance_stacks.get(concept_id, [])
+        if not stack:
+            return 0.0, 0.0
+        row_count = min(instance_per_row, len(stack))
+        rows = math.ceil(len(stack) / row_count)
+        widths = [sizes[str(instance["id"])][0] for instance in stack]
+        heights = [sizes[str(instance["id"])][1] for instance in stack]
+        group_w = row_count * max(widths) + max(0, row_count - 1) * instance_gap
+        group_h = rows * max(heights) + max(0, rows - 1) * instance_row_gap
+        return group_w, group_h
+
+    concept_ids = [str(item["id"]) for item in primary_items]
+    instance_group_w = max([instance_group_size(concept_id)[0] for concept_id in concept_ids] or [0.0])
+    lane_w = max(col_w, instance_group_w)
+    col_gap = max(col_gap, max(48.0, lane_w - col_w + 48.0))
+    concept_grid_w = columns * col_w + max(0, columns - 1) * col_gap
+    lane_grid_w = columns * lane_w + max(0, columns - 1) * max(48.0, col_gap - (lane_w - col_w))
+    width = int(max(float(contract.get("ontology_compact_min_width", 1450)), concept_grid_w + 2 * margin_x, lane_grid_w + 2 * margin_x))
+    if isinstance(contract.get("ontology_compact_width"), (int, float)):
+        width = int(max(float(contract["ontology_compact_width"]), concept_grid_w + 2 * margin_x, lane_grid_w + 2 * margin_x))
+    concept_grid_x = (width - concept_grid_w) / 2
+    concept_row_gap = max(float(contract.get("ontology_compact_concept_row_gap", 150)), row_gap)
+    instance_band_gap = max(float(contract.get("ontology_compact_instance_band_gap", 52)), 36.0)
+
+    positions: dict[str, tuple[float, float, float, float]] = {}
+    concept_slot: dict[str, tuple[int, int]] = {}
+    row_heights: dict[int, float] = {}
+    snake_rows = contract.get("ontology_compact_snake", True) is not False
+    for idx, item in enumerate(primary_items):
+        row = idx // columns
+        offset = idx % columns
+        col = columns - 1 - offset if snake_rows and row % 2 else offset
+        concept_slot[str(item["id"])] = (row, col)
+        row_heights[row] = max(row_heights.get(row, 0.0), sizes[str(item["id"])][1])
+
+    max_row = max(row_heights, default=0)
+    top_band_h = max((instance_group_size(str(item["id"]))[1] for item in primary_items if concept_slot[str(item["id"])][0] == 0), default=0.0)
+    row_y: dict[int, float] = {}
+    y = float(top_y) + top_band_h + (instance_band_gap if top_band_h > 0 else 0.0)
+    for row in sorted(row_heights):
+        row_y[row] = y
+        y += row_heights[row] + concept_row_gap
+
+    for item in primary_items:
+        item_id = str(item["id"])
+        row, col = concept_slot[item_id]
+        ew, eh = sizes[item_id]
+        cell_x = concept_grid_x + col * (col_w + col_gap)
+        positions[item_id] = (cell_x + (col_w - ew) / 2, row_y[row], ew, eh)
+
+    for concept_id, stack in instance_stacks.items():
+        if concept_id not in positions or concept_id not in concept_slot:
+            continue
+        concept_x, concept_y, concept_w, concept_h = positions[concept_id]
+        concept_row, _concept_col = concept_slot[concept_id]
+        row_count = min(instance_per_row, len(stack))
+        rows = math.ceil(len(stack) / row_count)
+        max_iw = max(sizes[str(instance["id"])][0] for instance in stack)
+        max_ih = max(sizes[str(instance["id"])][1] for instance in stack)
+        group_w = row_count * max_iw + max(0, row_count - 1) * instance_gap
+        group_h = rows * max_ih + max(0, rows - 1) * instance_row_gap
+        group_x = concept_x + concept_w / 2 - group_w / 2
+        if concept_row == 0:
+            group_y = concept_y - instance_band_gap - group_h
+        elif concept_row == max_row:
+            group_y = concept_y + concept_h + instance_band_gap
+        else:
+            group_y = concept_y + concept_h + instance_band_gap
+        for stack_idx, instance in enumerate(stack):
+            instance_id = str(instance["id"])
+            iw, ih = sizes[instance_id]
+            local_row = stack_idx // row_count
+            local_col = stack_idx % row_count
+            x = group_x + local_col * (max_iw + instance_gap) + (max_iw - iw) / 2
+            y = group_y + local_row * (max_ih + instance_row_gap) + (max_ih - ih) / 2
+            positions[instance_id] = (x, y, iw, ih)
+    return width, positions
+
+
 def _relationship_item_size(
     item: dict,
     defaults: dict[str, float],
@@ -4277,18 +4427,37 @@ def _ontology_instance_link_points(
     lane_offset: float = 0.0,
     concept_anchor_override: object = None,
     instance_anchor_override: object = None,
+    force_detour: bool = False,
+    side_entry_shift: float = 0.0,
+    relative_auto_anchor: bool = False,
 ) -> list[tuple[float, float]]:
     instance_center = _rect_center(instance_rect)
     if concept_anchor_override:
         concept_anchor, concept_side = _rect_anchor_with_side(concept_rect, instance_center, concept_anchor_override)
+    elif relative_auto_anchor and instance_rect[1] + instance_rect[3] <= concept_rect[1]:
+        concept_anchor, concept_side = _rect_edge_anchor_toward(concept_rect, instance_center, "top"), "top"
+    elif relative_auto_anchor and concept_rect[1] + concept_rect[3] <= instance_rect[1]:
+        concept_anchor, concept_side = _rect_edge_anchor_toward(concept_rect, instance_center, "bottom"), "bottom"
+    elif relative_auto_anchor and instance_rect[0] + instance_rect[2] <= concept_rect[0]:
+        concept_anchor, concept_side = _rect_edge_anchor_toward(concept_rect, instance_center, "left"), "left"
+    elif relative_auto_anchor and concept_rect[0] + concept_rect[2] <= instance_rect[0]:
+        concept_anchor, concept_side = _rect_edge_anchor_toward(concept_rect, instance_center, "right"), "right"
     else:
         concept_anchor, concept_side = _rect_edge_anchor_toward(concept_rect, instance_center, "bottom"), "bottom"
     if instance_anchor_override:
         instance_anchor, instance_side = _rect_anchor_with_side(instance_rect, concept_anchor, instance_anchor_override)
+    elif relative_auto_anchor and concept_side == "top":
+        instance_anchor, instance_side = _rect_edge_anchor_toward(instance_rect, concept_anchor, "bottom"), "bottom"
+    elif relative_auto_anchor and concept_side == "bottom":
+        instance_anchor, instance_side = _rect_edge_anchor_toward(instance_rect, concept_anchor, "top"), "top"
+    elif relative_auto_anchor and concept_side == "left":
+        instance_anchor, instance_side = _rect_edge_anchor_toward(instance_rect, concept_anchor, "right"), "right"
+    elif relative_auto_anchor and concept_side == "right":
+        instance_anchor, instance_side = _rect_edge_anchor_toward(instance_rect, concept_anchor, "left"), "left"
     else:
         instance_anchor, instance_side = _rect_edge_anchor_toward(instance_rect, concept_anchor, "top"), "top"
     direct_points = _orthogonal_link_points(concept_anchor, instance_anchor, concept_side, instance_side)
-    if not _points_cross_any_rect(direct_points, obstacles, 12.0):
+    if not force_detour and not _points_cross_any_rect(direct_points, obstacles, 12.0):
         return direct_points
     cx, _cy = _rect_center(concept_rect)
     ix, _iy = _rect_center(instance_rect)
@@ -4296,25 +4465,52 @@ def _ontology_instance_link_points(
     rights = [concept_rect[0] + concept_rect[2], instance_rect[0] + instance_rect[2]] + [rect[0] + rect[2] for rect in obstacles]
     corridor_x = min(xs) - 48.0 if ix <= cx else max(rights) + 48.0
     corridor_x += lane_offset
-    top_lane_y = concept_anchor[1] + 34.0 + lane_offset
-    bottom_lane_y = instance_anchor[1] - 34.0 + lane_offset
-    points = [
-        concept_anchor,
-        (concept_anchor[0], top_lane_y),
-        (corridor_x, top_lane_y),
-        (corridor_x, bottom_lane_y),
-        (instance_anchor[0], bottom_lane_y),
-        instance_anchor,
-    ]
+    if force_detour:
+        gap = abs(instance_anchor[1] - concept_anchor[1])
+        clearance = min(86.0, max(44.0, gap * 0.35))
+        low = min(concept_anchor[1], instance_anchor[1]) + 18.0
+        high = max(concept_anchor[1], instance_anchor[1]) - 18.0
+        top_lane_y = _clamp(concept_anchor[1] + clearance + lane_offset, low, high)
+        bottom_lane_y = _clamp(instance_anchor[1] - clearance + lane_offset, low, high)
+        if instance_side in {"left", "right"}:
+            bottom_lane_y = _clamp(instance_rect[1] - 9.0 + side_entry_shift, instance_rect[1] - 16.0, instance_rect[1] - 2.0)
+    else:
+        top_lane_y = concept_anchor[1] + 34.0 + lane_offset
+        bottom_lane_y = instance_anchor[1] - 34.0 + lane_offset
+    def detour_points(candidate_x: float) -> list[tuple[float, float]]:
+        return [
+            concept_anchor,
+            (concept_anchor[0], top_lane_y),
+            (candidate_x, top_lane_y),
+            (candidate_x, bottom_lane_y),
+            (instance_anchor[0], bottom_lane_y),
+            instance_anchor,
+        ]
+
+    points = detour_points(corridor_x)
+    if force_detour and _points_cross_any_rect(points, obstacles, 12.0):
+        for step in (96.0, 144.0, 192.0):
+            for direction in (-1.0, 1.0):
+                candidate = corridor_x + direction * step
+                candidate_points = detour_points(candidate)
+                if not _points_cross_any_rect(candidate_points, obstacles, 12.0):
+                    return candidate_points
     return points
 
 
-def _render_ontology_instance_links(contract: dict, positions: dict[str, tuple[float, float, float, float]], style: dict) -> list[str]:
+def _render_ontology_instance_links(
+    contract: dict,
+    positions: dict[str, tuple[float, float, float, float]],
+    style: dict,
+    compact_ontology: bool = False,
+    extra_obstacles: list[tuple[float, float, float, float]] | None = None,
+) -> list[str]:
     paths: list[str] = []
     instances = _ontology_instances(contract)
     lane_step = float(contract.get("ontology_instance_lane_gap", 18.0))
     concept_ids = _unique(str(instance.get("concept", "")) for instance in instances if instance.get("concept"))
     concept_palette_index = {concept_id: idx for idx, concept_id in enumerate(concept_ids)}
+    concept_seen: dict[str, int] = {}
     for idx, instance in enumerate(instances):
         instance_id = str(instance.get("id", ""))
         concept_id = str(instance.get("concept", ""))
@@ -4323,14 +4519,23 @@ def _render_ontology_instance_links(contract: dict, positions: dict[str, tuple[f
         concept_rect = positions[concept_id]
         instance_rect = positions[instance_id]
         obstacles = [rect for item_id, rect in positions.items() if item_id not in {concept_id, instance_id}]
-        lane_offset = float(instance.get("lane_offset", (idx - (len(instances) - 1) / 2) * lane_step))
+        if extra_obstacles:
+            obstacles.extend(extra_obstacles)
+        local_idx = concept_seen.get(concept_id, 0)
+        concept_seen[concept_id] = local_idx + 1
+        lane_offset = 0.0 if compact_ontology else float(instance.get("lane_offset", (idx - (len(instances) - 1) / 2) * lane_step))
+        concept_anchor = None if compact_ontology else instance.get("concept_anchor")
+        instance_anchor = None if compact_ontology else instance.get("instance_anchor")
         points = _ontology_instance_link_points(
             concept_rect,
             instance_rect,
             obstacles,
             lane_offset,
-            instance.get("concept_anchor"),
-            instance.get("instance_anchor"),
+            concept_anchor,
+            instance_anchor,
+            False,
+            0.0,
+            compact_ontology,
         )
         color = _connector_palette_color(style, "ontology_instance_palette", concept_palette_index.get(concept_id, idx))
         if not color:
@@ -4361,57 +4566,75 @@ def _object_relationship_layout(contract: dict, style: dict, diagram_type: str) 
     row_gap = max(row_gap, float(contract.get("relationship_row_gap_min", 132)))
     sizes = {str(entity["id"]): _relationship_item_size(entity, defaults, instance_ids) for entity in entities}
     order_index = {id(entity): idx for idx, entity in enumerate(entities)}
-    concept_max_row = max(
-        (int(entity.get("row", 0)) for entity in primary_items if str(entity.get("id", "")) not in instance_ids),
-        default=0,
-    )
-    rows: dict[int, list[dict]] = {}
-    for idx, entity in enumerate(entities):
-        default_row = concept_max_row + 1 if str(entity.get("id", "")) in instance_ids else 0
-        row = int(entity.get("row", default_row))
-        rows.setdefault(row, []).append(entity)
-    for row_entities in rows.values():
-        row_entities.sort(key=lambda entity: (entity.get("col", order_index[id(entity)]), order_index[id(entity)]))
-    max_row_w = 0.0
-    for row_entities in rows.values():
-        if any("col" in entity for entity in row_entities):
-            max_col = max(int(entity.get("col", 0)) for entity in row_entities)
-            row_w = (max_col + 1) * default_w + max_col * col_gap
-        else:
-            row_w = sum(sizes[str(entity["id"])][0] for entity in row_entities) + max(0, len(row_entities) - 1) * col_gap
-        max_row_w = max(max_row_w, row_w)
-    width = int(max(contract.get("width", 1500), max_row_w + 2 * margin_x))
     positions: dict[str, tuple[float, float, float, float]] = {}
-    y = top_y
-    for row in sorted(rows):
-        row_entities = rows[row]
-        explicit_cols = any("col" in entity for entity in row_entities)
-        if explicit_cols:
-            max_col = max(int(entity.get("col", 0)) for entity in row_entities)
-            row_w = (max_col + 1) * default_w + max_col * col_gap
-        else:
-            row_w = sum(sizes[str(entity["id"])][0] for entity in row_entities) + max(0, len(row_entities) - 1) * col_gap
-        row_h_actual = max(sizes[str(entity["id"])][1] for entity in row_entities)
-        row_x = (width - row_w) / 2
-        x = row_x
-        for entity in row_entities:
-            entity_id = str(entity["id"])
-            ew, eh = sizes[entity_id]
-            if explicit_cols:
-                ex = row_x + int(entity.get("col", 0)) * (default_w + col_gap)
+    compact_ontology = diagram_type == "ontology_map" and _ontology_should_compact_wide_chain(contract, primary_items)
+    if compact_ontology:
+        width, positions = _ontology_compact_positions(
+            contract,
+            primary_items,
+            _ontology_instances(contract),
+            defaults,
+            sizes,
+            margin_x,
+            top_y,
+            col_gap,
+            row_gap,
+        )
+    else:
+        concept_max_row = max(
+            (int(entity.get("row", 0)) for entity in primary_items if str(entity.get("id", "")) not in instance_ids),
+            default=0,
+        )
+        rows: dict[int, list[dict]] = {}
+        for idx, entity in enumerate(entities):
+            default_row = concept_max_row + 1 if str(entity.get("id", "")) in instance_ids else 0
+            row = int(entity.get("row", default_row))
+            rows.setdefault(row, []).append(entity)
+        for row_entities in rows.values():
+            row_entities.sort(key=lambda entity: (entity.get("col", order_index[id(entity)]), order_index[id(entity)]))
+        max_row_w = 0.0
+        for row_entities in rows.values():
+            if any("col" in entity for entity in row_entities):
+                max_col = max(int(entity.get("col", 0)) for entity in row_entities)
+                row_w = (max_col + 1) * default_w + max_col * col_gap
             else:
-                ex = x
-            ex = float(entity.get("x", ex))
-            ey = float(entity.get("y", y + (row_h_actual - eh) / 2))
-            positions[entity_id] = (ex, ey, ew, eh)
-            x += ew + col_gap
-        y += row_h_actual + row_gap
+                row_w = sum(sizes[str(entity["id"])][0] for entity in row_entities) + max(0, len(row_entities) - 1) * col_gap
+            max_row_w = max(max_row_w, row_w)
+        width = int(max(contract.get("width", 1500), max_row_w + 2 * margin_x))
+        y = top_y
+        for row in sorted(rows):
+            row_entities = rows[row]
+            explicit_cols = any("col" in entity for entity in row_entities)
+            if explicit_cols:
+                max_col = max(int(entity.get("col", 0)) for entity in row_entities)
+                row_w = (max_col + 1) * default_w + max_col * col_gap
+            else:
+                row_w = sum(sizes[str(entity["id"])][0] for entity in row_entities) + max(0, len(row_entities) - 1) * col_gap
+            row_h_actual = max(sizes[str(entity["id"])][1] for entity in row_entities)
+            row_x = (width - row_w) / 2
+            x = row_x
+            for entity in row_entities:
+                entity_id = str(entity["id"])
+                ew, eh = sizes[entity_id]
+                if explicit_cols:
+                    ex = row_x + int(entity.get("col", 0)) * (default_w + col_gap)
+                else:
+                    ex = x
+                ex = float(entity.get("x", ex))
+                ey = float(entity.get("y", y + (row_h_actual - eh) / 2))
+                positions[entity_id] = (ex, ey, ew, eh)
+                x += ew + col_gap
+            y += row_h_actual + row_gap
     grid = _object_relationship_grid(contract, positions, diagram_type)
+    if compact_ontology:
+        grid["compact_ontology"] = True
+        grid["compact_preserve_relationship_positions"] = bool(contract.get("ontology_compact_preserve_relationship_positions"))
     entity_rects = list(positions.values())
     relationship_bottoms = []
     for rel in contract.get("relationships", []) or []:
         if not isinstance(rel, dict):
             continue
+        rel = _ontology_effective_relationship(rel, grid)
         source = str(rel.get("from", ""))
         target = str(rel.get("to", ""))
         if source not in positions or target not in positions:
@@ -4550,6 +4773,7 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
     for rel in contract.get("relationships", []) or []:
         if not isinstance(rel, dict):
             continue
+        rel = _ontology_effective_relationship(rel, grid)
         source = str(rel.get("from", ""))
         target = str(rel.get("to", ""))
         if source not in positions or target not in positions:
@@ -4648,7 +4872,8 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
 
     parts.extend(link_parts)
     if diagram_type == "ontology_map":
-        parts.extend(_render_ontology_instance_links(contract, positions, style))
+        compact_ontology = bool(grid.get("compact_ontology"))
+        parts.extend(_render_ontology_instance_links(contract, positions, style, compact_ontology, all_diamond_boxes if compact_ontology else None))
     for entity_id in sorted(positions, key=lambda eid: (positions[eid][1], positions[eid][0])):
         entity = item_by_id[entity_id]
         if diagram_type == "ontology_map":

@@ -144,7 +144,7 @@ Use for formal concept/class maps that need ontology concepts, relationship pred
 
 Contract shape: `concepts`, `relationships`, optional `instances`, optional `info_panels`, optional `annotations`.
 
-Renderer strategy: ontology profile on the relationship-map geometry engine. Concept cards use ontology-specific class boxes; relationship predicates use the same fixed-slot diamond routing as object relationship diagrams; instances render as subordinate example cards linked back to their concept.
+Renderer strategy: ontology profile on the relationship-map geometry engine. Concept cards use ontology-specific class boxes; relationship predicates use the same fixed-slot diamond routing as object relationship diagrams; instances render as example cards linked back to their owning concept.
 
 Required fields:
 
@@ -163,11 +163,15 @@ Optional fields:
 - `relationships[].id`, `style`, `accent`, `from_cardinality`, `to_cardinality`, `row`, `col`, `x`, `y`, `diamond_width`, `diamond_height`, `lane_offset`
 - `relationships[].from_anchor`, `to_anchor`, `from_diamond_anchor`, `to_diamond_anchor` as `left`, `right`, `top`, or `bottom`
 - `instances[].subtitle`, `row`, `col`, `x`, `y`, `width`, `height`, `kind`, `accent`, `lane_offset`, `concept_anchor`, `instance_anchor`
+- `ontology_layout`: optional `preserve`/`manual` to honor explicit coordinates; `compact_grid` to force a compact multi-row concept grid with instances grouped immediately above or below their owning concept lane. If omitted, the renderer may compact generated long-chain coordinates when the ontology would otherwise produce an overly wide, shallow canvas.
+- `ontology_compact_columns`: optional column count for compact grids.
+- `ontology_compact_snake`: optional boolean; default `true` keeps long backbone chains visually continuous across rows, while `false` preserves normal row-major concept order.
+- `ontology_compact_preserve_relationship_positions`: optional boolean for compact grids whose relationship diamonds already have reviewed row/col or x/y slots. Leave unset for generated long-chain coordinates so stale positions are discarded.
 - `info_panels[]` for legend/about/rules/version panels. Legacy `placement: "left" | "right"` values are accepted as ordering guidance, but panels render below the concept canvas so the ontology core keeps the horizontal space.
 
 Unsupported structural fields: `groups`, `nodes`, `edges`, `columns`, `rows`, `hub_id`, `domains`, `external_partners`, `entities`.
 
-Rules: every relationship endpoint must reference a concept id; instances reference concepts but are not relationship endpoints. Relationship labels render inside diamonds, so keep predicate names short. Use concept `row`/`col` plus relationship `row`/`col` for stable placement; use `instances[].lane_offset` when multiple instance examples share a concept or corridor. Use `concept_anchor` and `instance_anchor` when an instance link needs a fixed side to avoid predicate diamonds. Use explicit `x`/`y` only for polished reference layouts. Use `ontology_map` when class/instance semantics matter; use `object_relationship_diagram` when table keys and object attributes are the primary message.
+Rules: every relationship endpoint must reference a concept id; instances reference concepts but are not relationship endpoints. Relationship labels render inside diamonds, so keep predicate names short. Use concept `row`/`col` plus relationship `row`/`col` for stable placement; use `instances[].lane_offset` when multiple instance examples share a concept or corridor in a preserved manual layout. Use `concept_anchor` and `instance_anchor` when an instance link needs a fixed side to avoid predicate diamonds. Use explicit `x`/`y` only for polished reference layouts; generated coordinates that merely stretch a concept chain across a very wide canvas should be left to compact-grid auto layout or marked `ontology_layout: "preserve"` only after visual review. In compact-grid auto layout, instance `x`/`y`, manual anchors, and lane offsets are treated as legacy hints and the renderer instead keeps instance clusters near the owning concept. For compact grids, use snake rows for single backbone chains and row-major order for ontology grids where same-row relationship diamonds carry the meaning. Use `ontology_map` when class/instance semantics matter; use `object_relationship_diagram` when table keys and object attributes are the primary message.
 
 ## capability_domain_map
 

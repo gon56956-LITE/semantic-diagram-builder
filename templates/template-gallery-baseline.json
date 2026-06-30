@@ -306,6 +306,15 @@
       "max_height": 1350
     },
     {
+      "diagram_type": "ontology_map",
+      "variant": "realworld-stress",
+      "style": "accent-blueprint",
+      "title": "OCS R300 Manufacturing Concept Ontology",
+      "contract": "templates/ontology_map/realworld-stress-contract.json",
+      "svg": "templates/ontology_map/realworld-stress.svg",
+      "max_height": 1500
+    },
+    {
       "diagram_type": "capability_domain_map",
       "variant": "reference",
       "style": "accent-blueprint",

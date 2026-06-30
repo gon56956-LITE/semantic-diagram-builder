@@ -673,6 +673,8 @@ def _check_ontology_geometry(
         for other_source, other_target, other_seg in instance_segments[idx + 1:]:
             if (source, target) == (other_source, other_target):
                 continue
+            if source and source == other_source:
+                continue
             if _axis_segment_overlap_length(seg, other_seg) >= 36.0:
                 fail(
                     f'ontology instance links {source or "unknown"}->{target or "unknown"} and '

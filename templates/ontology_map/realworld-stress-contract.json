@@ -1,0 +1,408 @@
+{
+  "title": "OCS R300 Manufacturing Concept Ontology",
+  "subtitle": "Backbone concept chain with subordinate member-card examples; not a process sequence",
+  "diagram_type": "ontology_map",
+  "style": "accent-blueprint",
+  "width": 3300,
+  "height": 700,
+  "top_y": 118,
+  "canvas_margin_x": 60,
+  "concept_width": 260,
+  "concept_header_height": 42,
+  "concept_attribute_row_height": 26,
+  "relationship_col_gap_min": 160,
+  "relationship_row_gap_min": 140,
+  "instance_width": 235,
+  "instance_height": 70,
+  "ontology_instance_lane_gap": 20,
+  "concepts": [
+    {
+      "id": "manufacturing-kb",
+      "label": "Manufacturing KB",
+      "kind": "ontology",
+      "accent": "accent_cyan",
+      "x": 100,
+      "y": 150,
+      "width": 260,
+      "attributes": [
+        {
+          "name": "product: OCS R300"
+        },
+        {
+          "name": "scope: WI Knowledge"
+        },
+        {
+          "name": "role: navigation root"
+        }
+      ],
+      "row": 0
+    },
+    {
+      "id": "process-group-class",
+      "label": "Process Group",
+      "kind": "package",
+      "accent": "accent_green",
+      "x": 650,
+      "y": 150,
+      "width": 260,
+      "attributes": [
+        {
+          "name": "class: WI package groups"
+        },
+        {
+          "name": "members: route families"
+        },
+        {
+          "name": "boundary: group source set"
+        }
+      ],
+      "row": 0
+    },
+    {
+      "id": "controlled-source-class",
+      "label": "Controlled Source",
+      "kind": "source",
+      "accent": "accent_orange",
+      "x": 1200,
+      "y": 150,
+      "width": 260,
+      "attributes": [
+        {
+          "name": "authority: execution record"
+        },
+        {
+          "name": "examples: WI / PLM / MES"
+        },
+        {
+          "name": "controls release decisions"
+        }
+      ],
+      "row": 0
+    },
+    {
+      "id": "distilled-note-class",
+      "label": "Distilled Note",
+      "kind": "process",
+      "accent": "accent_purple",
+      "x": 1750,
+      "y": 150,
+      "width": 260,
+      "attributes": [
+        {
+          "name": "derived from sources"
+        },
+        {
+          "name": "step maps and registers"
+        },
+        {
+          "name": "not controlled WI"
+        }
+      ],
+      "row": 0
+    },
+    {
+      "id": "synthesis-note-class",
+      "label": "Synthesis Note",
+      "kind": "index",
+      "accent": "accent_cyan",
+      "x": 2300,
+      "y": 150,
+      "width": 260,
+      "attributes": [
+        {
+          "name": "cross-group navigation"
+        },
+        {
+          "name": "ontology and query routing"
+        },
+        {
+          "name": "decision support only"
+        }
+      ],
+      "row": 0
+    },
+    {
+      "id": "authority-boundary",
+      "label": "Authority Boundary",
+      "kind": "risk",
+      "accent": "accent_orange",
+      "x": 2850,
+      "y": 150,
+      "width": 260,
+      "attributes": [
+        {
+          "name": "verify current source"
+        },
+        {
+          "name": "no release authority"
+        },
+        {
+          "name": "no rework authority"
+        }
+      ],
+      "row": 0
+    }
+  ],
+  "relationships": [
+    {
+      "id": "kb-classifies-process",
+      "label": "classifies",
+      "from": "manufacturing-kb",
+      "to": "process-group-class",
+      "from_cardinality": "1",
+      "to_cardinality": "0..*",
+      "x": 505,
+      "y": 212,
+      "diamond_width": 118,
+      "diamond_height": 48
+    },
+    {
+      "id": "process-has-source",
+      "label": "has source",
+      "from": "process-group-class",
+      "to": "controlled-source-class",
+      "from_cardinality": "1",
+      "to_cardinality": "0..*",
+      "x": 1055,
+      "y": 212,
+      "diamond_width": 118,
+      "diamond_height": 48
+    },
+    {
+      "id": "source-bounds-note",
+      "label": "source-bounds",
+      "from": "controlled-source-class",
+      "to": "distilled-note-class",
+      "from_cardinality": "1",
+      "to_cardinality": "0..*",
+      "x": 1605,
+      "y": 212,
+      "diamond_width": 118,
+      "diamond_height": 48
+    },
+    {
+      "id": "note-feeds-synthesis",
+      "label": "feeds",
+      "from": "distilled-note-class",
+      "to": "synthesis-note-class",
+      "from_cardinality": "1",
+      "to_cardinality": "0..*",
+      "x": 2155,
+      "y": 212,
+      "diamond_width": 96,
+      "diamond_height": 48
+    },
+    {
+      "id": "synthesis-checks-boundary",
+      "label": "checks",
+      "from": "synthesis-note-class",
+      "to": "authority-boundary",
+      "from_cardinality": "1",
+      "to_cardinality": "0..*",
+      "x": 2705,
+      "y": 212,
+      "diamond_width": 96,
+      "diamond_height": 48
+    }
+  ],
+  "instances": [
+    {
+      "id": "wi-knowledge-section",
+      "label": "WI Knowledge",
+      "subtitle": "vault section",
+      "concept": "manufacturing-kb",
+      "x": 75,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "index",
+      "accent": "accent_cyan",
+      "concept_anchor": "left",
+      "instance_anchor": "top",
+      "lane_offset": -24,
+      "row": 1
+    },
+    {
+      "id": "public-synthesis-notes",
+      "label": "Public Notes",
+      "subtitle": "cross-group synthesis",
+      "concept": "manufacturing-kb",
+      "x": 260,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "index",
+      "accent": "accent_cyan",
+      "concept_anchor": "right",
+      "instance_anchor": "top",
+      "lane_offset": 24,
+      "row": 2
+    },
+    {
+      "id": "process-groups-a",
+      "label": "Route groups A",
+      "subtitle": "MEMS / MCA / OBM / POB",
+      "concept": "process-group-class",
+      "x": 625,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "package",
+      "accent": "accent_green",
+      "concept_anchor": "left",
+      "instance_anchor": "top",
+      "lane_offset": -24,
+      "row": 1
+    },
+    {
+      "id": "process-groups-b",
+      "label": "Faceplate + FRU",
+      "subtitle": "MECH Assy + Final",
+      "concept": "process-group-class",
+      "x": 810,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "package",
+      "accent": "accent_green",
+      "concept_anchor": "right",
+      "instance_anchor": "top",
+      "lane_offset": 24,
+      "row": 2
+    },
+    {
+      "id": "wi-visual-sources",
+      "label": "WI / Visual sources",
+      "subtitle": "PDF and visual aid",
+      "concept": "controlled-source-class",
+      "x": 1175,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "source",
+      "accent": "accent_orange",
+      "concept_anchor": "left",
+      "instance_anchor": "top",
+      "lane_offset": -24,
+      "row": 1
+    },
+    {
+      "id": "plm-mes-records",
+      "label": "PLM / MES records",
+      "subtitle": "BOM, traveler, signoff",
+      "concept": "controlled-source-class",
+      "x": 1360,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "source",
+      "accent": "accent_orange",
+      "concept_anchor": "right",
+      "instance_anchor": "top",
+      "lane_offset": 24,
+      "row": 2
+    },
+    {
+      "id": "inventory-overview",
+      "label": "Inventory / overview",
+      "subtitle": "sources and process context",
+      "concept": "distilled-note-class",
+      "x": 1725,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "registry",
+      "accent": "accent_purple",
+      "concept_anchor": "left",
+      "instance_anchor": "top",
+      "lane_offset": -24,
+      "row": 1
+    },
+    {
+      "id": "step-registers",
+      "label": "Step map / registers",
+      "subtitle": "steps, parameters, CTQ",
+      "concept": "distilled-note-class",
+      "x": 1910,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "process",
+      "accent": "accent_purple",
+      "concept_anchor": "right",
+      "instance_anchor": "top",
+      "lane_offset": 24,
+      "row": 2
+    },
+    {
+      "id": "navigation-notes",
+      "label": "Navigation notes",
+      "subtitle": "Knowledge Map / Query Guide",
+      "concept": "synthesis-note-class",
+      "x": 2275,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "index",
+      "accent": "accent_cyan",
+      "concept_anchor": "left",
+      "instance_anchor": "top",
+      "lane_offset": -24,
+      "row": 1
+    },
+    {
+      "id": "ontology-taxonomy",
+      "label": "Ontology / taxonomy",
+      "subtitle": "Glossary, E2E, risk classes",
+      "concept": "synthesis-note-class",
+      "x": 2460,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "ontology",
+      "accent": "accent_cyan",
+      "concept_anchor": "right",
+      "instance_anchor": "top",
+      "lane_offset": 24,
+      "row": 2
+    },
+    {
+      "id": "not-controlled-wi",
+      "label": "Not controlled WI",
+      "subtitle": "analysis and navigation only",
+      "concept": "authority-boundary",
+      "x": 2825,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "risk",
+      "accent": "accent_orange",
+      "concept_anchor": "left",
+      "instance_anchor": "top",
+      "lane_offset": -24,
+      "row": 1
+    },
+    {
+      "id": "release-rework-check",
+      "label": "Release / rework check",
+      "subtitle": "current controlled source",
+      "concept": "authority-boundary",
+      "x": 3010,
+      "y": 420,
+      "width": 235,
+      "height": 70,
+      "kind": "decision",
+      "accent": "accent_orange",
+      "concept_anchor": "right",
+      "instance_anchor": "top",
+      "lane_offset": 24,
+      "row": 2
+    }
+  ],
+  "annotations": [
+    {
+      "text": "Backbone concept cards carry the ontology chain. Smaller member-card examples stay near their owning concept and do not represent manufacturing sequence or controlled WI authority.",
+      "placement": "footer"
+    }
+  ]
+}
