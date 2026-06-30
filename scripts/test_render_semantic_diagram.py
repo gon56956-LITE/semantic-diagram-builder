@@ -588,6 +588,22 @@ def main() -> int:
         raise AssertionError("multi-source fan-out terminals should use separate target-card anchors")
     if not any('data-direct-lane="1"' in attrs and 'data-route-color="' in attrs for attrs in path_attrs(layered_stress_svg, {"direct-link"})):
         raise AssertionError("single-target source links should share the source-lane color/offset plan")
+    realworld_layered_stress = load_json("templates/layered_knowledge_topology/realworld-stress-contract.json")
+    realworld_layered_svg = assert_valid("real-world layered knowledge topology stress template", realworld_layered_stress)
+    for expected in ("OCS R300 Manufacturing Knowledge Object Map", "Source Inventory", "Controlled Sources"):
+        if expected not in realworld_layered_svg:
+            raise AssertionError(f"real-world layered stress should preserve semantic title text: {expected}")
+    realworld_ctq_anchor_shifts = {
+        (source_id, float(shift))
+        for attrs in path_attrs(realworld_layered_svg, {"fanout", "terminal"})
+        if 'data-target-id="ctq-parameter"' in attrs
+        for source_id in re.findall(r'data-source-id="([^"]+)"', attrs)
+        for shift in re.findall(r'data-target-anchor-shift="([-0-9.]+)"', attrs)
+    }
+    if ("knowledge-map", -9.0) not in realworld_ctq_anchor_shifts or ("glossary-ontology", 9.0) not in realworld_ctq_anchor_shifts:
+        raise AssertionError("real-world layered stress should separate different source anchors at shared synthesis targets")
+    if not any('data-direct-corridor=' in attrs and 'data-route-color="#FFD84D"' in attrs for attrs in path_attrs(realworld_layered_svg, {"direct-link"})):
+        raise AssertionError("real-world layered stress should color shared direct corridors from entry sources")
     shared_direct = {
         "title": "Shared Direct Corridor Regression",
         "diagram_type": "layered_knowledge_topology",

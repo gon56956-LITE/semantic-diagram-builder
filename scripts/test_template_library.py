@@ -139,13 +139,25 @@ def main() -> int:
             fail(f"{entry['contract']} has mismatched style")
         if contract.get("title") != entry["title"]:
             fail(f"{entry['contract']} has mismatched title")
+        ok, messages = contract_validator.check(contract_path)
+        if not ok:
+            fail(f"{entry['contract']} failed contract validation: {messages}")
+        if not svg_path.exists():
+            fail(f"{entry['svg']} does not exist")
+        rendered_svg = renderer.render(contract, contract_path)
+        expected_svg = svg_path.read_text(encoding="utf-8-sig")
+        if rendered_svg.strip() != expected_svg.strip():
+            fail(f"{entry['svg']} is stale; regenerate it from {entry['contract']}")
+        issues = svg_validator.check_svg(expected_svg)
+        if issues:
+            fail(f"{entry['svg']} failed SVG QA: {issues}")
         if entry["variant"] == "minimal":
             fail("template gallery should use reference/stress entries, not minimal entries")
         if diagram_type == "hub_spoke" and _svg_height(svg_path.read_text(encoding="utf-8-sig")) > float(entry.get("max_height", 99999)):
             fail(f"{entry['svg']} canvas is too tall")
 
     for diagram_type, variants in gallery_variants.items():
-        if variants != {"reference", "stress"}:
+        if not {"reference", "stress"} <= variants:
             fail(f"{diagram_type} gallery should include reference and stress templates")
 
     gallery_path = ROOT / manifest["gallery"]

@@ -1,0 +1,303 @@
+{
+  "title": "OCS R300 Manufacturing Knowledge Object Map",
+  "subtitle": "Navigation and synthesis objects over source-bound WI sub-knowledgebases and controlled-source authority",
+  "diagram_type": "layered_knowledge_topology",
+  "style": "accent-blueprint",
+  "width": 2100,
+  "card_width": 360,
+  "card_height": 108,
+  "max_nodes_per_row": 4,
+  "card_col_gap": 64,
+  "card_row_gap": 56,
+  "groups": [
+    {
+      "id": "entry",
+      "label": "ENTRY AND NAVIGATION OBJECTS",
+      "type": "layer",
+      "max_per_row": 4
+    },
+    {
+      "id": "synthesis",
+      "label": "PRODUCT-LEVEL SYNTHESIS OBJECTS",
+      "type": "layer",
+      "max_per_row": 4,
+      "routing": {
+        "mode": "row_bus_side_trunk",
+        "fanout_side": "right",
+        "fanin_side": "left"
+      },
+      "side_gutter": 150,
+      "row_gap": 72
+    },
+    {
+      "id": "wi-groups",
+      "label": "SOURCE-BOUND WI SUB-KNOWLEDGEBASES",
+      "type": "layer",
+      "max_per_row": 4,
+      "routing": {
+        "mode": "row_bus_side_trunk",
+        "fanout_side": "right",
+        "fanin_side": "left"
+      },
+      "side_gutter": 190,
+      "row_gap": 104
+    },
+    {
+      "id": "authority",
+      "label": "CONTROLLED-SOURCE AUTHORITY BOUNDARY",
+      "type": "layer",
+      "max_per_row": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "manufacturing-moc",
+      "label": "MOC",
+      "subtitle": "landing page",
+      "kind": "index",
+      "group": "entry",
+      "row": 0,
+      "col": 0
+    },
+    {
+      "id": "knowledge-map",
+      "label": "Knowledge Map",
+      "subtitle": "object topology",
+      "kind": "capability",
+      "group": "entry",
+      "row": 0,
+      "col": 1
+    },
+    {
+      "id": "query-guide",
+      "label": "Query Guide",
+      "subtitle": "where to look",
+      "kind": "query",
+      "group": "entry",
+      "row": 0,
+      "col": 2
+    },
+    {
+      "id": "glossary-ontology",
+      "label": "Glossary / Ontology",
+      "subtitle": "shared language",
+      "kind": "glossary",
+      "group": "entry",
+      "row": 0,
+      "col": 3
+    },
+    {
+      "id": "e2e-process",
+      "label": "End-to-End Process",
+      "subtitle": "group flow view",
+      "kind": "process",
+      "group": "synthesis",
+      "row": 0,
+      "col": 0
+    },
+    {
+      "id": "ctq-parameter",
+      "label": "CTQ / Parameter",
+      "subtitle": "quality lookup",
+      "kind": "quality",
+      "group": "synthesis",
+      "row": 0,
+      "col": 1
+    },
+    {
+      "id": "risk-taxonomy",
+      "label": "Defect / Risk",
+      "subtitle": "risk lookup",
+      "kind": "risk",
+      "group": "synthesis",
+      "row": 0,
+      "col": 2
+    },
+    {
+      "id": "source-inventory",
+      "label": "Source Inventory",
+      "subtitle": "WI source index",
+      "kind": "registry",
+      "group": "synthesis",
+      "row": 0,
+      "col": 3
+    },
+    {
+      "id": "mems-package",
+      "label": "MEMS Package",
+      "subtitle": "package build",
+      "kind": "package",
+      "group": "wi-groups",
+      "row": 0,
+      "col": 0
+    },
+    {
+      "id": "mca-package",
+      "label": "MCA Package",
+      "subtitle": "FAU / ribbon / ILU",
+      "kind": "package",
+      "group": "wi-groups",
+      "row": 0,
+      "col": 1
+    },
+    {
+      "id": "obm-assy",
+      "label": "OBM Assy",
+      "subtitle": "optical bench",
+      "kind": "package",
+      "group": "wi-groups",
+      "row": 0,
+      "col": 2
+    },
+    {
+      "id": "pob",
+      "label": "POB",
+      "subtitle": "align / package",
+      "kind": "package",
+      "group": "wi-groups",
+      "row": 0,
+      "col": 3
+    },
+    {
+      "id": "faceplate",
+      "label": "Faceplate",
+      "subtitle": "panels / LC / OFDR",
+      "kind": "package",
+      "group": "wi-groups",
+      "row": 1,
+      "col": 0
+    },
+    {
+      "id": "fru",
+      "label": "FRU",
+      "subtitle": "field modules",
+      "kind": "package",
+      "group": "wi-groups",
+      "row": 1,
+      "col": 1
+    },
+    {
+      "id": "mech-assy",
+      "label": "MECH Assy",
+      "subtitle": "ribbon / OEI",
+      "kind": "package",
+      "group": "wi-groups",
+      "row": 1,
+      "col": 2
+    },
+    {
+      "id": "final",
+      "label": "Final",
+      "subtitle": "test / packing",
+      "kind": "package",
+      "group": "wi-groups",
+      "row": 1,
+      "col": 3
+    },
+    {
+      "id": "controlled-source",
+      "label": "Controlled Sources",
+      "subtitle": "WI / PLM / MES authority",
+      "kind": "source",
+      "group": "authority",
+      "row": 0,
+      "col": 0,
+      "importance": "primary"
+    }
+  ],
+  "edges": [
+    {
+      "from": "manufacturing-moc",
+      "to": "knowledge-map",
+      "relation": "opens"
+    },
+    {
+      "from": "knowledge-map",
+      "to": "e2e-process",
+      "relation": "opens"
+    },
+    {
+      "from": "knowledge-map",
+      "to": "ctq-parameter",
+      "relation": "opens"
+    },
+    {
+      "from": "knowledge-map",
+      "to": "risk-taxonomy",
+      "relation": "opens"
+    },
+    {
+      "from": "query-guide",
+      "to": "source-inventory",
+      "relation": "routes"
+    },
+    {
+      "from": "glossary-ontology",
+      "to": "ctq-parameter",
+      "relation": "normalizes",
+      "style": "dashed"
+    },
+    {
+      "from": "glossary-ontology",
+      "to": "risk-taxonomy",
+      "relation": "normalizes",
+      "style": "dashed"
+    },
+    {
+      "from": "e2e-process",
+      "to": "mems-package",
+      "relation": "maps_group"
+    },
+    {
+      "from": "e2e-process",
+      "to": "mca-package",
+      "relation": "maps_group"
+    },
+    {
+      "from": "e2e-process",
+      "to": "obm-assy",
+      "relation": "maps_group"
+    },
+    {
+      "from": "e2e-process",
+      "to": "pob",
+      "relation": "maps_group"
+    },
+    {
+      "from": "e2e-process",
+      "to": "faceplate",
+      "relation": "maps_group"
+    },
+    {
+      "from": "e2e-process",
+      "to": "fru",
+      "relation": "maps_group"
+    },
+    {
+      "from": "e2e-process",
+      "to": "mech-assy",
+      "relation": "maps_group"
+    },
+    {
+      "from": "e2e-process",
+      "to": "final",
+      "relation": "maps_group"
+    },
+    {
+      "from": "mech-assy",
+      "to": "controlled-source",
+      "relation": "source_bound_anchor",
+      "style": "dashed"
+    }
+  ],
+  "annotations": [
+    {
+      "text": "Knowledge Map fan-out opens the core synthesis notes. Query Guide routes to Source Inventory; Glossary/Ontology normalizes CTQ and risk terms on separate lanes.",
+      "placement": "footer"
+    },
+    {
+      "text": "E2E Process maps the eight source-bound WI sub-knowledgebases; controlled WI / PLM / MES records remain authoritative.",
+      "placement": "footer"
+    }
+  ]
+}

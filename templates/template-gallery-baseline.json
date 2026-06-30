@@ -181,6 +181,15 @@
       "svg": "templates/layered_knowledge_topology/stress.svg"
     },
     {
+      "diagram_type": "layered_knowledge_topology",
+      "variant": "realworld-stress",
+      "style": "accent-blueprint",
+      "title": "OCS R300 Manufacturing Knowledge Object Map",
+      "contract": "templates/layered_knowledge_topology/realworld-stress-contract.json",
+      "svg": "templates/layered_knowledge_topology/realworld-stress.svg",
+      "max_height": 1400
+    },
+    {
       "diagram_type": "source_boundary_map",
       "variant": "reference",
       "style": "accent-blueprint",
