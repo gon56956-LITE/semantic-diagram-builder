@@ -1337,8 +1337,7 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
         cls_parts = ["edge"]
         if edge.get("style") == "dashed":
             cls_parts.append("edge-dashed")
-        if shared_corridor:
-            cls_parts.append("direct-link")
+        cls_parts.append("direct-link")
         cls = " ".join(cls_parts)
         extra_attrs = _direct_edge_attrs(
             model.get("style", {}),
@@ -1348,6 +1347,8 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
             lane_shift=lane_shift,
             corridor_key=corridor_key,
         )
+        direct_metadata = f'data-from="{e(fr)}" data-to="{e(to)}" data-source-id="{e(fr)}" data-target-id="{e(to)}"'
+        extra_attrs = f"{direct_metadata} {extra_attrs}".strip()
         if target_anchor_attrs:
             extra_attrs = f"{extra_attrs} {target_anchor_attrs}".strip()
         paths.append(_path(edge_path(positions[fr], positions[to], bus_y, target_shift), cls, "arrow", extra_attrs))

@@ -936,7 +936,7 @@ def _check_terminal_target_anchors(svg: str, issues: list[str]) -> None:
     by_target: dict[str, list[dict]] = {}
     for path in _connector_paths(svg):
         classes = set(str(path.get('classes', '')).split())
-        if 'terminal' not in classes:
+        if not ({'terminal', 'direct-link'} & classes):
             continue
         attrs = str(path.get('attrs', ''))
         target = _attr_value(DATA_TARGET_ID_RE, attrs)

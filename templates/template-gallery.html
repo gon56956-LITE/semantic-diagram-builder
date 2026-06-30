@@ -79,9 +79,9 @@
 <path d="M 812.0 989.0 L 1443.0 989.0" class="edge fanin route-shared bus"/>
 <path d="M 814.0 989.0 L 807.0 989.0 Q 800.0 989.0 800.0 996.0 L 800.0 1103.0" class="edge fanin route-shared merge"/>
 <path d="M 800.0 957.0 L 800.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)"/>
-<path d="M 772.0 229.0 L 828.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
-<path d="M 592.0 279 L 592.0 407" class="edge" marker-end="url(#arrow)"/>
-<path d="M 592.0 279 L 592.0 329.0 Q 592.0 343.0 606.0 343.0 L 994.0 343.0 Q 1008.0 343.0 1008.0 357.0 L 1008.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 772.0 229.0 L 828.0 229.0" class="edge edge-dashed direct-link" marker-end="url(#arrow)" data-from="portal" data-to="registry" data-source-id="portal" data-target-id="registry"/>
+<path d="M 592.0 279 L 592.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="domain_map" data-source-id="portal" data-target-id="domain_map"/>
+<path d="M 592.0 279 L 592.0 329.0 Q 592.0 343.0 606.0 343.0 L 994.0 343.0 Q 1008.0 343.0 1008.0 357.0 L 1008.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="rules" data-source-id="portal" data-target-id="rules"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="158.4" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Navigation layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="349" width="150.0" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Synthesis layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="577" width="242.4" height="30" rx="7" fill="#F8FBFF" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable knowledge modules</text></g>
@@ -187,8 +187,8 @@
 <path d="M 1144.0 1047.0 L 1151.0 1047.0 Q 1158.0 1047.0 1158.0 1054.0 L 1158.0 1061.0" class="edge fanin route-shared merge" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
 <path d="M 1172.0 1047.0 L 1165.0 1047.0 Q 1158.0 1047.0 1158.0 1054.0 L 1158.0 1061.0" class="edge fanin route-shared merge" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
 <path d="M 1158.0 1061.0 L 1158.0 1145.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
-<path d="M 506.0 229.0 L 562.0 229.0" class="edge" marker-end="url(#arrow)"/>
-<path d="M 1158.0 279 L 1158.0 338.0 Q 1158.0 352.0 1172.0 352.0 L 1504.5 352.0 Q 1518.5 352.0 1518.5 366.0 L 1518.5 449" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#FFD84D" data-route-color="#FFD84D" data-direct-corridor="down:279:449" data-direct-lane="1" data-lane-shift="-12.0"/>
+<path d="M 506.0 229.0 L 562.0 229.0" class="edge direct-link" marker-end="url(#arrow)" data-from="moc" data-to="knowledge_map" data-source-id="moc" data-target-id="knowledge_map"/>
+<path d="M 1158.0 279 L 1158.0 338.0 Q 1158.0 352.0 1172.0 352.0 L 1504.5 352.0 Q 1518.5 352.0 1518.5 366.0 L 1518.5 449" class="edge direct-link" marker-end="url(#arrow)" data-from="query" data-to="source_inventory" data-source-id="query" data-target-id="source_inventory" style="stroke:#FFD84D" data-route-color="#FFD84D" data-direct-corridor="down:279:449" data-direct-lane="1" data-lane-shift="-12.0"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="242.4" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Entry and navigation layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="349" width="284.40000000000003" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Product-level synthesis objects</text></g>
 <g class="group-label-wrap"><rect x="88" y="619" width="343.2" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="639" class="group-label">WI-derived reusable knowledge packages</text></g>
@@ -283,9 +283,9 @@
 <path d="M 858.5 883.0 L 851.5 883.0 Q 844.5 883.0 844.5 890.0 L 844.5 915.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#FFD84D" data-route-family="2" data-route-color="#FFD84D" data-target-id="fru"/>
 <path d="M 1269.5 883.0 L 1262.5 883.0 Q 1255.5 883.0 1255.5 890.0 L 1255.5 915.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#FFD84D" data-route-family="2" data-route-color="#FFD84D" data-target-id="mech-assy"/>
 <path d="M 1680.5 883.0 L 1673.5 883.0 Q 1666.5 883.0 1666.5 890.0 L 1666.5 915.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#FFD84D" data-route-family="2" data-route-color="#FFD84D" data-target-id="final"/>
-<path d="M 594.0 233.0 L 658.0 233.0" class="edge" marker-end="url(#arrow)"/>
-<path d="M 1262.0 287 L 1262.0 346.0 Q 1262.0 360.0 1276.0 360.0 L 1672.0 360.0 Q 1686.0 360.0 1686.0 374.0 L 1686.0 457" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#FFD84D" data-route-color="#FFD84D" data-direct-corridor="down:287:457" data-direct-lane="1" data-lane-shift="-12.0"/>
-<path d="M 1255.5 1023 L 1255.5 1073.0 Q 1255.5 1087.0 1241.5 1087.0 L 1064.0 1087.0 Q 1050.0 1087.0 1050.0 1101.0 L 1050.0 1151" class="edge edge-dashed" marker-end="url(#arrow)"/>
+<path d="M 594.0 233.0 L 658.0 233.0" class="edge direct-link" marker-end="url(#arrow)" data-from="manufacturing-moc" data-to="knowledge-map" data-source-id="manufacturing-moc" data-target-id="knowledge-map"/>
+<path d="M 1262.0 287 L 1262.0 346.0 Q 1262.0 360.0 1276.0 360.0 L 1672.0 360.0 Q 1686.0 360.0 1686.0 374.0 L 1686.0 457" class="edge direct-link" marker-end="url(#arrow)" data-from="query-guide" data-to="source-inventory" data-source-id="query-guide" data-target-id="source-inventory" style="stroke:#FFD84D" data-route-color="#FFD84D" data-direct-corridor="down:287:457" data-direct-lane="1" data-lane-shift="-12.0"/>
+<path d="M 1255.5 1023 L 1255.5 1073.0 Q 1255.5 1087.0 1241.5 1087.0 L 1064.0 1087.0 Q 1050.0 1087.0 1050.0 1101.0 L 1050.0 1151" class="edge edge-dashed direct-link" marker-end="url(#arrow)" data-from="mech-assy" data-to="controlled-source" data-source-id="mech-assy" data-target-id="controlled-source"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="259.20000000000005" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">ENTRY AND NAVIGATION OBJECTS</text></g>
 <g class="group-label-wrap"><rect x="88" y="357" width="284.40000000000003" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="377" class="group-label">PRODUCT-LEVEL SYNTHESIS OBJECTS</text></g>
 <g class="group-label-wrap"><rect x="88" y="635" width="309.6" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="655" class="group-label">SOURCE-BOUND WI SUB-KNOWLEDGEBASES</text></g>
@@ -376,10 +376,10 @@
 <path d="M 780.0 989.0 L 1379.0 989.0" class="edge fanin route-shared bus" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
 <path d="M 782.0 989.0 L 775.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1103.0" class="edge fanin route-shared merge" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
 <path d="M 768.0 957.0 L 768.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 740.0 229.0 L 796.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
-<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge" marker-end="url(#arrow)"/>
-<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 754.0 343.0 Q 768.0 343.0 768.0 357.0 L 768.0 407" class="edge" marker-end="url(#arrow)"/>
-<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 1170.0 343.0 Q 1184.0 343.0 1184.0 357.0 L 1184.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 740.0 229.0 L 796.0 229.0" class="edge edge-dashed direct-link" marker-end="url(#arrow)" data-from="portal" data-to="glossary" data-source-id="portal" data-target-id="glossary"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="rules" data-source-id="portal" data-target-id="rules"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 754.0 343.0 Q 768.0 343.0 768.0 357.0 L 768.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="domain_map" data-source-id="portal" data-target-id="domain_map"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 1170.0 343.0 Q 1184.0 343.0 1184.0 357.0 L 1184.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="risk" data-source-id="portal" data-target-id="risk"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Navigation / access layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="349" width="276.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Synthesis and governance layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="577" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable knowledge assets</text></g>
@@ -476,10 +476,10 @@
 <path d="M 1144.0 1005.0 L 1151.0 1005.0 Q 1158.0 1005.0 1158.0 1012.0 L 1158.0 1019.0" class="edge fanin route-shared merge" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
 <path d="M 1172.0 1005.0 L 1165.0 1005.0 Q 1158.0 1005.0 1158.0 1012.0 L 1158.0 1019.0" class="edge fanin route-shared merge" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
 <path d="M 1158.0 1019.0 L 1158.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
-<path d="M 922.0 229.0 L 978.0 229.0" class="edge edge-dashed" marker-end="url(#arrow)"/>
-<path d="M 742.0 279 L 742.0 329.0 Q 742.0 343.0 728.0 343.0 L 548.0 343.0 Q 534.0 343.0 534.0 357.0 L 534.0 407" class="edge" marker-end="url(#arrow)"/>
-<path d="M 742.0 279 L 742.0 329.0 Q 742.0 343.0 756.0 343.0 L 936.0 343.0 Q 950.0 343.0 950.0 357.0 L 950.0 407" class="edge" marker-end="url(#arrow)"/>
-<path d="M 742.0 279 L 742.0 329.0 Q 742.0 343.0 756.0 343.0 L 1352.0 343.0 Q 1366.0 343.0 1366.0 357.0 L 1366.0 407" class="edge" marker-end="url(#arrow)"/>
+<path d="M 922.0 229.0 L 978.0 229.0" class="edge edge-dashed direct-link" marker-end="url(#arrow)" data-from="portal" data-to="glossary" data-source-id="portal" data-target-id="glossary"/>
+<path d="M 742.0 279 L 742.0 329.0 Q 742.0 343.0 728.0 343.0 L 548.0 343.0 Q 534.0 343.0 534.0 357.0 L 534.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="domain_model" data-source-id="portal" data-target-id="domain_model"/>
+<path d="M 742.0 279 L 742.0 329.0 Q 742.0 343.0 756.0 343.0 L 936.0 343.0 Q 950.0 343.0 950.0 357.0 L 950.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="risk_taxonomy" data-source-id="portal" data-target-id="risk_taxonomy"/>
+<path d="M 742.0 279 L 742.0 329.0 Q 742.0 343.0 756.0 343.0 L 1352.0 343.0 Q 1366.0 343.0 1366.0 357.0 L 1366.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="ownership_rules" data-source-id="portal" data-target-id="ownership_rules"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="284.40000000000003" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Access and interpretation layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="349" width="183.6" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Derived model layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="577" width="217.20000000000002" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable derived assets</text></g>

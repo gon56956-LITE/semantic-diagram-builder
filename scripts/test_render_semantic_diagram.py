@@ -651,6 +651,44 @@ def main() -> int:
     if not any("edge-dashed" in attrs and 'data-route-color="' in attrs for attrs in shared_direct_attrs):
         raise AssertionError("dashed direct links in shared corridors should keep dash semantics while receiving a route color")
 
+    direct_shared_target = {
+        "title": "Direct Shared Target Anchor Regression",
+        "diagram_type": "layered_knowledge_topology",
+        "style": "accent-blueprint",
+        "width": 1200,
+        "max_nodes_per_row": 3,
+        "groups": [
+            {"id": "entry", "label": "Entry", "type": "layer"},
+            {"id": "synthesis", "label": "Synthesis", "type": "layer"},
+        ],
+        "nodes": [
+            {"id": "source_a", "label": "Source A", "subtitle": "primary", "kind": "index", "group": "entry"},
+            {"id": "source_b", "label": "Source B", "subtitle": "dashed", "kind": "glossary", "group": "entry"},
+            {"id": "target", "label": "Shared Target", "subtitle": "two source entry", "kind": "quality", "group": "synthesis"},
+        ],
+        "edges": [
+            {"from": "source_a", "to": "target", "relation": "opens"},
+            {"from": "source_b", "to": "target", "relation": "normalizes", "style": "dashed"},
+        ],
+    }
+    direct_shared_target_svg = assert_valid("direct shared target anchor regression", direct_shared_target)
+    direct_target_attrs = [
+        attrs for attrs in path_attrs(direct_shared_target_svg, {"direct-link"})
+        if 'data-target-id="target"' in attrs
+    ]
+    if len(direct_target_attrs) != 2:
+        raise AssertionError("multi-source direct target regression should render two direct-link connectors")
+    direct_target_shifts = {
+        (source_id, float(shift))
+        for attrs in direct_target_attrs
+        for source_id in re.findall(r'data-source-id="([^"]+)"', attrs)
+        for shift in re.findall(r'data-target-anchor-shift="([-0-9.]+)"', attrs)
+    }
+    if ("source_a", -9.0) not in direct_target_shifts or ("source_b", 9.0) not in direct_target_shifts:
+        raise AssertionError("multi-source direct links should use separate target-card anchors")
+    if not all('data-from="' in attrs and 'data-to="target"' in attrs for attrs in direct_target_attrs):
+        raise AssertionError("direct links should expose source/target metadata for SVG QA")
+
     same_source_fanout = copy.deepcopy(shared_direct)
     same_source_fanout["title"] = "Same Source Fanout Regression"
     same_source_fanout["edges"] = [
@@ -659,7 +697,11 @@ def main() -> int:
         {"from": "source_b", "to": "target_c", "relation": "opens"},
     ]
     same_source_svg = assert_valid("same source fanout regression", same_source_fanout)
-    if path_attrs(same_source_svg, {"direct-link"}):
+    same_source_direct_attrs = path_attrs(same_source_svg, {"direct-link"})
+    if any(
+        'data-direct-corridor=' in attrs or 'data-route-color=' in attrs or 'data-direct-lane=' in attrs
+        for attrs in same_source_direct_attrs
+    ):
         raise AssertionError("same-source direct fan-out should not be colored or staggered as a multi-source shared corridor")
 
     layered_family_bus_y = {

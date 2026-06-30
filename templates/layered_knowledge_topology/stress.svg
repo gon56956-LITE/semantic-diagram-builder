@@ -78,8 +78,8 @@
 <path d="M 1144.0 1047.0 L 1151.0 1047.0 Q 1158.0 1047.0 1158.0 1054.0 L 1158.0 1061.0" class="edge fanin route-shared merge" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
 <path d="M 1172.0 1047.0 L 1165.0 1047.0 Q 1158.0 1047.0 1158.0 1054.0 L 1158.0 1061.0" class="edge fanin route-shared merge" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
 <path d="M 1158.0 1061.0 L 1158.0 1145.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)" style="stroke:#B56CFF" data-route-family="1" data-route-color="#B56CFF"/>
-<path d="M 506.0 229.0 L 562.0 229.0" class="edge" marker-end="url(#arrow)"/>
-<path d="M 1158.0 279 L 1158.0 338.0 Q 1158.0 352.0 1172.0 352.0 L 1504.5 352.0 Q 1518.5 352.0 1518.5 366.0 L 1518.5 449" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#FFD84D" data-route-color="#FFD84D" data-direct-corridor="down:279:449" data-direct-lane="1" data-lane-shift="-12.0"/>
+<path d="M 506.0 229.0 L 562.0 229.0" class="edge direct-link" marker-end="url(#arrow)" data-from="moc" data-to="knowledge_map" data-source-id="moc" data-target-id="knowledge_map"/>
+<path d="M 1158.0 279 L 1158.0 338.0 Q 1158.0 352.0 1172.0 352.0 L 1504.5 352.0 Q 1518.5 352.0 1518.5 366.0 L 1518.5 449" class="edge direct-link" marker-end="url(#arrow)" data-from="query" data-to="source_inventory" data-source-id="query" data-target-id="source_inventory" style="stroke:#FFD84D" data-route-color="#FFD84D" data-direct-corridor="down:279:449" data-direct-lane="1" data-lane-shift="-12.0"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="242.4" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Entry and navigation layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="349" width="284.40000000000003" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Product-level synthesis objects</text></g>
 <g class="group-label-wrap"><rect x="88" y="619" width="343.2" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="639" class="group-label">WI-derived reusable knowledge packages</text></g>
