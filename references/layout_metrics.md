@@ -30,6 +30,9 @@ These metrics keep semantic diagrams visually consistent. Use them as defaults u
 - Orthogonal connector turns should use rounded `Q` corners. Avoid hard 90-degree turns in hand-authored SVGs unless the diagram is intentionally grid-like.
 - Do not add parallel bus lanes as a default style. Use a single clear bus unless the user explicitly requests multiple lanes and the diagram remains readable.
 - Side-trunk gutter default for generated multi-row routing: reserve at least `130 px` inside the layer side gutter. The default fan-out side is right; the default fan-in side is left.
+- `family_lane_gap` / `fanout_lane_gap` / `direct_lane_gap` separate different source families only when they share a corridor; same-source fan-out should normally stay grouped on one route family.
+- `terminal_anchor_gap` defaults to about `18 px` and separates final target-card entry anchors when multiple different sources enter the same target. Use it to improve source/target traceability, not as a height-compression tool.
+- Direct cross-layer links should use the same target-anchor separation rule as fan-out terminal branches when multiple sources enter one target card.
 
 ## Layer container metrics
 

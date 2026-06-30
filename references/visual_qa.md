@@ -18,6 +18,10 @@ Run this checklist before delivering a semantic diagram.
 - Fan-out bus sits inside the target layer with visible clearance above the target card row; arrowheads do not touch or crowd the bus.
 - Fan-in bus sits inside the source layer with visible clearance below the source card row; only a single trunk crosses into the next layer after merge.
 - Parallel sibling nodes split and merge within their own layer; only a single trunk crosses into the next layer after merge.
+- Same-source fan-out stays visually grouped unless the group itself becomes unreadable; do not treat one source opening several targets as several unrelated source lanes.
+- Multiple source families from the same layer that share a downstream corridor are separated by color and/or lane offset while preserving solid/dashed semantics.
+- When different sources enter the same target card, the final target anchors are visibly offset so the last arrow segments remain traceable.
+- Direct cross-layer links expose source/target metadata and follow the same shared-target anchor rule as fan-out terminal branches.
 - Layer titles, boundary captions, and explanatory notes do not share space with connector buses.
 
 ## Text
@@ -58,4 +62,6 @@ Checks:
 - For multi-row sibling sets, verify fan-out and fan-in paths separately: each row should have its own bus channel, and no route should pass through or touch a sibling card.
 - Do not fake a rounded elbow by composing two separate straight paths that visually meet at a hard 90-degree corner. If a user-perceived route changes direction, encode that route segment with a `Q` rounded elbow in the actual path data.
 - Audit multi-path T-junctions and merge-junctions visually, not only individual path data. A vertical stem meeting a horizontal bus is still a hard visual corner unless the branch route curves into the bus with a `Q` elbow.
+- Audit `data-source-id`, `data-target-id`, `data-target-anchor-lane`, and `data-target-anchor-shift` when a target card receives multiple source families. Missing metadata usually means automated QA cannot protect the shared-target route.
+- For `direct-link` paths, audit `data-from` and `data-to` in addition to the rendered geometry; direct links without source/target metadata cannot be checked for shared-corridor or shared-target ambiguity.
 - Colored connector legends must sit in empty layer space or a side/footer area, never on top of a bus or arrow corridor.

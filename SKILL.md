@@ -180,6 +180,10 @@ The renderer fails if `style` is missing or cannot be loaded. This is intentiona
 - For fan-in from parallel sibling cards, place the horizontal merge bus inside the source layer below the cards, then use one trunk for the cross-layer transition.
 - For parallel sibling cards with split or merge edges, complete the split/merge within the sibling layer and use one trunk for the cross-layer transition. If the bus needs room, increase the layer band height instead of pushing the bus into the gap.
 - For multi-row sibling sets, prefer `routing.mode: "row_bus_side_trunk"` with explicit `row`/`col` fields. Fan-out uses row-level buses above each target row; fan-in uses row-level buses below each source row; side trunks carry lower-row routes through the layer gutter.
+- Same-source fan-out may share one color and one bus family; do not stagger every branch just because one source opens multiple sibling targets.
+- When multiple sources in the same layer each route into a downstream layer, give each source family a distinct route color/lane when they share a corridor. Preserve dashed/secondary semantics while still separating the lane visually.
+- When multiple different sources enter the same target card, offset the target-card anchor points enough that the final arrow segments remain distinguishable. This applies to both fan-out terminal branches and direct cross-layer links.
+- Direct cross-layer links should carry source/target metadata such as `data-from`, `data-to`, `data-source-id`, and `data-target-id` so automated QA can verify shared-corridor and shared-target behavior.
 - Before editing an existing SVG referenced by a note, resolve the exact embedded or linked SVG path from the note/selection. Do not infer the target from a similar diagram title or filename.
 - Preserve connector semantics when making manual SVG geometry fixes. Do not change classes such as `.line` and `.bus`, marker settings, or arrowhead behavior unless the intended semantic relation changed.
 - For side backbone-to-label or backbone-to-pill connectors, stop the main backbone at the last branch origin. Do not let the backbone continue to the branch endpoint, because that creates a visible extra tail below the final rounded elbow.
@@ -204,6 +208,9 @@ Before final delivery, verify:
 - No card title/subtitle collision.
 - Connectors do not run through cards.
 - Arrowheads are not hidden inside corners or text, and they point into the side/top/bottom anchor they visually enter.
+- Different source families that share a corridor are visibly separated by color and/or lane offset; same-source fan-out remains grouped unless the grouped route itself becomes unreadable.
+- Multiple source families entering the same target card use separate target anchors; their final arrow segments should not collapse into one indistinguishable entry point.
+- Direct-link paths expose source/target metadata and participate in the same shared-target QA as fan-out terminal branches.
 - Rounded elbows bend in the direction of travel; no curled or backward-facing corners. Orthogonal connector turns should use rounded corners, not hard 90-degree corners, when the SVG is manually authored.
 - QA both single-path turns and multi-path visual junctions. A vertical branch meeting a horizontal bus is still a hard T-junction unless the branch curves into the bus with a `Q` elbow.
 - Icons are semantically distinct when node kinds differ, and icon strokes stay inside the badge/card.
