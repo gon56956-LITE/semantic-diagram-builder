@@ -696,7 +696,7 @@ def left_mid(pos):
     return x, y + h / 2
 
 
-def edge_path(a, b, bus_y: float | None = None) -> str:
+def edge_path(a, b, bus_y: float | None = None, target_x_shift: float = 0.0) -> str:
     ax, ay, aw, ah = a
     bx, by, bw, bh = b
     # Same visual row: route horizontally so the arrowhead points into the side anchor.
@@ -709,6 +709,7 @@ def edge_path(a, b, bus_y: float | None = None) -> str:
     # the actual turn so corners do not curl in the opposite direction.
     sx, sy = center_bottom(a) if ay < by else center_top(a)
     tx, ty = center_top(b) if ay < by else center_bottom(b)
+    tx += target_x_shift
     if abs(tx - sx) < 1e-6:
         return f'M {sx} {sy} L {tx} {ty}'
     mid_y = bus_y if bus_y is not None else (sy + ty) / 2
@@ -856,6 +857,40 @@ def _direct_edge_attrs(
     return " ".join(attrs)
 
 
+def _terminal_anchor_lane_shift(style: dict, lane_index: int, lane_count: int) -> float:
+    if lane_count <= 1:
+        return 0.0
+    connector = _style_component(style, "connector")
+    gap = float(connector.get("terminal_anchor_gap", 18.0))
+    return (lane_index - (lane_count - 1) / 2) * gap
+
+
+def _target_anchor_lanes(stats: dict, edges: list[dict]) -> dict[tuple[str, str], tuple[int, int]]:
+    node_groups = stats["node_groups"]
+    group_order = stats["group_order"]
+    target_sources: dict[tuple[str, str, str], list[str]] = {}
+    for edge in edges:
+        fr, to = edge.get("from"), edge.get("to")
+        source_group = node_groups.get(fr)
+        target_group = node_groups.get(to)
+        if not source_group or not target_group or source_group == target_group:
+            continue
+        if group_order.get(source_group, 0) >= group_order.get(target_group, 0):
+            continue
+        key = (source_group, target_group, to)
+        source_order = target_sources.setdefault(key, [])
+        if fr not in source_order:
+            source_order.append(fr)
+
+    lanes: dict[tuple[str, str], tuple[int, int]] = {}
+    for (_source_group, _target_group, target_id), source_order in target_sources.items():
+        if len(source_order) <= 1:
+            continue
+        for lane_index, source_id in enumerate(source_order):
+            lanes[(source_id, target_id)] = (lane_index, len(source_order))
+    return lanes
+
+
 def _source_lane_indices(stats: dict, edges: list[dict]) -> dict[tuple[str, str, str], int]:
     node_groups = stats["node_groups"]
     group_order = stats["group_order"]
@@ -987,6 +1022,7 @@ def _fanout_family_paths(
     *,
     use_lane_shift: bool = False,
     edge_lookup: dict[tuple[str, str], dict] | None = None,
+    target_anchor_lanes: dict[tuple[str, str], tuple[int, int]] | None = None,
 ) -> tuple[list[str], set[tuple[str, str]]]:
     positions = model["positions"]
     layout = model["group_layouts"].get(target_group)
@@ -1069,7 +1105,7 @@ def _fanout_family_paths(
     for row in sorted(row_targets):
         targets = row_targets[row]
         bus_y = layout["rows"][row]["fanout_bus_y"] + lane_shift
-        terminal_paths = []
+        terminal_paths: list[tuple[str, str]] = []
         upstream_x = sx if row == first_row else trunk_x
         if row == first_row:
             bus_points = list(source_bus_anchors)
@@ -1079,16 +1115,27 @@ def _fanout_family_paths(
             bus_points = [trunk_anchor_x]
         for target_id in targets:
             tx, ty = center_top(positions[target_id])
+            terminal_attrs = f'{family_attrs} data-target-id="{e(target_id)}"'
+            target_lane = target_anchor_lanes.get((source_id, target_id)) if target_anchor_lanes else None
+            if target_lane:
+                target_lane_index, target_lane_count = target_lane
+                target_shift = _terminal_anchor_lane_shift(style, target_lane_index, target_lane_count)
+                tx += target_shift
+                terminal_attrs = (
+                    f'{terminal_attrs} data-target-anchor-lane="{target_lane_index}" '
+                    f'data-target-anchor-count="{target_lane_count}" '
+                    f'data-target-anchor-shift="{round(target_shift, 2)}"'
+                )
             if row == first_row and abs(tx - sx) < 1e-6:
-                terminal_paths.append(_vertical_branch(tx, bus_y, ty))
+                terminal_paths.append((_vertical_branch(tx, bus_y, ty), terminal_attrs))
                 continue
             terminal_path, terminal_anchor = _curve_from_bus_from_side(tx, bus_y, ty, upstream_x)
-            terminal_paths.append(terminal_path)
+            terminal_paths.append((terminal_path, terminal_attrs))
             bus_points.append(terminal_anchor)
         for bus_d in _horizontal_bus_segments(bus_points, bus_y):
             paths.append(_path(bus_d, f"edge{dash_class} fanout route-shared bus", extra_attrs=family_attrs))
-        for terminal_path in terminal_paths:
-            paths.append(_path(terminal_path, f"edge{dash_class} fanout terminal", "arrow-fanout", family_attrs))
+        for terminal_path, terminal_attrs in terminal_paths:
+            paths.append(_path(terminal_path, f"edge{dash_class} fanout terminal", "arrow-fanout", terminal_attrs))
     return paths, routed
 
 
@@ -1206,6 +1253,7 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
     stats = model["stats"]
     edge_lookup = {(edge.get("from"), edge.get("to")): edge for edge in edges}
     source_lanes = _source_lane_indices(stats, edges)
+    target_anchor_lanes = _target_anchor_lanes(stats, edges)
     for family_index, ((source_id, target_group), target_ids) in enumerate(stats["fanout_families"].items()):
         source_group = stats["node_groups"].get(source_id)
         source_lane = source_lanes.get((source_group, target_group, source_id), 0)
@@ -1218,6 +1266,7 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
             source_lane,
             use_lane_shift=(source_group, target_group, source_id) in source_lanes,
             edge_lookup=edge_lookup,
+            target_anchor_lanes=target_anchor_lanes,
         )
         paths.extend(family_paths)
         routed_edges.update(family_edges)
@@ -1274,6 +1323,17 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
         lane_index = direct_lane_indices.get(direct_index, 0)
         lane_shift = _direct_corridor_lane_shift(model.get("style", {}), lane_index) if shared_corridor else 0.0
         bus_y = _direct_corridor_bus_y(positions[fr], positions[to], lane_shift) if shared_corridor else None
+        target_shift = 0.0
+        target_lane = target_anchor_lanes.get((fr, to))
+        target_anchor_attrs = ""
+        if target_lane:
+            target_lane_index, target_lane_count = target_lane
+            target_shift = _terminal_anchor_lane_shift(model.get("style", {}), target_lane_index, target_lane_count)
+            target_anchor_attrs = (
+                f'data-target-anchor-lane="{target_lane_index}" '
+                f'data-target-anchor-count="{target_lane_count}" '
+                f'data-target-anchor-shift="{round(target_shift, 2)}"'
+            )
         cls_parts = ["edge"]
         if edge.get("style") == "dashed":
             cls_parts.append("edge-dashed")
@@ -1288,7 +1348,9 @@ def routed_edge_paths(model: dict, edges: list[dict]) -> list[str]:
             lane_shift=lane_shift,
             corridor_key=corridor_key,
         )
-        paths.append(_path(edge_path(positions[fr], positions[to], bus_y), cls, "arrow", extra_attrs))
+        if target_anchor_attrs:
+            extra_attrs = f"{extra_attrs} {target_anchor_attrs}".strip()
+        paths.append(_path(edge_path(positions[fr], positions[to], bus_y, target_shift), cls, "arrow", extra_attrs))
     return paths
 
 

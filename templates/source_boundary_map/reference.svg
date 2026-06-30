@@ -40,12 +40,12 @@
 <path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 775.0 613.0 L 782.0 613.0" class="edge fanout route-shared branch" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
 <path d="M 1377.0 613.0 L 1384.0 613.0 Q 1391.0 613.0 1391.0 620.0 L 1391.0 818.0 Q 1391.0 825.0 1384.0 825.0 L 1377.0 825.0" class="edge fanout route-shared trunk" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
 <path d="M 396.0 613.0 L 1379.0 613.0" class="edge fanout route-shared bus" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 398.0 613.0 L 391.0 613.0 Q 384.0 613.0 384.0 620.0 L 384.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 768.0 613.0 L 768.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 1138.0 613.0 L 1145.0 613.0 Q 1152.0 613.0 1152.0 620.0 L 1152.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
+<path d="M 398.0 613.0 L 391.0 613.0 Q 384.0 613.0 384.0 620.0 L 384.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_a"/>
+<path d="M 768.0 613.0 L 768.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_b"/>
+<path d="M 1138.0 613.0 L 1145.0 613.0 Q 1152.0 613.0 1152.0 620.0 L 1152.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_c"/>
 <path d="M 780.0 825.0 L 1379.0 825.0" class="edge fanout route-shared bus" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 782.0 825.0 L 775.0 825.0 Q 768.0 825.0 768.0 832.0 L 768.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 1166.0 825.0 L 1159.0 825.0 Q 1152.0 825.0 1152.0 832.0 L 1152.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
+<path d="M 782.0 825.0 L 775.0 825.0 Q 768.0 825.0 768.0 832.0 L 768.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_d"/>
+<path d="M 1166.0 825.0 L 1159.0 825.0 Q 1152.0 825.0 1152.0 832.0 L 1152.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_e"/>
 <path d="M 1377.0 777.0 L 1384.0 777.0 Q 1391.0 777.0 1391.0 784.0 L 1391.0 982.0 Q 1391.0 989.0 1384.0 989.0 L 1377.0 989.0" class="edge fanin route-shared trunk" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
 <path d="M 384.0 745.0 L 384.0 770.0 Q 384.0 777.0 391.0 777.0 L 398.0 777.0" class="edge fanin route-shared branch" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
 <path d="M 768.0 745.0 L 768.0 770.0 Q 768.0 777.0 775.0 777.0 L 782.0 777.0" class="edge fanin route-shared branch" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>

@@ -38,12 +38,12 @@
 <path d="M 592.0 507.0 L 592.0 606.0 Q 592.0 613.0 599.0 613.0 L 606.0 613.0" class="edge fanout route-shared branch"/>
 <path d="M 1441.0 613.0 L 1448.0 613.0 Q 1455.0 613.0 1455.0 620.0 L 1455.0 818.0 Q 1455.0 825.0 1448.0 825.0 L 1441.0 825.0" class="edge fanout route-shared trunk"/>
 <path d="M 406.67 613.0 L 1443.0 613.0" class="edge fanout route-shared bus"/>
-<path d="M 408.67 613.0 L 401.67 613.0 Q 394.67 613.0 394.67 620.0 L 394.67 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
-<path d="M 786.0 613.0 L 793.0 613.0 Q 800.0 613.0 800.0 620.0 L 800.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
-<path d="M 1191.33 613.0 L 1198.33 613.0 Q 1205.33 613.0 1205.33 620.0 L 1205.33 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 408.67 613.0 L 401.67 613.0 Q 394.67 613.0 394.67 620.0 L 394.67 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" data-target-id="module_a"/>
+<path d="M 786.0 613.0 L 793.0 613.0 Q 800.0 613.0 800.0 620.0 L 800.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" data-target-id="module_b"/>
+<path d="M 1191.33 613.0 L 1198.33 613.0 Q 1205.33 613.0 1205.33 620.0 L 1205.33 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" data-target-id="module_c"/>
 <path d="M 812.0 825.0 L 1443.0 825.0" class="edge fanout route-shared bus"/>
-<path d="M 814.0 825.0 L 807.0 825.0 Q 800.0 825.0 800.0 832.0 L 800.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
-<path d="M 1219.33 825.0 L 1212.33 825.0 Q 1205.33 825.0 1205.33 832.0 L 1205.33 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)"/>
+<path d="M 814.0 825.0 L 807.0 825.0 Q 800.0 825.0 800.0 832.0 L 800.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" data-target-id="module_d"/>
+<path d="M 1219.33 825.0 L 1212.33 825.0 Q 1205.33 825.0 1205.33 832.0 L 1205.33 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" data-target-id="module_e"/>
 <path d="M 1441.0 777.0 L 1448.0 777.0 Q 1455.0 777.0 1455.0 784.0 L 1455.0 982.0 Q 1455.0 989.0 1448.0 989.0 L 1441.0 989.0" class="edge fanin route-shared trunk"/>
 <path d="M 394.67 745.0 L 394.67 770.0 Q 394.67 777.0 401.67 777.0 L 408.67 777.0" class="edge fanin route-shared branch"/>
 <path d="M 800.0 745.0 L 800.0 770.0 Q 800.0 777.0 807.0 777.0 L 814.0 777.0" class="edge fanin route-shared branch"/>

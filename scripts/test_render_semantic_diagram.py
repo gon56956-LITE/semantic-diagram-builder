@@ -577,6 +577,15 @@ def main() -> int:
         raise AssertionError("different entry-layer source fan-outs should use distinct bus y lanes")
     if not any('edge-dashed' in attrs and 'data-source-id="glossary"' in attrs for attrs in path_attrs(layered_stress_svg, {"fanout"})):
         raise AssertionError("dashed source fan-out lanes should preserve dashed semantics")
+    parameter_anchor_shifts = {
+        (source_id, float(shift))
+        for attrs in path_attrs(layered_stress_svg, {"fanout", "terminal"})
+        if 'data-target-id="parameter_master"' in attrs
+        for source_id in re.findall(r'data-source-id="([^"]+)"', attrs)
+        for shift in re.findall(r'data-target-anchor-shift="([-0-9.]+)"', attrs)
+    }
+    if ("knowledge_map", -9.0) not in parameter_anchor_shifts or ("glossary", 9.0) not in parameter_anchor_shifts:
+        raise AssertionError("multi-source fan-out terminals should use separate target-card anchors")
     if not any('data-direct-lane="1"' in attrs and 'data-route-color="' in attrs for attrs in path_attrs(layered_stress_svg, {"direct-link"})):
         raise AssertionError("single-target source links should share the source-lane color/offset plan")
     shared_direct = {
