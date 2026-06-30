@@ -70,6 +70,14 @@ D_RE = re.compile(r'\bd="([^"]+)"')
 DATA_FROM_RE = re.compile(r'\bdata-from="([^"]*)"')
 DATA_TO_RE = re.compile(r'\bdata-to="([^"]*)"')
 DATA_RELATIONSHIP_RE = re.compile(r'\bdata-relationship="([^"]*)"')
+DATA_SOURCE_ID_RE = re.compile(r'\bdata-source-id="([^"]*)"')
+DATA_TARGET_ID_RE = re.compile(r'\bdata-target-id="([^"]*)"')
+DATA_ROUTE_COLOR_RE = re.compile(r'\bdata-route-color="([^"]*)"')
+DATA_SOURCE_LANE_RE = re.compile(r'\bdata-source-lane="([^"]*)"')
+DATA_DIRECT_LANE_RE = re.compile(r'\bdata-direct-lane="([^"]*)"')
+DATA_TARGET_ANCHOR_LANE_RE = re.compile(r'\bdata-target-anchor-lane="([^"]*)"')
+DATA_TARGET_ANCHOR_COUNT_RE = re.compile(r'\bdata-target-anchor-count="([^"]*)"')
+DATA_TARGET_ANCHOR_SHIFT_RE = re.compile(r'\bdata-target-anchor-shift="([^"]*)"')
 STROKE_STYLE_RE = re.compile(r'stroke\s*:\s*(#[0-9A-Fa-f]{6})')
 STROKE_ATTR_RE = re.compile(r'\bstroke="([^"]+)"')
 DIRECT_LINE_RE = re.compile(r'^M ([-0-9.]+) ([-0-9.]+) L ([-0-9.]+) ([-0-9.]+)$')
@@ -99,6 +107,8 @@ EPS = 1e-6
 BUS_CARD_CLEARANCE = 24.0
 BUS_LANE_GAP = 48.0
 LAYER_LABEL_HEIGHT = 42.0
+TARGET_ANCHOR_MIN_GAP = 10.0
+TARGET_ANCHOR_Y_TOLERANCE = 4.0
 TEXT_MIN_SIZES = {
     'group-label': 14.5,
     'tree-level-label': 14.5,
@@ -191,6 +201,11 @@ def _path_stroke(attrs: str) -> str:
     if attr_match:
         return attr_match.group(1).lower()
     return ''
+
+
+def _attr_value(pattern: re.Pattern[str], attrs: str) -> str:
+    match = pattern.search(attrs)
+    return match.group(1) if match else ''
 
 
 def _axis_segment(a: tuple[float, float], b: tuple[float, float]) -> tuple[str | None, tuple[float, float], tuple[float, float]]:
@@ -333,10 +348,12 @@ def _is_intentional_bus_junction(a: dict, b: dict) -> bool:
 
 def _connector_paths(svg: str) -> list[dict]:
     paths = []
-    for idx, (_attrs, d, classes) in enumerate(_path_attrs_with_classes(svg, CONNECTOR_CLASSES), start=1):
+    for idx, (attrs, d, classes) in enumerate(_path_attrs_with_classes(svg, CONNECTOR_CLASSES), start=1):
         geom = _parse_path_geometry(d)
         geom['idx'] = idx
+        geom['attrs'] = attrs
         geom['classes'] = ' '.join(sorted(classes))
+        geom['stroke'] = _path_stroke(attrs)
         paths.append(geom)
     return paths
 
@@ -905,6 +922,68 @@ def _check_relationship_matrix_geometry(svg: str, issues: list[str]) -> None:
             fail('accent-blueprint relationship_matrix should use white/near-white primary linework', issues)
 
 
+def _terminal_route_key(path: dict) -> tuple[str, str, str, str]:
+    attrs = str(path.get('attrs', ''))
+    classes = set(str(path.get('classes', '')).split())
+    source = _attr_value(DATA_SOURCE_ID_RE, attrs) or _attr_value(DATA_FROM_RE, attrs)
+    color = _attr_value(DATA_ROUTE_COLOR_RE, attrs) or str(path.get('stroke', ''))
+    lane = _attr_value(DATA_SOURCE_LANE_RE, attrs) or _attr_value(DATA_DIRECT_LANE_RE, attrs)
+    line_style = 'dashed' if 'edge-dashed' in classes or 'stroke-dasharray' in attrs else 'solid'
+    return source, color.lower(), lane, line_style
+
+
+def _check_terminal_target_anchors(svg: str, issues: list[str]) -> None:
+    by_target: dict[str, list[dict]] = {}
+    for path in _connector_paths(svg):
+        classes = set(str(path.get('classes', '')).split())
+        if 'terminal' not in classes:
+            continue
+        attrs = str(path.get('attrs', ''))
+        target = _attr_value(DATA_TARGET_ID_RE, attrs)
+        if not target:
+            continue
+        by_target.setdefault(target, []).append(path)
+
+    for target, paths in by_target.items():
+        route_keys = {_terminal_route_key(path) for path in paths}
+        if len(paths) <= 1 or len(route_keys) <= 1:
+            continue
+
+        missing_anchor_metadata = []
+        for path in paths:
+            attrs = str(path.get('attrs', ''))
+            if not (
+                _attr_value(DATA_TARGET_ANCHOR_LANE_RE, attrs)
+                and _attr_value(DATA_TARGET_ANCHOR_COUNT_RE, attrs)
+                and _attr_value(DATA_TARGET_ANCHOR_SHIFT_RE, attrs)
+            ):
+                missing_anchor_metadata.append(path)
+        if missing_anchor_metadata:
+            fail(
+                f'multi-source terminal anchors for target {target} should expose data-target-anchor-* metadata',
+                issues,
+            )
+            continue
+
+        endpoints = [(path.get('end'), path) for path in paths if path.get('end') is not None]
+        too_close = False
+        for i, (first_end, _first_path) in enumerate(endpoints):
+            if first_end is None:
+                continue
+            for second_end, _second_path in endpoints[i + 1:]:
+                if second_end is None:
+                    continue
+                dx = abs(first_end[0] - second_end[0])
+                dy = abs(first_end[1] - second_end[1])
+                if dx < TARGET_ANCHOR_MIN_GAP and dy <= TARGET_ANCHOR_Y_TOLERANCE:
+                    too_close = True
+                    break
+            if too_close:
+                break
+        if too_close:
+            fail(f'multi-source terminal anchors for target {target} are too close; offset target-card anchors', issues)
+
+
 def _check_connector_clearance(svg: str, issues: list[str]) -> None:
     layers = _layer_rects(svg)
     cards = _card_rects(svg)
@@ -1110,6 +1189,7 @@ def check_svg(svg: str) -> list[str]:
             if klass == 'title' and len(text) > max(18, int(w / 8)):
                 fail(f'card {idx} title may be too long for width {w:.0f}: {text}', issues)
 
+    _check_terminal_target_anchors(svg, issues)
     _check_connector_rounding(svg, issues)
     _check_connector_clearance(svg, issues)
     _check_layer_metrics(svg, issues)

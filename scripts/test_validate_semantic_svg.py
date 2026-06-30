@@ -100,6 +100,41 @@ def main() -> int:
         "context-stroke",
     )
     assert_issue(
+        "multi-source terminal anchors missing metadata",
+        """
+<svg width="500" height="300">
+<defs><marker id="arrow-fanout"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<g id="node-target" class="card node-card"><rect x="180" y="160" width="120" height="70" fill="#FFFFFF" stroke="#334155"/><text class="card-title">T</text></g>
+<path d="M 120 80 L 120 120 Q 120 134 134 134 L 234 134 Q 234 134 234 148 L 234 160" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-target-id="target" data-source-id="source_a" data-route-color="#16D9FF"/>
+<path d="M 340 80 L 340 120 Q 340 134 326 134 L 234 134 Q 234 134 234 148 L 234 160" class="edge edge-dashed fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#6EE66E" data-target-id="target" data-source-id="source_b" data-route-color="#6EE66E"/>
+</svg>
+""",
+        "data-target-anchor",
+    )
+    assert_issue(
+        "multi-source terminal anchors too close",
+        """
+<svg width="500" height="300">
+<defs><marker id="arrow-fanout"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<g id="node-target" class="card node-card"><rect x="180" y="160" width="120" height="70" fill="#FFFFFF" stroke="#334155"/><text class="card-title">T</text></g>
+<path d="M 120 80 L 120 120 Q 120 134 134 134 L 232 134 Q 232 134 232 148 L 232 160" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-target-id="target" data-source-id="source_a" data-route-color="#16D9FF" data-target-anchor-lane="0" data-target-anchor-count="2" data-target-anchor-shift="-2.0"/>
+<path d="M 340 80 L 340 120 Q 340 134 326 134 L 236 134 Q 236 134 236 148 L 236 160" class="edge edge-dashed fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#6EE66E" data-target-id="target" data-source-id="source_b" data-route-color="#6EE66E" data-target-anchor-lane="1" data-target-anchor-count="2" data-target-anchor-shift="2.0"/>
+</svg>
+""",
+        "too close",
+    )
+    assert_pass(
+        "multi-source terminal anchors separated",
+        """
+<svg width="500" height="300">
+<defs><marker id="arrow-fanout"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<g id="node-target" class="card node-card"><rect x="180" y="160" width="120" height="70" fill="#FFFFFF" stroke="#334155"/><text class="card-title">T</text></g>
+<path d="M 120 80 L 120 120 Q 120 134 134 134 L 225 134 Q 225 134 225 148 L 225 160" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-target-id="target" data-source-id="source_a" data-route-color="#16D9FF" data-target-anchor-lane="0" data-target-anchor-count="2" data-target-anchor-shift="-9.0"/>
+<path d="M 340 80 L 340 120 Q 340 134 326 134 L 243 134 Q 243 134 243 148 L 243 160" class="edge edge-dashed fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#6EE66E" data-target-id="target" data-source-id="source_b" data-route-color="#6EE66E" data-target-anchor-lane="1" data-target-anchor-count="2" data-target-anchor-shift="9.0"/>
+</svg>
+""",
+    )
+    assert_issue(
         "small generated label text",
         """
 <svg width="600" height="260">
