@@ -1281,6 +1281,9 @@ def main() -> int:
     long_lane = renderer._capability_level_label_width({}, [{"id": "sub", "label": "Sub-Domains"}])
     if not short_lane < long_lane:
         raise AssertionError("capability level label lane should grow from label content instead of using one fixed width")
+    handoff_lane = renderer._capability_level_label_width({}, [{"id": "risk", "label": "Primary Handoff Risk"}])
+    if handoff_lane < 184:
+        raise AssertionError("capability level label lane should fit readable two-line labels without truncation")
     long_header_capability = {
         "title": "Capability Long Header Regression",
         "diagram_type": "capability_domain_map",
@@ -1302,6 +1305,18 @@ def main() -> int:
     for long_label in ("Customer Experience Operations", "Semantic Governance Intelligence"):
         if f">{long_label}</text>" in long_header_svg:
             raise AssertionError("capability_domain_map column headers should fit long labels inside the header slot")
+    long_level_label_capability = {
+        "title": "Capability Long Level Label Regression",
+        "diagram_type": "capability_domain_map",
+        "style": "accent-blueprint",
+        "width": 900,
+        "levels": [{"id": "risk", "label": "Primary Handoff Risk", "kind": "risk"}],
+        "columns": [{"id": "handoff", "label": "Handoff", "kind": "object"}],
+        "items": [{"id": "risk_entry", "label": "Risk Entry", "level": "risk", "column": "handoff"}],
+    }
+    long_level_label_svg = assert_valid("capability domain map long level label regression", long_level_label_capability)
+    if "Handoff Ri..." in long_level_label_svg or ">Handoff Risk</text>" not in long_level_label_svg:
+        raise AssertionError("capability_domain_map long level labels should wrap without truncating semantic words")
 
     relationship_matrix = load_json("templates/relationship_matrix/reference-contract.json")
     relationship_svg = assert_valid("relationship matrix reference template", relationship_matrix)

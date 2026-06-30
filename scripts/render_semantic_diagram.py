@@ -2734,9 +2734,20 @@ def _capability_level_label_width(contract: dict, levels: list[dict]) -> float:
     if contract.get("level_label_width") is not None:
         return float(contract["level_label_width"])
     labels = [str(level.get("label", level.get("id", ""))) for level in levels]
-    tokens = [token for label in labels for token in re.split(r"\s+", label.strip()) if token]
-    longest_token = max((len(token) for token in tokens), default=9)
-    text_w = longest_token * 15.5 * 0.56
+    required_chars = 9
+    for label in labels:
+        words = [word for word in re.split(r"\s+", label.strip()) if word]
+        if not words:
+            continue
+        if len(words) <= 2:
+            required_chars = max(required_chars, max(len(word) for word in words))
+            continue
+        best_split = min(
+            max(len(" ".join(words[:idx])), len(" ".join(words[idx:])))
+            for idx in range(1, len(words))
+        )
+        required_chars = max(required_chars, best_split)
+    text_w = required_chars * 15.5 * 0.56
     min_w = float(contract.get("level_label_min_width", 148))
     max_w = float(contract.get("level_label_max_width", 240))
     return _clamp(text_w + 84, min_w, max_w)
