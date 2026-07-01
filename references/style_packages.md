@@ -8,6 +8,16 @@ Semantic diagram styles are declarative JSON packages. They control visual langu
 - Local style path: `style: "./my-style/style.json"` relative to the contract file.
 - Missing or invalid styles are hard errors.
 
+## Choosing a Style
+
+When the user asks for a diagram but does not specify a style, recommend one style based on the content and ask for confirmation before building the final contract or rendering. If the user explicitly asks the skill to choose, pick the recommended style and state that choice.
+
+- Recommend `modern-tech` for neutral light technical diagrams, knowledge maps, Obsidian/PPT documentation, and operational structure diagrams.
+- Recommend `accent-blueprint` for enterprise architecture, topology, system boundary, platform, infrastructure, and CAD-like technical diagrams.
+- Recommend `brief-grid` for executive briefs, intelligence-style analysis, policy/market/risk comparisons, forecast panels, and report-like grids.
+
+Style selection is a visual-language decision only. It must not change the selected `diagram_type`, layer/card placement logic, or arrow routing semantics.
+
 ## Package Shape
 
 Required fields:

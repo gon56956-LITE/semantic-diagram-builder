@@ -6,6 +6,23 @@ Run `py scripts/validate_semantic_contract.py contract.json` before rendering. T
 
 Use `references/diagram_type_maturity.md` to check whether a type has enough minimal, reference, stress, schema, renderer, validator, and gallery coverage to be treated as mature. Use `references/diagram_type_readiness.md` to decide whether a type is stable, beta, or experimental for production use.
 
+## Choosing a Diagram Type
+
+When the user asks for a diagram but does not specify a diagram type, recommend one standard type based on the content and ask for confirmation before building the final contract or rendering. If the user explicitly asks the skill to choose, pick the recommended type and state that choice.
+
+- Recommend `layered_knowledge_topology` for abstraction layers, knowledge architecture, source-to-synthesis stacks, and multi-row sibling layers.
+- Recommend `source_boundary_map` when the main message is controlled source material versus derived knowledge or interpretation.
+- Recommend `boundary_ownership_map` for domains, owners, stewards, systems, data assets, and shared responsibility boundaries.
+- Recommend `registry_table` for glossary, CTQ, parameter, risk, status, or compact index registers.
+- Recommend `taxonomy_tree` for classification trees, category hierarchies, rule trees, and parent-child taxonomies.
+- Recommend `hub_spoke` for one central platform, module, concept, or source surrounded by comparable spokes.
+- Recommend `object_relationship_diagram` for data-model sketches, MOC/object links, ER-style entities, attributes, keys, and cardinalities.
+- Recommend `ontology_map` for formal concepts/classes, predicates, datatype attributes, cardinality labels, and instance examples.
+- Recommend `capability_domain_map` for strategic objectives, business domains, sub-domains, capabilities, enabling capabilities, and sparse support overlays.
+- Recommend `relationship_matrix` when many-to-many relationships are too dense for a direct node-link diagram and need comparison.
+
+Diagram type selection chooses the structural contract. Visual style selection is separate and must not be used to change the chosen layout semantics.
+
 ## layered_knowledge_topology
 
 Use for abstraction layers, knowledge architecture, navigation/synthesis/source separation, and multi-row sibling layers.

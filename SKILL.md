@@ -22,6 +22,8 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
 2. Choose a standard diagram type.
    - New contracts should declare `diagram_type`. Legacy `layout` is accepted only for compatibility and will produce a warning.
    - Supported standard types: `layered_knowledge_topology`, `source_boundary_map`, `boundary_ownership_map`, `registry_table`, `taxonomy_tree`, `hub_spoke`, `object_relationship_diagram`, `ontology_map`, `capability_domain_map`, and `relationship_matrix`.
+   - If the user asks for a diagram but does not specify a diagram type, recommend one diagram type based on the content and ask for confirmation before building the final contract or rendering. Use a concise confirmation such as: "I recommend `capability_domain_map` because this content is organized by domains and capability levels; confirm this type, or should I use another structure?"
+   - If the user explicitly says to choose the diagram type, use the recommended type and state that choice before rendering.
    - Some diagram types support a top-level `variant` to choose a layout strategy. `diagram_type` answers "what is this diagram for"; `variant` answers "which arrangement should present it."
    - See `references/diagram_types.md` for required fields and boundaries.
    - See `references/diagram_type_maturity.md` before adding a new type or calling a type mature.
@@ -29,6 +31,8 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - Start from `templates/<diagram_type>/minimal-contract.json` for a small starter, `reference-contract.json` for a normal rich pattern, or `stress-contract.json` when you need QA coverage for dense content.
 3. Choose a visual style package.
    - `style` is required. Use `modern-tech` for the migrated current style, `accent-blueprint` for the blue enterprise blueprint style, `brief-grid` for warm grid-paper intelligence briefs, or a relative path to a custom `style.json`.
+   - If the user asks for a diagram but does not specify a visual style, recommend one style based on the content and ask for confirmation before building the final contract or rendering. Use a concise confirmation such as: "I recommend `brief-grid` for this executive comparison/risk brief; confirm this style, or choose `modern-tech` / `accent-blueprint`?"
+   - If the user explicitly says to choose for them, use the recommended style and state that choice before rendering.
    - Style packages are declarative JSON only; do not execute Python or external code from a style.
    - See `references/style_packages.md`.
 4. Apply stable layout metrics from `references/layout_metrics.md` before rendering or manual SVG edits.
@@ -171,6 +175,29 @@ Useful style values:
 - `./path/to/style.json`: custom declarative style package relative to the contract file.
 
 The renderer fails if `style` is missing or cannot be loaded. This is intentional so diagrams do not silently switch visual systems.
+
+When the requester has not named a diagram type, recommend and confirm before rendering:
+
+- Recommend `layered_knowledge_topology` for abstraction layers, knowledge architecture, source-to-synthesis stacks, and multi-row sibling layers.
+- Recommend `source_boundary_map` when the main message is controlled source material versus derived knowledge or interpretation.
+- Recommend `boundary_ownership_map` for domains, owners, stewards, systems, data assets, and shared responsibility boundaries.
+- Recommend `registry_table` for glossary, CTQ, parameter, risk, status, or compact index registers.
+- Recommend `taxonomy_tree` for classification trees, category hierarchies, rule trees, and parent-child taxonomies.
+- Recommend `hub_spoke` for one central platform, module, concept, or source surrounded by comparable spokes.
+- Recommend `object_relationship_diagram` for data-model sketches, MOC/object links, ER-style entities, attributes, keys, and cardinalities.
+- Recommend `ontology_map` for formal concepts/classes, predicates, datatype attributes, cardinality labels, and instance examples.
+- Recommend `capability_domain_map` for strategic objectives, business domains, sub-domains, capabilities, enabling capabilities, and sparse support overlays.
+- Recommend `relationship_matrix` when many-to-many relationships are too dense for a direct node-link diagram and need comparison.
+
+Diagram type confirmation chooses the structural contract. Style confirmation is separate and should happen after the diagram type is clear.
+
+When the requester has not named a style, recommend and confirm before rendering:
+
+- Recommend `modern-tech` for neutral light technical diagrams, knowledge maps, Obsidian/PPT documentation, and operational structure diagrams.
+- Recommend `accent-blueprint` for enterprise architecture, topology, system boundary, platform, infrastructure, and CAD-like technical diagrams.
+- Recommend `brief-grid` for executive briefs, intelligence-style analysis, policy/market/risk comparisons, forecast panels, and report-like grids.
+
+Style confirmation changes visual language only. It must not change the selected `diagram_type`, layer/card placement logic, or arrow routing semantics.
 
 ## Layout and design rules
 
