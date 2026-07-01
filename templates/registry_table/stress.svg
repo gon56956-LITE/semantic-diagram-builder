@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1457" viewBox="0 0 2400 1457" role="img" aria-label="Registry Table Stress" data-style="accent-blueprint" data-diagram-type="registry_table">
+<svg xmlns="http://www.w3.org/2000/svg" width="2540" height="1444" viewBox="0 0 2540 1444" role="img" aria-label="Registry Table Stress" data-style="accent-blueprint" data-diagram-type="registry_table">
 <defs>
-  <pattern id="blueprint-grid-small" width="19.2" height="19.2" patternUnits="userSpaceOnUse"><path d="M 19.2 0 H 0 V 19.2" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1.12"/></pattern>
-  <pattern id="blueprint-grid" width="96" height="96" patternUnits="userSpaceOnUse"><rect width="96" height="96" fill="url(#blueprint-grid-small)"/><path d="M 96 0 H 0 V 96" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.6"/> </pattern>
+  <pattern id="blueprint-grid-small" width="20.32" height="20.32" patternUnits="userSpaceOnUse"><path d="M 20.32 0 H 0 V 20.32" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1.19"/></pattern>
+  <pattern id="blueprint-grid" width="101.6" height="101.6" patternUnits="userSpaceOnUse"><rect width="101.6" height="101.6" fill="url(#blueprint-grid-small)"/><path d="M 101.6 0 H 0 V 101.6" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.69"/> </pattern>
   <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
   <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
   <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
@@ -28,180 +28,180 @@
     [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
   </style>
 </defs>
-<rect x="0" y="0" width="2400" height="1457" rx="0" fill="#062B5F"/>
-<rect x="0" y="0" width="2400" height="1457" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
-<text x="1200.0" y="54" text-anchor="middle" class="title">Registry Table Stress</text>
-<text x="1200.0" y="80.0" text-anchor="middle" class="subtitle">Dense semantic register with long definitions, status signals, owners, risks, and governance notes</text>
-<rect x="70" y="115" width="2260" height="1073" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
-<rect x="70" y="115" width="2260" height="65" rx="6" fill="#FFFFFF" fill-opacity="0.06"/>
+<rect x="0" y="0" width="2540" height="1444" rx="0" fill="#062B5F"/>
+<rect x="0" y="0" width="2540" height="1444" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="1270.0" y="54" text-anchor="middle" class="title">Registry Table Stress</text>
+<text x="1270.0" y="80.0" text-anchor="middle" class="subtitle">Dense semantic register with long definitions, status signals, owners, risks, and governance notes</text>
+<rect x="70" y="115" width="2400" height="1073" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<rect x="70" y="115" width="2400" height="65" rx="6" fill="#FFFFFF" fill-opacity="0.06"/>
 <text x="86.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Term</text>
 <line x1="320.0" y1="115" x2="320.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="336.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Definition</text>
-<line x1="840.0" y1="115" x2="840.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
-<text x="922.5" y="153.26" text-anchor="middle" class="table-header" style="font-size:17.3px">Type</text>
-<line x1="1005.0" y1="115" x2="1005.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
-<text x="1021.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Owner</text>
-<line x1="1235.0" y1="115" x2="1235.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
-<text x="1251.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Lifecycle State</text>
-<line x1="1425.0" y1="115" x2="1425.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
-<text x="1441.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Risk / Constraint</text>
-<line x1="1755.0" y1="115" x2="1755.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
-<text x="1771.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Required Evidence</text>
-<line x1="2035.0" y1="115" x2="2035.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
-<text x="2051.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Related Items</text>
-<line x1="70" y1="180" x2="2330" y2="180" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<line x1="880.0" y1="115" x2="880.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="962.5" y="153.26" text-anchor="middle" class="table-header" style="font-size:17.3px">Type</text>
+<line x1="1045.0" y1="115" x2="1045.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="1061.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Owner</text>
+<line x1="1275.0" y1="115" x2="1275.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="1291.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Lifecycle State</text>
+<line x1="1465.0" y1="115" x2="1465.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="1481.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Risk / Constraint</text>
+<line x1="1895.0" y1="115" x2="1895.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="1911.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Required Evidence</text>
+<line x1="2175.0" y1="115" x2="2175.0" y2="1188" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="2191.0" y="153.26" text-anchor="start" class="table-header" style="font-size:17.3px">Related Items</text>
+<line x1="70" y1="180" x2="2470" y2="180" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="242.3" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Domain Map</text>
 <g class="table-badge semantic-badge" data-kind="capability"><rect x="86" y="221.0" width="30" height="30" rx="5" fill="#031E42" stroke="#16D9FF" stroke-width="1.2"/><rect x="91.0" y="229.0" width="20" height="16" rx="3" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M91.0,234.0 H111.0 M101.0,229.0 V245.0" class="icon-line" stroke="#16D9FF"/></g>
 <text x="336.0" y="218.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Aligned view of systems, interfaces, ownership</text>
-<text x="336.0" y="242.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">boundaries, reusable knowledge modules, and</text>
-<text x="336.0" y="265.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">the operating scope they belong to.</text>
-<text x="922.5" y="242.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Map</text>
-<text x="1021.0" y="230.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Enterprise</text>
-<text x="1021.0" y="254.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Architecture</text>
-<text x="1251.0" y="230.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved</text>
-<text x="1251.0" y="254.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">baseline</text>
-<text x="1441.0" y="218.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Scope must match the</text>
-<text x="1441.0" y="242.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">declared domain boundary;</text>
-<text x="1441.0" y="265.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">hidden cross-domain ownersh...</text>
-<text x="1771.0" y="230.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Owner approval +</text>
-<text x="1771.0" y="254.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">interface inventory</text>
-<text x="2051.0" y="230.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Interfaces, Modules,</text>
-<text x="2051.0" y="254.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Owners, Boundary Map</text>
-<line x1="70" y1="292" x2="2330" y2="292" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="336.0" y="242.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">boundaries, reusable knowledge modules, and the</text>
+<text x="336.0" y="265.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">operating scope they belong to.</text>
+<text x="962.5" y="242.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Map</text>
+<text x="1061.0" y="230.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Enterprise</text>
+<text x="1061.0" y="254.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Architecture</text>
+<text x="1291.0" y="230.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved</text>
+<text x="1291.0" y="254.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">baseline</text>
+<text x="1481.0" y="218.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Scope must match the declared domain</text>
+<text x="1481.0" y="242.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">boundary; hidden cross-domain</text>
+<text x="1481.0" y="265.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">ownership must be called out.</text>
+<text x="1911.0" y="230.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Owner approval +</text>
+<text x="1911.0" y="254.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">interface inventory</text>
+<text x="2191.0" y="230.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Interfaces, Modules,</text>
+<text x="2191.0" y="254.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Owners, Boundary Map</text>
+<line x1="70" y1="292" x2="2470" y2="292" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="342.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Controlled</text>
 <text x="132.0" y="366.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Source</text>
 <g class="table-badge semantic-badge" data-kind="source"><rect x="86" y="333.0" width="30" height="30" rx="5" fill="#031E42" stroke="#F4F8FF" stroke-width="1.2"/><path d="M91.0,338.0 H105.0 L111.0,344.0 V358.0 H91.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M105.0,338.0 V344.0 H111.0" class="icon-line" stroke="#F4F8FF"/></g>
-<text x="336.0" y="330.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Authoritative document, PLM record, MOC</text>
-<text x="336.0" y="354.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">package, or system record used to validate</text>
-<text x="336.0" y="377.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">derived knowledge assets.</text>
-<text x="922.5" y="354.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Authority</text>
-<text x="1021.0" y="354.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Document Control</text>
-<text x="1251.0" y="354.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Controlled</text>
-<text x="1441.0" y="330.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Revision mismatch</text>
-<text x="1441.0" y="354.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">invalidates derived content</text>
-<text x="1441.0" y="377.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">and must trigger re-review...</text>
-<text x="1771.0" y="342.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Revision, effective</text>
-<text x="1771.0" y="366.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">date, approver</text>
-<text x="2051.0" y="342.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Revision, Approval,</text>
-<text x="2051.0" y="366.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Change Notice</text>
-<line x1="70" y1="404" x2="2330" y2="404" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="336.0" y="330.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Authoritative document, PLM record, MOC package,</text>
+<text x="336.0" y="354.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">or system record used to validate derived</text>
+<text x="336.0" y="377.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">knowledge assets.</text>
+<text x="962.5" y="354.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Authority</text>
+<text x="1061.0" y="354.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Document Control</text>
+<text x="1291.0" y="354.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Controlled</text>
+<text x="1481.0" y="330.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Revision mismatch invalidates derived</text>
+<text x="1481.0" y="354.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">content and must trigger re-review</text>
+<text x="1481.0" y="377.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">before reuse.</text>
+<text x="1911.0" y="342.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Revision, effective</text>
+<text x="1911.0" y="366.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">date, approver</text>
+<text x="2191.0" y="342.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Revision, Approval,</text>
+<text x="2191.0" y="366.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Change Notice</text>
+<line x1="70" y1="404" x2="2470" y2="404" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="466.3" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Risk Constraint</text>
 <g class="table-badge semantic-badge" data-kind="risk"><rect x="86" y="445.0" width="30" height="30" rx="5" fill="#031E42" stroke="#FFD84D" stroke-width="1.2"/><path d="M101.0,450.0 L110.0,455.0 V465.0 L101.0,470.0 L92.0,465.0 V455.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M97.0,460.0 L100.0,464.0 L106.0,456.0" class="icon-line" stroke="#FFD84D"/></g>
 <text x="336.0" y="442.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Condition that limits how an asset, parameter,</text>
 <text x="336.0" y="466.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">process step, or reusable module can be reused</text>
 <text x="336.0" y="489.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">across products.</text>
-<text x="922.5" y="466.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Governance</text>
-<text x="1021.0" y="466.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Quality Engineering</text>
-<text x="1251.0" y="466.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Active control</text>
-<text x="1441.0" y="442.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Exceptions require explicit</text>
-<text x="1441.0" y="466.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">owner approval and</text>
-<text x="1441.0" y="489.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">traceability to the affecte...</text>
-<text x="1771.0" y="454.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Exception log +</text>
-<text x="1771.0" y="478.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">mitigation owner</text>
-<text x="2051.0" y="454.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">CTQ, Exception, Control</text>
-<text x="2051.0" y="478.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Plan</text>
-<line x1="70" y1="516" x2="2330" y2="516" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="962.5" y="466.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Governance</text>
+<text x="1061.0" y="466.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Quality Engineering</text>
+<text x="1291.0" y="466.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Active control</text>
+<text x="1481.0" y="442.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Exceptions require explicit owner</text>
+<text x="1481.0" y="466.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">approval and traceability to the</text>
+<text x="1481.0" y="489.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">affected knowledge object.</text>
+<text x="1911.0" y="454.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Exception log +</text>
+<text x="1911.0" y="478.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">mitigation owner</text>
+<text x="2191.0" y="454.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">CTQ, Exception, Control</text>
+<text x="2191.0" y="478.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Plan</text>
+<line x1="70" y1="516" x2="2470" y2="516" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="566.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Reusable</text>
 <text x="132.0" y="590.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Knowledge Module</text>
 <g class="table-badge semantic-badge" data-kind="package"><rect x="86" y="557.0" width="30" height="30" rx="5" fill="#031E42" stroke="#6EE66E" stroke-width="1.2"/><rect x="91.0" y="565.0" width="20" height="16" rx="3" fill="none" stroke="#6EE66E" stroke-width="1.2"/><path d="M91.0,570.0 H111.0 M101.0,565.0 V581.0" class="icon-line" stroke="#6EE66E"/></g>
-<text x="336.0" y="554.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved package that can be referenced by</text>
-<text x="336.0" y="578.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">maps, taxonomies, procedures, dashboards, or</text>
-<text x="336.0" y="601.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">workflow diagrams without rewriting the sourc...</text>
-<text x="922.5" y="578.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Asset</text>
-<text x="1021.0" y="566.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Knowledge</text>
-<text x="1021.0" y="590.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Operations</text>
-<text x="1251.0" y="578.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Reusable</text>
-<text x="1441.0" y="554.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Must cite source boundary,</text>
-<text x="1441.0" y="578.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">steward, and allowed-use</text>
-<text x="1441.0" y="601.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">conditions before downstrea...</text>
-<text x="1771.0" y="566.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Module record + source</text>
-<text x="1771.0" y="590.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">links</text>
-<text x="2051.0" y="566.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Package, Instance,</text>
-<text x="2051.0" y="590.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Taxonomy Node</text>
-<line x1="70" y1="628" x2="2330" y2="628" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="336.0" y="554.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved package that can be referenced by maps,</text>
+<text x="336.0" y="578.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">taxonomies, procedures, dashboards, or workflow</text>
+<text x="336.0" y="601.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">diagrams without rewriting the source logic.</text>
+<text x="962.5" y="578.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Asset</text>
+<text x="1061.0" y="566.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Knowledge</text>
+<text x="1061.0" y="590.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Operations</text>
+<text x="1291.0" y="578.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Reusable</text>
+<text x="1481.0" y="554.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Must cite source boundary, steward,</text>
+<text x="1481.0" y="578.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">and allowed-use conditions before</text>
+<text x="1481.0" y="601.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">downstream reuse.</text>
+<text x="1911.0" y="566.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Module record + source</text>
+<text x="1911.0" y="590.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">links</text>
+<text x="2191.0" y="566.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Package, Instance,</text>
+<text x="2191.0" y="590.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Taxonomy Node</text>
+<line x1="70" y1="628" x2="2470" y2="628" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="690.3" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">System Interface</text>
 <g class="table-badge semantic-badge" data-kind="query"><rect x="86" y="669.0" width="30" height="30" rx="5" fill="#031E42" stroke="#16D9FF" stroke-width="1.2"/><circle cx="99.0" cy="682.0" r="7" fill="none" stroke="#16D9FF" stroke-width="1.2"/><path d="M105.0,688.0 L111.0,694.0" class="icon-line" stroke="#16D9FF"/></g>
-<text x="336.0" y="666.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Boundary where systems, teams, or process</text>
-<text x="336.0" y="690.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">owners exchange data, decisions, events, or</text>
+<text x="336.0" y="666.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Boundary where systems, teams, or process owners</text>
+<text x="336.0" y="690.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">exchange data, decisions, events, or</text>
 <text x="336.0" y="713.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">responsibilities.</text>
-<text x="922.5" y="690.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Interface</text>
-<text x="1021.0" y="678.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Systems</text>
-<text x="1021.0" y="702.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Architecture</text>
-<text x="1251.0" y="690.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Reviewed</text>
-<text x="1441.0" y="666.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Ambiguous ownership causes</text>
-<text x="1441.0" y="690.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">handoff gaps, duplicate</text>
-<text x="1441.0" y="713.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">records, and stale downstre...</text>
-<text x="1771.0" y="678.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Interface owner + data</text>
-<text x="1771.0" y="702.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">contract</text>
-<text x="2051.0" y="690.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Domain, Owner, Data Flow</text>
-<line x1="70" y1="740" x2="2330" y2="740" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="962.5" y="690.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Interface</text>
+<text x="1061.0" y="678.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Systems</text>
+<text x="1061.0" y="702.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Architecture</text>
+<text x="1291.0" y="690.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Reviewed</text>
+<text x="1481.0" y="666.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Ambiguous ownership causes handoff</text>
+<text x="1481.0" y="690.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">gaps, duplicate records, and stale</text>
+<text x="1481.0" y="713.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">downstream knowledge.</text>
+<text x="1911.0" y="678.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Interface owner + data</text>
+<text x="1911.0" y="702.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">contract</text>
+<text x="2191.0" y="690.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Domain, Owner, Data Flow</text>
+<line x1="70" y1="740" x2="2470" y2="740" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="790.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Classification</text>
 <text x="132.0" y="814.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Node</text>
 <g class="table-badge semantic-badge" data-kind="glossary"><rect x="86" y="781.0" width="30" height="30" rx="5" fill="#031E42" stroke="#B56CFF" stroke-width="1.2"/><path d="M91.0,786.0 H107.0 Q111.0,786.0 111.0,790.0 V805.0 H91.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M96.0,792.0 H105.0 M96.0,798.0 H105.0" class="icon-line" stroke="#B56CFF"/></g>
 <text x="336.0" y="778.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Named category in a hierarchy used to classify</text>
-<text x="336.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">knowledge objects while preserving</text>
-<text x="336.0" y="825.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">parent-child meaning.</text>
-<text x="922.5" y="802.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Taxonomy</text>
-<text x="1021.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Architecture Board</text>
-<text x="1251.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Draft review</text>
-<text x="1441.0" y="778.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Do not skip parent levels</text>
-<text x="1441.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">unless a rule explains why</text>
-<text x="1441.0" y="825.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">the shortcut is allowed.</text>
-<text x="1771.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Parent rule + examples</text>
-<text x="2051.0" y="790.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Parent, Child, Registry</text>
-<text x="2051.0" y="814.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Term</text>
-<line x1="70" y1="852" x2="2330" y2="852" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="336.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">knowledge objects while preserving parent-child</text>
+<text x="336.0" y="825.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">meaning.</text>
+<text x="962.5" y="802.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Taxonomy</text>
+<text x="1061.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Architecture Board</text>
+<text x="1291.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Draft review</text>
+<text x="1481.0" y="778.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Do not skip parent levels unless a</text>
+<text x="1481.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">rule explains why the shortcut is</text>
+<text x="1481.0" y="825.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">allowed.</text>
+<text x="1911.0" y="802.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Parent rule + examples</text>
+<text x="2191.0" y="790.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Parent, Child, Registry</text>
+<text x="2191.0" y="814.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Term</text>
+<line x1="70" y1="852" x2="2470" y2="852" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="914.3" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Quality Metric</text>
 <g class="table-badge semantic-badge" data-kind="quality"><rect x="86" y="893.0" width="30" height="30" rx="5" fill="#031E42" stroke="#FFD84D" stroke-width="1.2"/><path d="M101.0,898.0 L111.0,916.0 H91.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M101.0,905.0 V911.0 M101.0,915.0 V915.0" class="icon-line" stroke="#FFD84D"/></g>
-<text x="336.0" y="890.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Measure used to evaluate completeness,</text>
-<text x="336.0" y="914.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">freshness, approval status, or reuse readiness</text>
-<text x="336.0" y="937.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">of a knowledge asset.</text>
-<text x="922.5" y="914.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Metric</text>
-<text x="1021.0" y="914.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Quality Systems</text>
-<text x="1251.0" y="914.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved</text>
-<text x="1441.0" y="890.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Metric definition must be</text>
-<text x="1441.0" y="914.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">stable enough for trend</text>
-<text x="1441.0" y="937.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">comparison across review cy...</text>
-<text x="1771.0" y="902.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Metric definition +</text>
-<text x="1771.0" y="926.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">threshold</text>
-<text x="2051.0" y="902.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">CTQ, Threshold, Review</text>
-<text x="2051.0" y="926.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Gate</text>
-<line x1="70" y1="964" x2="2330" y2="964" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="336.0" y="890.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Measure used to evaluate completeness, freshness,</text>
+<text x="336.0" y="914.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">approval status, or reuse readiness of a knowledge</text>
+<text x="336.0" y="937.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">asset.</text>
+<text x="962.5" y="914.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Metric</text>
+<text x="1061.0" y="914.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Quality Systems</text>
+<text x="1291.0" y="914.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Approved</text>
+<text x="1481.0" y="890.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Metric definition must be stable</text>
+<text x="1481.0" y="914.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">enough for trend comparison across</text>
+<text x="1481.0" y="937.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">review cycles.</text>
+<text x="1911.0" y="902.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Metric definition +</text>
+<text x="1911.0" y="926.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">threshold</text>
+<text x="2191.0" y="902.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">CTQ, Threshold, Review</text>
+<text x="2191.0" y="926.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Gate</text>
+<line x1="70" y1="964" x2="2470" y2="964" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="1014.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">External System</text>
 <text x="132.0" y="1038.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Reference</text>
 <g class="table-badge semantic-badge" data-kind="ontology"><rect x="86" y="1005.0" width="30" height="30" rx="5" fill="#031E42" stroke="#B56CFF" stroke-width="1.2"/><path d="M91.0,1010.0 H107.0 Q111.0,1010.0 111.0,1014.0 V1029.0 H91.0 Z" fill="none" stroke="#B56CFF" stroke-width="1.2"/><path d="M96.0,1016.0 H105.0 M96.0,1022.0 H105.0" class="icon-line" stroke="#B56CFF"/></g>
 <text x="336.0" y="1002.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Pointer to an out-of-bound system or provider</text>
 <text x="336.0" y="1026.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">whose data influences the register but is not</text>
 <text x="336.0" y="1049.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">governed inside this knowledge boundary.</text>
-<text x="922.5" y="1026.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">External</text>
-<text x="1021.0" y="1026.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Integration Owner</text>
-<text x="1251.0" y="1026.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Watched</text>
-<text x="1441.0" y="1002.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Provider schema or SLA</text>
-<text x="1441.0" y="1026.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">changes may break</text>
-<text x="1441.0" y="1049.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">assumptions without changin...</text>
-<text x="1771.0" y="1014.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Interface SLA +</text>
-<text x="1771.0" y="1038.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">escalation path</text>
-<text x="2051.0" y="1014.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">External Partner, API,</text>
-<text x="2051.0" y="1038.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">SLA</text>
-<line x1="70" y1="1076" x2="2330" y2="1076" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
+<text x="962.5" y="1026.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">External</text>
+<text x="1061.0" y="1026.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Integration Owner</text>
+<text x="1291.0" y="1026.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Watched</text>
+<text x="1481.0" y="1002.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Provider schema or SLA changes may</text>
+<text x="1481.0" y="1026.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">break assumptions without changing</text>
+<text x="1481.0" y="1049.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">internal records.</text>
+<text x="1911.0" y="1014.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Interface SLA +</text>
+<text x="1911.0" y="1038.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">escalation path</text>
+<text x="2191.0" y="1014.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">External Partner, API,</text>
+<text x="2191.0" y="1038.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">SLA</text>
+<line x1="70" y1="1076" x2="2470" y2="1076" stroke="#F4F8FF" stroke-opacity="0.58" stroke-width="1"/>
 <text x="132.0" y="1126.4875" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Exception</text>
 <text x="132.0" y="1150.1125" text-anchor="start" class="table-cell" style="font-size:18.9px;font-weight:700">Playbook</text>
 <g class="table-badge semantic-badge" data-kind="process"><rect x="86" y="1117.0" width="30" height="30" rx="5" fill="#031E42" stroke="#FF9F2E" stroke-width="1.2"/><circle cx="95.0" cy="1133.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="109.0" cy="1126.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="109.0" cy="1140.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M99.0,1133.0 H103.0 M105.0,1129.0 L103.0,1133.0 L105.0,1137.0" class="icon-line" stroke="#FF9F2E"/></g>
-<text x="336.0" y="1114.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Reusable response pattern for known</text>
-<text x="336.0" y="1138.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">deviations, incomplete evidence, late</text>
-<text x="336.0" y="1161.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">approvals, or temporary source gaps.</text>
-<text x="922.5" y="1138.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Process</text>
-<text x="1021.0" y="1138.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Governance Lead</text>
-<text x="1251.0" y="1138.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Conditional</text>
-<text x="1441.0" y="1114.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Playbook cannot become a</text>
-<text x="1441.0" y="1138.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">permanent bypass for missing</text>
-<text x="1441.0" y="1161.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">controlled-source evidence.</text>
-<text x="1771.0" y="1126.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Deviation record +</text>
-<text x="1771.0" y="1150.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">sunset date</text>
-<text x="2051.0" y="1126.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Risk, Approval, Audit</text>
-<text x="2051.0" y="1150.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Trail</text>
+<text x="336.0" y="1114.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Reusable response pattern for known deviations,</text>
+<text x="336.0" y="1138.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">incomplete evidence, late approvals, or temporary</text>
+<text x="336.0" y="1161.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">source gaps.</text>
+<text x="962.5" y="1138.3" text-anchor="middle" class="table-cell-secondary" style="font-size:18.9px">Process</text>
+<text x="1061.0" y="1138.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Governance Lead</text>
+<text x="1291.0" y="1138.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Conditional</text>
+<text x="1481.0" y="1114.675" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Playbook cannot become a permanent</text>
+<text x="1481.0" y="1138.3" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">bypass for missing controlled-source</text>
+<text x="1481.0" y="1161.925" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">evidence.</text>
+<text x="1911.0" y="1126.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Deviation record +</text>
+<text x="1911.0" y="1150.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">sunset date</text>
+<text x="2191.0" y="1126.4875" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Risk, Approval, Audit</text>
+<text x="2191.0" y="1150.1125" text-anchor="start" class="table-cell-secondary" style="font-size:18.9px">Trail</text>
 <g class="info-panel" data-panel-id="legend">
-<rect x="70.0" y="1212" width="741.3333333333334" height="160.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="70.0" y="1212" width="788.0" height="160.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#16D9FF" stroke-opacity="0.62" stroke-width="1"/>
 <text x="88.0" y="1240" class="info-panel-title">Semantic Badge Key</text>
 <rect x="88.0" y="1258" width="9" height="9" rx="2" fill="#16D9FF" opacity="0.95"/>
 <text x="106.0" y="1268.0" class="info-panel-item" style="font-size:15.1px">Cyan: maps, interfaces, selected active domains</text>
@@ -213,27 +213,25 @@
 <text x="106.0" y="1343.3599999999997" class="info-panel-item" style="font-size:15.1px">Purple: external systems, optional links, out-of-bound references</text>
 </g>
 <g class="info-panel" data-panel-id="rules">
-<rect x="829.3333333333334" y="1212" width="741.3333333333334" height="173.60000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>
-<text x="847.3333333333334" y="1240" class="info-panel-title">Registry Rules</text>
-<rect x="847.3333333333334" y="1258" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
-<text x="865.3333333333334" y="1268.0" class="info-panel-item" style="font-size:15.1px">Every term must resolve to one accountable owner and one evidence</text>
-<text x="865.3333333333334" y="1287.12" class="info-panel-item" style="font-size:15.1px">requirement.</text>
-<rect x="847.3333333333334" y="1302.24" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
-<text x="865.3333333333334" y="1312.24" class="info-panel-item" style="font-size:15.1px">Lifecycle state must describe current use permission, not project mood.</text>
-<rect x="847.3333333333334" y="1327.36" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
-<text x="865.3333333333334" y="1337.36" class="info-panel-item" style="font-size:15.1px">Long definitions should wrap inside cells without shrinking the register</text>
-<text x="865.3333333333334" y="1356.4799999999998" class="info-panel-item" style="font-size:15.1px">into unreadable type.</text>
+<rect x="876.0" y="1212" width="788.0" height="154.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-opacity="0.62" stroke-width="1"/>
+<text x="894.0" y="1240" class="info-panel-title">Registry Rules</text>
+<rect x="894.0" y="1258" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
+<text x="912.0" y="1268.0" class="info-panel-item" style="font-size:15.1px">Every term must resolve to one accountable owner and one evidence requirement.</text>
+<rect x="894.0" y="1283.12" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
+<text x="912.0" y="1293.12" class="info-panel-item" style="font-size:15.1px">Lifecycle state must describe current use permission, not project mood.</text>
+<rect x="894.0" y="1308.2399999999998" width="9" height="9" rx="2" fill="#FFD84D" opacity="0.95"/>
+<text x="912.0" y="1318.2399999999998" class="info-panel-item" style="font-size:15.1px">Long definitions should wrap inside cells without shrinking the register into</text>
+<text x="912.0" y="1337.3599999999997" class="info-panel-item" style="font-size:15.1px">unreadable type.</text>
 </g>
 <g class="info-panel" data-panel-id="metadata">
-<rect x="1588.6666666666667" y="1212" width="741.3333333333334" height="154.48000000000002" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
-<text x="1606.6666666666667" y="1240" class="info-panel-title">Review Metadata</text>
-<rect x="1606.6666666666667" y="1258" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
-<text x="1624.6666666666667" y="1268.0" class="info-panel-item" style="font-size:15.1px">Cadence: monthly semantic review; immediate review on controlled-source</text>
-<text x="1624.6666666666667" y="1287.12" class="info-panel-item" style="font-size:15.1px">change</text>
-<rect x="1606.6666666666667" y="1302.24" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
-<text x="1624.6666666666667" y="1312.24" class="info-panel-item" style="font-size:15.1px">Consumers: architecture, quality, document control, knowledge operations</text>
-<rect x="1606.6666666666667" y="1327.36" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
-<text x="1624.6666666666667" y="1337.36" class="info-panel-item" style="font-size:15.1px">Version: stress template v1.1</text>
+<rect x="1682.0" y="1212" width="788.0" height="135.36" rx="6" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.62" stroke-width="1"/>
+<text x="1700.0" y="1240" class="info-panel-title">Review Metadata</text>
+<rect x="1700.0" y="1258" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
+<text x="1718.0" y="1268.0" class="info-panel-item" style="font-size:15.1px">Cadence: monthly semantic review; immediate review on controlled-source change</text>
+<rect x="1700.0" y="1283.12" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
+<text x="1718.0" y="1293.12" class="info-panel-item" style="font-size:15.1px">Consumers: architecture, quality, document control, knowledge operations</text>
+<rect x="1700.0" y="1308.2399999999998" width="9" height="9" rx="2" fill="#F4F8FF" opacity="0.95"/>
+<text x="1718.0" y="1318.2399999999998" class="info-panel-item" style="font-size:15.1px">Version: stress template v1.1</text>
 </g>
-<text x="1200.0" y="1429" text-anchor="middle" class="note">Stress template: long rows, semantic badges, and governance panels should remain readable without turning the table into a dashboard.</text>
+<text x="1270.0" y="1416" text-anchor="middle" class="note">Stress template: long rows, semantic badges, and governance panels should remain readable without turning the table into a dashboard.</text>
 </svg>

@@ -3,15 +3,15 @@
   "subtitle": "Dense semantic register with long definitions, status signals, owners, risks, and governance notes",
   "diagram_type": "registry_table",
   "style": "accent-blueprint",
-  "width": 2400,
+  "width": 2540,
   "row_height": 112,
   "columns": [
     {"id": "term", "label": "Term", "width": 250},
-    {"id": "definition", "label": "Definition", "width": 520},
+    {"id": "definition", "label": "Definition", "width": 560},
     {"id": "type", "label": "Type", "width": 165, "align": "center"},
     {"id": "owner", "label": "Owner", "width": 230},
     {"id": "state", "label": "Lifecycle State", "width": 190},
-    {"id": "risk", "label": "Risk / Constraint", "width": 330},
+    {"id": "risk", "label": "Risk / Constraint", "width": 430},
     {"id": "evidence", "label": "Required Evidence", "width": 280},
     {"id": "related", "label": "Related Items"}
   ],

@@ -8,14 +8,14 @@ Height above `max_height` is a review signal, not an automatic compression targe
 
 | Rank | Template | Priority | Notes |
 | --- | --- | --- | --- |
-| 1 | taxonomy_tree/reference | 5 | right whitespace 298px |
-| 2 | capability_domain_map/stress | 0 | height above max_height 1300px; dense but acceptable |
-| 3 | object_relationship_diagram/stress | 0 | height above max_height 1450px; dense but acceptable |
-| 4 | relationship_matrix/stress | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
-| 5 | boundary_ownership_map/minimal | 0 | ok |
-| 6 | boundary_ownership_map/reference | 0 | ok |
-| 7 | boundary_ownership_map/stress | 0 | ok |
-| 8 | capability_domain_map/minimal | 0 | ok |
+| 1 | capability_domain_map/stress | 0 | height above max_height 1300px; dense but acceptable |
+| 2 | object_relationship_diagram/stress | 0 | height above max_height 1450px; dense but acceptable |
+| 3 | relationship_matrix/stress | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
+| 4 | boundary_ownership_map/minimal | 0 | ok |
+| 5 | boundary_ownership_map/reference | 0 | ok |
+| 6 | boundary_ownership_map/stress | 0 | ok |
+| 7 | capability_domain_map/minimal | 0 | ok |
+| 8 | capability_domain_map/reference | 0 | ok |
 
 ## Height Diagnostics
 
@@ -27,7 +27,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | layered_knowledge_topology/stress | 1349 | 1289 | 0 | 22 | content span 1289px, panel span 0px; bottom whitespace 22px |
 | object_relationship_diagram/stress | 1487 | 984 | 289 | 22 | 10 objects/concepts, 10 relationships; diagram span 984px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
 | ontology_map/stress | 1238 | 732 | 289 | 22 | 8 objects/concepts, 8 relationships; diagram span 732px, panel span 289px; bottom whitespace 22px; height driven by relationship geometry and info panels |
-| registry_table/stress | 1457 | 1397 | 174 | 22 | content span 1397px, panel span 174px; bottom whitespace 22px |
+| registry_table/stress | 1444 | 1384 | 160 | 22 | content span 1384px, panel span 160px; bottom whitespace 22px |
 | relationship_matrix/stress | 1802 | 1612 | 330 | 22 | 11x11 matrix, 121 cells; grid span 1262px, top-connected span 330px; bottom whitespace 22px; height driven by matrix rows and companion panels |
 | source_boundary_map/stress | 1307 | 1247 | 0 | 22 | content span 1247px, panel span 0px; bottom whitespace 22px |
 | taxonomy_tree/stress | 1335 | 1275 | 0 | 22 | content span 1275px, panel span 0px; bottom whitespace 22px |
@@ -37,7 +37,6 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | Template | Total | Review | Compact | Highest Concern | Examples |
 | --- | --- | --- | --- | --- | --- |
 | relationship_matrix/stress | 17 | 0 | 17 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'account ow...'; compact-fit:matrix-preview-title@matrix-preview-node 'Commercial...'; compact-fit:matrix-preview-sub@matrix-preview-node 'commercial...' |
-| registry_table/stress | 8 | 8 | 0 | context-review | context-review:table-cell-secondary@svg 'hidden cross-domain ownersh...'; context-review:table-cell-secondary@svg 'and must trigger re-review...'; context-review:table-cell-secondary@svg 'traceability to the affecte...' |
 | boundary_ownership_map/reference | 3 | 3 | 0 | context-review | context-review:table-cell-secondary@svg 'Customer Data Stewa...'; context-review:table-cell-secondary@svg 'Operations Data Own...'; context-review:table-cell-secondary@svg 'Operations Data Ste...' |
 | layered_knowledge_topology/stress | 1 | 1 | 0 | context-review | context-review:card-sub@node-package_e 'fixture + inspection r...' |
 | relationship_matrix/minimal | 1 | 0 | 1 | compact-fit | compact-fit:matrix-preview-sub@matrix-preview-node 'catalog...' |
@@ -68,7 +67,7 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | ontology_map/stress | 1796x1238 | 1656x1178 | 70/22 | 14 | 22 | 4 | 133/1451 | 0 (0%) | 0 | ok |
 | registry_table/minimal | 1100x467 | 960x407 | 70/22 | 0 | 0 | 0 | 14/281 | 0 (0%) | 0 | ok |
 | registry_table/reference | 1500x657 | 1360x597 | 70/22 | 0 | 0 | 0 | 37/698 | 0 (0%) | 0 | ok |
-| registry_table/stress | 2400x1457 | 2260x1397 | 70/22 | 0 | 0 | 3 | 160/3724 | 8 (5%) | 0 | ok |
+| registry_table/stress | 2540x1444 | 2400x1384 | 70/22 | 0 | 0 | 3 | 158/3810 | 0 (0%) | 0 | ok |
 | relationship_matrix/minimal | 1960x1190 | 1864x1130 | 48/22 | 0 | 0 | 3 | 89/794 | 1 (1%) | 0 | ok |
 | relationship_matrix/reference | 2200x1514 | 2104x1454 | 48/22 | 0 | 0 | 3 | 177/1080 | 0 (0%) | 0 | ok |
 | relationship_matrix/stress | 2400x1802 | 2304x1742 | 48/22 | 0 | 0 | 3 | 252/1455 | 17 (7%) | 0 | height above max_height 1700px; dense but acceptable; very tall canvas |
@@ -76,5 +75,5 @@ Height above `max_height` is a review signal, not an automatic compression targe
 | source_boundary_map/reference | 1536x1307 | 1468x1247 | 0/22 | 11 | 23 | 0 | 32/701 | 0 (0%) | 0 | ok |
 | source_boundary_map/stress | 1900x1307 | 1760x1247 | 70/22 | 13 | 33 | 0 | 40/777 | 0 (0%) | 0 | ok |
 | taxonomy_tree/minimal | 850x557 | 610x497 | 170/22 | 2 | 1 | 0 | 10/177 | 0 (0%) | 0 | ok |
-| taxonomy_tree/reference | 1500x835 | 1132x775 | 298/22 | 10 | 9 | 0 | 30/438 | 0 (0%) | 0 | right whitespace 298px |
+| taxonomy_tree/reference | 1260x835 | 1012x775 | 178/22 | 10 | 9 | 0 | 30/438 | 0 (0%) | 0 | ok |
 | taxonomy_tree/stress | 1700x1335 | 1524x1275 | 106/22 | 27 | 26 | 0 | 77/1011 | 0 (0%) | 0 | ok |
