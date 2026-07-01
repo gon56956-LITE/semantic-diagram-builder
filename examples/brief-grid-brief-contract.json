@@ -1,0 +1,48 @@
+{
+  "title": "Executive Intelligence Brief",
+  "subtitle": "Geopolitical, economic, and technological inflection points",
+  "diagram_type": "capability_domain_map",
+  "style": "brief-grid",
+  "width": 1680,
+  "levels": [
+    {"id": "signals", "label": "Primary Signals", "kind": "source"},
+    {"id": "vectors", "label": "Vectors", "kind": "capability"},
+    {"id": "response", "label": "Response", "kind": "decision"}
+  ],
+  "columns": [
+    {"id": "tech", "label": "Technological", "kind": "query", "width": 260},
+    {"id": "jurisdiction", "label": "Jurisdictional", "kind": "registry", "width": 260},
+    {"id": "economic", "label": "Economic", "kind": "risk", "width": 260}
+  ],
+  "items": [
+    {"id": "recursive_ai", "label": "Recursive AI", "subtitle": "successor systems", "level": "signals", "column": "tech", "kind": "query"},
+    {"id": "legal_personhood", "label": "Non-Human Corp", "subtitle": "agentic shells", "level": "signals", "column": "jurisdiction", "kind": "registry"},
+    {"id": "automation_market", "label": "Automation Paradox", "subtitle": "labor up, markets unstable", "level": "signals", "column": "economic", "kind": "risk"},
+    {"id": "compute_swarms", "label": "Compute Swarms", "subtitle": "infra demand", "level": "vectors", "column": "tech", "kind": "capability"},
+    {"id": "jurisdiction_race", "label": "Jurisdiction Race", "subtitle": "tax and oversight", "level": "vectors", "column": "jurisdiction", "kind": "decision"},
+    {"id": "white_collar_reorg", "label": "White-Collar Reorg", "subtitle": "enterprise redesign", "level": "vectors", "column": "economic", "kind": "process"},
+    {"id": "coordination", "label": "Finish-Line Coordination", "subtitle": "policy, capital, and safety rails", "level": "response", "column": "jurisdiction", "span": 2, "kind": "decision"}
+  ],
+  "relationships": [
+    {"from": "recursive_ai", "to": "compute_swarms", "relation": "drives", "style": "primary"},
+    {"from": "legal_personhood", "to": "jurisdiction_race", "relation": "triggers", "style": "primary"},
+    {"from": "automation_market", "to": "white_collar_reorg", "relation": "pressures", "style": "primary"},
+    {"from": "jurisdiction_race", "to": "coordination", "relation": "requires", "style": "secondary"},
+    {"from": "white_collar_reorg", "to": "coordination", "relation": "requires", "style": "secondary"}
+  ],
+  "info_panels": [
+    {
+      "id": "sources",
+      "title": "Data Sources",
+      "kind": "source",
+      "items": [
+        {"label": "Break", "value": "market telemetry"},
+        {"label": "Break", "value": "policy filings"},
+        {"label": "Break", "value": "labor indicators"}
+      ]
+    }
+  ],
+  "annotations": [
+    {"text": "Brief-grid uses warm grid paper, navy ink, and red alert accents while preserving standard layout and routing semantics.", "placement": "footer"}
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Brief Grid Taxonomy",
+  "subtitle": "brief-grid taxonomy_tree style check",
+  "diagram_type": "taxonomy_tree",
+  "style": "brief-grid",
+  "width": 1500,
+  "nodes": [
+    {"id": "root", "label": "Brief Signals", "subtitle": "root set", "kind": "hub"},
+    {"id": "tech", "label": "Technology", "subtitle": "capability", "kind": "query", "parent": "root", "order": 0},
+    {"id": "policy", "label": "Policy", "subtitle": "jurisdiction", "kind": "registry", "parent": "root", "order": 1},
+    {"id": "markets", "label": "Markets", "subtitle": "economic", "kind": "risk", "parent": "root", "order": 2},
+    {"id": "recursive", "label": "Recursive AI", "subtitle": "self-improving", "kind": "query", "parent": "tech", "order": 0},
+    {"id": "compute", "label": "Compute Buildout", "subtitle": "infrastructure", "kind": "capability", "parent": "tech", "order": 1},
+    {"id": "personhood", "label": "Legal Shells", "subtitle": "agentic entities", "kind": "decision", "parent": "policy", "order": 0},
+    {"id": "tax", "label": "Tax Havens", "subtitle": "capital flows", "kind": "registry", "parent": "policy", "order": 1},
+    {"id": "labor", "label": "Labor Shift", "subtitle": "bottlenecks", "kind": "process", "parent": "markets", "order": 0},
+    {"id": "liquidity", "label": "Liquidity Shock", "subtitle": "market stress", "kind": "risk", "parent": "markets", "order": 1}
+  ],
+  "annotations": [
+    {"text": "Brief-grid taxonomy check: square cards and report-style hierarchy on warm grid paper.", "placement": "footer"}
+  ]
+}

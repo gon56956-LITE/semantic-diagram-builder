@@ -1,0 +1,19 @@
+{
+  "title": "Brief Grid Coordination Hub",
+  "subtitle": "brief-grid hub_spoke style check",
+  "diagram_type": "hub_spoke",
+  "style": "brief-grid",
+  "width": 1500,
+  "hub_id": "hub",
+  "nodes": [
+    {"id": "hub", "label": "Coordination Hub", "subtitle": "finish-line mechanism", "kind": "hub"},
+    {"id": "labs", "label": "Frontier Labs", "subtitle": "model releases", "kind": "query", "order": 0},
+    {"id": "capital", "label": "Capital", "subtitle": "liquidity", "kind": "evidence", "order": 1},
+    {"id": "policy", "label": "Policy", "subtitle": "oversight", "kind": "decision", "order": 2},
+    {"id": "compute", "label": "Compute", "subtitle": "capacity", "kind": "capability", "order": 3},
+    {"id": "risk", "label": "Risk Desk", "subtitle": "constraints", "kind": "risk", "order": 4, "style": "dashed"}
+  ],
+  "annotations": [
+    {"text": "Brief-grid hub check: report boxes, technical icons, and direct coordination spokes.", "placement": "footer"}
+  ]
+}

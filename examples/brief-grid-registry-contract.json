@@ -1,0 +1,46 @@
+{
+  "title": "Brief Grid Register",
+  "subtitle": "brief-grid registry_table style check",
+  "diagram_type": "registry_table",
+  "style": "brief-grid",
+  "width": 1600,
+  "columns": [
+    {"id": "signal", "label": "Signal", "width": 240},
+    {"id": "brief", "label": "Brief", "width": 500},
+    {"id": "status", "label": "Status", "width": 190, "align": "center"},
+    {"id": "owner", "label": "Desk", "width": 220},
+    {"id": "watch", "label": "Watch Item"}
+  ],
+  "rows": [
+    {
+      "id": "takeoff",
+      "kind": "risk",
+      "signal": "Hard Takeoff",
+      "brief": "Autonomy curve steepens faster than governance review cycles.",
+      "status": "Alert",
+      "owner": "AI Policy",
+      "watch": "Compute, evals, release cadence"
+    },
+    {
+      "id": "jurisdiction",
+      "kind": "registry",
+      "signal": "Jurisdiction Race",
+      "brief": "States compete to host agentic capital and legal containers.",
+      "status": "Active",
+      "owner": "Legal",
+      "watch": "Tax, personhood, oversight"
+    },
+    {
+      "id": "labor",
+      "kind": "process",
+      "signal": "Labor Reorg",
+      "brief": "Automation shifts the bottleneck toward judgment and coordination.",
+      "status": "Rising",
+      "owner": "Markets",
+      "watch": "Hiring, layoffs, margins"
+    }
+  ],
+  "annotations": [
+    {"text": "Brief-grid register check: grid paper, square report cells, navy ink, and red alert accents.", "placement": "footer"}
+  ]
+}

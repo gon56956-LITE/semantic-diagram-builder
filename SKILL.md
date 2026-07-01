@@ -28,7 +28,7 @@ This is not a workflow skill. If the diagram is mainly an execution sequence, pr
    - See `references/diagram_type_readiness.md` before using a type in a production diagram; it records `stable`, `beta`, and `experimental` boundaries.
    - Start from `templates/<diagram_type>/minimal-contract.json` for a small starter, `reference-contract.json` for a normal rich pattern, or `stress-contract.json` when you need QA coverage for dense content.
 3. Choose a visual style package.
-   - `style` is required. Use `modern-tech` for the migrated current style, `accent-blueprint` for the blue enterprise blueprint style, or a relative path to a custom `style.json`.
+   - `style` is required. Use `modern-tech` for the migrated current style, `accent-blueprint` for the blue enterprise blueprint style, `brief-grid` for warm grid-paper intelligence briefs, or a relative path to a custom `style.json`.
    - Style packages are declarative JSON only; do not execute Python or external code from a style.
    - See `references/style_packages.md`.
 4. Apply stable layout metrics from `references/layout_metrics.md` before rendering or manual SVG edits.
@@ -167,6 +167,7 @@ Useful style values:
 
 - `modern-tech`: migrated light technical style used by the original examples.
 - `accent-blueprint`: deep navy/cobalt blueprint style with subtle grid, white technical linework, and sparse semantic accents.
+- `brief-grid`: warm off-white grid-paper brief style with square report panels, navy ink, and red/orange alert accents.
 - `./path/to/style.json`: custom declarative style package relative to the contract file.
 
 The renderer fails if `style` is missing or cannot be loaded. This is intentional so diagrams do not silently switch visual systems.

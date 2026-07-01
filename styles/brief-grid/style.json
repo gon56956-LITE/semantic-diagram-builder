@@ -1,0 +1,186 @@
+{
+  "id": "brief-grid",
+  "version": "1.0.0",
+  "description": "Warm paper intelligence-brief style with engineering grid lines, square report panels, navy ink, and red alert accents.",
+  "metrics": {
+    "canvas_margin_x": 70,
+    "top_y": 115,
+    "card_h": 100,
+    "card_min_w": 260,
+    "card_max_w": 360,
+    "card_col_gap": 56,
+    "card_row_gap": 34,
+    "layer_label_h": 42,
+    "layer_top_pad": 64,
+    "layer_bottom_pad": 32,
+    "layer_min_h": 170,
+    "layer_gap": 32,
+    "layer_side_gutter": 110,
+    "bus_to_card_clearance": 32,
+    "bus_bottom_clearance": 18,
+    "bus_lane_gap": 48,
+    "side_trunk_gutter": 130
+  },
+  "tokens": {
+    "colors": {
+      "background": "#F3F1E8",
+      "background_dark": "#E7E3D7",
+      "grid_line": "rgba(35,43,54,0.13)",
+      "grid_line_strong": "rgba(35,43,54,0.24)",
+      "text_primary": "#101010",
+      "text_secondary": "#29323D",
+      "line_primary": "#263142",
+      "panel_fill": "rgba(255,255,255,0.34)",
+      "panel_fill_strong": "rgba(231,227,215,0.72)",
+      "card_fill": "rgba(255,255,255,0.40)",
+      "accent_cyan": "#315F9E",
+      "accent_yellow": "#B4831D",
+      "accent_green": "#3D6F55",
+      "accent_purple": "#5D4D7A",
+      "accent_orange": "#E7472E",
+      "fanout": "#E7472E",
+      "fanin": "#25346D",
+      "accents": {
+        "hub": "#101010",
+        "index": "#25346D",
+        "query": "#315F9E",
+        "glossary": "#5D4D7A",
+        "ontology": "#5D4D7A",
+        "process": "#E7472E",
+        "quality": "#B4831D",
+        "risk": "#E7472E",
+        "package": "#25346D",
+        "source": "#29323D",
+        "registry": "#B4831D",
+        "capability": "#315F9E",
+        "evidence": "#29323D",
+        "decision": "#E7472E",
+        "object": "#29323D"
+      },
+      "pale": {
+        "#101010": "#F3F1E8",
+        "#25346D": "#E4E8F4",
+        "#315F9E": "#E6ECF4",
+        "#5D4D7A": "#E9E4EE",
+        "#E7472E": "#F5D7CD",
+        "#B4831D": "#EFE5C9",
+        "#3D6F55": "#DDE9DF",
+        "#29323D": "#ECE8DC"
+      }
+    },
+    "typography": {
+      "sans": "IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace",
+      "mono": "IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace",
+      "title": "IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace",
+      "title_size": "31px",
+      "subtitle_size": "14px",
+      "group_label_size": "15px",
+      "card_title_size": "17px",
+      "card_sub_size": "13px",
+      "note_size": "14px",
+      "title_letter_spacing": ".03em",
+      "label_letter_spacing": ".04em",
+      "title_transform": "uppercase"
+    },
+    "grid": {
+      "enabled": true,
+      "line": "grid_line",
+      "strong_line": "grid_line_strong",
+      "size": 24,
+      "strong_every": 5,
+      "reference_width": 1500,
+      "scale_with_canvas": true,
+      "opacity": 1
+    }
+  },
+  "components": {
+    "canvas": {
+      "background": "background",
+      "radius": 0
+    },
+    "group": {
+      "fill": "panel_fill",
+      "opacity": 1,
+      "stroke": "line_primary",
+      "stroke_opacity": 0.75,
+      "stroke_width": 1,
+      "radius": 2,
+      "dasharray": "none"
+    },
+    "card": {
+      "fill": "card_fill",
+      "fill_opacity": 1,
+      "stroke_mode": "accent",
+      "stroke_width": 1.6,
+      "radius": 2,
+      "padding_x": 18,
+      "icon_gap": 14,
+      "title_line_height": 19,
+      "subtitle_gap": 10,
+      "shadow": {
+        "enabled": false
+      }
+    },
+    "icon": {
+      "fill_mode": "none",
+      "stroke_width": 1.35,
+      "line_width": 1.45
+    },
+    "connector": {
+      "primary": "line_primary",
+      "fanout": "fanout",
+      "fanin": "fanin",
+      "stroke_width": 1.8,
+      "opacity": 0.9,
+      "fanout_opacity": 0.92,
+      "fanin_opacity": 0.9,
+      "dasharray": "7 5",
+      "dashed_opacity": 0.72,
+      "fanout_palette": ["fanout", "accent_cyan", "accent_yellow", "accent_purple", "accent_green"],
+      "fanin_palette": ["fanin", "accent_purple", "accent_yellow", "accent_orange", "accent_cyan"],
+      "relation_palette": ["accent_cyan", "accent_orange", "accent_yellow", "accent_purple", "accent_green"],
+      "ontology_instance_palette": ["accent_cyan", "accent_orange", "accent_purple", "accent_yellow", "accent_green"],
+      "relation_colors": {
+        "data_flow": "accent_orange",
+        "flow": "accent_orange",
+        "feeds": "accent_orange",
+        "shared_responsibility": "accent_purple",
+        "hosting_boundary": "accent_purple",
+        "federation": "accent_cyan",
+        "reporting": "accent_yellow",
+        "reviewed_by": "accent_yellow",
+        "reviewed by": "accent_yellow",
+        "optional": "accent_purple"
+      }
+    },
+    "table": {
+      "fill": "panel_fill",
+      "header_fill": "panel_fill_strong",
+      "stroke": "line_primary",
+      "stroke_width": 1,
+      "grid_opacity": 0.62,
+      "radius": 2,
+      "header_size": "15.5px",
+      "cell_size": "17px"
+    },
+    "tree_node": {
+      "source": "card"
+    },
+    "hub": {
+      "source": "card"
+    },
+    "spoke": {
+      "source": "card"
+    },
+    "metadata_panel": {
+      "fill": "panel_fill",
+      "stroke": "line_primary",
+      "stroke_opacity": 0.68
+    }
+  },
+  "qa": {
+    "reference_contracts": [
+      "examples/brief-grid-brief-contract.json"
+    ]
+  }
+}

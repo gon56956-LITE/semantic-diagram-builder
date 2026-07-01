@@ -14,6 +14,19 @@
       "diagram_type": "layered_knowledge_topology"
     },
     {
+      "path": "examples/modern-tech-registry-contract.json",
+      "title": "Modern Semantic Register",
+      "style": "modern-tech",
+      "diagram_type": "registry_table"
+    },
+    {
+      "path": "examples/modern-tech-hub-contract.json",
+      "title": "Modern Knowledge Hub",
+      "style": "modern-tech",
+      "diagram_type": "hub_spoke",
+      "max_height": 720
+    },
+    {
       "path": "examples/accent-blueprint-boundary-contract.json",
       "title": "Knowledge Boundary Blueprint",
       "style": "accent-blueprint",
@@ -35,6 +48,31 @@
       "path": "examples/hub-spoke-contract.json",
       "title": "Knowledge Hub Reference",
       "style": "accent-blueprint",
+      "diagram_type": "hub_spoke",
+      "max_height": 720
+    },
+    {
+      "path": "examples/brief-grid-brief-contract.json",
+      "title": "Executive Intelligence Brief",
+      "style": "brief-grid",
+      "diagram_type": "capability_domain_map"
+    },
+    {
+      "path": "examples/brief-grid-registry-contract.json",
+      "title": "Brief Grid Register",
+      "style": "brief-grid",
+      "diagram_type": "registry_table"
+    },
+    {
+      "path": "examples/brief-grid-taxonomy-contract.json",
+      "title": "Brief Grid Taxonomy",
+      "style": "brief-grid",
+      "diagram_type": "taxonomy_tree"
+    },
+    {
+      "path": "examples/brief-grid-hub-contract.json",
+      "title": "Brief Grid Coordination Hub",
+      "style": "brief-grid",
       "diagram_type": "hub_spoke",
       "max_height": 720
     }

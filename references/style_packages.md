@@ -4,7 +4,7 @@ Semantic diagram styles are declarative JSON packages. They control visual langu
 
 ## Loading
 
-- Built-in style id: `style: "modern-tech"` or `style: "accent-blueprint"`.
+- Built-in style id: `style: "modern-tech"`, `style: "accent-blueprint"`, or `style: "brief-grid"`.
 - Local style path: `style: "./my-style/style.json"` relative to the contract file.
 - Missing or invalid styles are hard errors.
 
@@ -58,6 +58,16 @@ Connector color policy:
 - Repeated fan-in/fan-out families may use the connector family palette so shared corridors remain distinguishable.
 - Sparse dashed overlays use relation-specific colors first, then source-object accent or the relation palette when the relation repeats.
 - Explicit edge or relationship `accent` values still win when a contract needs a known semantic color.
+
+## Brief Grid
+
+`brief-grid` is a warm grid-paper briefing style. It follows the supplied executive/intelligence brief references and uses:
+
+- off-white paper background with engineering grid lines.
+- black/navy monospace report typography.
+- square cards, tables, and panels with thin technical borders and no shadows.
+- red/orange alert accents plus muted navy, blue, green, purple, and ochre semantic colors.
+- context-stroke arrow markers so connector arrows inherit lane color.
 
 ## QA
 

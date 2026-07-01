@@ -186,6 +186,142 @@
 </section>
 <section class="frame">
   <header>
+    <strong>Modern Semantic Register</strong>
+    <span>modern-tech</span>
+    <span>registry_table</span>
+    <code>examples\modern-tech-registry-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1500" height="564" viewBox="0 0 1500 564" role="img" aria-label="Modern Semantic Register" data-style="modern-tech" data-diagram-type="registry_table">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .info-panel-title{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .info-panel-item{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1500" height="564" rx="28" fill="#F8FBFF"/>
+<text x="750.0" y="54" text-anchor="middle" class="title">Modern Semantic Register</text>
+<text x="750.0" y="80.0" text-anchor="middle" class="subtitle">modern-tech registry_table style check</text>
+<rect x="70" y="115" width="1360" height="339" rx="16" fill="#FFFFFF" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<rect x="70" y="115" width="1360" height="60" rx="16" fill="#EEF6FF"/>
+<text x="86.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Term</text>
+<line x1="290.0" y1="115" x2="290.0" y2="454" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="306.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Definition</text>
+<line x1="750.0" y1="115" x2="750.0" y2="454" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="835.0" y="150.33333333333334" text-anchor="middle" class="table-header" style="font-size:16px">Type</text>
+<line x1="920.0" y1="115" x2="920.0" y2="454" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="936.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Owner</text>
+<line x1="1130.0" y1="115" x2="1130.0" y2="454" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="1146.0" y="150.33333333333334" text-anchor="start" class="table-header" style="font-size:16px">Related Items</text>
+<line x1="70" y1="175" x2="1430" y2="175" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="132.0" y="227.33333333333334" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Domain Map</text>
+<g class="table-badge semantic-badge" data-kind="capability"><rect x="86" y="206.5" width="30" height="30" rx="5" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.2"/><rect x="91.0" y="214.5" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M91.0,219.5 H111.0 M101.0,214.5 V230.5" class="icon-line" stroke="#0EA5E9"/></g>
+<text x="306.0" y="216.39583333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Aligned view of systems, interfaces,</text>
+<text x="306.0" y="238.27083333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">boundaries, and reusable knowledge modules.</text>
+<text x="835.0" y="227.33333333333334" text-anchor="middle" class="table-cell-secondary" style="font-size:17.5px">Map</text>
+<text x="936.0" y="227.33333333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Architecture</text>
+<text x="1146.0" y="216.39583333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Interfaces, Modules,</text>
+<text x="1146.0" y="238.27083333333334" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Boundaries</text>
+<line x1="70" y1="268" x2="1430" y2="268" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="132.0" y="309.3958333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Controlled</text>
+<text x="132.0" y="331.2708333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Source</text>
+<g class="table-badge semantic-badge" data-kind="source"><rect x="86" y="299.5" width="30" height="30" rx="5" fill="#F8FAFC" stroke="#334155" stroke-width="1.2"/><path d="M91.0,304.5 H105.0 L111.0,310.5 V324.5 H91.0 Z" fill="#F8FAFC" stroke="#334155" stroke-width="1.7"/><path d="M105.0,304.5 V310.5 H111.0" class="icon-line" stroke="#334155"/></g>
+<text x="306.0" y="309.3958333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Authoritative document or system record used</text>
+<text x="306.0" y="331.2708333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">to validate derived knowledge.</text>
+<text x="835.0" y="320.3333333333333" text-anchor="middle" class="table-cell-secondary" style="font-size:17.5px">Authority</text>
+<text x="936.0" y="320.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Document Control</text>
+<text x="1146.0" y="320.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Revision, Approval</text>
+<line x1="70" y1="361" x2="1430" y2="361" stroke="#334155" stroke-opacity="0.24" stroke-width="1"/>
+<text x="132.0" y="402.3958333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Risk</text>
+<text x="132.0" y="424.2708333333333" text-anchor="start" class="table-cell" style="font-size:17.5px;font-weight:700">Constraint</text>
+<g class="table-badge semantic-badge" data-kind="risk"><rect x="86" y="392.5" width="30" height="30" rx="5" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.2"/><path d="M101.0,397.5 L110.0,402.5 V412.5 L101.0,417.5 L92.0,412.5 V402.5 Z" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.7"/><path d="M97.0,407.5 L100.0,411.5 L106.0,403.5" class="icon-line" stroke="#7C3AED"/></g>
+<text x="306.0" y="402.3958333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Condition that limits how an asset,</text>
+<text x="306.0" y="424.2708333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">parameter, or process module can be reused.</text>
+<text x="835.0" y="413.3333333333333" text-anchor="middle" class="table-cell-secondary" style="font-size:17.5px">Governance</text>
+<text x="936.0" y="413.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">Quality</text>
+<text x="1146.0" y="413.3333333333333" text-anchor="start" class="table-cell-secondary" style="font-size:17.5px">CTQ, Exception</text>
+<text x="750.0" y="536" text-anchor="middle" class="note">Modern-tech register check: light cards, soft fills, and high-contrast semantic accents.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Modern Knowledge Hub</strong>
+    <span>modern-tech</span>
+    <span>hub_spoke</span>
+    <code>examples\modern-tech-hub-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1500" height="645" viewBox="0 0 1500 645" role="img" aria-label="Modern Knowledge Hub" data-style="modern-tech" data-diagram-type="hub_spoke">
+<defs>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style="modern-tech"] .route-shared{marker-end:none}
+    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .info-panel-title{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .info-panel-item{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1500" height="645" rx="28" fill="#F8FBFF"/>
+<text x="750.0" y="54" text-anchor="middle" class="title">Modern Knowledge Hub</text>
+<text x="750.0" y="80.0" text-anchor="middle" class="subtitle">modern-tech hub_spoke style check</text>
+<circle cx="750.0" cy="390" r="138.0" fill="none" stroke="#2F7DFF" stroke-opacity="0.16" stroke-width="1.4"/>
+<path d="M 640.19 346.8 L 445.0 270.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 632.0 390.0 L 445.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 640.19 433.2 L 445.0 510.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 865.78 367.22 L 1055.0 330.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 865.78 412.78 L 1055.0 450.0" class="edge edge-dashed hub-spoke-link" marker-end="url(#arrow)"/>
+<g id="node-hub" class="hub-core card"><rect x="632.0" y="272.0" width="236.0" height="236.0" fill="none" stroke="none"/><circle cx="750.0" cy="390" r="118.0" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="3.2"/><circle cx="750.0" cy="390" r="106.0" fill="none" stroke="#2F7DFF" stroke-opacity="0.32" stroke-width="1.3"/><text x="750.0" y="380.0" text-anchor="middle" class="card-title" style="font-size:22px">Knowledge Hub</text><text x="750.0" y="405.0" text-anchor="middle" class="card-sub" style="font-size:15px">navigation +</text><text x="750.0" y="422.0" text-anchor="middle" class="card-sub" style="font-size:15px">orchestration</text></g>
+<g id="node-portal" class="hub-spoke-node spoke-block card"><rect x="165" y="227.0" width="280.0" height="86.0" rx="10" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2"/><rect x="189" y="260.0" width="18" height="20" rx="3" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M193,266.0 H203 M193,271.0 H203 M193,276.0 H200" class="icon-line" stroke="#2F7DFF"/><text x="231" y="268.75" text-anchor="start" class="card-title" style="font-size:19px">Portal</text><text x="231" y="290.25" text-anchor="start" class="card-sub" style="font-size:14.5px">entry point</text></g>
+<g id="node-domain" class="hub-spoke-node spoke-block card"><rect x="165" y="347.0" width="280.0" height="86.0" rx="10" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2.2"/><rect x="189" y="383.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M189,388.0 H209 M199,383.0 V399.0" class="icon-line" stroke="#0EA5E9"/><text x="231" y="388.75" text-anchor="start" class="card-title" style="font-size:19px">Domain Maps</text><text x="231" y="410.25" text-anchor="start" class="card-sub" style="font-size:14.5px">systems + owners</text></g>
+<g id="node-registers" class="hub-spoke-node spoke-block card"><rect x="165" y="467.0" width="280.0" height="86.0" rx="10" fill="#FFFFFF" stroke="#F97316" stroke-width="2.2"/><path d="M199,500.0 L209,518.0 H189 Z" fill="#FFF7ED" stroke="#F97316" stroke-width="1.7"/><path d="M199,507.0 V513.0 M199,517.0 V517.0" class="icon-line" stroke="#F97316"/><text x="231" y="508.75" text-anchor="start" class="card-title" style="font-size:19px">Registers</text><text x="231" y="530.25" text-anchor="start" class="card-sub" style="font-size:14.5px">terms + parameters</text></g>
+<g id="node-modules" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="287.0" width="280.0" height="86.0" rx="10" fill="#FFFFFF" stroke="#22C55E" stroke-width="2.2"/><rect x="1079.0" y="323.0" width="20" height="16" rx="3" fill="#ECFDF5" stroke="#22C55E" stroke-width="1.7"/><path d="M1079.0,328.0 H1099.0 M1089.0,323.0 V339.0" class="icon-line" stroke="#22C55E"/><text x="1121.0" y="328.75" text-anchor="start" class="card-title" style="font-size:19px">Modules</text><text x="1121.0" y="350.25" text-anchor="start" class="card-sub" style="font-size:14.5px">approved assets</text></g>
+<g id="node-governance" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="407.0" width="280.0" height="86.0" rx="10" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2.2"/><path d="M1089.0,440.0 L1098.0,445.0 V455.0 L1089.0,460.0 L1080.0,455.0 V445.0 Z" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.7"/><path d="M1085.0,450.0 L1088.0,454.0 L1094.0,446.0" class="icon-line" stroke="#7C3AED"/><text x="1121.0" y="448.75" text-anchor="start" class="card-title" style="font-size:19px">Governance</text><text x="1121.0" y="470.25" text-anchor="start" class="card-sub" style="font-size:14.5px">rules + risks</text></g>
+<text x="750.0" y="617" text-anchor="middle" class="note">Modern-tech hub check: soft surfaces, rounded cards, and readable spoke labels.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
     <strong>Knowledge Boundary Blueprint</strong>
     <span>accent-blueprint</span>
     <span>source_boundary_map</span>
@@ -490,6 +626,302 @@
 <g id="node-sources" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="347.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-width="1.4"/><path d="M1079.0,380.0 H1093.0 L1099.0,386.0 V400.0 H1079.0 Z" fill="none" stroke="#F4F8FF" stroke-width="1.2"/><path d="M1093.0,380.0 V386.0 H1099.0" class="icon-line" stroke="#F4F8FF"/><text x="1121.0" y="388.75" text-anchor="start" class="card-title" style="font-size:19px">Sources</text><text x="1121.0" y="410.25" text-anchor="start" class="card-sub" style="font-size:14.5px">controlled authority</text></g>
 <g id="node-governance" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="467.0" width="280.0" height="86.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFD84D" stroke-width="1.4"/><path d="M1089.0,500.0 L1098.0,505.0 V515.0 L1089.0,520.0 L1080.0,515.0 V505.0 Z" fill="none" stroke="#FFD84D" stroke-width="1.2"/><path d="M1085.0,510.0 L1088.0,514.0 L1094.0,506.0" class="icon-line" stroke="#FFD84D"/><text x="1121.0" y="508.75" text-anchor="start" class="card-title" style="font-size:19px">Governance</text><text x="1121.0" y="530.25" text-anchor="start" class="card-sub" style="font-size:14.5px">rules + risks</text></g>
 <text x="750.0" y="617" text-anchor="middle" class="note">hub_spoke uses hub_id for the center and nodes[].order for deterministic spoke placement.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Executive Intelligence Brief</strong>
+    <span>brief-grid</span>
+    <span>capability_domain_map</span>
+    <code>examples\brief-grid-brief-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1680" height="856" viewBox="0 0 1680 856" role="img" aria-label="Executive Intelligence Brief" data-style="brief-grid" data-diagram-type="capability_domain_map">
+<defs>
+  <pattern id="blueprint-grid-small" width="26.88" height="26.88" patternUnits="userSpaceOnUse"><path d="M 26.88 0 H 0 V 26.88" fill="none" stroke="#232B36" stroke-opacity="0.13" stroke-width="0.78"/></pattern>
+  <pattern id="blueprint-grid" width="134.4" height="134.4" patternUnits="userSpaceOnUse"><rect width="134.4" height="134.4" fill="url(#blueprint-grid-small)"/><path d="M 134.4 0 H 0 V 134.4" fill="none" stroke="#232B36" stroke-opacity="0.24" stroke-width="1.12"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="brief-grid"] .title{font:700 31px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.03em;text-transform:uppercase}
+    [data-style="brief-grid"] .subtitle{font:400 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .card-title{font:700 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .card-sub{font:500 13px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .edge{fill:none;stroke:#263142;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:0.9}
+    [data-style="brief-grid"] .fanout{stroke:#E7472E;opacity:0.92}
+    [data-style="brief-grid"] .fanin{stroke:#25346D;opacity:0.9}
+    [data-style="brief-grid"] .route-shared{marker-end:none}
+    [data-style="brief-grid"] .edge-dashed{stroke-dasharray:7 5;opacity:0.72}
+    [data-style="brief-grid"] .note{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace}
+    [data-style="brief-grid"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .table-cell{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .table-cell-secondary{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .info-panel-item{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .icon-line{fill:none;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1680" height="856" rx="0" fill="#F3F1E8"/>
+<rect x="0" y="0" width="1680" height="856" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="840.0" y="54" text-anchor="middle" class="title">Executive Intelligence Brief</text>
+<text x="840.0" y="80.0" text-anchor="middle" class="subtitle">Geopolitical, economic, and technological inflection points</text>
+<rect x="302.94000000000005" y="115" width="1074.12" height="56.0" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.52" stroke-width="1"/>
+<rect x="509.06000000000006" y="124" width="260.0" height="38.0" rx="5" fill="none" stroke="#315F9E" stroke-opacity="0.7" stroke-width="1"/>
+<g class="capability-column-icon capability-header-icon" data-kind="query"><rect x="521.0600000000001" y="128" width="30" height="30" rx="6" fill="#E6ECF4" stroke="#315F9E" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="534.0600000000001" cy="141" r="7" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M540.0600000000001,147 L546.0600000000001,153" class="icon-line" stroke="#315F9E"/></g>
+<text x="561.0600000000001" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#263142">Technological</text>
+<rect x="813.0600000000001" y="124" width="260.0" height="38.0" rx="5" fill="none" stroke="#B4831D" stroke-opacity="0.7" stroke-width="1"/>
+<g class="capability-column-icon capability-header-icon" data-kind="registry"><rect x="825.0600000000001" y="128" width="30" height="30" rx="6" fill="#EFE5C9" stroke="#B4831D" stroke-width="1.2" stroke-opacity="0.95"/><path d="M840.0600000000001,133 L850.0600000000001,151 H830.0600000000001 Z" fill="none" stroke="#B4831D" stroke-width="1.35"/><path d="M840.0600000000001,140 V146 M840.0600000000001,150 V150" class="icon-line" stroke="#B4831D"/></g>
+<text x="865.0600000000001" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#263142">Jurisdictional</text>
+<rect x="1117.06" y="124" width="260.0" height="38.0" rx="5" fill="none" stroke="#E7472E" stroke-opacity="0.7" stroke-width="1"/>
+<g class="capability-column-icon capability-header-icon" data-kind="risk"><rect x="1129.06" y="128" width="30" height="30" rx="6" fill="#F5D7CD" stroke="#E7472E" stroke-width="1.2" stroke-opacity="0.95"/><path d="M1144.06,133 L1153.06,138 V148 L1144.06,153 L1135.06,148 V138 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M1140.06,143 L1143.06,147 L1149.06,139" class="icon-line" stroke="#E7472E"/></g>
+<text x="1169.06" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#263142">Economic</text>
+<rect x="302.94000000000005" y="189.0" width="1074.12" height="120.0" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.22" stroke-width="1"/>
+<rect x="302.94000000000005" y="189.0" width="162.12" height="120.0" rx="5" fill="none" stroke="#29323D" stroke-width="1.2" stroke-opacity="0.95"/>
+<g class="capability-level-icon capability-header-icon" data-kind="source"><rect x="318.94000000000005" y="234.0" width="30" height="30" rx="6" fill="#ECE8DC" stroke="#29323D" stroke-width="1.2" stroke-opacity="0.95"/><path d="M323.94000000000005,239.0 H337.94000000000005 L343.94000000000005,245.0 V259.0 H323.94000000000005 Z" fill="none" stroke="#29323D" stroke-width="1.35"/><path d="M337.94000000000005,239.0 V245.0 H343.94000000000005" class="icon-line" stroke="#29323D"/></g>
+<text x="360.94000000000005" y="245.39" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#29323D">Primary</text>
+<text x="360.94000000000005" y="263.05" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#29323D">Signals</text>
+<rect x="302.94000000000005" y="345.0" width="1074.12" height="120.0" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.22" stroke-width="1"/>
+<rect x="302.94000000000005" y="345.0" width="162.12" height="120.0" rx="5" fill="none" stroke="#315F9E" stroke-width="1.2" stroke-opacity="0.95"/>
+<g class="capability-level-icon capability-header-icon" data-kind="capability"><rect x="318.94000000000005" y="390.0" width="30" height="30" rx="6" fill="#E6ECF4" stroke="#315F9E" stroke-width="1.2" stroke-opacity="0.95"/><rect x="323.94000000000005" y="398.0" width="20" height="16" rx="3" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M323.94000000000005,403.0 H343.94000000000005 M333.94000000000005,398.0 V414.0" class="icon-line" stroke="#315F9E"/></g>
+<text x="360.94000000000005" y="410.22" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#315F9E">Vectors</text>
+<rect x="302.94000000000005" y="501.0" width="1074.12" height="120.0" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.22" stroke-width="1"/>
+<rect x="302.94000000000005" y="501.0" width="162.12" height="120.0" rx="5" fill="none" stroke="#E7472E" stroke-width="1.2" stroke-opacity="0.95"/>
+<g class="capability-level-icon capability-header-icon" data-kind="decision"><rect x="318.94000000000005" y="546.0" width="30" height="30" rx="6" fill="#F5D7CD" stroke="#E7472E" stroke-width="1.2" stroke-opacity="0.95"/><path d="M333.94000000000005,551.0 L343.94000000000005,561.0 L333.94000000000005,571.0 L323.94000000000005,561.0 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M329.94000000000005,561.0 H337.94000000000005" class="icon-line" stroke="#E7472E"/></g>
+<text x="360.94000000000005" y="566.22" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#E7472E">Response</text>
+<path d="M 639.06 297.0 L 639.06 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#263142;opacity:0.86" data-from="recursive_ai" data-to="compute_swarms" data-relation="drives" data-lane-shift="0"/>
+<path d="M 943.06 297.0 L 943.06 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#263142;opacity:0.86" data-from="legal_personhood" data-to="jurisdiction_race" data-relation="triggers" data-lane-shift="-14"/>
+<path d="M 1247.06 297.0 L 1247.06 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#263142;opacity:0.86" data-from="automation_market" data-to="white_collar_reorg" data-relation="pressures" data-lane-shift="14"/>
+<path d="M 943.06 453.0 L 943.06 469.0 Q 943.06 483.0 957.06 483.0 L 1081.06 483.0 Q 1095.06 483.0 1095.06 497.0 L 1095.06 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#5D4D7A;opacity:0.86" stroke-dasharray="6 5" data-from="jurisdiction_race" data-to="coordination" data-relation="requires" data-lane-shift="0"/>
+<path d="M 1247.06 453.0 L 1247.06 461.0 Q 1247.06 469.0 1239.06 469.0 L 1109.06 469.0 Q 1095.06 469.0 1095.06 483.0 L 1095.06 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#3D6F55;opacity:0.86" stroke-dasharray="6 5" data-from="white_collar_reorg" data-to="coordination" data-relation="requires" data-lane-shift="-14"/>
+<g id="capability-item-recursive_ai" class="capability-map-item card" data-kind="query"><rect x="509.06000000000006" y="201.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.2"/><text x="525.0600000000001" y="247.78199999999998" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Recursive AI</text><text x="525.0600000000001" y="271.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">successor systems</text></g>
+<g id="capability-item-legal_personhood" class="capability-map-item card" data-kind="registry"><rect x="813.0600000000001" y="201.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#B4831D" stroke-width="1.2"/><text x="829.0600000000001" y="247.78199999999998" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Non-Human Corp</text><text x="829.0600000000001" y="271.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">agentic shells</text></g>
+<g id="capability-item-automation_market" class="capability-map-item card" data-kind="risk"><rect x="1117.06" y="201.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.2"/><text x="1133.06" y="247.78199999999998" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Automation Paradox</text><text x="1133.06" y="271.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">labor up, markets unstable</text></g>
+<g id="capability-item-compute_swarms" class="capability-map-item card" data-kind="capability"><rect x="509.06000000000006" y="357.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.2"/><text x="525.0600000000001" y="403.782" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Compute Swarms</text><text x="525.0600000000001" y="427.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">infra demand</text></g>
+<g id="capability-item-jurisdiction_race" class="capability-map-item card" data-kind="decision"><rect x="813.0600000000001" y="357.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.2"/><text x="829.0600000000001" y="403.782" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Jurisdiction Race</text><text x="829.0600000000001" y="427.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">tax and oversight</text></g>
+<g id="capability-item-white_collar_reorg" class="capability-map-item card" data-kind="process"><rect x="1117.06" y="357.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.2"/><text x="1133.06" y="403.782" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">White-Collar Reorg</text><text x="1133.06" y="427.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">enterprise redesign</text></g>
+<g id="capability-item-coordination" class="capability-map-item card" data-kind="decision"><rect x="813.0600000000001" y="513.0" width="564.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.2"/><text x="829.0600000000001" y="559.782" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Finish-Line Coordination</text><text x="829.0600000000001" y="583.6020000000001" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">policy, capital, and safety rails</text></g>
+<g class="info-panel" data-panel-id="sources">
+<rect x="70.0" y="657.0" width="1540.0" height="135.36" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#29323D" stroke-opacity="0.62" stroke-width="1"/>
+<text x="88.0" y="685.0" class="info-panel-title">Data Sources</text>
+<rect x="88.0" y="703.0" width="9" height="9" rx="2" fill="#29323D" opacity="0.95"/>
+<text x="106.0" y="713.0" class="info-panel-item" style="font-size:15.1px">Break: market telemetry</text>
+<rect x="88.0" y="728.12" width="9" height="9" rx="2" fill="#29323D" opacity="0.95"/>
+<text x="106.0" y="738.12" class="info-panel-item" style="font-size:15.1px">Break: policy filings</text>
+<rect x="88.0" y="753.24" width="9" height="9" rx="2" fill="#29323D" opacity="0.95"/>
+<text x="106.0" y="763.24" class="info-panel-item" style="font-size:15.1px">Break: labor indicators</text>
+</g>
+<text x="840.0" y="828" text-anchor="middle" class="note">Brief-grid uses warm grid paper, navy ink, and red alert accents while preserving standard layout and routing semantics.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Brief Grid Register</strong>
+    <span>brief-grid</span>
+    <span>registry_table</span>
+    <code>examples\brief-grid-registry-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1600" height="583" viewBox="0 0 1600 583" role="img" aria-label="Brief Grid Register" data-style="brief-grid" data-diagram-type="registry_table">
+<defs>
+  <pattern id="blueprint-grid-small" width="25.6" height="25.6" patternUnits="userSpaceOnUse"><path d="M 25.6 0 H 0 V 25.6" fill="none" stroke="#232B36" stroke-opacity="0.13" stroke-width="0.75"/></pattern>
+  <pattern id="blueprint-grid" width="128" height="128" patternUnits="userSpaceOnUse"><rect width="128" height="128" fill="url(#blueprint-grid-small)"/><path d="M 128 0 H 0 V 128" fill="none" stroke="#232B36" stroke-opacity="0.24" stroke-width="1.07"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="brief-grid"] .title{font:700 31px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.03em;text-transform:uppercase}
+    [data-style="brief-grid"] .subtitle{font:400 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .card-title{font:700 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .card-sub{font:500 13px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .edge{fill:none;stroke:#263142;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:0.9}
+    [data-style="brief-grid"] .fanout{stroke:#E7472E;opacity:0.92}
+    [data-style="brief-grid"] .fanin{stroke:#25346D;opacity:0.9}
+    [data-style="brief-grid"] .route-shared{marker-end:none}
+    [data-style="brief-grid"] .edge-dashed{stroke-dasharray:7 5;opacity:0.72}
+    [data-style="brief-grid"] .note{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace}
+    [data-style="brief-grid"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .table-cell{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .table-cell-secondary{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .info-panel-item{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .icon-line{fill:none;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1600" height="583" rx="0" fill="#F3F1E8"/>
+<rect x="0" y="0" width="1600" height="583" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="800.0" y="54" text-anchor="middle" class="title">Brief Grid Register</text>
+<text x="800.0" y="80.0" text-anchor="middle" class="subtitle">brief-grid registry_table style check</text>
+<rect x="70" y="115" width="1460" height="358" rx="2" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.62" stroke-width="1"/>
+<rect x="70" y="115" width="1460" height="64" rx="2" fill="#E7E3D7" fill-opacity="0.72"/>
+<text x="86.0" y="152.6888888888889" text-anchor="start" class="table-header" style="font-size:17.1px">Signal</text>
+<line x1="310.0" y1="115" x2="310.0" y2="473" stroke="#263142" stroke-opacity="0.62" stroke-width="1"/>
+<text x="326.0" y="152.6888888888889" text-anchor="start" class="table-header" style="font-size:17.1px">Brief</text>
+<line x1="810.0" y1="115" x2="810.0" y2="473" stroke="#263142" stroke-opacity="0.62" stroke-width="1"/>
+<text x="905.0" y="152.6888888888889" text-anchor="middle" class="table-header" style="font-size:17.1px">Status</text>
+<line x1="1000.0" y1="115" x2="1000.0" y2="473" stroke="#263142" stroke-opacity="0.62" stroke-width="1"/>
+<text x="1016.0" y="152.6888888888889" text-anchor="start" class="table-header" style="font-size:17.1px">Desk</text>
+<line x1="1220.0" y1="115" x2="1220.0" y2="473" stroke="#263142" stroke-opacity="0.62" stroke-width="1"/>
+<text x="1236.0" y="152.6888888888889" text-anchor="start" class="table-header" style="font-size:17.1px">Watch Item</text>
+<line x1="70" y1="179" x2="1530" y2="179" stroke="#263142" stroke-opacity="0.62" stroke-width="1"/>
+<text x="132.0" y="234.22222222222223" text-anchor="start" class="table-cell" style="font-size:18.7px;font-weight:700">Hard Takeoff</text>
+<g class="table-badge semantic-badge" data-kind="risk"><rect x="86" y="213.0" width="30" height="30" rx="5" fill="#F5D7CD" stroke="#E7472E" stroke-width="1.2"/><path d="M101.0,218.0 L110.0,223.0 V233.0 L101.0,238.0 L92.0,233.0 V223.0 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M97.0,228.0 L100.0,232.0 L106.0,224.0" class="icon-line" stroke="#E7472E"/></g>
+<text x="326.0" y="222.55555555555557" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">Autonomy curve steepens faster than</text>
+<text x="326.0" y="245.8888888888889" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">governance review cycles.</text>
+<text x="905.0" y="234.22222222222223" text-anchor="middle" class="table-cell-secondary" style="font-size:18.7px">Alert</text>
+<text x="1016.0" y="234.22222222222223" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">AI Policy</text>
+<text x="1236.0" y="222.55555555555557" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">Compute, evals, release</text>
+<text x="1236.0" y="245.8888888888889" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">cadence</text>
+<line x1="70" y1="277" x2="1530" y2="277" stroke="#263142" stroke-opacity="0.62" stroke-width="1"/>
+<text x="132.0" y="320.55555555555554" text-anchor="start" class="table-cell" style="font-size:18.7px;font-weight:700">Jurisdiction</text>
+<text x="132.0" y="343.88888888888886" text-anchor="start" class="table-cell" style="font-size:18.7px;font-weight:700">Race</text>
+<g class="table-badge semantic-badge" data-kind="registry"><rect x="86" y="311.0" width="30" height="30" rx="5" fill="#EFE5C9" stroke="#B4831D" stroke-width="1.2"/><path d="M101.0,316.0 L111.0,334.0 H91.0 Z" fill="none" stroke="#B4831D" stroke-width="1.35"/><path d="M101.0,323.0 V329.0 M101.0,333.0 V333.0" class="icon-line" stroke="#B4831D"/></g>
+<text x="326.0" y="320.55555555555554" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">States compete to host agentic capital and</text>
+<text x="326.0" y="343.88888888888886" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">legal containers.</text>
+<text x="905.0" y="332.22222222222223" text-anchor="middle" class="table-cell-secondary" style="font-size:18.7px">Active</text>
+<text x="1016.0" y="332.22222222222223" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">Legal</text>
+<text x="1236.0" y="332.22222222222223" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">Tax, personhood, oversight</text>
+<line x1="70" y1="375" x2="1530" y2="375" stroke="#263142" stroke-opacity="0.62" stroke-width="1"/>
+<text x="132.0" y="430.22222222222223" text-anchor="start" class="table-cell" style="font-size:18.7px;font-weight:700">Labor Reorg</text>
+<g class="table-badge semantic-badge" data-kind="process"><rect x="86" y="409.0" width="30" height="30" rx="5" fill="#F5D7CD" stroke="#E7472E" stroke-width="1.2"/><circle cx="95.0" cy="425.0" r="4" fill="none" stroke="#E7472E" stroke-width="1.6"/><circle cx="109.0" cy="418.0" r="4" fill="none" stroke="#E7472E" stroke-width="1.6"/><circle cx="109.0" cy="432.0" r="4" fill="none" stroke="#E7472E" stroke-width="1.6"/><path d="M99.0,425.0 H103.0 M105.0,421.0 L103.0,425.0 L105.0,429.0" class="icon-line" stroke="#E7472E"/></g>
+<text x="326.0" y="418.55555555555554" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">Automation shifts the bottleneck toward</text>
+<text x="326.0" y="441.88888888888886" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">judgment and coordination.</text>
+<text x="905.0" y="430.22222222222223" text-anchor="middle" class="table-cell-secondary" style="font-size:18.7px">Rising</text>
+<text x="1016.0" y="430.22222222222223" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">Markets</text>
+<text x="1236.0" y="430.22222222222223" text-anchor="start" class="table-cell-secondary" style="font-size:18.7px">Hiring, layoffs, margins</text>
+<text x="800.0" y="555" text-anchor="middle" class="note">Brief-grid register check: grid paper, square report cells, navy ink, and red alert accents.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Brief Grid Taxonomy</strong>
+    <span>brief-grid</span>
+    <span>taxonomy_tree</span>
+    <code>examples\brief-grid-taxonomy-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1800" height="789" viewBox="0 0 1800 789" role="img" aria-label="Brief Grid Taxonomy" data-style="brief-grid" data-diagram-type="taxonomy_tree">
+<defs>
+  <pattern id="blueprint-grid-small" width="28.8" height="28.8" patternUnits="userSpaceOnUse"><path d="M 28.8 0 H 0 V 28.8" fill="none" stroke="#232B36" stroke-opacity="0.13" stroke-width="0.84"/></pattern>
+  <pattern id="blueprint-grid" width="144" height="144" patternUnits="userSpaceOnUse"><rect width="144" height="144" fill="url(#blueprint-grid-small)"/><path d="M 144 0 H 0 V 144" fill="none" stroke="#232B36" stroke-opacity="0.24" stroke-width="1.2"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="brief-grid"] .title{font:700 31px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.03em;text-transform:uppercase}
+    [data-style="brief-grid"] .subtitle{font:400 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .card-title{font:700 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .card-sub{font:500 13px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .edge{fill:none;stroke:#263142;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:0.9}
+    [data-style="brief-grid"] .fanout{stroke:#E7472E;opacity:0.92}
+    [data-style="brief-grid"] .fanin{stroke:#25346D;opacity:0.9}
+    [data-style="brief-grid"] .route-shared{marker-end:none}
+    [data-style="brief-grid"] .edge-dashed{stroke-dasharray:7 5;opacity:0.72}
+    [data-style="brief-grid"] .note{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace}
+    [data-style="brief-grid"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .table-cell{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .table-cell-secondary{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .info-panel-item{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .icon-line{fill:none;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1800" height="789" rx="0" fill="#F3F1E8"/>
+<rect x="0" y="0" width="1800" height="789" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="900.0" y="54" text-anchor="middle" class="title">Brief Grid Taxonomy</text>
+<text x="900.0" y="80.0" text-anchor="middle" class="subtitle">brief-grid taxonomy_tree style check</text>
+<path d="M 900.0 215.0 L 900.0 267.0 Q 900.0 281.0 886.0 281.0 L 628.0 281.0 Q 614.0 281.0 614.0 295.0 L 614.0 347.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="root" data-child="tech" data-lane-y="281.0" style="stroke:#101010;opacity:0.92"/>
+<path d="M 900.0 215.0 L 900.0 347.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="root" data-child="policy" data-lane-y="281.0" style="stroke:#101010;opacity:0.92"/>
+<path d="M 900.0 215.0 L 900.0 267.0 Q 900.0 281.0 914.0 281.0 L 1172.0 281.0 Q 1186.0 281.0 1186.0 295.0 L 1186.0 347.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="root" data-child="markets" data-lane-y="281.0" style="stroke:#101010;opacity:0.92"/>
+<path d="M 614.0 447.0 L 614.0 477.0 Q 614.0 491.0 600.0 491.0 L 199.0 491.0 Q 185.0 491.0 185.0 505.0 L 185.0 579.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="tech" data-child="recursive" data-lane-y="491.0" style="stroke:#315F9E;opacity:0.92"/>
+<path d="M 614.0 447.0 L 614.0 477.0 Q 614.0 491.0 600.0 491.0 L 485.0 491.0 Q 471.0 491.0 471.0 505.0 L 471.0 579.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="tech" data-child="compute" data-lane-y="491.0" style="stroke:#315F9E;opacity:0.92"/>
+<path d="M 900.0 447.0 L 900.0 499.0 Q 900.0 513.0 886.0 513.0 L 771.0 513.0 Q 757.0 513.0 757.0 527.0 L 757.0 579.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="policy" data-child="personhood" data-lane-y="513.0" style="stroke:#B4831D;opacity:0.92"/>
+<path d="M 900.0 447.0 L 900.0 499.0 Q 900.0 513.0 914.0 513.0 L 1029.0 513.0 Q 1043.0 513.0 1043.0 527.0 L 1043.0 579.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="policy" data-child="tax" data-lane-y="513.0" style="stroke:#B4831D;opacity:0.92"/>
+<path d="M 1186.0 447.0 L 1186.0 521.0 Q 1186.0 535.0 1200.0 535.0 L 1315.0 535.0 Q 1329.0 535.0 1329.0 549.0 L 1329.0 579.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="markets" data-child="labor" data-lane-y="535.0" style="stroke:#3D6F55;opacity:0.92"/>
+<path d="M 1186.0 447.0 L 1186.0 521.0 Q 1186.0 535.0 1200.0 535.0 L 1601.0 535.0 Q 1615.0 535.0 1615.0 549.0 L 1615.0 579.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="markets" data-child="liquidity" data-lane-y="535.0" style="stroke:#3D6F55;opacity:0.92"/>
+<g id="node-root" class="card node-card"><rect x="785.0" y="115.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#101010" stroke-width="1.6"/><circle cx="811.0" cy="165.0" r="8" fill="none" stroke="#101010" stroke-width="1.35"/><path d="M806.0,165.0 H816.0 M811.0,160.0 V170.0" class="icon-line" stroke="#101010"/><text x="829.0" y="163.97" text-anchor="start" class="card-title" style="font-size:21px">Brief Signals</text><text x="829.0" y="185.43" text-anchor="start" class="card-sub" style="font-size:16px">root set</text></g>
+<g id="node-tech" class="card node-card"><rect x="499.0" y="347.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.6"/><circle cx="523.0" cy="395.0" r="7" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M529.0,401.0 L535.0,407.0" class="icon-line" stroke="#315F9E"/><text x="543.0" y="395.97" text-anchor="start" class="card-title" style="font-size:21px">Technology</text><text x="543.0" y="417.43" text-anchor="start" class="card-sub" style="font-size:16px">capability</text></g>
+<g id="node-policy" class="card node-card"><rect x="785.0" y="347.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#B4831D" stroke-width="1.6"/><path d="M811.0,387.0 L821.0,405.0 H801.0 Z" fill="none" stroke="#B4831D" stroke-width="1.35"/><path d="M811.0,394.0 V400.0 M811.0,404.0 V404.0" class="icon-line" stroke="#B4831D"/><text x="829.0" y="395.97" text-anchor="start" class="card-title" style="font-size:21px">Policy</text><text x="829.0" y="417.43" text-anchor="start" class="card-sub" style="font-size:16px">jurisdiction</text></g>
+<g id="node-markets" class="card node-card"><rect x="1071.0" y="347.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.6"/><path d="M1097.0,387.0 L1106.0,392.0 V402.0 L1097.0,407.0 L1088.0,402.0 V392.0 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M1093.0,397.0 L1096.0,401.0 L1102.0,393.0" class="icon-line" stroke="#E7472E"/><text x="1115.0" y="395.97" text-anchor="start" class="card-title" style="font-size:21px">Markets</text><text x="1115.0" y="417.43" text-anchor="start" class="card-sub" style="font-size:16px">economic</text></g>
+<g id="node-recursive" class="card node-card"><rect x="70.0" y="579.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.6"/><circle cx="94.0" cy="627.0" r="7" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M100.0,633.0 L106.0,639.0" class="icon-line" stroke="#315F9E"/><text x="114.0" y="627.97" text-anchor="start" class="card-title" style="font-size:21px">Recursive AI</text><text x="114.0" y="649.43" text-anchor="start" class="card-sub" style="font-size:16px">self-improving</text></g>
+<g id="node-compute" class="card node-card"><rect x="356.0" y="579.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.6"/><rect x="372.0" y="622.0" width="20" height="16" rx="3" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M372.0,627.0 H392.0 M382.0,622.0 V638.0" class="icon-line" stroke="#315F9E"/><text x="400.0" y="616.63" text-anchor="start" class="card-title" style="font-size:21px">Compute</text><text x="400.0" y="639.31" text-anchor="start" class="card-title" style="font-size:21px">Buildout</text><text x="400.0" y="660.77" text-anchor="start" class="card-sub" style="font-size:16px">infrastructure</text></g>
+<g id="node-personhood" class="card node-card"><rect x="642.0" y="579.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.6"/><path d="M668.0,619.0 L678.0,629.0 L668.0,639.0 L658.0,629.0 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M664.0,629.0 H672.0" class="icon-line" stroke="#E7472E"/><text x="686.0" y="627.97" text-anchor="start" class="card-title" style="font-size:21px">Legal Shells</text><text x="686.0" y="649.43" text-anchor="start" class="card-sub" style="font-size:16px">agentic entities</text></g>
+<g id="node-tax" class="card node-card"><rect x="928.0" y="579.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#B4831D" stroke-width="1.6"/><path d="M954.0,619.0 L964.0,637.0 H944.0 Z" fill="none" stroke="#B4831D" stroke-width="1.35"/><path d="M954.0,626.0 V632.0 M954.0,636.0 V636.0" class="icon-line" stroke="#B4831D"/><text x="972.0" y="627.97" text-anchor="start" class="card-title" style="font-size:21px">Tax Havens</text><text x="972.0" y="649.43" text-anchor="start" class="card-sub" style="font-size:16px">capital flows</text></g>
+<g id="node-labor" class="card node-card"><rect x="1214.0" y="579.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.6"/><circle cx="1234.0" cy="630.0" r="4" fill="none" stroke="#E7472E" stroke-width="1.6"/><circle cx="1248.0" cy="623.0" r="4" fill="none" stroke="#E7472E" stroke-width="1.6"/><circle cx="1248.0" cy="637.0" r="4" fill="none" stroke="#E7472E" stroke-width="1.6"/><path d="M1238.0,630.0 H1242.0 M1244.0,626.0 L1242.0,630.0 L1244.0,634.0" class="icon-line" stroke="#E7472E"/><text x="1258.0" y="627.97" text-anchor="start" class="card-title" style="font-size:21px">Labor Shift</text><text x="1258.0" y="649.43" text-anchor="start" class="card-sub" style="font-size:16px">bottlenecks</text></g>
+<g id="node-liquidity" class="card node-card"><rect x="1500.0" y="579.0" width="230.0" height="100.0" rx="2" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.6"/><path d="M1526.0,619.0 L1535.0,624.0 V634.0 L1526.0,639.0 L1517.0,634.0 V624.0 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M1522.0,629.0 L1525.0,633.0 L1531.0,625.0" class="icon-line" stroke="#E7472E"/><text x="1544.0" y="616.63" text-anchor="start" class="card-title" style="font-size:21px">Liquidity</text><text x="1544.0" y="639.31" text-anchor="start" class="card-title" style="font-size:21px">Shock</text><text x="1544.0" y="660.77" text-anchor="start" class="card-sub" style="font-size:16px">market stress</text></g>
+<text x="70" y="101.0" class="tree-level-label">Level 0</text>
+<text x="70" y="333.0" class="tree-level-label">Level 1</text>
+<text x="70" y="565.0" class="tree-level-label">Level 2</text>
+<text x="900.0" y="761" text-anchor="middle" class="note">Brief-grid taxonomy check: square cards and report-style hierarchy on warm grid paper.</text>
+</svg>
+</div>
+</section>
+<section class="frame">
+  <header>
+    <strong>Brief Grid Coordination Hub</strong>
+    <span>brief-grid</span>
+    <span>hub_spoke</span>
+    <code>examples\brief-grid-hub-contract.json</code>
+  </header>
+  <div class="svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="1500" height="645" viewBox="0 0 1500 645" role="img" aria-label="Brief Grid Coordination Hub" data-style="brief-grid" data-diagram-type="hub_spoke">
+<defs>
+  <pattern id="blueprint-grid-small" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M 24 0 H 0 V 24" fill="none" stroke="#232B36" stroke-opacity="0.13" stroke-width="0.7"/></pattern>
+  <pattern id="blueprint-grid" width="120" height="120" patternUnits="userSpaceOnUse"><rect width="120" height="120" fill="url(#blueprint-grid-small)"/><path d="M 120 0 H 0 V 120" fill="none" stroke="#232B36" stroke-opacity="0.24" stroke-width="1"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="brief-grid"] .title{font:700 31px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.03em;text-transform:uppercase}
+    [data-style="brief-grid"] .subtitle{font:400 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .card-title{font:700 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .card-sub{font:500 13px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .edge{fill:none;stroke:#263142;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:0.9}
+    [data-style="brief-grid"] .fanout{stroke:#E7472E;opacity:0.92}
+    [data-style="brief-grid"] .fanin{stroke:#25346D;opacity:0.9}
+    [data-style="brief-grid"] .route-shared{marker-end:none}
+    [data-style="brief-grid"] .edge-dashed{stroke-dasharray:7 5;opacity:0.72}
+    [data-style="brief-grid"] .note{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace}
+    [data-style="brief-grid"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .table-cell{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .table-cell-secondary{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .info-panel-item{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .icon-line{fill:none;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1500" height="645" rx="0" fill="#F3F1E8"/>
+<rect x="0" y="0" width="1500" height="645" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="750.0" y="54" text-anchor="middle" class="title">Brief Grid Coordination Hub</text>
+<text x="750.0" y="80.0" text-anchor="middle" class="subtitle">brief-grid hub_spoke style check</text>
+<circle cx="750.0" cy="390" r="138.0" fill="none" stroke="#101010" stroke-opacity="0.16" stroke-width="1.4"/>
+<path d="M 640.19 346.8 L 445.0 270.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 632.0 390.0 L 445.0 390.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 640.19 433.2 L 445.0 510.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 865.78 367.22 L 1055.0 330.0" class="edge hub-spoke-link" marker-end="url(#arrow)"/>
+<path d="M 865.78 412.78 L 1055.0 450.0" class="edge edge-dashed hub-spoke-link" marker-end="url(#arrow)"/>
+<g id="node-hub" class="hub-core card"><rect x="632.0" y="272.0" width="236.0" height="236.0" fill="none" stroke="none"/><circle cx="750.0" cy="390" r="118.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#101010" stroke-width="3.2"/><circle cx="750.0" cy="390" r="106.0" fill="none" stroke="#101010" stroke-opacity="0.32" stroke-width="1.3"/><text x="750.0" y="376.5" text-anchor="middle" class="card-title" style="font-size:22px">Coordination</text><text x="750.0" y="400.5" text-anchor="middle" class="card-title" style="font-size:22px">Hub</text><text x="750.0" y="425.5" text-anchor="middle" class="card-sub" style="font-size:15px">finish-line mechanism</text></g>
+<g id="node-labs" class="hub-spoke-node spoke-block card"><rect x="165" y="227.0" width="280.0" height="86.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.6"/><circle cx="197" cy="268.0" r="7" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M203,274.0 L209,280.0" class="icon-line" stroke="#315F9E"/><text x="231" y="268.75" text-anchor="start" class="card-title" style="font-size:19px">Frontier Labs</text><text x="231" y="290.25" text-anchor="start" class="card-sub" style="font-size:14.5px">model releases</text></g>
+<g id="node-capital" class="hub-spoke-node spoke-block card"><rect x="165" y="347.0" width="280.0" height="86.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#29323D" stroke-width="1.6"/><path d="M189,380.0 H203 L209,386.0 V400.0 H189 Z" fill="none" stroke="#29323D" stroke-width="1.35"/><path d="M203,380.0 V386.0 H209" class="icon-line" stroke="#29323D"/><text x="231" y="388.75" text-anchor="start" class="card-title" style="font-size:19px">Capital</text><text x="231" y="410.25" text-anchor="start" class="card-sub" style="font-size:14.5px">liquidity</text></g>
+<g id="node-policy" class="hub-spoke-node spoke-block card"><rect x="165" y="467.0" width="280.0" height="86.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.6"/><path d="M199,500.0 L209,510.0 L199,520.0 L189,510.0 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M195,510.0 H203" class="icon-line" stroke="#E7472E"/><text x="231" y="508.75" text-anchor="start" class="card-title" style="font-size:19px">Policy</text><text x="231" y="530.25" text-anchor="start" class="card-sub" style="font-size:14.5px">oversight</text></g>
+<g id="node-compute" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="287.0" width="280.0" height="86.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.6"/><rect x="1079.0" y="323.0" width="20" height="16" rx="3" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M1079.0,328.0 H1099.0 M1089.0,323.0 V339.0" class="icon-line" stroke="#315F9E"/><text x="1121.0" y="328.75" text-anchor="start" class="card-title" style="font-size:19px">Compute</text><text x="1121.0" y="350.25" text-anchor="start" class="card-sub" style="font-size:14.5px">capacity</text></g>
+<g id="node-risk" class="hub-spoke-node spoke-block card"><rect x="1055.0" y="407.0" width="280.0" height="86.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.6"/><path d="M1089.0,440.0 L1098.0,445.0 V455.0 L1089.0,460.0 L1080.0,455.0 V445.0 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M1085.0,450.0 L1088.0,454.0 L1094.0,446.0" class="icon-line" stroke="#E7472E"/><text x="1121.0" y="448.75" text-anchor="start" class="card-title" style="font-size:19px">Risk Desk</text><text x="1121.0" y="470.25" text-anchor="start" class="card-sub" style="font-size:14.5px">constraints</text></g>
+<text x="750.0" y="617" text-anchor="middle" class="note">Brief-grid hub check: report boxes, technical icons, and direct coordination spokes.</text>
 </svg>
 </div>
 </section>

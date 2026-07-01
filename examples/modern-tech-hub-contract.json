@@ -1,0 +1,19 @@
+{
+  "title": "Modern Knowledge Hub",
+  "subtitle": "modern-tech hub_spoke style check",
+  "diagram_type": "hub_spoke",
+  "style": "modern-tech",
+  "width": 1500,
+  "hub_id": "hub",
+  "nodes": [
+    {"id": "hub", "label": "Knowledge Hub", "subtitle": "navigation + orchestration", "kind": "hub"},
+    {"id": "portal", "label": "Portal", "subtitle": "entry point", "kind": "index", "order": 0},
+    {"id": "domain", "label": "Domain Maps", "subtitle": "systems + owners", "kind": "capability", "order": 1},
+    {"id": "registers", "label": "Registers", "subtitle": "terms + parameters", "kind": "registry", "order": 2},
+    {"id": "modules", "label": "Modules", "subtitle": "approved assets", "kind": "package", "order": 3},
+    {"id": "governance", "label": "Governance", "subtitle": "rules + risks", "kind": "risk", "order": 4, "style": "dashed"}
+  ],
+  "annotations": [
+    {"text": "Modern-tech hub check: soft surfaces, rounded cards, and readable spoke labels.", "placement": "footer"}
+  ]
+}

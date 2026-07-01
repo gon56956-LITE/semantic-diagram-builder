@@ -44,7 +44,8 @@ def path_ds(svg: str, required_classes: set[str]) -> list[str]:
 def main() -> int:
     modern = renderer.load_style_package("modern-tech")
     accent = renderer.load_style_package("accent-blueprint")
-    if modern["id"] != "modern-tech" or accent["id"] != "accent-blueprint":
+    brief = renderer.load_style_package("brief-grid")
+    if modern["id"] != "modern-tech" or accent["id"] != "accent-blueprint" or brief["id"] != "brief-grid":
         raise AssertionError("built-in style ids did not load correctly")
 
     multi = load_contract("ocs-r300-multirrow-contract.json")
@@ -56,6 +57,13 @@ def main() -> int:
         raise AssertionError("style packages should not change layout geometry with equal metrics")
     if modern_model["group_boxes"] != accent_model["group_boxes"]:
         raise AssertionError("style packages should not change group geometry with equal metrics")
+    brief_contract = copy.deepcopy(multi)
+    brief_contract["style"] = "brief-grid"
+    brief_model = renderer.build_layout_model(brief_contract)
+    if modern_model["positions"] != brief_model["positions"]:
+        raise AssertionError("brief-grid should not change layout geometry with equal metrics")
+    if modern_model["group_boxes"] != brief_model["group_boxes"]:
+        raise AssertionError("brief-grid should not change group geometry with equal metrics")
 
     accent_svg = renderer.render(accent_contract)
     for required in (
@@ -78,6 +86,19 @@ def main() -> int:
         raise AssertionError("accent-blueprint grid should scale with canvas width")
     if 'stroke-width="1.12"' not in wide_accent_svg or 'stroke-width="1.6"' not in wide_accent_svg:
         raise AssertionError("accent-blueprint grid strokes should scale with canvas width")
+
+    brief_svg = renderer.render(brief_contract)
+    for required in (
+        'data-style="brief-grid"',
+        'id="blueprint-grid"',
+        '#F3F1E8',
+        '#101010',
+        '#E7472E',
+        'fill="context-stroke"',
+        '[data-style="brief-grid"] .card-title',
+    ):
+        if required not in brief_svg:
+            raise AssertionError(f"brief-grid SVG missing {required}")
 
     boundary = load_contract("accent-blueprint-boundary-contract.json")
     boundary_model = renderer.build_layout_model(boundary)
@@ -123,10 +144,13 @@ def main() -> int:
         ROOT / "examples" / "registry-table-contract.json",
         ROOT / "examples" / "taxonomy-tree-contract.json",
         ROOT / "examples" / "hub-spoke-contract.json",
+        ROOT / "examples" / "brief-grid-brief-contract.json",
     ])
     if "accent-blueprint" not in gallery_html or "<svg" not in gallery_html:
         raise AssertionError("style gallery did not embed rendered SVG")
-    for diagram_type in ("source_boundary_map", "registry_table", "taxonomy_tree", "hub_spoke"):
+    if "brief-grid" not in gallery_html:
+        raise AssertionError("style gallery did not include brief-grid")
+    for diagram_type in ("source_boundary_map", "registry_table", "taxonomy_tree", "hub_spoke", "capability_domain_map"):
         if f'data-diagram-type="{diagram_type}"' not in gallery_html:
             raise AssertionError(f"style gallery missing {diagram_type}")
 

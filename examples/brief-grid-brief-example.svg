@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="856" viewBox="0 0 1680 856" role="img" aria-label="Executive Intelligence Brief" data-style="brief-grid" data-diagram-type="capability_domain_map">
+<defs>
+  <pattern id="blueprint-grid-small" width="26.88" height="26.88" patternUnits="userSpaceOnUse"><path d="M 26.88 0 H 0 V 26.88" fill="none" stroke="#232B36" stroke-opacity="0.13" stroke-width="0.78"/></pattern>
+  <pattern id="blueprint-grid" width="134.4" height="134.4" patternUnits="userSpaceOnUse"><rect width="134.4" height="134.4" fill="url(#blueprint-grid-small)"/><path d="M 134.4 0 H 0 V 134.4" fill="none" stroke="#232B36" stroke-opacity="0.24" stroke-width="1.12"/> </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <style>
+    [data-style="brief-grid"] .title{font:700 31px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.03em;text-transform:uppercase}
+    [data-style="brief-grid"] .subtitle{font:400 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .card-title{font:700 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .card-sub{font:500 13px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .edge{fill:none;stroke:#263142;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:0.9}
+    [data-style="brief-grid"] .fanout{stroke:#E7472E;opacity:0.92}
+    [data-style="brief-grid"] .fanin{stroke:#25346D;opacity:0.9}
+    [data-style="brief-grid"] .route-shared{marker-end:none}
+    [data-style="brief-grid"] .edge-dashed{stroke-dasharray:7 5;opacity:0.72}
+    [data-style="brief-grid"] .note{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace}
+    [data-style="brief-grid"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .table-cell{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010}
+    [data-style="brief-grid"] .table-cell-secondary{font:500 17px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#101010;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .info-panel-item{font:500 14px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D}
+    [data-style="brief-grid"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,Courier New,monospace;fill:#29323D;letter-spacing:.04em;text-transform:uppercase}
+    [data-style="brief-grid"] .icon-line{fill:none;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</defs>
+<rect x="0" y="0" width="1680" height="856" rx="0" fill="#F3F1E8"/>
+<rect x="0" y="0" width="1680" height="856" rx="0" fill="url(#blueprint-grid)" opacity="1"/>
+<text x="840.0" y="54" text-anchor="middle" class="title">Executive Intelligence Brief</text>
+<text x="840.0" y="80.0" text-anchor="middle" class="subtitle">Geopolitical, economic, and technological inflection points</text>
+<rect x="302.94000000000005" y="115" width="1074.12" height="56.0" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.52" stroke-width="1"/>
+<rect x="509.06000000000006" y="124" width="260.0" height="38.0" rx="5" fill="none" stroke="#315F9E" stroke-opacity="0.7" stroke-width="1"/>
+<g class="capability-column-icon capability-header-icon" data-kind="query"><rect x="521.0600000000001" y="128" width="30" height="30" rx="6" fill="#E6ECF4" stroke="#315F9E" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="534.0600000000001" cy="141" r="7" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M540.0600000000001,147 L546.0600000000001,153" class="icon-line" stroke="#315F9E"/></g>
+<text x="561.0600000000001" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#263142">Technological</text>
+<rect x="813.0600000000001" y="124" width="260.0" height="38.0" rx="5" fill="none" stroke="#B4831D" stroke-opacity="0.7" stroke-width="1"/>
+<g class="capability-column-icon capability-header-icon" data-kind="registry"><rect x="825.0600000000001" y="128" width="30" height="30" rx="6" fill="#EFE5C9" stroke="#B4831D" stroke-width="1.2" stroke-opacity="0.95"/><path d="M840.0600000000001,133 L850.0600000000001,151 H830.0600000000001 Z" fill="none" stroke="#B4831D" stroke-width="1.35"/><path d="M840.0600000000001,140 V146 M840.0600000000001,150 V150" class="icon-line" stroke="#B4831D"/></g>
+<text x="865.0600000000001" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#263142">Jurisdictional</text>
+<rect x="1117.06" y="124" width="260.0" height="38.0" rx="5" fill="none" stroke="#E7472E" stroke-opacity="0.7" stroke-width="1"/>
+<g class="capability-column-icon capability-header-icon" data-kind="risk"><rect x="1129.06" y="128" width="30" height="30" rx="6" fill="#F5D7CD" stroke="#E7472E" stroke-width="1.2" stroke-opacity="0.95"/><path d="M1144.06,133 L1153.06,138 V148 L1144.06,153 L1135.06,148 V138 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M1140.06,143 L1143.06,147 L1149.06,139" class="icon-line" stroke="#E7472E"/></g>
+<text x="1169.06" y="150" text-anchor="start" class="capability-column-label" style="font-size:15.7px;font-weight:700;fill:#263142">Economic</text>
+<rect x="302.94000000000005" y="189.0" width="1074.12" height="120.0" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.22" stroke-width="1"/>
+<rect x="302.94000000000005" y="189.0" width="162.12" height="120.0" rx="5" fill="none" stroke="#29323D" stroke-width="1.2" stroke-opacity="0.95"/>
+<g class="capability-level-icon capability-header-icon" data-kind="source"><rect x="318.94000000000005" y="234.0" width="30" height="30" rx="6" fill="#ECE8DC" stroke="#29323D" stroke-width="1.2" stroke-opacity="0.95"/><path d="M323.94000000000005,239.0 H337.94000000000005 L343.94000000000005,245.0 V259.0 H323.94000000000005 Z" fill="none" stroke="#29323D" stroke-width="1.35"/><path d="M337.94000000000005,239.0 V245.0 H343.94000000000005" class="icon-line" stroke="#29323D"/></g>
+<text x="360.94000000000005" y="245.39" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#29323D">Primary</text>
+<text x="360.94000000000005" y="263.05" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#29323D">Signals</text>
+<rect x="302.94000000000005" y="345.0" width="1074.12" height="120.0" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.22" stroke-width="1"/>
+<rect x="302.94000000000005" y="345.0" width="162.12" height="120.0" rx="5" fill="none" stroke="#315F9E" stroke-width="1.2" stroke-opacity="0.95"/>
+<g class="capability-level-icon capability-header-icon" data-kind="capability"><rect x="318.94000000000005" y="390.0" width="30" height="30" rx="6" fill="#E6ECF4" stroke="#315F9E" stroke-width="1.2" stroke-opacity="0.95"/><rect x="323.94000000000005" y="398.0" width="20" height="16" rx="3" fill="none" stroke="#315F9E" stroke-width="1.35"/><path d="M323.94000000000005,403.0 H343.94000000000005 M333.94000000000005,398.0 V414.0" class="icon-line" stroke="#315F9E"/></g>
+<text x="360.94000000000005" y="410.22" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#315F9E">Vectors</text>
+<rect x="302.94000000000005" y="501.0" width="1074.12" height="120.0" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#263142" stroke-opacity="0.22" stroke-width="1"/>
+<rect x="302.94000000000005" y="501.0" width="162.12" height="120.0" rx="5" fill="none" stroke="#E7472E" stroke-width="1.2" stroke-opacity="0.95"/>
+<g class="capability-level-icon capability-header-icon" data-kind="decision"><rect x="318.94000000000005" y="546.0" width="30" height="30" rx="6" fill="#F5D7CD" stroke="#E7472E" stroke-width="1.2" stroke-opacity="0.95"/><path d="M333.94000000000005,551.0 L343.94000000000005,561.0 L333.94000000000005,571.0 L323.94000000000005,561.0 Z" fill="none" stroke="#E7472E" stroke-width="1.35"/><path d="M329.94000000000005,561.0 H337.94000000000005" class="icon-line" stroke="#E7472E"/></g>
+<text x="360.94000000000005" y="566.22" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#E7472E">Response</text>
+<path d="M 639.06 297.0 L 639.06 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#263142;opacity:0.86" data-from="recursive_ai" data-to="compute_swarms" data-relation="drives" data-lane-shift="0"/>
+<path d="M 943.06 297.0 L 943.06 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#263142;opacity:0.86" data-from="legal_personhood" data-to="jurisdiction_race" data-relation="triggers" data-lane-shift="-14"/>
+<path d="M 1247.06 297.0 L 1247.06 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#263142;opacity:0.86" data-from="automation_market" data-to="white_collar_reorg" data-relation="pressures" data-lane-shift="14"/>
+<path d="M 943.06 453.0 L 943.06 469.0 Q 943.06 483.0 957.06 483.0 L 1081.06 483.0 Q 1095.06 483.0 1095.06 497.0 L 1095.06 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#5D4D7A;opacity:0.86" stroke-dasharray="6 5" data-from="jurisdiction_race" data-to="coordination" data-relation="requires" data-lane-shift="0"/>
+<path d="M 1247.06 453.0 L 1247.06 461.0 Q 1247.06 469.0 1239.06 469.0 L 1109.06 469.0 Q 1095.06 469.0 1095.06 483.0 L 1095.06 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#3D6F55;opacity:0.86" stroke-dasharray="6 5" data-from="white_collar_reorg" data-to="coordination" data-relation="requires" data-lane-shift="-14"/>
+<g id="capability-item-recursive_ai" class="capability-map-item card" data-kind="query"><rect x="509.06000000000006" y="201.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.2"/><text x="525.0600000000001" y="247.78199999999998" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Recursive AI</text><text x="525.0600000000001" y="271.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">successor systems</text></g>
+<g id="capability-item-legal_personhood" class="capability-map-item card" data-kind="registry"><rect x="813.0600000000001" y="201.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#B4831D" stroke-width="1.2"/><text x="829.0600000000001" y="247.78199999999998" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Non-Human Corp</text><text x="829.0600000000001" y="271.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">agentic shells</text></g>
+<g id="capability-item-automation_market" class="capability-map-item card" data-kind="risk"><rect x="1117.06" y="201.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.2"/><text x="1133.06" y="247.78199999999998" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Automation Paradox</text><text x="1133.06" y="271.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">labor up, markets unstable</text></g>
+<g id="capability-item-compute_swarms" class="capability-map-item card" data-kind="capability"><rect x="509.06000000000006" y="357.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#315F9E" stroke-width="1.2"/><text x="525.0600000000001" y="403.782" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Compute Swarms</text><text x="525.0600000000001" y="427.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">infra demand</text></g>
+<g id="capability-item-jurisdiction_race" class="capability-map-item card" data-kind="decision"><rect x="813.0600000000001" y="357.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.2"/><text x="829.0600000000001" y="403.782" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Jurisdiction Race</text><text x="829.0600000000001" y="427.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">tax and oversight</text></g>
+<g id="capability-item-white_collar_reorg" class="capability-map-item card" data-kind="process"><rect x="1117.06" y="357.0" width="260.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.2"/><text x="1133.06" y="403.782" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">White-Collar Reorg</text><text x="1133.06" y="427.602" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">enterprise redesign</text></g>
+<g id="capability-item-coordination" class="capability-map-item card" data-kind="decision"><rect x="813.0600000000001" y="513.0" width="564.0" height="96.0" rx="2.0" fill="#FFFFFF" fill-opacity="0.4" stroke="#E7472E" stroke-width="1.2"/><text x="829.0600000000001" y="559.782" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#101010">Finish-Line Coordination</text><text x="829.0600000000001" y="583.6020000000001" class="capability-sub" style="font-size:14.3px;font-weight:500;fill:#29323D">policy, capital, and safety rails</text></g>
+<g class="info-panel" data-panel-id="sources">
+<rect x="70.0" y="657.0" width="1540.0" height="135.36" rx="6" fill="#FFFFFF" fill-opacity="0.34" stroke="#29323D" stroke-opacity="0.62" stroke-width="1"/>
+<text x="88.0" y="685.0" class="info-panel-title">Data Sources</text>
+<rect x="88.0" y="703.0" width="9" height="9" rx="2" fill="#29323D" opacity="0.95"/>
+<text x="106.0" y="713.0" class="info-panel-item" style="font-size:15.1px">Break: market telemetry</text>
+<rect x="88.0" y="728.12" width="9" height="9" rx="2" fill="#29323D" opacity="0.95"/>
+<text x="106.0" y="738.12" class="info-panel-item" style="font-size:15.1px">Break: policy filings</text>
+<rect x="88.0" y="753.24" width="9" height="9" rx="2" fill="#29323D" opacity="0.95"/>
+<text x="106.0" y="763.24" class="info-panel-item" style="font-size:15.1px">Break: labor indicators</text>
+</g>
+<text x="840.0" y="828" text-anchor="middle" class="note">Brief-grid uses warm grid paper, navy ink, and red alert accents while preserving standard layout and routing semantics.</text>
+</svg>
