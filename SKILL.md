@@ -1,8 +1,6 @@
-﻿---
+---
 name: semantic-diagram-builder
 description: Build contract-driven semantic diagrams as clean SVGs for knowledge maps, hierarchy maps, layered topologies, source-boundary maps, MOC/object relationship maps, ontology maps, capability maps, and other non-sequential object-relation diagrams. Use when the user wants a designed diagram of concepts, knowledge objects, groups, boundaries, dependencies, or navigation structure rather than a time-ordered workflow.
-metadata:
-  short-description: Build semantic object-relation SVG diagrams
 ---
 
 # Semantic Diagram Builder

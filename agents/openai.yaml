@@ -1,3 +1,7 @@
-﻿display_name: Semantic Diagram Builder
-short_description: Build clean SVG diagrams for semantic object relationships, knowledge maps, hierarchies, and layered topologies.
-default_prompt: Create a semantic diagram from these objects, groups, and relationships.
+interface:
+  display_name: "Semantic Diagram Builder"
+  short_description: "Build semantic object-relation SVG diagrams"
+  default_prompt: "Use $semantic-diagram-builder to create a semantic diagram from these objects, groups, and relationships."
+
+policy:
+  allow_implicit_invocation: true
