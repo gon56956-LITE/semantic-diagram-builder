@@ -178,7 +178,7 @@
     }
   },
   "qa": {
-    "reference_image": "C:/Users/gon56956/Downloads/Accent Blueprint style.png",
+    "reference_image": "references/style-images/accent-blueprint.png",
     "reference_contracts": [
       "examples/accent-blueprint-boundary-contract.json",
       "examples/registry-table-contract.json",
