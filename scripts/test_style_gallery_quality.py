@@ -72,8 +72,8 @@ def main() -> int:
             fail(f"{entry['path']} is missing data-diagram-type={expected_type}")
         if f'aria-label="{expected_title}"' not in svg:
             fail(f"{entry['path']} is missing expected aria-label")
-        if 'fill="context-stroke"' not in svg:
-            fail(f"{entry['path']} should use context-stroke arrow markers")
+        if 'fill="context-stroke"' in svg or 'markerUnits="userSpaceOnUse"' not in svg:
+            fail(f"{entry['path']} should use explicit, user-space arrow markers")
 
         issues = validator.check_svg(svg)
         if issues:

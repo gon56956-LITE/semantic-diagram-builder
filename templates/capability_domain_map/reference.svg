@@ -2,30 +2,30 @@
 <defs>
   <pattern id="blueprint-grid-small" width="14.34" height="14.34" patternUnits="userSpaceOnUse"><path d="M 14.34 0 H 0 V 14.34" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.84"/></pattern>
   <pattern id="blueprint-grid" width="71.68" height="71.68" patternUnits="userSpaceOnUse"><rect width="71.68" height="71.68" fill="url(#blueprint-grid-small)"/><path d="M 71.68 0 H 0 V 71.68" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.19"/> </pattern>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
-  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
-  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#F4F8FF"/></marker>
+  <marker id="arrow-fanout" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#FF9F2E"/></marker>
+  <marker id="arrow-fanin" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#6EE66E"/></marker>
   <style>
-    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
-    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
-    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
-    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
-    [data-style="accent-blueprint"] .route-shared{marker-end:none}
-    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
-    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
-    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
-    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .info-panel-item{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+    [data-style=accent-blueprint] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style=accent-blueprint] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style=accent-blueprint] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style=accent-blueprint] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style=accent-blueprint] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style=accent-blueprint] .route-shared{marker-end:none}
+    [data-style=accent-blueprint] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style=accent-blueprint] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style=accent-blueprint] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style=accent-blueprint] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .info-panel-item{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
   </style>
 </defs>
 <rect x="0" y="0" width="1792" height="1305" rx="0" fill="#062B5F"/>
@@ -74,26 +74,26 @@
 <g class="capability-level-icon capability-header-icon" data-kind="process"><rect x="85.91999999999996" y="982.0" width="30" height="30" rx="6" fill="#031E42" stroke="#FF9F2E" stroke-width="1.2" stroke-opacity="0.95"/><circle cx="94.91999999999996" cy="998.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="108.91999999999996" cy="991.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><circle cx="108.91999999999996" cy="1005.0" r="4" fill="none" stroke="#FF9F2E" stroke-width="1.6"/><path d="M98.91999999999996,998.0 H102.91999999999996 M104.91999999999996,994.0 L102.91999999999996,998.0 L104.91999999999996,1002.0" class="icon-line" stroke="#FF9F2E"/></g>
 <text x="127.91999999999996" y="993.39" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#FF9F2E">Enabling</text>
 <text x="127.91999999999996" y="1011.05" text-anchor="start" class="capability-level-label" style="font-size:15.7px;font-weight:700;fill:#FF9F2E">Capabilities</text>
-<path d="M 402.08 297.0 L 402.08 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="grow_revenue" data-to="customer_domain" data-relation="guides" data-lane-shift="0"/>
-<path d="M 768.08 297.0 L 768.08 305.0 Q 768.08 313.0 760.08 313.0 L 660.08 313.0 Q 646.08 313.0 646.08 327.0 L 646.08 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="customer_experience" data-to="product_domain" data-relation="guides" data-lane-shift="-14"/>
-<path d="M 768.08 297.0 L 768.08 327.0 Q 768.08 341.0 782.08 341.0 L 882.08 341.0 Q 890.08 341.0 890.08 349.0 L 890.08 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="customer_experience" data-to="operations_domain" data-relation="guides" data-lane-shift="14"/>
-<path d="M 1134.08 297.0 L 1134.08 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="operational_excellence" data-to="finance_domain" data-relation="guides" data-lane-shift="-16"/>
-<path d="M 1622.08 297.0 L 1622.08 357.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="compliance_objective" data-to="technology_domain" data-relation="guides" data-lane-shift="16"/>
-<path d="M 402.08 453.0 L 402.08 575.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="customer_domain" data-to="marketing_sales" data-relation="contains" data-lane-shift="0"/>
-<path d="M 646.08 453.0 L 646.08 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="product_domain" data-to="product_management" data-relation="contains" data-lane-shift="0"/>
-<path d="M 890.08 453.0 L 890.08 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="operations_domain" data-to="supply_chain" data-relation="contains" data-lane-shift="-14"/>
-<path d="M 1134.08 453.0 L 1134.08 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="finance_domain" data-to="accounting" data-relation="contains" data-lane-shift="14"/>
-<path d="M 1378.08 453.0 L 1378.08 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="people_domain" data-to="hr" data-relation="contains" data-lane-shift="-16"/>
-<path d="M 1622.08 453.0 L 1622.08 513.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="technology_domain" data-to="it_ops" data-relation="contains" data-lane-shift="16"/>
-<path d="M 402.08 671.0 L 402.08 793.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="marketing_sales" data-to="customer_acquisition" data-relation="contains" data-lane-shift="0"/>
-<path d="M 646.08 609.0 L 646.08 613.0 Q 646.08 617.0 642.08 617.0 L 534.08 617.0 Q 524.08 617.0 524.08 627.0 L 524.08 775.0 Q 524.08 785.0 534.08 785.0 L 642.08 785.0 Q 646.08 785.0 646.08 789.0 L 646.08 793.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="product_management" data-to="order_mgmt" data-relation="contains" data-lane-shift="0" data-corridor-x="524.1"/>
-<path d="M 890.08 733.0 L 890.08 793.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="manufacturing" data-to="product_development" data-relation="contains" data-lane-shift="0"/>
-<path d="M 1134.08 733.0 L 1134.08 793.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="treasury" data-to="demand_planning" data-relation="contains" data-lane-shift="-14"/>
-<path d="M 1378.08 733.0 L 1378.08 793.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="talent" data-to="workforce_mgmt" data-relation="contains" data-lane-shift="14"/>
-<path d="M 1622.08 733.0 L 1622.08 793.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="platforms" data-to="it_service_mgmt" data-relation="contains" data-lane-shift="-16"/>
-<path d="M 402.08 949.0 L 402.08 889.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#FF9F2E;opacity:0.86" stroke-dasharray="6 5" data-from="data_analytics" data-to="customer_acquisition" data-relation="supports" data-lane-shift="0"/>
-<path d="M 890.08 949.0 L 890.08 889.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#FF9F2E;opacity:0.86" stroke-dasharray="6 5" data-from="risk_compliance" data-to="product_development" data-relation="supports" data-lane-shift="-14"/>
-<path d="M 1622.08 949.0 L 1622.08 889.0" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:#FF9F2E;opacity:0.86" stroke-dasharray="6 5" data-from="technology_platforms" data-to="it_service_mgmt" data-relation="supports" data-lane-shift="14"/>
+<path d="M 402.08 297.0 L 402.08 357.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="grow_revenue" data-to="customer_domain" data-relation="guides" data-lane-shift="0"/>
+<path d="M 768.08 297.0 L 768.08 305.0 Q 768.08 313.0 760.08 313.0 L 660.08 313.0 Q 646.08 313.0 646.08 327.0 L 646.08 357.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="customer_experience" data-to="product_domain" data-relation="guides" data-lane-shift="-14"/>
+<path d="M 768.08 297.0 L 768.08 327.0 Q 768.08 341.0 782.08 341.0 L 882.08 341.0 Q 890.08 341.0 890.08 349.0 L 890.08 357.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="customer_experience" data-to="operations_domain" data-relation="guides" data-lane-shift="14"/>
+<path d="M 1134.08 297.0 L 1134.08 357.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="operational_excellence" data-to="finance_domain" data-relation="guides" data-lane-shift="-16"/>
+<path d="M 1622.08 297.0 L 1622.08 357.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#B56CFF;opacity:0.86" data-from="compliance_objective" data-to="technology_domain" data-relation="guides" data-lane-shift="16"/>
+<path d="M 402.08 453.0 L 402.08 575.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="customer_domain" data-to="marketing_sales" data-relation="contains" data-lane-shift="0"/>
+<path d="M 646.08 453.0 L 646.08 513.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="product_domain" data-to="product_management" data-relation="contains" data-lane-shift="0"/>
+<path d="M 890.08 453.0 L 890.08 513.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="operations_domain" data-to="supply_chain" data-relation="contains" data-lane-shift="-14"/>
+<path d="M 1134.08 453.0 L 1134.08 513.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="finance_domain" data-to="accounting" data-relation="contains" data-lane-shift="14"/>
+<path d="M 1378.08 453.0 L 1378.08 513.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="people_domain" data-to="hr" data-relation="contains" data-lane-shift="-16"/>
+<path d="M 1622.08 453.0 L 1622.08 513.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="technology_domain" data-to="it_ops" data-relation="contains" data-lane-shift="16"/>
+<path d="M 402.08 671.0 L 402.08 793.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="marketing_sales" data-to="customer_acquisition" data-relation="contains" data-lane-shift="0"/>
+<path d="M 646.08 609.0 L 646.08 613.0 Q 646.08 617.0 642.08 617.0 L 534.08 617.0 Q 524.08 617.0 524.08 627.0 L 524.08 775.0 Q 524.08 785.0 534.08 785.0 L 642.08 785.0 Q 646.08 785.0 646.08 789.0 L 646.08 793.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="product_management" data-to="order_mgmt" data-relation="contains" data-lane-shift="0" data-corridor-x="524.1"/>
+<path d="M 890.08 733.0 L 890.08 793.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="manufacturing" data-to="product_development" data-relation="contains" data-lane-shift="0"/>
+<path d="M 1134.08 733.0 L 1134.08 793.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="treasury" data-to="demand_planning" data-relation="contains" data-lane-shift="-14"/>
+<path d="M 1378.08 733.0 L 1378.08 793.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="talent" data-to="workforce_mgmt" data-relation="contains" data-lane-shift="14"/>
+<path d="M 1622.08 733.0 L 1622.08 793.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#F4F8FF;opacity:0.86" data-from="platforms" data-to="it_service_mgmt" data-relation="contains" data-lane-shift="-16"/>
+<path d="M 402.08 949.0 L 402.08 889.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#FF9F2E;opacity:0.86" stroke-dasharray="6 5" data-from="data_analytics" data-to="customer_acquisition" data-relation="supports" data-lane-shift="0"/>
+<path d="M 890.08 949.0 L 890.08 889.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#FF9F2E;opacity:0.86" stroke-dasharray="6 5" data-from="risk_compliance" data-to="product_development" data-relation="supports" data-lane-shift="-14"/>
+<path d="M 1622.08 949.0 L 1622.08 889.0" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:#FF9F2E;opacity:0.86" stroke-dasharray="6 5" data-from="technology_platforms" data-to="it_service_mgmt" data-relation="supports" data-lane-shift="14"/>
 <g id="capability-item-grow_revenue" class="capability-map-item card" data-kind="glossary"><rect x="302.08" y="201.0" width="200.0" height="96.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.2"/><text x="318.08" y="256.91" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#F4F8FF">Grow Revenue</text></g>
 <g id="capability-item-customer_experience" class="capability-map-item card" data-kind="glossary"><rect x="546.0799999999999" y="201.0" width="444.0" height="96.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.2"/><text x="562.0799999999999" y="256.91" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#F4F8FF">Improve Customer Experience</text></g>
 <g id="capability-item-operational_excellence" class="capability-map-item card" data-kind="glossary"><rect x="1034.08" y="201.0" width="200.0" height="96.0" rx="6.0" fill="#FFFFFF" fill-opacity="0.03" stroke="#B56CFF" stroke-width="1.2"/><text x="1050.08" y="247.0" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#F4F8FF">Operational</text><text x="1050.08" y="266.82" class="capability-title" style="font-size:17.8px;font-weight:700;fill:#F4F8FF">Excellence</text></g>

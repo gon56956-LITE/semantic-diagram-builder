@@ -521,11 +521,27 @@ def _check_arrow_markers(svg: str, issues: list[str]) -> None:
         if not id_match or 'arrow' not in id_match.group(1):
             continue
         fills = FILL_RE.findall(body)
-        if 'context-stroke' not in fills:
+        explicit_fills = [fill for fill in fills if re.fullmatch(r'#[0-9A-Fa-f]{6}', fill)]
+        if not explicit_fills or 'context-stroke' in fills:
             fail(
-                f'arrow marker "{id_match.group(1)}" should use context-stroke so arrowheads match connector color',
+                f'arrow marker "{id_match.group(1)}" should use an explicit six-digit color; context-stroke is not reliable in embedded HTML',
                 issues,
             )
+        if 'markerUnits="userSpaceOnUse"' not in attrs:
+            fail(
+                f'arrow marker "{id_match.group(1)}" should use markerUnits="userSpaceOnUse" to prevent stroke-scaled arrowhead blobs',
+                issues,
+            )
+
+
+def _check_embedded_style_safety(svg: str, issues: list[str]) -> None:
+    if re.search(r'\[data-style\s*=\s*[“”‘’]', svg):
+        fail('data-style CSS selector contains smart quotes and will not match after HTML embedding', issues)
+    if 'data-style=' not in svg:
+        return
+    for attrs, _d, classes in _path_attrs_with_classes(svg, {'edge'}):
+        if 'edge' in classes and 'fill="none"' not in attrs:
+            fail('connector path should carry inline fill="none" so an embedded CSS failure cannot create a black wedge', issues)
 
 
 def _check_text_scale(svg: str, issues: list[str]) -> None:
@@ -1146,6 +1162,7 @@ def check_svg(svg: str) -> list[str]:
             fail(f'non-portable {attr} value: {value}', issues)
 
     _check_arrow_markers(svg, issues)
+    _check_embedded_style_safety(svg, issues)
     _check_text_scale(svg, issues)
     _check_text_fit_in_rect_groups(svg, issues)
     _check_group_label_shields(svg, issues)

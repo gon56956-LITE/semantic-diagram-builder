@@ -73,8 +73,8 @@ def main() -> int:
         '#F4F8FF',
         '#FF9F2E',
         '#6EE66E',
-        'fill="context-stroke"',
-        '[data-style="accent-blueprint"] .card-title',
+        'markerUnits="userSpaceOnUse"',
+        '[data-style=accent-blueprint] .card-title',
     ):
         if required not in accent_svg:
             raise AssertionError(f"accent-blueprint SVG missing {required}")
@@ -94,8 +94,8 @@ def main() -> int:
         '#F3F1E8',
         '#101010',
         '#E7472E',
-        'fill="context-stroke"',
-        '[data-style="brief-grid"] .card-title',
+        'markerUnits="userSpaceOnUse"',
+        '[data-style=brief-grid] .card-title',
     ):
         if required not in brief_svg:
             raise AssertionError(f"brief-grid SVG missing {required}")

@@ -1,36 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="850" height="557" viewBox="0 0 850 557" role="img" aria-label="Taxonomy Tree Minimal" data-style="modern-tech" data-diagram-type="taxonomy_tree">
 <defs>
   <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.1"/></filter>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
-  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
-  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+  <marker id="arrow-fanout" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker>
+  <marker id="arrow-fanin" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#16A34A"/></marker>
   <style>
-    [data-style="modern-tech"] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
-    [data-style="modern-tech"] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
-    [data-style="modern-tech"] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
-    [data-style="modern-tech"] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
-    [data-style="modern-tech"] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
-    [data-style="modern-tech"] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
-    [data-style="modern-tech"] .fanout{stroke:#2563EB;opacity:0.74}
-    [data-style="modern-tech"] .fanin{stroke:#16A34A;opacity:0.74}
-    [data-style="modern-tech"] .route-shared{marker-end:none}
-    [data-style="modern-tech"] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
-    [data-style="modern-tech"] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
-    [data-style="modern-tech"] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
-    [data-style="modern-tech"] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
-    [data-style="modern-tech"] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
-    [data-style="modern-tech"] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
-    [data-style="modern-tech"] .info-panel-title{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
-    [data-style="modern-tech"] .info-panel-item{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
-    [data-style="modern-tech"] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
-    [data-style="modern-tech"] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
-    [data-style="modern-tech"] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    [data-style=modern-tech] .title{font:700 30px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:0;text-transform:none}
+    [data-style=modern-tech] .subtitle{font:400 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style=modern-tech] .group-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style=modern-tech] .card-title{font:700 18px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style=modern-tech] .card-sub{font:500 13.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style=modern-tech] .edge{fill:none;stroke:#334155;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0.76}
+    [data-style=modern-tech] .fanout{stroke:#2563EB;opacity:0.74}
+    [data-style=modern-tech] .fanin{stroke:#16A34A;opacity:0.74}
+    [data-style=modern-tech] .route-shared{marker-end:none}
+    [data-style=modern-tech] .edge-dashed{stroke-dasharray:8 8;opacity:0.66}
+    [data-style=modern-tech] .note{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style=modern-tech] .mono{font-family:Inter,Segoe UI,Aptos,Arial,sans-serif}
+    [data-style=modern-tech] .table-header{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style=modern-tech] .table-cell{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A}
+    [data-style=modern-tech] .table-cell-secondary{font:500 17px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style=modern-tech] .info-panel-title{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#0F172A;letter-spacing:.06em;text-transform:uppercase}
+    [data-style=modern-tech] .info-panel-item{font:500 14px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B}
+    [data-style=modern-tech] .tree-level-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style=modern-tech] .hub-label{font:700 15.5px Inter,Segoe UI,Aptos,Arial,sans-serif;fill:#64748B;letter-spacing:.06em;text-transform:uppercase}
+    [data-style=modern-tech] .icon-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   </style>
 </defs>
 <rect x="0" y="0" width="850" height="557" rx="28" fill="#F8FBFF"/>
 <text x="425.0" y="54" text-anchor="middle" class="title">Taxonomy Tree Minimal</text>
 <text x="425.0" y="80.0" text-anchor="middle" class="subtitle">Minimal standard contract for a taxonomy tree</text>
-<path d="M 425.0 215.0 L 425.0 347.0" class="edge taxonomy-link" marker-end="url(#arrow)" data-parent="root" data-child="maps" data-lane-y="281.0" style="stroke:#2F7DFF;opacity:0.92"/>
+<path d="M 425.0 215.0 L 425.0 347.0" class="edge taxonomy-link" fill="none" marker-end="url(#arrow)" data-parent="root" data-child="maps" data-lane-y="281.0" style="stroke:#2F7DFF;opacity:0.92"/>
 <g id="node-root" class="card node-card"><rect x="310.0" y="115.0" width="230.0" height="100.0" rx="20" fill="#FFFFFF" stroke="#2F7DFF" stroke-width="2.2" filter="url(#shadow)"/><circle cx="336.0" cy="165.0" r="8" fill="#EFF6FF" stroke="#2F7DFF" stroke-width="1.7"/><path d="M331.0,165.0 H341.0 M336.0,160.0 V170.0" class="icon-line" stroke="#2F7DFF"/><text x="354.0" y="152.99" text-anchor="start" class="card-title" style="font-size:20.5px">Knowledge</text><text x="354.0" y="175.13" text-anchor="start" class="card-title" style="font-size:20.5px">Assets</text><text x="354.0" y="195.96" text-anchor="start" class="card-sub" style="font-size:15.5px">root class</text></g>
 <g id="node-maps" class="card node-card"><rect x="310.0" y="347.0" width="230.0" height="100.0" rx="20" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2.2" filter="url(#shadow)"/><rect x="326.0" y="390.0" width="20" height="16" rx="3" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.7"/><path d="M326.0,395.0 H346.0 M336.0,390.0 V406.0" class="icon-line" stroke="#0EA5E9"/><text x="354.0" y="396.06" text-anchor="start" class="card-title" style="font-size:20.5px">Maps</text><text x="354.0" y="416.89" text-anchor="start" class="card-sub" style="font-size:15.5px">child class</text></g>
 <text x="70" y="101.0" class="tree-level-label">Level 0</text>

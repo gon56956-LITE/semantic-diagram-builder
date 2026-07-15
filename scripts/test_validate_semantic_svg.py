@@ -30,6 +30,26 @@ def assert_issue(name: str, svg: str, expected: str) -> None:
 
 
 def main() -> int:
+    assert_issue(
+        "smart-quoted embedded selector",
+        """
+<svg width="200" height="120" data-style="modern-tech">
+<style>[data-style=“modern-tech”] .edge{fill:none;stroke:#334155}</style>
+<path d="M 20 60 L 180 60" class="edge" fill="none"/>
+</svg>
+""",
+        "smart quotes",
+    )
+    assert_issue(
+        "embedded connector without inline fill none",
+        """
+<svg width="200" height="120" data-style="modern-tech">
+<style>[data-style=modern-tech] .edge{fill:none;stroke:#334155}</style>
+<path d="M 20 60 L 180 60" class="edge"/>
+</svg>
+""",
+        'inline fill="none"',
+    )
     assert_pass(
         "node-id card compatibility",
         """
@@ -80,7 +100,7 @@ def main() -> int:
 </svg>
 """,
     )
-    assert_pass(
+    assert_issue(
         "context stroke arrow marker",
         """
 <svg width="100" height="100">
@@ -88,22 +108,22 @@ def main() -> int:
 <path d="M 0 0 L 10 0" class="edge" marker-end="url(#arrow)"/>
 </svg>
 """,
+        "explicit six-digit color",
     )
-    assert_issue(
+    assert_pass(
         "fixed color arrow marker",
         """
 <svg width="100" height="100">
-<defs><marker id="arrow-fanout"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker></defs>
+<defs><marker id="arrow-fanout" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker></defs>
 <path d="M 0 0 L 10 0" class="edge fanout" marker-end="url(#arrow-fanout)"/>
 </svg>
 """,
-        "context-stroke",
     )
     assert_issue(
         "multi-source terminal anchors missing metadata",
         """
 <svg width="500" height="300">
-<defs><marker id="arrow-fanout"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<defs><marker id="arrow-fanout" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker></defs>
 <g id="node-target" class="card node-card"><rect x="180" y="160" width="120" height="70" fill="#FFFFFF" stroke="#334155"/><text class="card-title">T</text></g>
 <path d="M 120 80 L 120 120 Q 120 134 134 134 L 234 134 Q 234 134 234 148 L 234 160" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-target-id="target" data-source-id="source_a" data-route-color="#16D9FF"/>
 <path d="M 340 80 L 340 120 Q 340 134 326 134 L 234 134 Q 234 134 234 148 L 234 160" class="edge edge-dashed fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#6EE66E" data-target-id="target" data-source-id="source_b" data-route-color="#6EE66E"/>
@@ -115,7 +135,7 @@ def main() -> int:
         "multi-source terminal anchors too close",
         """
 <svg width="500" height="300">
-<defs><marker id="arrow-fanout"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<defs><marker id="arrow-fanout" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker></defs>
 <g id="node-target" class="card node-card"><rect x="180" y="160" width="120" height="70" fill="#FFFFFF" stroke="#334155"/><text class="card-title">T</text></g>
 <path d="M 120 80 L 120 120 Q 120 134 134 134 L 232 134 Q 232 134 232 148 L 232 160" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-target-id="target" data-source-id="source_a" data-route-color="#16D9FF" data-target-anchor-lane="0" data-target-anchor-count="2" data-target-anchor-shift="-2.0"/>
 <path d="M 340 80 L 340 120 Q 340 134 326 134 L 236 134 Q 236 134 236 148 L 236 160" class="edge edge-dashed fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#6EE66E" data-target-id="target" data-source-id="source_b" data-route-color="#6EE66E" data-target-anchor-lane="1" data-target-anchor-count="2" data-target-anchor-shift="2.0"/>
@@ -127,7 +147,7 @@ def main() -> int:
         "multi-source terminal anchors separated",
         """
 <svg width="500" height="300">
-<defs><marker id="arrow-fanout"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<defs><marker id="arrow-fanout" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker></defs>
 <g id="node-target" class="card node-card"><rect x="180" y="160" width="120" height="70" fill="#FFFFFF" stroke="#334155"/><text class="card-title">T</text></g>
 <path d="M 120 80 L 120 120 Q 120 134 134 134 L 225 134 Q 225 134 225 148 L 225 160" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-target-id="target" data-source-id="source_a" data-route-color="#16D9FF" data-target-anchor-lane="0" data-target-anchor-count="2" data-target-anchor-shift="-9.0"/>
 <path d="M 340 80 L 340 120 Q 340 134 326 134 L 243 134 Q 243 134 243 148 L 243 160" class="edge edge-dashed fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#6EE66E" data-target-id="target" data-source-id="source_b" data-route-color="#6EE66E" data-target-anchor-lane="1" data-target-anchor-count="2" data-target-anchor-shift="9.0"/>
@@ -138,7 +158,7 @@ def main() -> int:
         "multi-source direct-link anchors missing metadata",
         """
 <svg width="500" height="300">
-<defs><marker id="arrow"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<defs><marker id="arrow" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker></defs>
 <g id="node-target" class="card node-card"><rect x="180" y="160" width="120" height="70" fill="#FFFFFF" stroke="#334155"/><text class="card-title">T</text></g>
 <path d="M 120 80 L 120 120 Q 120 134 134 134 L 234 134 Q 234 134 234 148 L 234 160" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#16D9FF" data-target-id="target" data-source-id="source_a" data-route-color="#16D9FF"/>
 <path d="M 340 80 L 340 120 Q 340 134 326 134 L 234 134 Q 234 134 234 148 L 234 160" class="edge edge-dashed direct-link" marker-end="url(#arrow)" style="stroke:#6EE66E" data-target-id="target" data-source-id="source_b" data-route-color="#6EE66E"/>
@@ -150,7 +170,7 @@ def main() -> int:
         "multi-source direct-link anchors separated",
         """
 <svg width="500" height="300">
-<defs><marker id="arrow"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker></defs>
+<defs><marker id="arrow" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker></defs>
 <g id="node-target" class="card node-card"><rect x="180" y="160" width="120" height="70" fill="#FFFFFF" stroke="#334155"/><text class="card-title">T</text></g>
 <path d="M 120 80 L 120 120 Q 120 134 134 134 L 225 134 Q 225 134 225 148 L 225 160" class="edge direct-link" marker-end="url(#arrow)" style="stroke:#16D9FF" data-target-id="target" data-source-id="source_a" data-route-color="#16D9FF" data-target-anchor-lane="0" data-target-anchor-count="2" data-target-anchor-shift="-9.0"/>
 <path d="M 340 80 L 340 120 Q 340 134 326 134 L 243 134 Q 243 134 243 148 L 243 160" class="edge edge-dashed direct-link" marker-end="url(#arrow)" style="stroke:#6EE66E" data-target-id="target" data-source-id="source_b" data-route-color="#6EE66E" data-target-anchor-lane="1" data-target-anchor-count="2" data-target-anchor-shift="9.0"/>

@@ -78,7 +78,7 @@
     }
   ],
   "quality_gates": {
-    "require_context_stroke_markers": true,
+    "require_explicit_user_space_markers": true,
     "require_group_label_shields": true,
     "require_no_external_scripts": true,
     "require_accent_blueprint_grid": true

@@ -77,7 +77,8 @@ Connector color policy:
 - black/navy monospace report typography.
 - square cards, tables, and panels with thin technical borders and no shadows.
 - red/orange alert accents plus muted navy, blue, green, purple, and ochre semantic colors.
-- context-stroke arrow markers so connector arrows inherit lane color.
+- explicit six-digit marker fills with `markerUnits="userSpaceOnUse"`; keep primary, fan-out, and fan-in marker colors synchronized with their connector classes without relying on `context-stroke` inheritance.
+- quote-stable built-in style selectors and inline `fill="none"` on every connector path so Markdown/HTML conversion cannot turn an open connector into a filled black polygon.
 
 ## QA
 
@@ -90,5 +91,7 @@ py scripts/test_style_gallery_quality.py
 ```
 
 For screenshot review, compare the generated gallery/SVG against the style reference image listed in the style package `qa.reference_image`.
+
+When a semantic SVG is inlined through Markdown or another document converter, validate the converted HTML as a second artifact. A standalone SVG pass is insufficient if the converter can rewrite quotes inside `<style>`; the final HTML must contain matching `data-style` selectors and inline `fill="none"` on connector paths.
 
 `examples/style-gallery-baseline.json` is the shared QA manifest for the bundled examples. It keeps the checked contract list, expected diagram types/styles, and style-specific quality gates in one place so gallery regressions are caught before visual review.

@@ -81,5 +81,6 @@ Rules:
 Bundled renderer behavior:
 - Use `nodes[].row` and `nodes[].col` to lock multi-row sibling placement when the diagram must be reproducible.
 - Set `groups[].routing.mode` to `row_bus_side_trunk` to force row-level routing. In `auto`, this mode is selected when a group has more than one row and participates in fan-out or fan-in.
+- Force `row_bus_side_trunk` for a single-row group when three or more cards converge on one downstream target. The merge bus should carry one terminal marker; multiple arrowheads must not pile up at the target boundary.
 - `routing.fanout_side` defaults to `right`; `routing.fanin_side` defaults to `left`.
 - Set `routing.mode` to `simple` only when you intentionally want the older per-edge elbow routing and will visually inspect the result.

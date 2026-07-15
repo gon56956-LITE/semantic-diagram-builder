@@ -81,7 +81,7 @@ Useful group fields:
 - `max_per_row`: maximum automatically placed nodes per row.
 - `row_gap`: optional row gap override; the renderer raises it when bus lanes need more clearance.
 - `side_gutter`: optional side-gutter width for side trunks.
-- `routing.mode`: `auto`, `row_bus_side_trunk`, or `simple`. `auto` selects row-level buses for multi-row fan-out/fan-in groups.
+- `routing.mode`: `auto`, `row_bus_side_trunk`, or `simple`. `auto` selects row-level buses for multi-row fan-out/fan-in groups. For a single row with three or more sources entering one target, set `row_bus_side_trunk` explicitly so the target receives one terminal arrow instead of an arrowhead cluster.
 - `routing.fanout_side`: `right` by default; side trunk used to reach lower-row fan-out buses.
 - `routing.fanin_side`: `left` by default; side trunk used to merge row-level fan-in buses.
 
@@ -206,6 +206,7 @@ Style confirmation changes visual language only. It must not change the selected
 - Use bus/junction structure when multiple edges converge. Put horizontal bus channels inside the layer they organize: fan-out buses inside the target/sibling layer, fan-in buses inside the source/sibling layer before crossing the boundary. Avoid placing these buses in inter-layer gaps where they compete with layer titles.
 - For fan-out into parallel sibling cards, place the horizontal bus inside the target layer above the cards, with clear vertical space before arrowheads enter the card tops.
 - For fan-in from parallel sibling cards, place the horizontal merge bus inside the source layer below the cards, then use one trunk for the cross-layer transition.
+- A single-row dense fan-in is still a bus problem: merge the branches inside the source layer and draw only one terminal arrow into the target. Do not place several markers on neighboring or identical target anchors.
 - For parallel sibling cards with split or merge edges, complete the split/merge within the sibling layer and use one trunk for the cross-layer transition. If the bus needs room, increase the layer band height instead of pushing the bus into the gap.
 - For multi-row sibling sets, prefer `routing.mode: "row_bus_side_trunk"` with explicit `row`/`col` fields. Fan-out uses row-level buses above each target row; fan-in uses row-level buses below each source row; side trunks carry lower-row routes through the layer gutter.
 - Same-source fan-out may share one color and one bus family; do not stagger every branch just because one source opens multiple sibling targets.
@@ -236,6 +237,9 @@ Before final delivery, verify:
 - No card title/subtitle collision.
 - Connectors do not run through cards.
 - Arrowheads are not hidden inside corners or text, and they point into the side/top/bottom anchor they visually enter.
+- Arrow markers use explicit six-digit fill colors and `markerUnits="userSpaceOnUse"`. Do not depend on `context-stroke` inside embedded HTML, where unsupported inheritance or stroke scaling can render black wedges or oversized blobs.
+- Every connector path also carries inline `fill="none"`, and built-in style selectors use quote-free safe attribute values such as `[data-style=modern-tech]`. This prevents Markdown smart-quote transforms from disabling the connector CSS and filling open paths as black wedges in the final inline HTML.
+- QA the final inline HTML, not only the standalone SVG: reject smart quotes in `data-style` selectors and confirm that every embedded connector path still has `fill="none"` after document conversion.
 - Different source families that share a corridor are visibly separated by color and/or lane offset; same-source fan-out remains grouped unless the grouped route itself becomes unreadable.
 - Multiple source families entering the same target card use separate target anchors; their final arrow segments should not collapse into one indistinguishable entry point.
 - Direct-link paths expose source/target metadata and participate in the same shared-target QA as fan-out terminal branches.

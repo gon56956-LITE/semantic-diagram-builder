@@ -2,30 +2,30 @@
 <defs>
   <pattern id="blueprint-grid-small" width="12.29" height="12.29" patternUnits="userSpaceOnUse"><path d="M 12.29 0 H 0 V 12.29" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="0.72"/></pattern>
   <pattern id="blueprint-grid" width="61.44" height="61.44" patternUnits="userSpaceOnUse"><rect width="61.44" height="61.44" fill="url(#blueprint-grid-small)"/><path d="M 61.44 0 H 0 V 61.44" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.02"/> </pattern>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
-  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
-  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#F4F8FF"/></marker>
+  <marker id="arrow-fanout" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#FF9F2E"/></marker>
+  <marker id="arrow-fanin" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="#6EE66E"/></marker>
   <style>
-    [data-style="accent-blueprint"] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
-    [data-style="accent-blueprint"] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
-    [data-style="accent-blueprint"] .fanout{stroke:#FF9F2E;opacity:0.9}
-    [data-style="accent-blueprint"] .fanin{stroke:#6EE66E;opacity:0.9}
-    [data-style="accent-blueprint"] .route-shared{marker-end:none}
-    [data-style="accent-blueprint"] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
-    [data-style="accent-blueprint"] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
-    [data-style="accent-blueprint"] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
-    [data-style="accent-blueprint"] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .info-panel-item{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
-    [data-style="accent-blueprint"] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
-    [data-style="accent-blueprint"] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+    [data-style=accent-blueprint] .title{font:700 27px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.04em;text-transform:uppercase}
+    [data-style=accent-blueprint] .subtitle{font:400 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .group-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .card-title{font:700 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style=accent-blueprint] .card-sub{font:500 13px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .edge{fill:none;stroke:#F4F8FF;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.88}
+    [data-style=accent-blueprint] .fanout{stroke:#FF9F2E;opacity:0.9}
+    [data-style=accent-blueprint] .fanin{stroke:#6EE66E;opacity:0.9}
+    [data-style=accent-blueprint] .route-shared{marker-end:none}
+    [data-style=accent-blueprint] .edge-dashed{stroke-dasharray:6 5;opacity:0.68}
+    [data-style=accent-blueprint] .note{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .mono{font-family:IBM Plex Mono,JetBrains Mono,Consolas,monospace}
+    [data-style=accent-blueprint] .table-header{font:700 15.5px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .table-cell{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#F4F8FF}
+    [data-style=accent-blueprint] .table-cell-secondary{font:500 17px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .info-panel-title{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#F4F8FF;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .info-panel-item{font:500 14px IBM Plex Sans,Inter,Roboto Condensed,DIN,Segoe UI,Aptos,Arial,sans-serif;fill:#C9DAF5}
+    [data-style=accent-blueprint] .tree-level-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .hub-label{font:700 15px IBM Plex Mono,JetBrains Mono,Consolas,monospace;fill:#C9DAF5;letter-spacing:.08em;text-transform:uppercase}
+    [data-style=accent-blueprint] .icon-line{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
   </style>
 </defs>
 <rect x="0" y="0" width="1536" height="1307" rx="0" fill="#062B5F"/>
@@ -36,29 +36,29 @@
 <rect x="70" y="343" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
 <rect x="70" y="571" width="1396" height="436" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
 <rect x="70" y="1039" width="1396" height="196" class="group-panel" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#F4F8FF" stroke-opacity="0.7" stroke-width="1"/>
-<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 761.0 613.0 L 754.0 613.0" class="edge fanout route-shared branch" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 775.0 613.0 L 782.0 613.0" class="edge fanout route-shared branch" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 1377.0 613.0 L 1384.0 613.0 Q 1391.0 613.0 1391.0 620.0 L 1391.0 818.0 Q 1391.0 825.0 1384.0 825.0 L 1377.0 825.0" class="edge fanout route-shared trunk" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 396.0 613.0 L 1379.0 613.0" class="edge fanout route-shared bus" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 398.0 613.0 L 391.0 613.0 Q 384.0 613.0 384.0 620.0 L 384.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_a"/>
-<path d="M 768.0 613.0 L 768.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_b"/>
-<path d="M 1138.0 613.0 L 1145.0 613.0 Q 1152.0 613.0 1152.0 620.0 L 1152.0 645.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_c"/>
-<path d="M 780.0 825.0 L 1379.0 825.0" class="edge fanout route-shared bus" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
-<path d="M 782.0 825.0 L 775.0 825.0 Q 768.0 825.0 768.0 832.0 L 768.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_d"/>
-<path d="M 1166.0 825.0 L 1159.0 825.0 Q 1152.0 825.0 1152.0 832.0 L 1152.0 857.0" class="edge fanout terminal" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_e"/>
-<path d="M 1377.0 777.0 L 1384.0 777.0 Q 1391.0 777.0 1391.0 784.0 L 1391.0 982.0 Q 1391.0 989.0 1384.0 989.0 L 1377.0 989.0" class="edge fanin route-shared trunk" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 384.0 745.0 L 384.0 770.0 Q 384.0 777.0 391.0 777.0 L 398.0 777.0" class="edge fanin route-shared branch" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 768.0 745.0 L 768.0 770.0 Q 768.0 777.0 775.0 777.0 L 782.0 777.0" class="edge fanin route-shared branch" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 1152.0 745.0 L 1152.0 770.0 Q 1152.0 777.0 1159.0 777.0 L 1166.0 777.0" class="edge fanin route-shared branch" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 396.0 777.0 L 1379.0 777.0" class="edge fanin route-shared bus" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 1152.0 957.0 L 1152.0 982.0 Q 1152.0 989.0 1145.0 989.0 L 1138.0 989.0" class="edge fanin route-shared branch" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 780.0 989.0 L 1379.0 989.0" class="edge fanin route-shared bus" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 782.0 989.0 L 775.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1103.0" class="edge fanin route-shared merge" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 768.0 957.0 L 768.0 1103.0" class="edge fanin terminal" marker-end="url(#arrow-fanin)" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
-<path d="M 740.0 229.0 L 796.0 229.0" class="edge edge-dashed direct-link" marker-end="url(#arrow)" data-from="portal" data-to="glossary" data-source-id="portal" data-target-id="glossary"/>
-<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="rules" data-source-id="portal" data-target-id="rules"/>
-<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 754.0 343.0 Q 768.0 343.0 768.0 357.0 L 768.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="domain_map" data-source-id="portal" data-target-id="domain_map"/>
-<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 1170.0 343.0 Q 1184.0 343.0 1184.0 357.0 L 1184.0 407" class="edge direct-link" marker-end="url(#arrow)" data-from="portal" data-to="risk" data-source-id="portal" data-target-id="risk"/>
+<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 761.0 613.0 L 754.0 613.0" class="edge fanout route-shared branch" fill="none" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
+<path d="M 768.0 507.0 L 768.0 606.0 Q 768.0 613.0 775.0 613.0 L 782.0 613.0" class="edge fanout route-shared branch" fill="none" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
+<path d="M 1377.0 613.0 L 1384.0 613.0 Q 1391.0 613.0 1391.0 620.0 L 1391.0 818.0 Q 1391.0 825.0 1384.0 825.0 L 1377.0 825.0" class="edge fanout route-shared trunk" fill="none" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
+<path d="M 396.0 613.0 L 1379.0 613.0" class="edge fanout route-shared bus" fill="none" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
+<path d="M 398.0 613.0 L 391.0 613.0 Q 384.0 613.0 384.0 620.0 L 384.0 645.0" class="edge fanout terminal" fill="none" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_a"/>
+<path d="M 768.0 613.0 L 768.0 645.0" class="edge fanout terminal" fill="none" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_b"/>
+<path d="M 1138.0 613.0 L 1145.0 613.0 Q 1152.0 613.0 1152.0 620.0 L 1152.0 645.0" class="edge fanout terminal" fill="none" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_c"/>
+<path d="M 780.0 825.0 L 1379.0 825.0" class="edge fanout route-shared bus" fill="none" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF"/>
+<path d="M 782.0 825.0 L 775.0 825.0 Q 768.0 825.0 768.0 832.0 L 768.0 857.0" class="edge fanout terminal" fill="none" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_d"/>
+<path d="M 1166.0 825.0 L 1159.0 825.0 Q 1152.0 825.0 1152.0 832.0 L 1152.0 857.0" class="edge fanout terminal" fill="none" marker-end="url(#arrow-fanout)" style="stroke:#16D9FF" data-route-family="1" data-route-color="#16D9FF" data-target-id="asset_e"/>
+<path d="M 1377.0 777.0 L 1384.0 777.0 Q 1391.0 777.0 1391.0 784.0 L 1391.0 982.0 Q 1391.0 989.0 1384.0 989.0 L 1377.0 989.0" class="edge fanin route-shared trunk" fill="none" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 384.0 745.0 L 384.0 770.0 Q 384.0 777.0 391.0 777.0 L 398.0 777.0" class="edge fanin route-shared branch" fill="none" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 768.0 745.0 L 768.0 770.0 Q 768.0 777.0 775.0 777.0 L 782.0 777.0" class="edge fanin route-shared branch" fill="none" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 1152.0 745.0 L 1152.0 770.0 Q 1152.0 777.0 1159.0 777.0 L 1166.0 777.0" class="edge fanin route-shared branch" fill="none" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 396.0 777.0 L 1379.0 777.0" class="edge fanin route-shared bus" fill="none" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 1152.0 957.0 L 1152.0 982.0 Q 1152.0 989.0 1145.0 989.0 L 1138.0 989.0" class="edge fanin route-shared branch" fill="none" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 780.0 989.0 L 1379.0 989.0" class="edge fanin route-shared bus" fill="none" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 782.0 989.0 L 775.0 989.0 Q 768.0 989.0 768.0 996.0 L 768.0 1103.0" class="edge fanin route-shared merge" fill="none" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 768.0 957.0 L 768.0 1103.0" class="edge fanin terminal" fill="none" marker-end="url(#arrow-fanin)" style="stroke:#6EE66E" data-route-family="0" data-route-color="#6EE66E"/>
+<path d="M 740.0 229.0 L 796.0 229.0" class="edge edge-dashed direct-link" fill="none" marker-end="url(#arrow)" data-from="portal" data-to="glossary" data-source-id="portal" data-target-id="glossary"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 546.0 343.0 L 366.0 343.0 Q 352.0 343.0 352.0 357.0 L 352.0 407" class="edge direct-link" fill="none" marker-end="url(#arrow)" data-from="portal" data-to="rules" data-source-id="portal" data-target-id="rules"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 754.0 343.0 Q 768.0 343.0 768.0 357.0 L 768.0 407" class="edge direct-link" fill="none" marker-end="url(#arrow)" data-from="portal" data-to="domain_map" data-source-id="portal" data-target-id="domain_map"/>
+<path d="M 560.0 279 L 560.0 329.0 Q 560.0 343.0 574.0 343.0 L 1170.0 343.0 Q 1184.0 343.0 1184.0 357.0 L 1184.0 407" class="edge direct-link" fill="none" marker-end="url(#arrow)" data-from="portal" data-to="risk" data-source-id="portal" data-target-id="risk"/>
 <g class="group-label-wrap"><rect x="88" y="121" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="141" class="group-label">Navigation / access layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="349" width="276.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="369" class="group-label">Synthesis and governance layer</text></g>
 <g class="group-label-wrap"><rect x="88" y="577" width="234.0" height="30" rx="7" fill="#062B5F" fill-opacity="0.78"/><text x="98" y="597" class="group-label">Reusable knowledge assets</text></g>

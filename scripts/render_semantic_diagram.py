@@ -207,6 +207,14 @@ def _css_attr(value: object) -> str:
     return str(value).replace("\\", "\\\\").replace('"', '\\"')
 
 
+def _css_attr_selector_value(value: object) -> str:
+    """Prefer a quote-free CSS attribute value so Markdown smart quotes cannot corrupt it."""
+    text = str(value)
+    if re.fullmatch(r'-?[_A-Za-z][_A-Za-z0-9-]*', text):
+        return text
+    return f'"{_css_attr(text)}"'
+
+
 def style_block(style: dict, canvas_w: float | None = None) -> str:
     typography = style_token(style, "tokens.typography", {})
     if not isinstance(typography, dict):
@@ -227,7 +235,7 @@ def style_block(style: dict, canvas_w: float | None = None) -> str:
     table = _style_component(style, "table")
     table_header_size = table.get("header_size", style_token(style, "tokens.typography.group_label_size", "13px"))
     table_cell_size = table.get("cell_size", style_token(style, "tokens.typography.card_sub_size", "12.5px"))
-    scope = f'[data-style="{_css_attr(style_id(style))}"]'
+    scope = f'[data-style={_css_attr_selector_value(style_id(style))}]'
 
     card = _style_component(style, "card")
     shadow = card.get("shadow", {})
@@ -266,9 +274,9 @@ def style_block(style: dict, canvas_w: float | None = None) -> str:
 
     return f"""
 <defs>{extra_defs}
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
-  <marker id="arrow-fanout" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
-  <marker id="arrow-fanin" markerWidth="10" markerHeight="10" refX="8.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke"/></marker>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="{arrow}"/></marker>
+  <marker id="arrow-fanout" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="{fanout}"/></marker>
+  <marker id="arrow-fanin" markerWidth="9" markerHeight="9" refX="8.2" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,6 L9,3 z" fill="{fanin}"/></marker>
   <style>
     {scope} .title{{font:700 {_font_css(style, "tokens.typography.title_size", "30px")} {title_family};fill:{style_color(style, "text_primary", "#0F172A")};letter-spacing:{typography.get("title_letter_spacing", "0")};text-transform:{title_case}}}
     {scope} .subtitle{{font:400 {_font_css(style, "tokens.typography.subtitle_size", "14px")} {sans};fill:{style_color(style, "text_secondary", "#64748B")}}}
@@ -753,7 +761,7 @@ def _side_x(layout: dict, side: str) -> float:
 def _path(d: str, classes: str, marker: str | None = None, extra_attrs: str = "") -> str:
     marker_attr = f' marker-end="url(#{marker})"' if marker else ""
     extra = f" {extra_attrs.strip()}" if extra_attrs.strip() else ""
-    return f'<path d="{d}" class="{classes}"{marker_attr}{extra}/>'
+    return f'<path d="{d}" class="{classes}" fill="none"{marker_attr}{extra}/>'
 
 
 def _connector_palette_color(style: dict, palette_name: str, index: int, fallback: str = "") -> str:
@@ -2412,7 +2420,7 @@ def _render_boundary_ownership_matrix(contract: dict, style: dict, diagram_type:
         elif shape == "dash":
             parts.append(f'<line x1="{lx}" y1="{ly}" x2="{lx+30}" y2="{ly}" stroke="{color}" stroke-width="1.4" stroke-dasharray="6 5"/>')
         elif shape == "arrow":
-            parts.append(f'<path d="M {lx} {ly} L {lx+30} {ly}" class="edge" marker-end="url(#arrow)" style="stroke:{color};opacity:0.95"/>')
+            parts.append(f'<path d="M {lx} {ly} L {lx+30} {ly}" class="edge" fill="none" marker-end="url(#arrow)" style="stroke:{color};opacity:0.95"/>')
         else:
             parts.append(f'<rect x="{lx}" y="{ly-7}" width="28" height="14" rx="3" fill="none" stroke="{color}" stroke-width="1.3"/>')
         parts.append(f'<text x="{lx+40}" y="{ly+4}" class="note" style="font-size:14px">{e(label)}</text>')
@@ -2543,7 +2551,7 @@ def _render_boundary_ownership_matrix(contract: dict, style: dict, diagram_type:
             extra_attrs = f' data-corridor-x="{round(corridor_x, 2)}"'
         else:
             path = _matrix_connector_path(item_positions[source], item_positions[target])
-        parts.append(f'<path d="{path}" class="edge boundary-matrix-link" marker-end="url(#arrow)" style="stroke:{color};opacity:0.86"{dash} data-from="{e(source)}" data-to="{e(target)}"{extra_attrs}/>')
+        parts.append(f'<path d="{path}" class="edge boundary-matrix-link" fill="none" marker-end="url(#arrow)" style="stroke:{color};opacity:0.86"{dash} data-from="{e(source)}" data-to="{e(target)}"{extra_attrs}/>')
 
     key_w = min(430, (width - 2 * margin_x) * 0.34)
     table_gap = 22
@@ -2968,7 +2976,7 @@ def _render_capability_domain_map(contract: dict, style: dict, diagram_type: str
         lane_shift += float(rel.get("lane_offset", 0.0))
         path = _capability_link_path(positions[source], positions[target], obstacles, corridor_offset, lane_shift)
         corridor_attr = f' data-corridor-x="{round(corridor_key, 1):g}"' if corridor_key is not None else ""
-        parts.append(f'<path d="{path}" class="edge capability-map-link" marker-end="url(#arrow)" style="stroke:{color};opacity:0.86"{dash} data-from="{e(source)}" data-to="{e(target)}" data-relation="{e(rel.get("relation", ""))}" data-lane-shift="{round(lane_shift, 1):g}"{corridor_attr}/>')
+        parts.append(f'<path d="{path}" class="edge capability-map-link" fill="none" marker-end="url(#arrow)" style="stroke:{color};opacity:0.86"{dash} data-from="{e(source)}" data-to="{e(target)}" data-relation="{e(rel.get("relation", ""))}" data-lane-shift="{round(lane_shift, 1):g}"{corridor_attr}/>')
 
     for item_id in sorted(positions, key=lambda iid: (positions[iid][1], positions[iid][0])):
         item = next(item for item in items if str(item.get("id")) == item_id)
@@ -4541,7 +4549,7 @@ def _render_ontology_instance_links(
         if not color:
             color = _accent_color(style, instance, "package")
         paths.append(
-            f'<path d="{_rounded_path(points)}" class="edge ontology-instance-link" '
+            f'<path d="{_rounded_path(points)}" class="edge ontology-instance-link" fill="none" '
             f'style="stroke:{color};opacity:0.78" stroke-dasharray="6 5" data-route-family="{e(concept_id)}" data-route-color="{color}" data-from="{e(concept_id)}" data-to="{e(instance_id)}"/>'
         )
     return paths
@@ -4811,7 +4819,7 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
             )
             self_points = _orthogonal_link_points(d_anchor, card_anchor, d_side, card_side)
             self_route = "axis" if len(self_points) == 2 else "orthogonal"
-            link_parts.append(f'<path d="{_rounded_path(self_points)}" class="{relationship_link_class}" style="stroke:{color};opacity:0.9"{dash} data-route="{self_route}" data-link-end="self" data-card-anchor="{card_side}" data-diamond-anchor="{d_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+            link_parts.append(f'<path d="{_rounded_path(self_points)}" class="{relationship_link_class}" fill="none" style="stroke:{color};opacity:0.9"{dash} data-route="{self_route}" data-link-end="self" data-card-anchor="{card_side}" data-diamond-anchor="{d_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
             for key, endpoint in (("from_cardinality", "from"), ("to_cardinality", "to")):
                 card = rel.get(key)
                 if card:
@@ -4846,8 +4854,8 @@ def _render_object_relationship(contract: dict, style: dict, diagram_type: str) 
         t_anchor = target_points[-1]
         source_route = "axis" if len(source_points) == 2 else "orthogonal"
         target_route = "axis" if len(target_points) == 2 else "orthogonal"
-        link_parts.append(f'<path d="{_rounded_path(source_points)}" class="{relationship_link_class}" style="stroke:{color};opacity:0.9"{dash} data-route="{source_route}" data-link-end="from" data-card-anchor="{s_side}" data-diamond-anchor="{d_from_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
-        link_parts.append(f'<path d="{_rounded_path(target_points)}" class="{relationship_link_class}" style="stroke:{color};opacity:0.9"{dash} data-route="{target_route}" data-link-end="to" data-card-anchor="{t_side}" data-diamond-anchor="{d_to_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+        link_parts.append(f'<path d="{_rounded_path(source_points)}" class="{relationship_link_class}" fill="none" style="stroke:{color};opacity:0.9"{dash} data-route="{source_route}" data-link-end="from" data-card-anchor="{s_side}" data-diamond-anchor="{d_from_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
+        link_parts.append(f'<path d="{_rounded_path(target_points)}" class="{relationship_link_class}" fill="none" style="stroke:{color};opacity:0.9"{dash} data-route="{target_route}" data-link-end="to" data-card-anchor="{t_side}" data-diamond-anchor="{d_to_side}" data-relationship="{rel_id}" data-from="{e(source)}" data-to="{e(target)}"/>')
         for key, anchor, side, rect, endpoint in (
             ("from_cardinality", s_anchor, s_side, source_rect, "from"),
             ("to_cardinality", t_anchor, t_side, target_rect, "to"),
